@@ -10,7 +10,7 @@ npm install react-native-candlestick-chart
 
 ## Usage
 
-```js
+```jsx
 import CandlestickChart from "react-native-candlestick-chart";
 
 const data = {
