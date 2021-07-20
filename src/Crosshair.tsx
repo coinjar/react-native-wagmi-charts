@@ -1,32 +1,40 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedGestureHandler,
   useSharedValue,
   useAnimatedStyle,
+  useAnimatedReaction,
+  runOnJS,
 } from 'react-native-reanimated';
 import { clamp } from 'react-native-redash';
 
 import Line from './Line';
-import Label from './Label';
 import { useCandlestickChart } from './useCandlestickChart';
 
 type CrosshairProps = {
-  includeLabel?: boolean;
+  enableHapticFeedback?: boolean;
 };
 
-export function Crosshair({ includeLabel = true }: CrosshairProps) {
-  const { width, height, domain, step } = useCandlestickChart();
+function invokeHaptic() {
+  console.log('test');
+  ReactNativeHapticFeedback.trigger('impactLight', {
+    enableVibrateFallback: true,
+    ignoreAndroidSystemSettings: false,
+  });
+}
 
-  const translateX = useSharedValue(0);
-  const translateY = useSharedValue(0);
+export function Crosshair({ enableHapticFeedback = false }: CrosshairProps) {
+  const { currentX, currentY, width, height, step } = useCandlestickChart();
+
   const opacity = useSharedValue(0);
   const onGestureEvent = useAnimatedGestureHandler({
     onActive: ({ x, y }) => {
       opacity.value = 1;
-      translateY.value = clamp(y, 0, height);
-      translateX.value = x - (x % step) + step / 2;
+      currentY.value = clamp(y, 0, height);
+      currentX.value = x - (x % step) + step / 2;
     },
     onEnd: () => {
       opacity.value = 0;
@@ -34,12 +42,21 @@ export function Crosshair({ includeLabel = true }: CrosshairProps) {
   });
   const horizontal = useAnimatedStyle(() => ({
     opacity: opacity.value,
-    transform: [{ translateY: translateY.value }],
+    transform: [{ translateY: currentY.value }],
   }));
   const vertical = useAnimatedStyle(() => ({
     opacity: opacity.value,
-    transform: [{ translateX: translateX.value }],
+    transform: [{ translateX: currentX.value }],
   }));
+
+  useAnimatedReaction(
+    () => (enableHapticFeedback ? currentX.value : 0),
+    (data) => {
+      if (data !== 0) {
+        runOnJS(invokeHaptic)();
+      }
+    }
+  );
 
   return (
     <PanGestureHandler minDist={0} onGestureEvent={onGestureEvent}>
@@ -50,14 +67,6 @@ export function Crosshair({ includeLabel = true }: CrosshairProps) {
         <Animated.View style={[StyleSheet.absoluteFill, vertical]}>
           <Line x={0} y={height} />
         </Animated.View>
-        {includeLabel && (
-          <Label
-            translateY={translateY}
-            maxHeight={height}
-            domain={domain}
-            opacity={opacity}
-          />
-        )}
       </Animated.View>
     </PanGestureHandler>
   );

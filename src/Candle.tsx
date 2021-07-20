@@ -1,21 +1,14 @@
 import React from 'react';
 import { Line, Rect } from 'react-native-svg';
 
+import type { TCandle, TDomain } from './types';
 import { scaleY, scaleBody } from './utils';
 
 const MARGIN = 2;
 
-export type Candle = {
-  date: String;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-};
-
 type CandleProps = {
-  candle: Candle;
-  domain: number[];
+  candle: TCandle;
+  domain: TDomain;
   maxHeight: number;
   index: number;
   width: number;

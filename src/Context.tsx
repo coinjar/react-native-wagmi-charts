@@ -1,10 +1,13 @@
 import * as React from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions } from 'react-native';
+import { useSharedValue } from 'react-native-reanimated';
 
 import type { TContext, TData } from './types';
 import { getDomain } from './utils';
 
 export const CandlestickChartContext = React.createContext<TContext>({
+  currentX: { value: 0 },
+  currentY: { value: 0 },
   data: [],
   height: 0,
   width: 0,
@@ -24,13 +27,14 @@ export const { width: screenWidth } = Dimensions.get('window');
 export function CandlestickChartProvider({
   children,
   data,
-  ...props
 }: CandlestickChartProviderProps) {
   const [width, setWidth] = React.useState(screenWidth);
   const [height, setHeight] = React.useState(screenWidth);
   const [step, setStep] = React.useState(0);
+  const currentX = useSharedValue(0);
+  const currentY = useSharedValue(0);
 
-  const domain = getDomain(data);
+  const domain = React.useMemo(() => getDomain(data), [data]);
 
   React.useEffect(() => {
     const newStep = width / data.length;
@@ -39,6 +43,8 @@ export function CandlestickChartProvider({
 
   const contextValue = React.useMemo(
     () => ({
+      currentX,
+      currentY,
       data,
       width,
       height,
@@ -48,12 +54,12 @@ export function CandlestickChartProvider({
       setHeight,
       setWidth,
     }),
-    [data, domain, height, step, width]
+    [currentX, currentY, data, domain, height, step, width]
   );
 
   return (
     <CandlestickChartContext.Provider value={contextValue}>
-      <View {...props}>{children}</View>
+      {children}
     </CandlestickChartContext.Provider>
   );
 }

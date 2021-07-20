@@ -1,12 +1,45 @@
 import { interpolate, Extrapolate } from 'react-native-reanimated';
-import { round } from 'react-native-redash';
 
-import type { Candle } from './Candle';
+import type { TCandle, TDomain } from './types';
 
-export const formatUSD = (value: number) => {
+// Taken from Rainbow Wallet: https://github.com/rainbow-me/rainbow/blob/develop/src/components/expanded-state/chart/chart-data-labels/ChartPriceLabel.js#L41
+export function formatPrice({
+  value: _value,
+  defaultPrice: _defaultPrice = '',
+}: {
+  value: string;
+  defaultPrice?: string;
+}) {
   'worklet';
-  return `$ ${round(value, 2).toLocaleString('en-US', { currency: 'USD' })}`;
-};
+
+  let defaultPrice = _defaultPrice;
+  if (typeof defaultPrice === 'number') {
+    defaultPrice = (defaultPrice as number).toString();
+  }
+
+  let value = _value || defaultPrice?.replace?.(',', '');
+  if (!value) {
+    return `0.00`;
+  }
+
+  let decimals =
+    Number(value) < 1
+      ? Math.min(8, value.toString().slice(2).search(/[^0]/g) + 3)
+      : 2;
+  if (defaultPrice) {
+    decimals = defaultPrice?.split('.')?.[1]?.length || 0;
+  }
+
+  let res = `${Number(value).toFixed(decimals)}`;
+  const vals = res.split('.');
+  if (vals.length > 0) {
+    res = vals[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    if (vals.length === 2) {
+      return res + '.' + vals[1];
+    }
+  }
+  return res;
+}
 
 export const formatDatetime = (value: string) => {
   'worklet';
@@ -18,7 +51,7 @@ export const formatDatetime = (value: string) => {
   });
 };
 
-export const getDomain = (rows: Candle[]): [number, number] => {
+export const getDomain = (rows: TCandle[]): [number, number] => {
   'worklet';
   const values = rows.map(({ high, low }) => [high, low]).flat();
   return [Math.min(...values), Math.max(...values)];
@@ -30,7 +63,7 @@ export const scaleY = ({
   maxHeight,
 }: {
   value: number;
-  domain: number[];
+  domain: TDomain;
   maxHeight: number;
 }) => {
   'worklet';
@@ -43,7 +76,7 @@ export const scaleBody = ({
   maxHeight,
 }: {
   value: number;
-  domain: number[];
+  domain: TDomain;
   maxHeight: number;
 }) => {
   'worklet';
@@ -61,7 +94,7 @@ export const scaleYInvert = ({
   maxHeight,
 }: {
   y: number;
-  domain: number[];
+  domain: TDomain;
   maxHeight: number;
 }) => {
   'worklet';
