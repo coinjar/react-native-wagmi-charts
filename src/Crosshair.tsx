@@ -19,7 +19,6 @@ type CrosshairProps = {
 };
 
 function invokeHaptic() {
-  console.log('test');
   ReactNativeHapticFeedback.trigger('impactLight', {
     enableVibrateFallback: true,
     ignoreAndroidSystemSettings: false,
