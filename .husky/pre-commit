@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-yarn lint --fix && yarn typescript
+yarn lint --fix && git add -A && yarn typescript
