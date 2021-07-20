@@ -17,7 +17,8 @@ export function CandlestickChart({
   height: _height,
   ...props
 }: CandlestickChartProps) {
-  const { data, width, height, domain, step, setHeight, setWidth } = useCandlestickChart();
+  const { data, width, height, domain, step, setHeight, setWidth } =
+    useCandlestickChart();
 
   React.useEffect(() => {
     if (_width) {
