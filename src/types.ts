@@ -1,7 +1,7 @@
 import type Animated from 'react-native-reanimated';
 
 export type TCandle = {
-  date: String;
+  date: string;
   open: number;
   high: number;
   low: number;
@@ -20,3 +20,4 @@ export type TContext = {
   setHeight: (height: number) => void;
   setWidth: (width: number) => void;
 };
+export type TPriceType = 'crosshair' | 'open' | 'close' | 'low' | 'high';

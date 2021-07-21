@@ -6,8 +6,8 @@ import type { TContext, TData } from './types';
 import { getDomain } from './utils';
 
 export const CandlestickChartContext = React.createContext<TContext>({
-  currentX: { value: 0 },
-  currentY: { value: 0 },
+  currentX: { value: -1 },
+  currentY: { value: -1 },
   data: [],
   height: 0,
   width: 0,
@@ -31,8 +31,8 @@ export function CandlestickChartProvider({
   const [width, setWidth] = React.useState(screenWidth);
   const [height, setHeight] = React.useState(screenWidth);
   const [step, setStep] = React.useState(0);
-  const currentX = useSharedValue(0);
-  const currentY = useSharedValue(0);
+  const currentX = useSharedValue(-1);
+  const currentY = useSharedValue(-1);
 
   const domain = React.useMemo(() => getDomain(data), [data]);
 

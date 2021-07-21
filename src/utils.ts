@@ -2,13 +2,14 @@ import { interpolate, Extrapolate } from 'react-native-reanimated';
 
 import type { TCandle, TDomain } from './types';
 
-// Taken from Rainbow Wallet: https://github.com/rainbow-me/rainbow/blob/develop/src/components/expanded-state/chart/chart-data-labels/ChartPriceLabel.js#L41
 export function formatPrice({
   value: _value,
   defaultPrice: _defaultPrice = '',
+  precision,
 }: {
   value: string;
   defaultPrice?: string;
+  precision?: number;
 }) {
   'worklet';
 
@@ -23,12 +24,10 @@ export function formatPrice({
   }
 
   let decimals =
-    Number(value) < 1
+    precision ||
+    (Number(value) < 1
       ? Math.min(8, value.toString().slice(2).search(/[^0]/g) + 3)
-      : 2;
-  if (defaultPrice) {
-    decimals = defaultPrice?.split('.')?.[1]?.length || 0;
-  }
+      : 2);
 
   let res = `${Number(value).toFixed(decimals)}`;
   const vals = res.split('.');
@@ -41,23 +40,31 @@ export function formatPrice({
   return res;
 }
 
-export const formatDatetime = (value: string) => {
-  'worklet';
-  const d = new Date(value);
-  return d.toLocaleTimeString('en-US', {
+export function formatDatetime({
+  value,
+  locale = 'en-US',
+  options = {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  });
-};
+  },
+}: {
+  value: string;
+  locale?: string;
+  options?: { [key: string]: string };
+}) {
+  'worklet';
+  const d = new Date(value);
+  return d.toLocaleTimeString(locale, options);
+}
 
-export const getDomain = (rows: TCandle[]): [number, number] => {
+export function getDomain(rows: TCandle[]): [number, number] {
   'worklet';
   const values = rows.map(({ high, low }) => [high, low]).flat();
   return [Math.min(...values), Math.max(...values)];
-};
+}
 
-export const scaleY = ({
+export function getY({
   value,
   domain,
   maxHeight,
@@ -65,12 +72,12 @@ export const scaleY = ({
   value: number;
   domain: TDomain;
   maxHeight: number;
-}) => {
+}) {
   'worklet';
   return interpolate(value, domain, [maxHeight, 0], Extrapolate.CLAMP);
-};
+}
 
-export const scaleBody = ({
+export function getHeight({
   value,
   domain,
   maxHeight,
@@ -78,7 +85,7 @@ export const scaleBody = ({
   value: number;
   domain: TDomain;
   maxHeight: number;
-}) => {
+}) {
   'worklet';
   return interpolate(
     value,
@@ -86,9 +93,9 @@ export const scaleBody = ({
     [0, maxHeight],
     Extrapolate.CLAMP
   );
-};
+}
 
-export const scaleYInvert = ({
+export function getPrice({
   y,
   domain,
   maxHeight,
@@ -96,7 +103,8 @@ export const scaleYInvert = ({
   y: number;
   domain: TDomain;
   maxHeight: number;
-}) => {
+}) {
   'worklet';
+  if (y === -1) return -1;
   return interpolate(y, [0, maxHeight], domain.reverse(), Extrapolate.CLAMP);
-};
+}

@@ -15,6 +15,7 @@ import Line from './Line';
 import { useCandlestickChart } from './useCandlestickChart';
 
 type CrosshairProps = {
+  color?: string;
   enableHapticFeedback?: boolean;
 };
 
@@ -25,7 +26,10 @@ function invokeHaptic() {
   });
 }
 
-export function Crosshair({ enableHapticFeedback = false }: CrosshairProps) {
+export function Crosshair({
+  color,
+  enableHapticFeedback = false,
+}: CrosshairProps) {
   const { currentX, currentY, width, height, step } = useCandlestickChart();
 
   const opacity = useSharedValue(0);
@@ -37,6 +41,8 @@ export function Crosshair({ enableHapticFeedback = false }: CrosshairProps) {
     },
     onEnd: () => {
       opacity.value = 0;
+      currentY.value = -1;
+      currentX.value = -1;
     },
   });
   const horizontal = useAnimatedStyle(() => ({
@@ -61,10 +67,10 @@ export function Crosshair({ enableHapticFeedback = false }: CrosshairProps) {
     <PanGestureHandler minDist={0} onGestureEvent={onGestureEvent}>
       <Animated.View style={StyleSheet.absoluteFill}>
         <Animated.View style={[StyleSheet.absoluteFill, horizontal]}>
-          <Line x={width} y={0} />
+          <Line color={color} x={width} y={0} />
         </Animated.View>
         <Animated.View style={[StyleSheet.absoluteFill, vertical]}>
-          <Line x={0} y={height} />
+          <Line color={color} x={0} y={height} />
         </Animated.View>
       </Animated.View>
     </PanGestureHandler>
