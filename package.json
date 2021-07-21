@@ -35,9 +35,6 @@
     "ios",
     "android"
   ],
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
-  },
   "dependencies": {
     "react-native-redash": "^16.1.1",
     "react-native-svg": "^12.1.1"
