@@ -14,7 +14,8 @@ import {
   Crosshair,
   PriceText,
   DatetimeText,
-} from 'react-native-candlestick-chart';
+  // @ts-ignore
+} from '@coinjar/react-native-candlestick-chart';
 
 import mockData from './data.json';
 
