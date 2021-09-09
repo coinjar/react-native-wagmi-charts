@@ -1,6 +1,6 @@
 {
   "name": "@coinjar/react-native-candlestick-chart",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0",
   "description": "A sweet candlestick chart for React Native",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
@@ -64,8 +64,8 @@
     "react": "*",
     "react-native": "*",
     "react-native-gesture-handler": "*",
-    "react-native-reanimated": "*",
-    "react-native-haptic-feedback": "*"
+    "react-native-haptic-feedback": "*",
+    "react-native-reanimated": "*"
   },
   "jest": {
     "preset": "react-native",
