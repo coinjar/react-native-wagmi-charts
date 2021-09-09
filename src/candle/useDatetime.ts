@@ -1,7 +1,7 @@
 import { useDerivedValue } from 'react-native-reanimated';
-import { useCandleData } from './useCandleData';
 
-import { formatDatetime } from './utils';
+import { formatDatetime } from '../utils';
+import { useCandleData } from './useCandleData';
 
 export function useDatetime({
   format,

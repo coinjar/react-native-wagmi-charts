@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "react-native-candlestick-chart": ["./src/index"]
+      "react-native-wagmi-charts": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,

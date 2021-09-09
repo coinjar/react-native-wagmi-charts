@@ -14,8 +14,7 @@ import {
   Crosshair,
   PriceText,
   DatetimeText,
-  // @ts-ignore
-} from '@coinjar/react-native-candlestick-chart';
+} from 'react-native-wagmi-charts';
 
 import mockData from './data.json';
 
@@ -24,17 +23,13 @@ export default function App() {
     <BumbagNativeProvider>
       <Box.Safe flex="1">
         <Box.Scroll>
-          <Heading.H6 paddingX="major-2" marginBottom="major-2">
+          <Heading.H5 paddingX="major-2" marginBottom="major-2">
             React Native Candlestick Chart 🕯
-          </Heading.H6>
+          </Heading.H5>
           <CandlestickChartProvider data={mockData}>
             <Box>
               <Candles />
-              <Crosshair
-                showTooltip
-                tooltipStyle={{ backgroundColor: 'black' }}
-                tooltipTextStyle={{ color: 'white' }}
-              />
+              <Crosshair showTooltip />
             </Box>
             <Stack padding="major-2" spacing="major-1">
               <Heading.H6>PriceText</Heading.H6>

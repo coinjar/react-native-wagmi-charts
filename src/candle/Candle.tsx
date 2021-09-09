@@ -63,7 +63,7 @@ export type CandleProps = {
   }) => React.ReactNode;
 };
 
-const Candle = ({
+export const Candle = ({
   candle,
   maxHeight,
   domain,
@@ -149,5 +149,3 @@ const Candle = ({
     </>
   );
 };
-
-export default Candle;

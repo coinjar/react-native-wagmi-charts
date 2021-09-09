@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Svg } from 'react-native-svg';
 
-import Candle, { CandleProps } from './Candle';
+import { Candle, CandleProps } from './Candle';
 import { useCandlestickChart } from './useCandlestickChart';
 
 type CandlesProps = {

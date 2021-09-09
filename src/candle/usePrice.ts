@@ -1,7 +1,8 @@
 import { useDerivedValue } from 'react-native-reanimated';
 
+import { formatPrice } from '../utils';
 import { useCandlestickChart } from './useCandlestickChart';
-import { formatPrice, getPrice } from './utils';
+import { getPrice } from './utils';
 import type { TPriceType } from './types';
 import { useCandleData } from './useCandleData';
 

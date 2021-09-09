@@ -1,17 +1,17 @@
-# react-native-candlestick-chart
+# react-native-wagmi-charts
 
-A sweet candlestick chart for React Native
+A sweet chart library for React Native that will make us all feel like **W**e're **A**ll **G**onna **M**ake **I**t
 
 ## Installation
 
 ```sh
-npm install react-native-candlestick-chart
+npm install react-native-wagmi-charts
 ```
 
 ## Usage
 
 ```jsx
-import CandlestickChart from "react-native-candlestick-chart";
+import CandlestickChart from "react-native-wagmi-charts";
 
 const data = {
   { date: "2019-12-31T09:00:00Z", open: 25228.7, high: 25234.58, low: 25182.26, close: 25183.03 },

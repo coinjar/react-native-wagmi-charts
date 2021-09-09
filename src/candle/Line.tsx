@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import Svg, { Line } from 'react-native-svg';
+import Svg, { Line as SVGLine } from 'react-native-svg';
 
 interface LineProps {
   color?: string;
@@ -8,10 +8,10 @@ interface LineProps {
   y: number;
 }
 
-const LineComp = ({ color = 'gray', x, y }: LineProps) => {
+export const Line = ({ color = 'gray', x, y }: LineProps) => {
   return (
     <Svg style={StyleSheet.absoluteFill}>
-      <Line
+      <SVGLine
         x1={0}
         y1={0}
         x2={x}
@@ -23,5 +23,3 @@ const LineComp = ({ color = 'gray', x, y }: LineProps) => {
     </Svg>
   );
 };
-
-export default LineComp;

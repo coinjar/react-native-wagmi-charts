@@ -1,11 +1,11 @@
 {
-  "name": "@coinjar/react-native-candlestick-chart",
+  "name": "react-native-wagmi-charts",
   "version": "1.0.0",
   "description": "A sweet candlestick chart for React Native",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
   "types": "lib/typescript/src/index.d.ts",
-  "react-native": "src/index.tsx",
+  "react-native": "src/index.ts",
   "source": "src/index",
   "scripts": {
     "test": "jest",
@@ -25,7 +25,7 @@
     "android",
     "ios",
     "cpp",
-    "react-native-candlestick-chart.podspec",
+    "react-native-wagmi-charts.podspec",
     "!lib/typescript/example",
     "!android/build",
     "!ios/build"

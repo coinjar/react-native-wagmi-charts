@@ -1,6 +1,6 @@
 {
-  "name": "react-native-candlestick-chart-example",
-  "description": "Example app for react-native-candlestick-chart",
+  "name": "react-native-wagmi-charts-example",
+  "description": "Example app for react-native-wagmi-charts",
   "version": "0.0.1",
   "private": true,
   "main": "index",

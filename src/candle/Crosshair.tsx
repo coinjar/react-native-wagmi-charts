@@ -11,7 +11,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { clamp } from 'react-native-redash';
 
-import Line from './Line';
+import { Line } from './Line';
 import { PriceText, PriceTextProps } from './PriceText';
 import { useCandlestickChart } from './useCandlestickChart';
 
