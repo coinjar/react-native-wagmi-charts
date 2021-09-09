@@ -6,7 +6,7 @@ import type { TPriceType } from './types';
 
 import { usePrice } from './usePrice';
 
-export type PriceTextProps = {
+export type CandlestickChartPriceTextProps = {
   format?: any;
   precision?: number;
   variant?: 'formatted' | 'value';
@@ -14,13 +14,13 @@ export type PriceTextProps = {
   style?: Animated.AnimateProps<RNTextProps>['style'];
 };
 
-export function PriceText({
+export function CandlestickChartPriceText({
   format,
   precision = 2,
   variant = 'formatted',
   type = 'crosshair',
   ...props
-}: PriceTextProps) {
+}: CandlestickChartPriceTextProps) {
   const price = usePrice({ format, precision, type });
   return <ReText text={price[variant]} {...props} />;
 }

@@ -1,22 +1,22 @@
 import * as React from 'react';
 import { Svg } from 'react-native-svg';
 
-import { Candle, CandleProps } from './Candle';
+import { CandlestickChartCandle, CandlestickChartCandleProps } from './Candle';
 import { useCandlestickChart } from './useCandlestickChart';
 
-type CandlesProps = {
+type CandlestickChartCandlesProps = {
   width?: number;
   height?: number;
-  positiveColor?: CandleProps['positiveColor'];
-  negativeColor?: CandleProps['negativeColor'];
-  renderRect?: CandleProps['renderRect'];
-  renderLine?: CandleProps['renderLine'];
-  rectProps?: CandleProps['rectProps'];
-  lineProps?: CandleProps['lineProps'];
+  positiveColor?: CandlestickChartCandleProps['positiveColor'];
+  negativeColor?: CandlestickChartCandleProps['negativeColor'];
+  renderRect?: CandlestickChartCandleProps['renderRect'];
+  renderLine?: CandlestickChartCandleProps['renderLine'];
+  rectProps?: CandlestickChartCandleProps['rectProps'];
+  lineProps?: CandlestickChartCandleProps['lineProps'];
   useAnimations?: boolean;
 };
 
-export function Candles({
+export function CandlestickChartCandles({
   width: widthOverride,
   height: heightOverride,
   positiveColor,
@@ -26,7 +26,7 @@ export function Candles({
   useAnimations = true,
   renderRect,
   renderLine,
-}: CandlesProps) {
+}: CandlestickChartCandlesProps) {
   const { data, width, height, domain, step, setHeight, setWidth } =
     useCandlestickChart();
 
@@ -49,7 +49,7 @@ export function Candles({
   return (
     <Svg width={width} height={height}>
       {data.map((candle, index) => (
-        <Candle
+        <CandlestickChartCandle
           key={index as React.Key}
           domain={domain}
           maxHeight={height}

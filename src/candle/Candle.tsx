@@ -20,7 +20,7 @@ const MARGIN = 2;
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
 const AnimatedLine = Animated.createAnimatedComponent(Line);
 
-export type CandleProps = {
+export type CandlestickChartCandleProps = {
   candle: TCandle;
   domain: TDomain;
   maxHeight: number;
@@ -63,7 +63,7 @@ export type CandleProps = {
   }) => React.ReactNode;
 };
 
-export const Candle = ({
+export const CandlestickChartCandle = ({
   candle,
   maxHeight,
   domain,
@@ -78,7 +78,7 @@ export const Candle = ({
     props.useAnimations ? <AnimatedLine {...props} /> : <Line {...props} />,
   renderRect = (props) =>
     props.useAnimations ? <AnimatedRect {...props} /> : <Rect {...props} />,
-}: CandleProps) => {
+}: CandlestickChartCandleProps) => {
   const { close, open, high, low } = candle;
   const isPositive = close > open;
   const fill = isPositive ? positiveColor : negativeColor;

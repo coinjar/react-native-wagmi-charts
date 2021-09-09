@@ -2,13 +2,17 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import Svg, { Line as SVGLine } from 'react-native-svg';
 
-interface LineProps {
+interface CandlestickChartLineProps {
   color?: string;
   x: number;
   y: number;
 }
 
-export const Line = ({ color = 'gray', x, y }: LineProps) => {
+export const CandlestickChartLine = ({
+  color = 'gray',
+  x,
+  y,
+}: CandlestickChartLineProps) => {
   return (
     <Svg style={StyleSheet.absoluteFill}>
       <SVGLine

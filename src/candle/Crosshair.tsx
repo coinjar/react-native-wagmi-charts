@@ -11,15 +11,18 @@ import Animated, {
 } from 'react-native-reanimated';
 import { clamp } from 'react-native-redash';
 
-import { Line } from './Line';
-import { PriceText, PriceTextProps } from './PriceText';
+import { CandlestickChartLine } from './Line';
+import {
+  CandlestickChartPriceText,
+  CandlestickChartPriceTextProps,
+} from './PriceText';
 import { useCandlestickChart } from './useCandlestickChart';
 
-type CrosshairProps = {
+type CandlestickChartCrosshairProps = {
   color?: string;
   enableHapticFeedback?: boolean;
   tooltipProps?: Animated.AnimateProps<ViewProps>;
-  tooltipTextProps?: PriceTextProps;
+  tooltipTextProps?: CandlestickChartPriceTextProps;
   showTooltip?: boolean;
 };
 
@@ -30,13 +33,13 @@ function invokeHaptic() {
   });
 }
 
-export function Crosshair({
+export function CandlestickChartCrosshair({
   color,
   enableHapticFeedback = false,
   tooltipProps = {},
   tooltipTextProps = {},
   showTooltip = false,
-}: CrosshairProps) {
+}: CandlestickChartCrosshairProps) {
   const { currentX, currentY, width, height, step } = useCandlestickChart();
 
   const tooltipPosition = useSharedValue('left');
@@ -75,9 +78,11 @@ export function Crosshair({
     padding: 4,
   }));
   const leftTooltip = useAnimatedStyle(() => ({
+    left: 0,
     opacity: tooltipPosition.value === 'left' ? 1 : 0,
   }));
   const rightTooltip = useAnimatedStyle(() => ({
+    right: 0,
     opacity: tooltipPosition.value === 'right' ? 1 : 0,
   }));
 
@@ -94,28 +99,23 @@ export function Crosshair({
     <PanGestureHandler minDist={0} onGestureEvent={onGestureEvent}>
       <Animated.View style={StyleSheet.absoluteFill}>
         <Animated.View style={[StyleSheet.absoluteFill, horizontal]}>
-          <Line color={color} x={width} y={0} />
+          <CandlestickChartLine color={color} x={width} y={0} />
           {showTooltip && (
             <>
               <Animated.View
                 {...tooltipProps}
-                style={[tooltip, leftTooltip, tooltipProps.style, { left: 0 }]}
+                style={[tooltip, leftTooltip, tooltipProps.style]}
               >
-                <PriceText
+                <CandlestickChartPriceText
                   {...tooltipTextProps}
                   style={[{ fontSize: 14 }, tooltipTextProps.style]}
                 />
               </Animated.View>
               <Animated.View
                 {...tooltipProps}
-                style={[
-                  tooltip,
-                  rightTooltip,
-                  tooltipProps.style,
-                  { right: 0 },
-                ]}
+                style={[tooltip, rightTooltip, tooltipProps.style]}
               >
-                <PriceText
+                <CandlestickChartPriceText
                   {...tooltipTextProps}
                   style={[{ fontSize: 14 }, tooltipTextProps.style]}
                 />
@@ -124,7 +124,7 @@ export function Crosshair({
           )}
         </Animated.View>
         <Animated.View style={[StyleSheet.absoluteFill, vertical]}>
-          <Line color={color} x={0} y={height} />
+          <CandlestickChartLine color={color} x={0} y={height} />
         </Animated.View>
       </Animated.View>
     </PanGestureHandler>

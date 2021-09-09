@@ -45,7 +45,7 @@ export function formatDatetime({
     day: 'numeric',
   },
 }: {
-  value: string;
+  value: number;
   locale?: string;
   options?: { [key: string]: string };
 }) {

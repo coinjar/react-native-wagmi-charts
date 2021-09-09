@@ -5,7 +5,7 @@ import type Animated from 'react-native-reanimated';
 
 import { useDatetime } from './useDatetime';
 
-type PriceTextProps = {
+type CandlestickChartPriceTextProps = {
   locale?: string;
   options?: { [key: string]: string };
   format?: any;
@@ -13,13 +13,13 @@ type PriceTextProps = {
   style?: Animated.AnimateProps<RNTextProps>['style'];
 };
 
-export function DatetimeText({
+export function CandlestickChartDatetimeText({
   locale,
   options,
   format,
   variant = 'formatted',
   ...props
-}: PriceTextProps) {
+}: CandlestickChartPriceTextProps) {
   const datetime = useDatetime({ format, locale, options });
   return <ReText text={datetime[variant]} {...props} />;
 }

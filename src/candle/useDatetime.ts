@@ -15,11 +15,16 @@ export function useDatetime({
   const candle = useCandleData();
 
   const timestamp = useDerivedValue(() => {
-    return candle.value.date;
+    return candle.value.timestamp;
+  });
+
+  const timestampString = useDerivedValue(() => {
+    if (timestamp.value === -1) return '';
+    return timestamp.value.toString();
   });
 
   const formatted = useDerivedValue(() => {
-    if (!timestamp.value) return '';
+    if (timestamp.value === -1) return '';
     const formattedDatetime = formatDatetime({
       value: timestamp.value,
       locale,
@@ -30,5 +35,5 @@ export function useDatetime({
       : formattedDatetime;
   });
 
-  return { value: timestamp, formatted };
+  return { value: timestampString, formatted };
 }

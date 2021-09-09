@@ -1,7 +1,7 @@
 import type Animated from 'react-native-reanimated';
 
 export type TCandle = {
-  date: string;
+  timestamp: number;
   open: number;
   high: number;
   low: number;
