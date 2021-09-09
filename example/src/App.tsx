@@ -30,7 +30,11 @@ export default function App() {
           <CandlestickChartProvider data={mockData}>
             <Box>
               <Candles />
-              <Crosshair />
+              <Crosshair
+                showTooltip
+                tooltipStyle={{ backgroundColor: 'black' }}
+                tooltipTextStyle={{ color: 'white' }}
+              />
             </Box>
             <Stack padding="major-2" spacing="major-1">
               <Heading.H6>PriceText</Heading.H6>

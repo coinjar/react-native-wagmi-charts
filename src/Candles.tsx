@@ -11,6 +11,9 @@ type CandlesProps = {
   negativeColor?: CandleProps['negativeColor'];
   renderRect?: CandleProps['renderRect'];
   renderLine?: CandleProps['renderLine'];
+  rectProps?: CandleProps['rectProps'];
+  lineProps?: CandleProps['lineProps'];
+  useAnimations?: boolean;
 };
 
 export function Candles({
@@ -18,6 +21,9 @@ export function Candles({
   height: heightOverride,
   positiveColor,
   negativeColor,
+  rectProps,
+  lineProps,
+  useAnimations = true,
   renderRect,
   renderLine,
 }: CandlesProps) {
@@ -44,7 +50,7 @@ export function Candles({
     <Svg width={width} height={height}>
       {data.map((candle, index) => (
         <Candle
-          key={candle.date as React.Key}
+          key={index as React.Key}
           domain={domain}
           maxHeight={height}
           width={step}
@@ -52,6 +58,9 @@ export function Candles({
           negativeColor={negativeColor}
           renderRect={renderRect}
           renderLine={renderLine}
+          rectProps={rectProps}
+          lineProps={lineProps}
+          useAnimations={useAnimations}
           candle={candle}
           index={index}
         />

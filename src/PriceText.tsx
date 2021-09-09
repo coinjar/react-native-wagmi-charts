@@ -6,7 +6,7 @@ import type { TPriceType } from './types';
 
 import { usePrice } from './usePrice';
 
-type PriceTextProps = {
+export type PriceTextProps = {
   format?: any;
   precision?: number;
   variant?: 'formatted' | 'value';
