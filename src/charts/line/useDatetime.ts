@@ -1,9 +1,9 @@
 import { useDerivedValue } from 'react-native-reanimated';
 
-import { formatDatetime } from '../utils';
-import { useCandleData } from './useCandleData';
+import { formatDatetime } from '../../utils';
+import { useLineChart } from './useLineChart';
 
-export function useDatetime({
+export function useLineChartDatetime({
   format,
   locale,
   options,
@@ -12,19 +12,21 @@ export function useDatetime({
   locale?: string;
   options?: { [key: string]: string };
 } = {}) {
-  const candle = useCandleData();
+  const { currentIndex, data } = useLineChart();
 
   const timestamp = useDerivedValue(() => {
-    return candle.value.timestamp;
+    if (typeof currentIndex.value === 'undefined' || currentIndex.value === -1)
+      return '';
+    return data[currentIndex.value].timestamp;
   });
 
   const timestampString = useDerivedValue(() => {
-    if (timestamp.value === -1) return '';
+    if (timestamp.value === '') return '';
     return timestamp.value.toString();
   });
 
   const formatted = useDerivedValue(() => {
-    if (timestamp.value === -1) return '';
+    if (timestamp.value === '') return '';
     const formattedDatetime = formatDatetime({
       value: timestamp.value,
       locale,

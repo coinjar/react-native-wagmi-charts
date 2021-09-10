@@ -8,6 +8,7 @@ import { getDomain, getPath } from './utils';
 export const LineChartContext = React.createContext<TLineChartContext>({
   currentX: { value: -1 },
   currentY: { value: -1 },
+  currentIndex: { value: -1 },
   data: [],
   height: 0,
   width: 0,
@@ -30,6 +31,7 @@ export function LineChartProvider({ children, data }: LineChartProviderProps) {
   const [height, setHeight] = React.useState(screenWidth);
   const currentX = useSharedValue(-1);
   const currentY = useSharedValue(-1);
+  const currentIndex = useSharedValue(-1);
   const isActive = useSharedValue(false);
 
   const domain = React.useMemo(() => getDomain(data), [data]);
@@ -42,6 +44,7 @@ export function LineChartProvider({ children, data }: LineChartProviderProps) {
     () => ({
       currentX,
       currentY,
+      currentIndex,
       data,
       path,
       width,
@@ -51,7 +54,17 @@ export function LineChartProvider({ children, data }: LineChartProviderProps) {
       setHeight,
       setWidth,
     }),
-    [currentX, currentY, data, domain, height, isActive, path, width]
+    [
+      currentIndex,
+      currentX,
+      currentY,
+      data,
+      domain,
+      height,
+      isActive,
+      path,
+      width,
+    ]
   );
 
   return (

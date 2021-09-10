@@ -32,6 +32,7 @@ export function getPath({
     .line()
     .x((data: any) => scaleX(data.timestamp))
     .y((data: any) => scaleY(data.value))
+    // .curve(shape.curveLinear)(data);
     .curve(shape.curveBumpX)(data);
   return path;
 }

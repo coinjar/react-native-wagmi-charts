@@ -21,7 +21,16 @@ export function LineChartCursor({
   wrapperSize = 32,
   type = 'crosshair',
 }: LineChartCursorProps) {
-  const { currentX, currentY, isActive, height, path } = useLineChart();
+  const {
+    currentX,
+    currentY,
+    currentIndex,
+    isActive,
+    height,
+    width,
+    path,
+    data,
+  } = useLineChart();
 
   const parsedPath = React.useMemo(() => parse(path), [path]);
 
@@ -30,9 +39,11 @@ export function LineChartCursor({
       isActive.value = true;
       currentX.value = x;
       currentY.value = getYForX(parsedPath, x) || 0;
+      currentIndex.value = Math.round(x / width / (1 / (data.length - 1)));
     },
     onEnd: () => {
       isActive.value = false;
+      currentIndex.value = -1;
     },
   });
 

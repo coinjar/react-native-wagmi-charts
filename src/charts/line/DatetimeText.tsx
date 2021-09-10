@@ -3,9 +3,9 @@ import { ReText } from 'react-native-redash';
 import type { TextProps as RNTextProps } from 'react-native';
 import type Animated from 'react-native-reanimated';
 
-import { useDatetime } from './useDatetime';
+import { useLineChartDatetime } from './useDatetime';
 
-type CandlestickChartPriceTextProps = {
+type LineChartPriceTextProps = {
   locale?: string;
   options?: { [key: string]: string };
   format?: any;
@@ -13,13 +13,13 @@ type CandlestickChartPriceTextProps = {
   style?: Animated.AnimateProps<RNTextProps>['style'];
 };
 
-export function CandlestickChartDatetimeText({
+export function LineChartDatetimeText({
   locale,
   options,
   format,
   variant = 'formatted',
   ...props
-}: CandlestickChartPriceTextProps) {
-  const datetime = useDatetime({ format, locale, options });
+}: LineChartPriceTextProps) {
+  const datetime = useLineChartDatetime({ format, locale, options });
   return <ReText text={datetime[variant]} {...props} />;
 }

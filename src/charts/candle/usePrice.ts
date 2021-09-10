@@ -1,12 +1,12 @@
 import { useDerivedValue } from 'react-native-reanimated';
 
-import { formatPrice } from '../utils';
+import { formatPrice } from '../../utils';
 import { useCandlestickChart } from './useCandlestickChart';
 import { getPrice } from './utils';
 import type { TPriceType } from './types';
 import { useCandleData } from './useCandleData';
 
-export function usePrice({
+export function useCandlestickChartPrice({
   format,
   precision = 2,
   type = 'crosshair',

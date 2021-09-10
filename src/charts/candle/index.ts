@@ -5,6 +5,9 @@ import { CandlestickChartProvider } from './Context';
 import { CandlestickChartPriceText } from './PriceText';
 import { CandlestickChartDatetimeText } from './DatetimeText';
 import { CandlestickChartLine } from './Line';
+import { useCandlestickChartDatetime } from './useDatetime';
+import { useCandlestickChartPrice } from './usePrice';
+import { useCandlestickChart } from './useCandlestickChart';
 
 export * from './Candle';
 export * from './Candles';
@@ -27,4 +30,7 @@ export const CandlestickChart = {
   PriceText: CandlestickChartPriceText,
   DatetimeText: CandlestickChartDatetimeText,
   Line: CandlestickChartLine,
+  useDatetime: useCandlestickChartDatetime,
+  usePrice: useCandlestickChartPrice,
+  useChart: useCandlestickChart,
 };

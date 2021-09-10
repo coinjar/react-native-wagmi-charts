@@ -2,25 +2,24 @@ import * as React from 'react';
 import { ReText } from 'react-native-redash';
 import type { TextProps as RNTextProps } from 'react-native';
 import type Animated from 'react-native-reanimated';
-import type { TPriceType } from './types';
 
-import { usePrice } from './usePrice';
+import { useCandlestickChartDatetime } from './useDatetime';
 
-export type CandlestickChartPriceTextProps = {
+type CandlestickChartPriceTextProps = {
+  locale?: string;
+  options?: { [key: string]: string };
   format?: any;
-  precision?: number;
   variant?: 'formatted' | 'value';
-  type?: TPriceType;
   style?: Animated.AnimateProps<RNTextProps>['style'];
 };
 
-export function CandlestickChartPriceText({
+export function CandlestickChartDatetimeText({
+  locale,
+  options,
   format,
-  precision = 2,
   variant = 'formatted',
-  type = 'crosshair',
   ...props
 }: CandlestickChartPriceTextProps) {
-  const price = usePrice({ format, precision, type });
-  return <ReText text={price[variant]} {...props} />;
+  const datetime = useCandlestickChartDatetime({ format, locale, options });
+  return <ReText text={datetime[variant]} {...props} />;
 }

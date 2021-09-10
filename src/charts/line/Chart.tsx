@@ -11,7 +11,7 @@ import { useLineChart } from './useLineChart';
 
 const AnimatedSVG = Animated.createAnimatedComponent(Svg);
 
-type ChartProps = {
+type LineChartProps = {
   inactivePathColor?: string;
   pathColor?: string;
   width?: number;
@@ -23,7 +23,7 @@ export function LineChart({
   pathColor = 'black',
   width: widthOverride,
   height: heightOverride,
-}: ChartProps) {
+}: LineChartProps) {
   const { currentX, isActive, width, height, setHeight, setWidth } =
     useLineChart();
 

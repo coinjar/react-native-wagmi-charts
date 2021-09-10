@@ -9,6 +9,7 @@ export type TLineChartDomain = [number, number];
 export type TLineChartContext = {
   currentX: Animated.SharedValue<number>;
   currentY: Animated.SharedValue<number>;
+  currentIndex: Animated.SharedValue<number>;
   data: TLineChartData;
   path: string;
   width: number;
