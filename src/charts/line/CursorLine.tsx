@@ -5,11 +5,11 @@ import Svg, { Line as SVGLine } from 'react-native-svg';
 
 import { useLineChart } from './useLineChart';
 
-interface LineChartCursorLineProps {
+type LineChartCursorLineProps = {
   color?: string;
   x: number;
   y: number;
-}
+};
 
 export const LineChartCursorLine = ({
   color = 'gray',

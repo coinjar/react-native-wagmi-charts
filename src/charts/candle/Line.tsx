@@ -2,11 +2,11 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import Svg, { Line as SVGLine } from 'react-native-svg';
 
-interface CandlestickChartLineProps {
+type CandlestickChartLineProps = {
   color?: string;
   x: number;
   y: number;
-}
+};
 
 export const CandlestickChartLine = ({
   color = 'gray',
