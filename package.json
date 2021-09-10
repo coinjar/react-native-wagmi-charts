@@ -36,6 +36,8 @@
     "android"
   ],
   "dependencies": {
+    "d3-scale": "^2",
+    "d3-shape": "^3.0.1",
     "react-native-redash": "^16.1.1",
     "react-native-svg": "^12.1.1"
   },

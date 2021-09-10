@@ -2,64 +2,61 @@ import * as React from 'react';
 import { Dimensions } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 
-import type { TContext, TData } from './types';
-import { getDomain } from './utils';
+import type { TLineChartContext, TLineChartData } from './types';
+import { getDomain, getPath } from './utils';
 
-export const CandlestickChartContext = React.createContext<TContext>({
+export const LineChartContext = React.createContext<TLineChartContext>({
   currentX: { value: -1 },
   currentY: { value: -1 },
   data: [],
   height: 0,
   width: 0,
   domain: [0, 0],
-  step: 0,
+  isActive: { value: false },
+  path: '',
   setHeight: () => {},
   setWidth: () => {},
 });
 
-type CandlestickChartProviderProps = {
+type LineChartProviderProps = {
   children: React.ReactNode;
-  data: TData;
+  data: TLineChartData;
 };
 
 const { width: screenWidth } = Dimensions.get('window');
 
-export function CandlestickChartProvider({
-  children,
-  data,
-}: CandlestickChartProviderProps) {
+export function LineChartProvider({ children, data }: LineChartProviderProps) {
   const [width, setWidth] = React.useState(screenWidth);
   const [height, setHeight] = React.useState(screenWidth);
-  const [step, setStep] = React.useState(0);
   const currentX = useSharedValue(-1);
   const currentY = useSharedValue(-1);
+  const isActive = useSharedValue(false);
 
   const domain = React.useMemo(() => getDomain(data), [data]);
 
-  React.useEffect(() => {
-    const newStep = width / data.length;
-    setStep(newStep);
-  }, [data.length, width]);
+  const path = React.useMemo(() => {
+    return getPath({ data, width, height });
+  }, [data, height, width]);
 
   const contextValue = React.useMemo(
     () => ({
       currentX,
       currentY,
       data,
+      path,
       width,
       height,
+      isActive,
       domain,
-      step,
-      setStep,
       setHeight,
       setWidth,
     }),
-    [currentX, currentY, data, domain, height, step, width]
+    [currentX, currentY, data, domain, height, isActive, path, width]
   );
 
   return (
-    <CandlestickChartContext.Provider value={contextValue}>
+    <LineChartContext.Provider value={contextValue}>
       {children}
-    </CandlestickChartContext.Provider>
+    </LineChartContext.Provider>
   );
 }
