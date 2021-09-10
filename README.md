@@ -9,7 +9,7 @@ Docs 🔜
 
 ### Credits
 
-This library was inspired by the following:
+This library wouldn't be possible if it weren't for:
 
 - [Rainbow's Animated Charts](https://github.com/rainbow-me/react-native-animated-charts)
 - @wcandillon and his [Can It Be Done In React Native](www.youtube.com/wcandillon) series 💪😍  
