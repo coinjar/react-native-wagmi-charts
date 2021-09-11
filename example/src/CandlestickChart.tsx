@@ -13,7 +13,9 @@ export default function App() {
       <CandlestickChart.Provider data={mockData}>
         <Box>
           <CandlestickChart.Candles />
-          <CandlestickChart.Crosshair showTooltip />
+          <CandlestickChart.Crosshair>
+            <CandlestickChart.Tooltip />
+          </CandlestickChart.Crosshair>
         </Box>
         <Stack padding="major-2" spacing="major-1">
           <Heading.H6>PriceText</Heading.H6>
