@@ -15,22 +15,24 @@ export function getPath({
   data,
   width,
   height,
+  gutter,
 }: {
   data: TLineChartData;
   width: number;
   height: number;
+  gutter: number;
 }): string {
-  const timestamps = data.map(({ timestamp }) => timestamp);
+  const timestamps = data.map(({}, i) => i);
   const values = data.map(({ value }) => value);
   const scaleX = scaleLinear()
     .domain([Math.min(...timestamps), Math.max(...timestamps)])
     .range([0, width]);
   const scaleY = scaleLinear()
     .domain([Math.min(...values), Math.max(...values)])
-    .range([height - 10, 0]);
+    .range([height - gutter, gutter]);
   const path = shape
     .line()
-    .x((data: any) => scaleX(data.timestamp))
+    .x((_: any, i: number) => scaleX(i))
     .y((data: any) => scaleY(data.value))
     // .curve(shape.curveLinear)(data);
     .curve(shape.curveBumpX)(data);

@@ -14,32 +14,14 @@ const AnimatedSVG = Animated.createAnimatedComponent(Svg);
 type LineChartProps = {
   inactivePathColor?: string;
   pathColor?: string;
-  width?: number;
-  height?: number;
+  gutter?: number;
 };
 
 export function LineChart({
   inactivePathColor = '#e0e0e0',
   pathColor = 'black',
-  width: widthOverride,
-  height: heightOverride,
 }: LineChartProps) {
-  const { currentX, isActive, width, height, setHeight, setWidth } =
-    useLineChart();
-
-  ////////////////////////////////////////////////
-
-  React.useEffect(() => {
-    if (widthOverride) {
-      setWidth(widthOverride);
-    }
-  }, [widthOverride, setWidth]);
-
-  React.useEffect(() => {
-    if (heightOverride) {
-      setHeight(heightOverride);
-    }
-  }, [heightOverride, setHeight]);
+  const { currentX, isActive, width, height } = useLineChart();
 
   ////////////////////////////////////////////////
 

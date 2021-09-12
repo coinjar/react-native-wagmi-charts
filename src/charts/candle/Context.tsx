@@ -13,13 +13,13 @@ export const CandlestickChartContext = React.createContext<TContext>({
   width: 0,
   domain: [0, 0],
   step: 0,
-  setHeight: () => {},
-  setWidth: () => {},
 });
 
 type CandlestickChartProviderProps = {
   children: React.ReactNode;
   data: TData;
+  width?: number;
+  height?: number;
 };
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -27,9 +27,9 @@ const { width: screenWidth } = Dimensions.get('window');
 export function CandlestickChartProvider({
   children,
   data,
+  width = screenWidth,
+  height = screenWidth,
 }: CandlestickChartProviderProps) {
-  const [width, setWidth] = React.useState(screenWidth);
-  const [height, setHeight] = React.useState(screenWidth);
   const [step, setStep] = React.useState(0);
   const currentX = useSharedValue(-1);
   const currentY = useSharedValue(-1);
@@ -51,8 +51,6 @@ export function CandlestickChartProvider({
       domain,
       step,
       setStep,
-      setHeight,
-      setWidth,
     }),
     [currentX, currentY, data, domain, height, step, width]
   );

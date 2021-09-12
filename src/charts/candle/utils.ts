@@ -5,7 +5,9 @@ import type { TCandle, TDomain } from './types';
 export function getDomain(rows: TCandle[]): [number, number] {
   'worklet';
   const values = rows.map(({ high, low }) => [high, low]).flat();
-  return [Math.min(...values), Math.max(...values)];
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  return [min - (max - min) * 0.025, max + (max - min) * 0.025];
 }
 
 export function getY({

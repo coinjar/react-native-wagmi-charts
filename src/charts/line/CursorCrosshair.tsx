@@ -5,15 +5,18 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 
+import { LineChartCursor } from './Cursor';
 import { useLineChart } from './useLineChart';
 
 type LineChartCursorCrosshairProps = {
+  children?: React.ReactNode;
   color?: string;
   size?: number;
   wrapperSize?: number;
 };
 
 export function LineChartCursorCrosshair({
+  children,
   color = 'black',
   size = 8,
   wrapperSize = 32,
@@ -33,35 +36,38 @@ export function LineChartCursorCrosshair({
   }));
 
   return (
-    <Animated.View
-      style={[
-        {
-          width: wrapperSize,
-          height: wrapperSize,
-          alignItems: 'center',
-          justifyContent: 'center',
-        },
-        animatedCursorStyle,
-      ]}
-    >
-      <View
-        style={{
-          backgroundColor: color,
-          width: wrapperSize,
-          height: wrapperSize,
-          borderRadius: wrapperSize,
-          opacity: 0.1,
-          position: 'absolute',
-        }}
-      />
-      <View
-        style={{
-          backgroundColor: color,
-          width: size,
-          height: size,
-          borderRadius: size,
-        }}
-      />
-    </Animated.View>
+    <LineChartCursor type="crosshair">
+      <Animated.View
+        style={[
+          {
+            width: wrapperSize,
+            height: wrapperSize,
+            alignItems: 'center',
+            justifyContent: 'center',
+          },
+          animatedCursorStyle,
+        ]}
+      >
+        <View
+          style={{
+            backgroundColor: color,
+            width: wrapperSize,
+            height: wrapperSize,
+            borderRadius: wrapperSize,
+            opacity: 0.1,
+            position: 'absolute',
+          }}
+        />
+        <View
+          style={{
+            backgroundColor: color,
+            width: size,
+            height: size,
+            borderRadius: size,
+          }}
+        />
+      </Animated.View>
+      {children}
+    </LineChartCursor>
   );
 }

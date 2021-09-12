@@ -12,58 +12,58 @@ export default function App() {
       <Heading.H5 paddingX="major-2" marginBottom="major-2">
         WAGMI Line Chart 📈
       </Heading.H5>
-      <LineChart.Provider data={data}>
+      <LineChart data={data}>
         <Box>
-          <LineChart.Chart />
-          <LineChart.Cursor>
-            <LineChart.CursorCrosshair />
-          </LineChart.Cursor>
+          <LineChart.Path />
+          <LineChart.CursorLine>
+            <LineChart.CursorTooltip />
+          </LineChart.CursorLine>
         </Box>
-        <Box>
-          <Button onPress={() => setData(mockData)}>Data 1</Button>
-          <Button onPress={() => setData(mockData2)}>Data 2</Button>
-        </Box>
-        <Stack padding="major-2" spacing="major-1">
-          <Heading.H6>PriceText</Heading.H6>
-          <Flex>
-            <Text fontWeight="500">Formatted: </Text>
-            <LineChart.PriceText />
-          </Flex>
-          <Flex>
-            <Text fontWeight="500">Value: </Text>
-            <LineChart.PriceText variant="value" />
-          </Flex>
-          <Flex>
-            <Text fontWeight="500">Custom format: </Text>
-            <LineChart.PriceText
-              format={(d: any) => {
-                'worklet';
-                return `$${d.formatted} AUD`;
-              }}
-            />
-          </Flex>
-          <Heading.H6>DatetimeText</Heading.H6>
-          <Flex>
-            <Text fontWeight="500">Formatted: </Text>
-            <LineChart.DatetimeText />
-          </Flex>
-          <Flex>
-            <Text fontWeight="500">Value: </Text>
-            <LineChart.DatetimeText variant="value" />
-          </Flex>
-          <Flex>
-            <Text fontWeight="500">Custom format: </Text>
-            <LineChart.DatetimeText
-              locale="en-AU"
-              options={{
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-              }}
-            />
-          </Flex>
-        </Stack>
-      </LineChart.Provider>
+      </LineChart>
+      <Box>
+        <Button onPress={() => setData(mockData)}>Data 1</Button>
+        <Button onPress={() => setData(mockData2)}>Data 2</Button>
+      </Box>
+      <Stack padding="major-2" spacing="major-1">
+        <Heading.H6>PriceText</Heading.H6>
+        <Flex>
+          <Text fontWeight="500">Formatted: </Text>
+          <LineChart.PriceText />
+        </Flex>
+        <Flex>
+          <Text fontWeight="500">Value: </Text>
+          <LineChart.PriceText variant="value" />
+        </Flex>
+        <Flex>
+          <Text fontWeight="500">Custom format: </Text>
+          <LineChart.PriceText
+            format={(d: any) => {
+              'worklet';
+              return `$${d.formatted} AUD`;
+            }}
+          />
+        </Flex>
+        <Heading.H6>DatetimeText</Heading.H6>
+        <Flex>
+          <Text fontWeight="500">Formatted: </Text>
+          <LineChart.DatetimeText />
+        </Flex>
+        <Flex>
+          <Text fontWeight="500">Value: </Text>
+          <LineChart.DatetimeText variant="value" />
+        </Flex>
+        <Flex>
+          <Text fontWeight="500">Custom format: </Text>
+          <LineChart.DatetimeText
+            locale="en-AU"
+            options={{
+              year: 'numeric',
+              month: 'numeric',
+              day: 'numeric',
+            }}
+          />
+        </Flex>
+      </Stack>
     </>
   );
 }

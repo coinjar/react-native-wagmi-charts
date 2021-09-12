@@ -17,8 +17,6 @@ type CandlestickChartCandlesProps = {
 };
 
 export function CandlestickChartCandles({
-  width: widthOverride,
-  height: heightOverride,
   positiveColor,
   negativeColor,
   rectProps,
@@ -27,22 +25,7 @@ export function CandlestickChartCandles({
   renderRect,
   renderLine,
 }: CandlestickChartCandlesProps) {
-  const { data, width, height, domain, step, setHeight, setWidth } =
-    useCandlestickChart();
-
-  ////////////////////////////////////////////////
-
-  React.useEffect(() => {
-    if (widthOverride) {
-      setWidth(widthOverride);
-    }
-  }, [widthOverride, setWidth]);
-
-  React.useEffect(() => {
-    if (heightOverride) {
-      setHeight(heightOverride);
-    }
-  }, [heightOverride, setHeight]);
+  const { data, width, height, domain, step } = useCandlestickChart();
 
   ////////////////////////////////////////////////
 

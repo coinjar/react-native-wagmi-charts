@@ -1,22 +1,26 @@
 import * as React from 'react';
-import { Box, Flex, Heading, Text, Stack } from 'bumbag-native';
+import { Box, Button, Flex, Heading, Text, Stack } from 'bumbag-native';
 import { CandlestickChart } from 'react-native-wagmi-charts';
 
 import mockData from './candlestick-data.json';
+import mockData2 from './candlestick-data2.json';
 
 export default function App() {
+  const [data, setData] = React.useState(mockData);
   return (
     <>
       <Heading.H5 paddingX="major-2" marginBottom="major-2">
-        React Native Candlestick Chart 🕯
+        WAGMI Candlestick Chart 🕯
       </Heading.H5>
-      <CandlestickChart.Provider data={mockData}>
+      <CandlestickChart.Provider data={data}>
         <Box>
           <CandlestickChart.Candles />
           <CandlestickChart.Crosshair>
             <CandlestickChart.Tooltip />
           </CandlestickChart.Crosshair>
         </Box>
+        <Button onPress={() => setData(mockData)}>Data 1</Button>
+        <Button onPress={() => setData(mockData2)}>Data 2</Button>
         <Stack padding="major-2" spacing="major-1">
           <Heading.H6>PriceText</Heading.H6>
           <Box>

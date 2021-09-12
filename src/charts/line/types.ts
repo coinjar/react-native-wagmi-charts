@@ -16,6 +16,4 @@ export type TLineChartContext = {
   height: number;
   isActive: Animated.SharedValue<boolean>;
   domain: TLineChartDomain;
-  setHeight: (height: number) => void;
-  setWidth: (width: number) => void;
 };

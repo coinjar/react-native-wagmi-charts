@@ -8,9 +8,12 @@ import { useLineChart } from './useLineChart';
 
 type LineChartCursorProps = {
   children: React.ReactNode;
+  type: 'line' | 'crosshair';
 };
 
-export function LineChartCursor({ children }: LineChartCursorProps) {
+export const CursorContext = React.createContext({ type: '' });
+
+export function LineChartCursor({ children, type }: LineChartCursorProps) {
   const { currentX, currentY, currentIndex, isActive, width, path, data } =
     useLineChart();
 
@@ -30,11 +33,15 @@ export function LineChartCursor({ children }: LineChartCursorProps) {
   });
 
   return (
-    <LongPressGestureHandler
-      minDurationMs={0}
-      onGestureEvent={onGestureEvent as any}
-    >
-      <Animated.View style={StyleSheet.absoluteFill}>{children}</Animated.View>
-    </LongPressGestureHandler>
+    <CursorContext.Provider value={{ type }}>
+      <LongPressGestureHandler
+        minDurationMs={0}
+        onGestureEvent={onGestureEvent as any}
+      >
+        <Animated.View style={StyleSheet.absoluteFill}>
+          {children}
+        </Animated.View>
+      </LongPressGestureHandler>
+    </CursorContext.Provider>
   );
 }

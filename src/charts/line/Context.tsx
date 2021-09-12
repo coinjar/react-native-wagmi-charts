@@ -15,20 +15,25 @@ export const LineChartContext = React.createContext<TLineChartContext>({
   domain: [0, 0],
   isActive: { value: false },
   path: '',
-  setHeight: () => {},
-  setWidth: () => {},
 });
 
 type LineChartProviderProps = {
   children: React.ReactNode;
   data: TLineChartData;
+  gutter?: number;
+  width?: number;
+  height?: number;
 };
 
 const { width: screenWidth } = Dimensions.get('window');
 
-export function LineChartProvider({ children, data }: LineChartProviderProps) {
-  const [width, setWidth] = React.useState(screenWidth);
-  const [height, setHeight] = React.useState(screenWidth);
+export function LineChartProvider({
+  children,
+  data,
+  gutter = 16,
+  width = screenWidth,
+  height = screenWidth,
+}: LineChartProviderProps) {
   const currentX = useSharedValue(-1);
   const currentY = useSharedValue(-1);
   const currentIndex = useSharedValue(-1);
@@ -37,8 +42,8 @@ export function LineChartProvider({ children, data }: LineChartProviderProps) {
   const domain = React.useMemo(() => getDomain(data), [data]);
 
   const path = React.useMemo(() => {
-    return getPath({ data, width, height });
-  }, [data, height, width]);
+    return getPath({ data, width, height, gutter });
+  }, [data, gutter, height, width]);
 
   const contextValue = React.useMemo(
     () => ({
@@ -46,13 +51,12 @@ export function LineChartProvider({ children, data }: LineChartProviderProps) {
       currentY,
       currentIndex,
       data,
+      gutter,
       path,
       width,
       height,
       isActive,
       domain,
-      setHeight,
-      setWidth,
     }),
     [
       currentIndex,
@@ -60,6 +64,7 @@ export function LineChartProvider({ children, data }: LineChartProviderProps) {
       currentY,
       data,
       domain,
+      gutter,
       height,
       isActive,
       path,
