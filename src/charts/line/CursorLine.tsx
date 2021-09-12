@@ -7,16 +7,12 @@ import { useLineChart } from './useLineChart';
 
 type LineChartCursorLineProps = {
   color?: string;
-  x: number;
-  y: number;
 };
 
 export const LineChartCursorLine = ({
   color = 'gray',
-  x,
-  y,
 }: LineChartCursorLineProps) => {
-  const { currentX, isActive } = useLineChart();
+  const { currentX, height, isActive } = useLineChart();
 
   const vertical = useAnimatedStyle(() => ({
     opacity: isActive.value ? 1 : 0,
@@ -30,8 +26,8 @@ export const LineChartCursorLine = ({
         <SVGLine
           x1={0}
           y1={0}
-          x2={x}
-          y2={y}
+          x2={0}
+          y2={height}
           strokeWidth={2}
           stroke={color}
           strokeDasharray="3 3"

@@ -15,7 +15,9 @@ export default function App() {
       <LineChart.Provider data={data}>
         <Box>
           <LineChart.Chart />
-          <LineChart.Cursor />
+          <LineChart.Cursor>
+            <LineChart.CursorCrosshair />
+          </LineChart.Cursor>
         </Box>
         <Box>
           <Button onPress={() => setData(mockData)}>Data 1</Button>
