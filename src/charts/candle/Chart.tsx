@@ -10,10 +10,8 @@ export const CandlestickChartDimensionsContext = React.createContext({
 
 type CandlestickChartProps = ViewProps & {
   children: React.ReactNode;
-  yGutter?: number;
   width?: number;
   height?: number;
-  shape?: any;
 };
 
 const { width: screenWidth } = Dimensions.get('window');

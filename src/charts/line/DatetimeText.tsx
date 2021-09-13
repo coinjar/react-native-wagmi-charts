@@ -7,7 +7,7 @@ import { useLineChartDatetime } from './useDatetime';
 
 type LineChartPriceTextProps = {
   locale?: string;
-  options?: { [key: string]: string };
+  options?: { [key: string]: any };
   format?: any;
   variant?: 'formatted' | 'value';
   style?: Animated.AnimateProps<RNTextProps>['style'];

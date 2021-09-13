@@ -14,10 +14,10 @@ export default function App() {
       </Heading.H5>
       <LineChart.Provider data={data}>
         <LineChart>
-          <LineChart.Path color="hotpink" />
-          <LineChart.CursorCrosshair color="hotpink">
-            {/* <LineChart.Tooltip />
-            <LineChart.Tooltip position="bottom">
+          <LineChart.Path />
+          <LineChart.CursorCrosshair>
+            <LineChart.Tooltip cursorGutter={60} xGutter={16} yGutter={16} />
+            {/* <LineChart.Tooltip position="bottom">
               <LineChart.DatetimeText />
             </LineChart.Tooltip> */}
           </LineChart.CursorCrosshair>

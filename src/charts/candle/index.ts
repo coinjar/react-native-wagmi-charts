@@ -10,6 +10,7 @@ import { CandlestickChartCrosshairTooltip } from './CrosshairTooltip';
 import { useCandlestickChartDatetime } from './useDatetime';
 import { useCandlestickChartPrice } from './usePrice';
 import { useCandlestickChart } from './useCandlestickChart';
+import { useCandleData } from './useCandleData';
 
 export * from './Chart';
 export * from './Candle';
@@ -24,6 +25,7 @@ export * from './types';
 export * from './useCandlestickChart';
 export * from './useDatetime';
 export * from './usePrice';
+export * from './useCandleData';
 export * from './utils';
 
 export const CandlestickChart = Object.assign(_CandlestickChart, {
@@ -38,4 +40,5 @@ export const CandlestickChart = Object.assign(_CandlestickChart, {
   useDatetime: useCandlestickChartDatetime,
   usePrice: useCandlestickChartPrice,
   useChart: useCandlestickChart,
+  useCandleData: useCandleData,
 });
