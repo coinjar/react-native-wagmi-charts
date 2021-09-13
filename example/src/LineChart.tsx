@@ -12,17 +12,21 @@ export default function App() {
       <Heading.H5 paddingX="major-2" marginBottom="major-2">
         WAGMI Line Chart 📈
       </Heading.H5>
-      <LineChart data={data}>
-        <Box>
+      <LineChart.Provider data={data}>
+        <LineChart>
           <LineChart.Path />
           <LineChart.CursorCrosshair>
-            <LineChart.CursorTooltip />
-            <LineChart.CursorTooltip position="bottom">
+            {/* <LineChart.CursorTooltip /> */}
+            {/* <LineChart.CursorTooltip position="bottom">
               <LineChart.DatetimeText />
-            </LineChart.CursorTooltip>
+            </LineChart.CursorTooltip> */}
           </LineChart.CursorCrosshair>
+        </LineChart>
+        <Box paddingX="major-2">
+          <LineChart.PriceText />
+          <LineChart.DatetimeText />
         </Box>
-        <Box>
+        <Box marginTop="major-2">
           <Button onPress={() => setData(mockData)}>Data 1</Button>
           <Button onPress={() => setData(mockData2)}>Data 2</Button>
         </Box>
@@ -66,7 +70,7 @@ export default function App() {
             />
           </Flex>
         </Stack>
-      </LineChart>
+      </LineChart.Provider>
     </>
   );
 }

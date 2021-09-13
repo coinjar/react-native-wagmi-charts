@@ -11,9 +11,6 @@ export type TLineChartContext = {
   currentY: Animated.SharedValue<number>;
   currentIndex: Animated.SharedValue<number>;
   data: TLineChartData;
-  path: string;
-  width: number;
-  height: number;
   isActive: Animated.SharedValue<boolean>;
   domain: TLineChartDomain;
 };

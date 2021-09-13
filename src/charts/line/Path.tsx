@@ -8,7 +8,7 @@ import Animated, {
 import { Path, PathProps } from 'react-native-svg';
 import { mixPath, parse } from 'react-native-redash';
 
-import { useLineChart } from './useLineChart';
+import { LineChartDimensionsContext } from './Chart';
 import { usePrevious } from '../../utils';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
@@ -25,7 +25,7 @@ export function LineChartPath({
   isInactive,
   ...props
 }: LineChartPathProps) {
-  const { path } = useLineChart();
+  const { path } = React.useContext(LineChartDimensionsContext);
 
   ////////////////////////////////////////////////
 

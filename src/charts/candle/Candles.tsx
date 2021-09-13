@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Svg, SvgProps } from 'react-native-svg';
 
+import { CandlestickChartDimensionsContext } from './Chart';
 import { CandlestickChartCandle, CandlestickChartCandleProps } from './Candle';
 import { useCandlestickChart } from './useCandlestickChart';
 
@@ -26,7 +27,8 @@ export function CandlestickChartCandles({
   renderLine,
   ...props
 }: CandlestickChartCandlesProps) {
-  const { data, width, height, domain, step } = useCandlestickChart();
+  const { width, height } = React.useContext(CandlestickChartDimensionsContext);
+  const { data, domain, step } = useCandlestickChart();
 
   ////////////////////////////////////////////////
 

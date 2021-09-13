@@ -16,11 +16,13 @@ export function getPath({
   width,
   height,
   gutter,
+  shape: _shape = shape.curveBumpX,
 }: {
   data: TLineChartData;
   width: number;
   height: number;
   gutter: number;
+  shape?: string;
 }): string {
   const timestamps = data.map(({}, i) => i);
   const values = data.map(({ value }) => value);
@@ -34,7 +36,6 @@ export function getPath({
     .line()
     .x((_: any, i: number) => scaleX(i))
     .y((data: any) => scaleY(data.value))
-    // .curve(shape.curveLinear)(data);
-    .curve(shape.curveBumpX)(data);
+    .curve(_shape)(data);
   return path;
 }

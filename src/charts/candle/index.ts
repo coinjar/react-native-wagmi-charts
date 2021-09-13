@@ -1,3 +1,4 @@
+import { CandlestickChart as _CandlestickChart } from './Chart';
 import { CandlestickChartCandle } from './Candle';
 import { CandlestickChartCandles } from './Candles';
 import { CandlestickChartCrosshair } from './Crosshair';
@@ -10,6 +11,7 @@ import { useCandlestickChartDatetime } from './useDatetime';
 import { useCandlestickChartPrice } from './usePrice';
 import { useCandlestickChart } from './useCandlestickChart';
 
+export * from './Chart';
 export * from './Candle';
 export * from './Candles';
 export * from './Context';
@@ -24,7 +26,7 @@ export * from './useDatetime';
 export * from './usePrice';
 export * from './utils';
 
-export const CandlestickChart = {
+export const CandlestickChart = Object.assign(_CandlestickChart, {
   Candle: CandlestickChartCandle,
   Candles: CandlestickChartCandles,
   Crosshair: CandlestickChartCrosshair,
@@ -36,4 +38,4 @@ export const CandlestickChart = {
   useDatetime: useCandlestickChartDatetime,
   usePrice: useCandlestickChartPrice,
   useChart: useCandlestickChart,
-};
+});

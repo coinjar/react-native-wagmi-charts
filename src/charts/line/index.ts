@@ -1,4 +1,5 @@
 import { LineChart as _LineChart } from './Chart';
+import { LineChartPathWrapper } from './ChartPath';
 import { LineChartProvider } from './Context';
 import { LineChartCursor } from './Cursor';
 import { LineChartCursorCrosshair } from './CursorCrosshair';
@@ -11,6 +12,7 @@ import { useLineChartPrice } from './usePrice';
 import { useLineChart } from './useLineChart';
 
 export * from './Chart';
+export * from './ChartPath';
 export * from './Context';
 export * from './Cursor';
 export * from './CursorCrosshair';
@@ -24,8 +26,9 @@ export * from './useLineChart';
 export * from './usePrice';
 export * from './types';
 
-export const LineChart = Object.assign(LineChartProvider, {
-  Path: _LineChart,
+export const LineChart = Object.assign(_LineChart, {
+  Chart: _LineChart,
+  Path: LineChartPathWrapper,
   Cursor: LineChartCursor,
   CursorCrosshair: LineChartCursorCrosshair,
   CursorLine: LineChartCursorLine,

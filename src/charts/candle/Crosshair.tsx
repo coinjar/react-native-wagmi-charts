@@ -14,6 +14,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { clamp } from 'react-native-redash';
 
+import { CandlestickChartDimensionsContext } from './Chart';
 import { CandlestickChartLine, CandlestickChartLineProps } from './Line';
 import { useCandlestickChart } from './useCandlestickChart';
 import { CandlestickChartCrosshairTooltipContext } from './CrosshairTooltip';
@@ -43,7 +44,8 @@ export function CandlestickChartCrosshair({
   lineProps = {},
   ...props
 }: CandlestickChartCrosshairProps) {
-  const { currentX, currentY, width, height, step } = useCandlestickChart();
+  const { width, height } = React.useContext(CandlestickChartDimensionsContext);
+  const { currentX, currentY, step } = useCandlestickChart();
 
   const tooltipPosition = useSharedValue<'left' | 'right'>('left');
 

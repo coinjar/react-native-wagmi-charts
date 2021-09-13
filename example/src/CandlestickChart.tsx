@@ -13,12 +13,12 @@ export default function App() {
         WAGMI Candlestick Chart 🕯
       </Heading.H5>
       <CandlestickChart.Provider data={data}>
-        <Box>
+        <CandlestickChart>
           <CandlestickChart.Candles />
           <CandlestickChart.Crosshair>
-            <CandlestickChart.Tooltip />
+            {/* <CandlestickChart.Tooltip /> */}
           </CandlestickChart.Crosshair>
-        </Box>
+        </CandlestickChart>
         <Button onPress={() => setData(mockData)}>Data 1</Button>
         <Button onPress={() => setData(mockData2)}>Data 2</Button>
         <Stack padding="major-2" spacing="major-1">

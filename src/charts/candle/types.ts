@@ -17,5 +17,7 @@ export type TContext = {
   height: number;
   domain: TDomain;
   step: number;
+  setWidth: any;
+  setHeight: any;
 };
 export type TPriceType = 'crosshair' | 'open' | 'close' | 'low' | 'high';

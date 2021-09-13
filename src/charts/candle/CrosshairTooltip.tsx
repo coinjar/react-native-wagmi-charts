@@ -6,6 +6,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 
+import { CandlestickChartDimensionsContext } from './Chart';
 import { useCandlestickChart } from './useCandlestickChart';
 import {
   CandlestickChartPriceText,
@@ -37,7 +38,8 @@ export function CandlestickChartCrosshairTooltip({
   textStyle = {},
   ...props
 }: CandlestickChartCrosshairTooltipProps) {
-  const { currentY, height, width } = useCandlestickChart();
+  const { width, height } = React.useContext(CandlestickChartDimensionsContext);
+  const { currentY } = useCandlestickChart();
   const { position } = React.useContext(
     CandlestickChartCrosshairTooltipContext
   );

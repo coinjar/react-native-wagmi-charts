@@ -7,6 +7,7 @@ import {
 import Animated, { useAnimatedGestureHandler } from 'react-native-reanimated';
 import { getYForX, parse } from 'react-native-redash';
 
+import { LineChartDimensionsContext } from './Chart';
 import { useLineChart } from './useLineChart';
 
 type LineChartCursorProps = LongPressGestureHandlerProps & {
@@ -21,8 +22,8 @@ export function LineChartCursor({
   type,
   ...props
 }: LineChartCursorProps) {
-  const { currentX, currentY, currentIndex, isActive, width, path, data } =
-    useLineChart();
+  const { width, path } = React.useContext(LineChartDimensionsContext);
+  const { currentX, currentY, currentIndex, isActive, data } = useLineChart();
 
   const parsedPath = React.useMemo(() => parse(path), [path]);
 

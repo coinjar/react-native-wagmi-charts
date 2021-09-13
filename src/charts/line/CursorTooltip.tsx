@@ -5,6 +5,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 
+import { LineChartDimensionsContext } from './Chart';
 import { CursorContext } from './Cursor';
 import { LineChartPriceText, LineChartPriceTextProps } from './PriceText';
 import { useLineChart } from './useLineChart';
@@ -29,8 +30,9 @@ export function LineChartCursorTooltip({
   textStyle,
   ...props
 }: LineChartCursorTooltipProps) {
+  const { width, height } = React.useContext(LineChartDimensionsContext);
   const { type } = React.useContext(CursorContext);
-  const { currentX, currentY, isActive, height, width } = useLineChart();
+  const { currentX, currentY, isActive } = useLineChart();
 
   const x = useSharedValue(0);
   const elementWidth = useSharedValue(0);

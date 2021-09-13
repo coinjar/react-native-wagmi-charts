@@ -1,39 +1,24 @@
 import * as React from 'react';
-import { Dimensions } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 
 import type { TLineChartContext, TLineChartData } from './types';
-import { getDomain, getPath } from './utils';
+import { getDomain } from './utils';
 
 export const LineChartContext = React.createContext<TLineChartContext>({
   currentX: { value: -1 },
   currentY: { value: -1 },
   currentIndex: { value: -1 },
   data: [],
-  height: 0,
-  width: 0,
   domain: [0, 0],
   isActive: { value: false },
-  path: '',
 });
 
 type LineChartProviderProps = {
   children: React.ReactNode;
   data: TLineChartData;
-  yGutter?: number;
-  width?: number;
-  height?: number;
 };
 
-const { width: screenWidth } = Dimensions.get('window');
-
-export function LineChartProvider({
-  children,
-  data,
-  yGutter = 16,
-  width = screenWidth,
-  height = screenWidth,
-}: LineChartProviderProps) {
+export function LineChartProvider({ children, data }: LineChartProviderProps) {
   const currentX = useSharedValue(-1);
   const currentY = useSharedValue(-1);
   const currentIndex = useSharedValue(-1);
@@ -41,35 +26,16 @@ export function LineChartProvider({
 
   const domain = React.useMemo(() => getDomain(data), [data]);
 
-  const path = React.useMemo(() => {
-    return getPath({ data, width, height, gutter: yGutter });
-  }, [data, yGutter, height, width]);
-
   const contextValue = React.useMemo(
     () => ({
       currentX,
       currentY,
       currentIndex,
       data,
-      gutter: yGutter,
-      path,
-      width,
-      height,
       isActive,
       domain,
     }),
-    [
-      currentIndex,
-      currentX,
-      currentY,
-      data,
-      domain,
-      yGutter,
-      height,
-      isActive,
-      path,
-      width,
-    ]
+    [currentIndex, currentX, currentY, data, domain, isActive]
   );
 
   return (

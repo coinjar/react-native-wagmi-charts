@@ -1,62 +1,53 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Svg } from 'react-native-svg';
-import Animated, {
-  useAnimatedProps,
-  withTiming,
-} from 'react-native-reanimated';
+import { Dimensions, View, ViewProps } from 'react-native';
 
-import { LineChartPath, LineChartPathProps } from './Path';
 import { useLineChart } from './useLineChart';
+import { getPath } from './utils';
 
-const AnimatedSVG = Animated.createAnimatedComponent(Svg);
+export const LineChartDimensionsContext = React.createContext({
+  width: 0,
+  height: 0,
+  path: '',
+  gutter: 0,
+});
 
-type LineChartProps = {
-  animationDuration?: number;
-  animationProps?: Partial<Animated.WithTimingConfig>;
-  pathColor?: string;
-  pathWidth?: number;
-  pathProps?: Partial<LineChartPathProps>;
-  showInactivePath?: boolean;
+type LineChartProps = ViewProps & {
+  children: React.ReactNode;
+  yGutter?: number;
+  width?: number;
+  height?: number;
+  shape?: any;
 };
 
+const { width: screenWidth } = Dimensions.get('window');
+
 export function LineChart({
-  animationDuration = 300,
-  animationProps = {},
-  pathColor = 'black',
-  pathWidth = 3,
-  pathProps = {},
-  showInactivePath = true,
+  children,
+  yGutter = 16,
+  width = screenWidth,
+  height = screenWidth,
+  shape,
+  ...props
 }: LineChartProps) {
-  const { currentX, isActive, width, height } = useLineChart();
+  const { data } = useLineChart();
 
-  ////////////////////////////////////////////////
+  const path = React.useMemo(() => {
+    return getPath({ data, width, height, gutter: yGutter, shape });
+  }, [data, width, height, yGutter, shape]);
 
-  const svgProps = useAnimatedProps(() => ({
-    width: isActive.value
-      ? currentX.value
-      : withTiming(width, { duration: animationDuration, ...animationProps }),
-  }));
-
-  ////////////////////////////////////////////////
+  const contextValue = React.useMemo(
+    () => ({
+      gutter: yGutter,
+      path,
+      width,
+      height,
+    }),
+    [height, path, width, yGutter]
+  );
 
   return (
-    <>
-      <View style={[{ width, height }]}>
-        <Svg width={width} height={height}>
-          <LineChartPath
-            color={pathColor}
-            width={pathWidth}
-            isInactive={showInactivePath}
-            {...pathProps}
-          />
-        </Svg>
-      </View>
-      <View style={StyleSheet.absoluteFill}>
-        <AnimatedSVG animatedProps={svgProps} height={height}>
-          <LineChartPath color={pathColor} width={pathWidth} {...pathProps} />
-        </AnimatedSVG>
-      </View>
-    </>
+    <LineChartDimensionsContext.Provider value={contextValue}>
+      <View {...props}>{children}</View>
+    </LineChartDimensionsContext.Provider>
   );
 }
