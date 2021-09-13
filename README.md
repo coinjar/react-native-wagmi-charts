@@ -448,9 +448,41 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 
 ### Customizing tooltips
 
-### Hooks for prices & date/time
+#### Style
 
-### Hooks for candle data
+You can customize the style of the tooltip by providing the `textStyle` prop:
+
+```jsx
+<LineChart.Tooltip
+  style={{
+    backgroundColor: 'black',
+    borderRadius: 4,
+    color: 'white',
+    fontSize: 18,
+    padding: 4,
+  }}
+/>
+```
+
+![Kapture 2021-09-13 at 18 46 41](https://user-images.githubusercontent.com/7336481/133053224-88ac9462-dd61-4070-a541-d1e6168f579e.gif)
+
+#### Gutter
+
+You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutter` or `yGutter`.
+
+`cursorGutter` is the gutter between the cursor and the tooltip.
+
+`xGutter` and `yGutter` is the gutter on the x & y axis of the chart (the tooltip can't pass the gutter).
+
+```jsx
+<LineChart.Tooltip 
+  cursorGutter={60} 
+  xGutter={16} 
+  yGutter={16} 
+/>
+```
+
+![Kapture 2021-09-13 at 18 54 01](https://user-images.githubusercontent.com/7336481/133054393-28d542c1-c9fc-4ba6-b4a0-86cf096ebcda.gif)
 
 ## Components & API
 
