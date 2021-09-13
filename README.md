@@ -400,7 +400,7 @@ To customize the formatting of the price text, you can supply a `format` functio
 
 > Note: due to the nature of reanimated worklets, you cannot define functions that run on the React Native JS thread. [Read more here](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets)
 
-```
+```jsx
 <LineChart.PriceText
   format={({ value }) => {
     'worklet';
@@ -414,13 +414,29 @@ To customize the formatting of the price text, you can supply a `format` functio
 
 ##### Date/time options
 
+Internally, WAGMI charts uses [`Date.prototype.toLocaleString()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) to generate the date/time label. You can customise it's options like so:
+
+```jsx
+<LineChart.DatetimeText
+  locale="en-AU"
+  options={{
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  }}
+/>
+```
+
 ##### Custom formatting
 
 To customize the formatting of the date/time text, you can supply a `format` function in the form of a [reanimated worklet](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets):
 
 > Note: due to the nature of reanimated worklets, you cannot define functions that run on the React Native JS thread. [Read more here](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets)
 
-```
+```jsx
 <LineChart.DatetimeText
   format={({ value }) => {
     'worklet';
