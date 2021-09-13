@@ -138,6 +138,8 @@ function Example() {
 
 ## Guides
 
+Below are some guides to help you make your charts suit your brand. Hopefully a combination of the below will enable you to make a great chart! :-)
+
 ### Interactive cursors
 
 #### Line chart
@@ -157,6 +159,8 @@ To render an interactive cursor on your line chart, you can include either the `
 
 <img src="https://user-images.githubusercontent.com/7336481/133027332-009b8996-4141-4865-bfd6-777e63b5e44d.gif" width="200px" />
 
+[Learn how to further customise your cursor]()
+
 ##### `LineChart.CursorLine`
 
 ```jsx
@@ -169,6 +173,8 @@ To render an interactive cursor on your line chart, you can include either the `
 ```
 
 <img src="https://user-images.githubusercontent.com/7336481/133027471-1c620ece-a95e-46b7-bd92-50f33757ce92.gif" width="200px" />
+
+[Learn how to further customise your cursor]()
 
 
 #### Candlestick chart
@@ -188,9 +194,13 @@ To render an interactive cursor on your candlestick chart, you can include the `
 
 <img src="https://user-images.githubusercontent.com/7336481/133027656-a877b248-77c1-4bf3-822f-a05dee4efa20.gif" width="200px" />
 
+[Learn how to further customise your crosshair]()
+
 ### Interactive labels
 
-To render an interactive label as your cursor moves along the graph, you can use the `PriceText` or `DatetimeText` components:
+#### Line chart
+
+To render an interactive label on your line chart as your cursor moves along the graph, you can use the `PriceText` or `DatetimeText` components:
 
 > Note: These components **must** be within the `LineChart.Provider` component.
 
@@ -207,19 +217,224 @@ To render an interactive label as your cursor moves along the graph, you can use
 
 <img src="https://user-images.githubusercontent.com/7336481/133028134-a0b65499-9edf-4535-9fcc-fcf8c1e4e0c4.gif" width="200px" />
 
+[Learn how to further customise your labels]()
+
+#### Candlestick chart
+
+To render an interactive label on your candlestick chart, you can use the `PriceText` or `DatetimeText` components:
+
+> Note: These components **must** be within the `CandlestickChart.Provider` component.
+
+```jsx
+<CandlestickChart.Provider data={data}>
+  <CandlestickChart>
+    <CandlestickChart.Candles />
+    <CandlestickChart.Crosshair />
+  </CandlestickChart>
+  <CandlestickChart.PriceText type="open" />
+  <CandlestickChart.PriceText type="high" />
+  <CandlestickChart.PriceText type="low" />
+  <CandlestickChart.PriceText type="close" />
+  <CandlestickChart.DatetimeText />
+</LineChart.Provider>
+```
+
+<img src="https://user-images.githubusercontent.com/7336481/133034935-faea61e6-09c2-4dba-a1ab-555d1ebee880.gif" width="200px" />
+
+[Learn how to further customise your labels]()
+
 ### Interactive tooltips
+
+#### Line charts
+
+To render an interactive tooltip that follows your cursor, you can use the `Tooltip` component.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path />
+    <LineChart.CursorCrosshair>
+      <LineChart.Tooltip />
+    </LineChart.CursorCrosshair>
+  </LineChart>
+</LineChart.Provider>
+```
+
+<img src="https://user-images.githubusercontent.com/7336481/133035626-a58b0258-e720-40b5-902b-522b2430b254.gif" width="200px" />
+
+You can even add another tooltip to show something like date/time:
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path />
+    <LineChart.CursorCrosshair>
+      <LineChart.Tooltip />
+      <LineChart.Tooltip position="bottom">
+        <LineChart.DatetimeText />
+      </LineChart.Tooltip>
+    </LineChart.CursorCrosshair>
+  </LineChart>
+</LineChart.Provider>
+```
+
+<img src="https://user-images.githubusercontent.com/7336481/133036011-8a9b4865-10dd-4e88-9fd1-1e109435a73c.gif" width="200px" />
+
+[Learn how to further customise your tooltips]()
+
+#### Candlestick charts
+
+To render an interactive tooltip that follows your crosshair, you can use the `Tooltip` component.
+
+```jsx
+<CandlestickChart.Provider data={data}>
+  <CandlestickChart>
+    <CandlestickChart.Candles />
+    <CandlestickChart.Crosshair>
+      <CandlestickChart.Tooltip />
+    </CandlestickChart.Crosshair>
+  </CandlestickChart>
+</CandlestickChart.Provider>
+```
+
+<img src="https://user-images.githubusercontent.com/7336481/133036451-e1f2f12b-9e96-4a0f-8c69-4f630bb8ded3.gif" width="200px" />
 
 ### Colors
 
-### Cursor types
+By default, the charts come with default colors out-of-the-box... But you probably will want to change these to suit your brand.
 
-### Customizing styles
+#### Line charts
+
+##### Coloring the path
+
+To customise the color of the line chart path, supply a `color` prop to `LineChart.Path`. This can be any valid React Native `StyleSheet` compatible color.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path color="hotpink" />
+  </LineChart>
+</LineChart.Provider>
+```
+
+<img src="https://user-images.githubusercontent.com/7336481/133037040-ce13ba5b-6ee5-45a2-ba14-18bf12e13746.png" width="200px" />
+
+
+##### Coloring the cursor
+
+To customise the color of the line chart cursor, supply a `color` prop to `LineChart.CursorCrosshair`. This can be any valid React Native `StyleSheet` compatible color.
+
+> Note: This also works for `LineChart.CursorLine`
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path color="hotpink" />
+    <LineChart.CursorCrosshair color="hotpink />
+  </LineChart>
+</LineChart.Provider>
+```
+
+<img width="200px" alt="Screen Shot 2021-09-13 at 4 53 46 pm" src="https://user-images.githubusercontent.com/7336481/133037333-6b1345e5-a98b-459c-b3b1-6e5b08143f33.png">
+
+#### Candlestick charts
+
+##### Coloring the candles
+
+To customise the color of the candlestick chart candles, supply a `negativeColor` and a `positiveColor` to `CandlestickChart.Candles`. This can be any valid React Native `StyleSheet` compatible color.
+
+```jsx
+<CandlestickChart.Provider data={data}>
+  <CandlestickChart>
+    <CandlestickChart.Candles positiveColor="hotpink" negativeColor="black" />
+  </CandlestickChart>
+</CandlestickChart.Provider>
+```
+
+<img width="200px" alt="Screen Shot 2021-09-13 at 4 58 52 pm" src="https://user-images.githubusercontent.com/7336481/133037949-aba76daa-20bb-4d4e-b05e-b0cff42b69a6.png">
+
+
+##### Coloring the crosshair
+
+To customise the color of the line chart cursor, supply a `color` prop to `CandlestickChart.Crosshair`. This can be any valid React Native `StyleSheet` compatible color.
+
+```jsx
+<CandlestickChart.Provider data={data}>
+  <CandlestickChart>
+    <CandlestickChart.Candles positiveColor="hotpink" negativeColor="black" />
+    <CandlestickChart.Crosshair color="hotpink" />
+  </CandlestickChart>
+</CandlestickChart.Provider>
+```
+
+<img width="200px" alt="Screen Shot 2021-09-13 at 4 58 52 pm" src="https://user-images.githubusercontent.com/7336481/133038181-33ee91bf-a5e2-4124-ab7b-df745a5ba804.gif">
 
 ### Customizing size
 
+You can modify the width & height of the charts by providing `width` and `height` props to `LineChart` or `CandlestickChart`. Your chart should adapt to it's size.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart width={150} height={150}>
+    <LineChart.Path />
+  </LineChart>
+</LineChart.Provider>
+```
+
 ### Customizing labels
 
+#### Price labels
+
+##### Precision
+
+By default, the price labels have a precision of `2`, meaning that the prices will always be to 2 decimal places. However, you can customize this with the `precision` prop:
+
+```jsx
+<LineChart.PriceText precision={4} />
+<CandlestickChart.PriceText precision={4} />
+```
+
+##### Custom formatting
+
+To customize the formatting of the price text, you can supply a `format` function in the form of a [reanimated worklet](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets):
+
+> Note: due to the nature of reanimated worklets, you cannot define functions that run on the React Native JS thread. [Read more here](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets)
+
+```
+<LineChart.PriceText
+  format={({ value }) => {
+    'worklet';
+    const formattedPrice = yourOwnFormatValueFn(value);
+    return `$${formattedPrice} AUD`;
+  }}
+/>
+```
+
+#### Datetime labels
+
+##### Date/time options
+
+##### Custom formatting
+
+To customize the formatting of the date/time text, you can supply a `format` function in the form of a [reanimated worklet](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets):
+
+> Note: due to the nature of reanimated worklets, you cannot define functions that run on the React Native JS thread. [Read more here](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets)
+
+```
+<LineChart.DatetimeText
+  format={({ value }) => {
+    'worklet';
+    const formattedDate = yourOwnFormatValueFn(value);
+    return formattedDate;
+  }}
+/>
+```
+
+### Customizing tooltips
+
 ### Hooks for prices & date/time
+
+### Hooks for candle data
 
 ## Components & API
 
