@@ -23,6 +23,47 @@ A sweet & simple chart library for React Native that will make us feel like **W*
 
 💬 Interactive tooltips
 
+## Table of Contents
+
+- [Features](#features)
+- [Table of Contents](#table-of-contents)
+- [Install](#install)
+- [Basic Usage](#basic-usage)
+  - [Line chart](#line-chart)
+  - [Candlestick chart](#candlestick-chart)
+- [Guides](#guides)
+  - [Interactive cursors](#interactive-cursors)
+  - [Interactive labels](#interactive-labels)
+  - [Interactive tooltips](#interactive-tooltips)
+  - [Colors](#colors)
+  - [Customizing size](#customizing-size)
+  - [Customizing labels](#customizing-labels)
+  - [Customizing tooltips](#customizing-tooltips)
+- [Component APIs](#component-apis)
+  - [LineChart.Provider](#linechartprovider)
+  - [LineChart](#linechart)
+  - [LineChart.Path](#linechartpath)
+  - [LineChart.CursorCrosshair](#linechartcursorcrosshair-1)
+  - [LineChart.CursorLine](#linechartcursorline-1)
+  - [LineChart.Tooltip](#linecharttooltip)
+  - [LineChart.PriceText](#linechartpricetext)
+  - [LineChart.DatetimeText](#linechartdatetimetext)
+  - [CandlestickChart.Provider](#candlestickchartprovider)
+  - [CandlestickChart](#candlestickchart)
+  - [CandlestickChart.Candles](#candlestickchartcandles)
+  - [CandlestickChart.Crosshair](#candlestickchartcrosshair-1)
+  - [CandlestickChart.Tooltip](#candlestickcharttooltip)
+  - [CandlestickChart.PriceText](#candlestickchartpricetext)
+  - [CandlestickChart.DatetimeText](#candlestickchartdatetimetext)
+- [Hooks](#hooks)
+  - [LineChart.useChart](#linechartusechart)
+  - [LineChart.useDatetime](#linechartusedatetime)
+  - [LineChart.usePrice](#linechartuseprice)
+  - [CandlestickChart.useChart](#candlestickchartusechart)
+  - [CandlestickChart.useCandleData](#candlestickchartusecandledata)
+  - [CandlestickChart.useDatetime](#candlestickchartusedatetime)
+  - [CandlestickChart.usePrice](#candlestickchartuseprice)
+- [Credits](#credits)
 
 ## Install
 
@@ -48,7 +89,7 @@ To render a simple line chart, you will need to use the `LineChart.Provider`, `L
 
 The `LineChart.Provider` component sets up the context of your chart, `LineChart` composes the chart elements, and the `LineChart.Path` component renders your data in the form of a line path.
 
-> Note: This chart does not include an interactive cursor like in the animated example above. If you want one, [check out the "Basic Line Chart with Cursor" recipe]()
+> Note: This chart does not include an interactive cursor like in the animated example above. If you want one, [check out the "Interactive Cursors" guide](#interactive-cursors)
 
 ```jsx
 import { LineChart } from 'react-native-wagmi-charts'; 
@@ -89,7 +130,7 @@ To render a simple candlestick chart, you will need to use the `CandlestickChart
 
 The `CandlestickChart.Provider` component sets up the context of your chart, `CandlestickChart` composes the chart elements, and the `CandlestickChart.Candles` component renders your data in the form of a line path.
 
-> Note: This chart does not include an interactive cursor like in the animated example above. If you want one, [check out the "Basic Candlestick Chart with Cursor" recipe]()
+> Note: This chart does not include an interactive cursor like in the animated example above. If you want one, [check out the "Interactive Cursors" guide](#interactive-cursors)
 
 ```jsx
 import { CandlestickChart } from 'react-native-wagmi-charts'; 
@@ -159,8 +200,6 @@ To render an interactive cursor on your line chart, you can include either the `
 
 <img src="https://user-images.githubusercontent.com/7336481/133027332-009b8996-4141-4865-bfd6-777e63b5e44d.gif" width="200px" />
 
-[Learn how to further customise your cursor]()
-
 ##### `LineChart.CursorLine`
 
 ```jsx
@@ -173,8 +212,6 @@ To render an interactive cursor on your line chart, you can include either the `
 ```
 
 <img src="https://user-images.githubusercontent.com/7336481/133027471-1c620ece-a95e-46b7-bd92-50f33757ce92.gif" width="200px" />
-
-[Learn how to further customise your cursor]()
 
 
 #### Candlestick chart
@@ -193,8 +230,6 @@ To render an interactive cursor on your candlestick chart, you can include the `
 ```
 
 <img src="https://user-images.githubusercontent.com/7336481/133027656-a877b248-77c1-4bf3-822f-a05dee4efa20.gif" width="200px" />
-
-[Learn how to further customise your crosshair]()
 
 ### Interactive labels
 
@@ -217,8 +252,6 @@ To render an interactive label on your line chart as your cursor moves along the
 
 <img src="https://user-images.githubusercontent.com/7336481/133028134-a0b65499-9edf-4535-9fcc-fcf8c1e4e0c4.gif" width="200px" />
 
-[Learn how to further customise your labels]()
-
 #### Candlestick chart
 
 To render an interactive label on your candlestick chart, you can use the `PriceText` or `DatetimeText` components:
@@ -240,8 +273,6 @@ To render an interactive label on your candlestick chart, you can use the `Price
 ```
 
 <img src="https://user-images.githubusercontent.com/7336481/133034935-faea61e6-09c2-4dba-a1ab-555d1ebee880.gif" width="200px" />
-
-[Learn how to further customise your labels]()
 
 ### Interactive tooltips
 
@@ -279,8 +310,6 @@ You can even add another tooltip to show something like date/time:
 ```
 
 <img src="https://user-images.githubusercontent.com/7336481/133036011-8a9b4865-10dd-4e88-9fd1-1e109435a73c.gif" width="200px" />
-
-[Learn how to further customise your tooltips]()
 
 #### Candlestick charts
 
