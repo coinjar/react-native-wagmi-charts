@@ -464,7 +464,7 @@ You can customize the style of the tooltip by providing the `textStyle` prop:
 />
 ```
 
-![Kapture 2021-09-13 at 18 46 41](https://user-images.githubusercontent.com/7336481/133053224-88ac9462-dd61-4070-a541-d1e6168f579e.gif)
+<img src="https://user-images.githubusercontent.com/7336481/133053224-88ac9462-dd61-4070-a541-d1e6168f579e.gif" width="200px" />
 
 #### Gutter
 
@@ -482,7 +482,7 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 />
 ```
 
-![Kapture 2021-09-13 at 18 54 01](https://user-images.githubusercontent.com/7336481/133054393-28d542c1-c9fc-4ba6-b4a0-86cf096ebcda.gif)
+<img src="https://user-images.githubusercontent.com/7336481/133054393-28d542c1-c9fc-4ba6-b4a0-86cf096ebcda.gif" width="200px" />
 
 ## Components & API
 
