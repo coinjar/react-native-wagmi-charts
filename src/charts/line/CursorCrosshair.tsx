@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { View, ViewProps } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -12,21 +12,27 @@ type LineChartCursorCrosshairProps = {
   children?: React.ReactNode;
   color?: string;
   size?: number;
-  wrapperSize?: number;
+  outerSize?: number;
+  crosshairWrapperProps?: Animated.AnimateProps<ViewProps>;
+  crosshairProps?: ViewProps;
+  crosshairOuterProps?: ViewProps;
 };
 
 export function LineChartCursorCrosshair({
   children,
   color = 'black',
   size = 8,
-  wrapperSize = 32,
+  outerSize = 32,
+  crosshairWrapperProps = {},
+  crosshairProps = {},
+  crosshairOuterProps = {},
 }: LineChartCursorCrosshairProps) {
   const { currentX, currentY, isActive } = useLineChart();
 
   const animatedCursorStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateX: currentX.value - wrapperSize / 2 },
-      { translateY: currentY.value - wrapperSize / 2 },
+      { translateX: currentX.value - outerSize / 2 },
+      { translateY: currentY.value - outerSize / 2 },
       {
         scale: withSpring(isActive.value ? 1 : 0, {
           damping: 10,
@@ -38,33 +44,43 @@ export function LineChartCursorCrosshair({
   return (
     <LineChartCursor type="crosshair">
       <Animated.View
+        {...crosshairWrapperProps}
         style={[
           {
-            width: wrapperSize,
-            height: wrapperSize,
+            width: outerSize,
+            height: outerSize,
             alignItems: 'center',
             justifyContent: 'center',
           },
           animatedCursorStyle,
+          crosshairWrapperProps.style,
         ]}
       >
         <View
-          style={{
-            backgroundColor: color,
-            width: wrapperSize,
-            height: wrapperSize,
-            borderRadius: wrapperSize,
-            opacity: 0.1,
-            position: 'absolute',
-          }}
+          {...crosshairOuterProps}
+          style={[
+            {
+              backgroundColor: color,
+              width: outerSize,
+              height: outerSize,
+              borderRadius: outerSize,
+              opacity: 0.1,
+              position: 'absolute',
+            },
+            crosshairOuterProps.style,
+          ]}
         />
         <View
-          style={{
-            backgroundColor: color,
-            width: size,
-            height: size,
-            borderRadius: size,
-          }}
+          {...crosshairProps}
+          style={[
+            {
+              backgroundColor: color,
+              width: size,
+              height: size,
+              borderRadius: size,
+            },
+            crosshairProps.style,
+          ]}
         />
       </Animated.View>
       {children}

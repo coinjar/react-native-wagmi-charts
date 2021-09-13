@@ -12,12 +12,14 @@ export default function App() {
       <Heading.H5 paddingX="major-2" marginBottom="major-2">
         WAGMI Line Chart 📈
       </Heading.H5>
-      <LineChart data={data} width={100}>
+      <LineChart data={data}>
         <Box>
           <LineChart.Path />
           <LineChart.CursorCrosshair>
             <LineChart.CursorTooltip />
-            <LineChart.CursorTooltip position="bottom" />
+            <LineChart.CursorTooltip position="bottom">
+              <LineChart.DatetimeText />
+            </LineChart.CursorTooltip>
           </LineChart.CursorCrosshair>
         </Box>
         <Box>

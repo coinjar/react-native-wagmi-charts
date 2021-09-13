@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Svg } from 'react-native-svg';
+import { Svg, SvgProps } from 'react-native-svg';
 
 import { CandlestickChartCandle, CandlestickChartCandleProps } from './Candle';
 import { useCandlestickChart } from './useCandlestickChart';
 
-type CandlestickChartCandlesProps = {
+type CandlestickChartCandlesProps = SvgProps & {
   width?: number;
   height?: number;
   positiveColor?: CandlestickChartCandleProps['positiveColor'];
@@ -24,13 +24,14 @@ export function CandlestickChartCandles({
   useAnimations = true,
   renderRect,
   renderLine,
+  ...props
 }: CandlestickChartCandlesProps) {
   const { data, width, height, domain, step } = useCandlestickChart();
 
   ////////////////////////////////////////////////
 
   return (
-    <Svg width={width} height={height}>
+    <Svg width={width} height={height} {...props}>
       {data.map((candle, index) => (
         <CandlestickChartCandle
           key={index as React.Key}

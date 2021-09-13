@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ViewProps } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import { PanGestureHandler } from 'react-native-gesture-handler';
+import {
+  PanGestureHandler,
+  PanGestureHandlerProps,
+} from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedGestureHandler,
   useSharedValue,
@@ -11,14 +14,17 @@ import Animated, {
 } from 'react-native-reanimated';
 import { clamp } from 'react-native-redash';
 
-import { CandlestickChartLine } from './Line';
+import { CandlestickChartLine, CandlestickChartLineProps } from './Line';
 import { useCandlestickChart } from './useCandlestickChart';
 import { CandlestickChartCrosshairTooltipContext } from './CrosshairTooltip';
 
-type CandlestickChartCrosshairProps = {
+type CandlestickChartCrosshairProps = PanGestureHandlerProps & {
   color?: string;
   children?: React.ReactNode;
   enableHapticFeedback?: boolean;
+  horizontalCrosshairProps?: Animated.AnimateProps<ViewProps>;
+  verticalCrosshairProps?: Animated.AnimateProps<ViewProps>;
+  lineProps?: Partial<CandlestickChartLineProps>;
 };
 
 function invokeHaptic() {
@@ -32,6 +38,10 @@ export function CandlestickChartCrosshair({
   color,
   enableHapticFeedback = false,
   children,
+  horizontalCrosshairProps = {},
+  verticalCrosshairProps = {},
+  lineProps = {},
+  ...props
 }: CandlestickChartCrosshairProps) {
   const { currentX, currentY, width, height, step } = useCandlestickChart();
 
@@ -75,18 +85,24 @@ export function CandlestickChartCrosshair({
   );
 
   return (
-    <PanGestureHandler minDist={0} onGestureEvent={onGestureEvent}>
+    <PanGestureHandler minDist={0} onGestureEvent={onGestureEvent} {...props}>
       <Animated.View style={StyleSheet.absoluteFill}>
-        <Animated.View style={[StyleSheet.absoluteFill, horizontal]}>
-          <CandlestickChartLine color={color} x={width} y={0} />
+        <Animated.View
+          style={[StyleSheet.absoluteFill, horizontal]}
+          {...horizontalCrosshairProps}
+        >
+          <CandlestickChartLine color={color} x={width} y={0} {...lineProps} />
           <CandlestickChartCrosshairTooltipContext.Provider
             value={{ position: tooltipPosition }}
           >
             {children}
           </CandlestickChartCrosshairTooltipContext.Provider>
         </Animated.View>
-        <Animated.View style={[StyleSheet.absoluteFill, vertical]}>
-          <CandlestickChartLine color={color} x={0} y={height} />
+        <Animated.View
+          style={[StyleSheet.absoluteFill, vertical]}
+          {...verticalCrosshairProps}
+        >
+          <CandlestickChartLine color={color} x={0} y={height} {...lineProps} />
         </Animated.View>
       </Animated.View>
     </PanGestureHandler>

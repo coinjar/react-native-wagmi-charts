@@ -1,19 +1,26 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import { LongPressGestureHandler } from 'react-native-gesture-handler';
+import {
+  LongPressGestureHandler,
+  LongPressGestureHandlerProps,
+} from 'react-native-gesture-handler';
 import Animated, { useAnimatedGestureHandler } from 'react-native-reanimated';
 import { getYForX, parse } from 'react-native-redash';
 
 import { useLineChart } from './useLineChart';
 
-type LineChartCursorProps = {
+type LineChartCursorProps = LongPressGestureHandlerProps & {
   children: React.ReactNode;
   type: 'line' | 'crosshair';
 };
 
 export const CursorContext = React.createContext({ type: '' });
 
-export function LineChartCursor({ children, type }: LineChartCursorProps) {
+export function LineChartCursor({
+  children,
+  type,
+  ...props
+}: LineChartCursorProps) {
   const { currentX, currentY, currentIndex, isActive, width, path, data } =
     useLineChart();
 
@@ -40,6 +47,7 @@ export function LineChartCursor({ children, type }: LineChartCursorProps) {
       <LongPressGestureHandler
         minDurationMs={0}
         onGestureEvent={onGestureEvent as any}
+        {...props}
       >
         <Animated.View style={StyleSheet.absoluteFill}>
           {children}

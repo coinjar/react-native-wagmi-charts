@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
-import Svg, { Line as SVGLine } from 'react-native-svg';
+import Svg, { Line as SVGLine, LineProps } from 'react-native-svg';
 
 import { LineChartCursor } from './Cursor';
 import { useLineChart } from './useLineChart';
@@ -9,11 +9,13 @@ import { useLineChart } from './useLineChart';
 type LineChartCursorLineProps = {
   children?: React.ReactNode;
   color?: string;
+  lineProps?: Partial<LineProps>;
 };
 
 export const LineChartCursorLine = ({
   children,
   color = 'gray',
+  lineProps = {},
 }: LineChartCursorLineProps) => {
   const { currentX, height, isActive } = useLineChart();
 
@@ -35,6 +37,7 @@ export const LineChartCursorLine = ({
             strokeWidth={2}
             stroke={color}
             strokeDasharray="3 3"
+            {...lineProps}
           />
         </Svg>
       </Animated.View>

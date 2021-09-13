@@ -6,27 +6,36 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { LineChartPath } from './Path';
+import { LineChartPath, LineChartPathProps } from './Path';
 import { useLineChart } from './useLineChart';
 
 const AnimatedSVG = Animated.createAnimatedComponent(Svg);
 
 type LineChartProps = {
-  inactivePathColor?: string;
+  animationDuration?: number;
+  animationProps?: Partial<Animated.WithTimingConfig>;
   pathColor?: string;
-  gutter?: number;
+  pathWidth?: number;
+  pathProps?: Partial<LineChartPathProps>;
+  showInactivePath?: boolean;
 };
 
 export function LineChart({
-  inactivePathColor = '#e0e0e0',
+  animationDuration = 300,
+  animationProps = {},
   pathColor = 'black',
+  pathWidth = 3,
+  pathProps = {},
+  showInactivePath = true,
 }: LineChartProps) {
   const { currentX, isActive, width, height } = useLineChart();
 
   ////////////////////////////////////////////////
 
   const svgProps = useAnimatedProps(() => ({
-    width: isActive.value ? currentX.value : withTiming(width),
+    width: isActive.value
+      ? currentX.value
+      : withTiming(width, { duration: animationDuration, ...animationProps }),
   }));
 
   ////////////////////////////////////////////////
@@ -35,12 +44,17 @@ export function LineChart({
     <>
       <View style={[{ width, height }]}>
         <Svg width={width} height={height}>
-          <LineChartPath color={inactivePathColor} />
+          <LineChartPath
+            color={pathColor}
+            width={pathWidth}
+            isInactive={showInactivePath}
+            {...pathProps}
+          />
         </Svg>
       </View>
       <View style={StyleSheet.absoluteFill}>
         <AnimatedSVG animatedProps={svgProps} height={height}>
-          <LineChartPath color={pathColor} />
+          <LineChartPath color={pathColor} width={pathWidth} {...pathProps} />
         </AnimatedSVG>
       </View>
     </>

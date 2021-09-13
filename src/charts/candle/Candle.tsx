@@ -15,8 +15,6 @@ import {
 import type { TCandle, TDomain } from './types';
 import { getY, getHeight } from './utils';
 
-const MARGIN = 2;
-
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
 const AnimatedLine = Animated.createAnimatedComponent(Line);
 
@@ -24,6 +22,7 @@ export type CandlestickChartCandleProps = {
   candle: TCandle;
   domain: TDomain;
   maxHeight: number;
+  margin?: number;
   positiveColor?: string;
   negativeColor?: string;
   index: number;
@@ -67,6 +66,7 @@ export const CandlestickChartCandle = ({
   candle,
   maxHeight,
   domain,
+  margin = 2,
   positiveColor = '#10b981',
   negativeColor = '#ef4444',
   rectProps: overrideRectProps,
@@ -118,18 +118,29 @@ export const CandlestickChartCandle = ({
 
   const rectProps = React.useMemo(
     () => ({
-      width: width - MARGIN * 2,
+      width: width - margin * 2,
       fill: fill,
       direction: isPositive ? 'positive' : 'negative',
-      x: x + MARGIN,
+      x: x + margin,
       y: getY({ maxHeight, value: max, domain }),
       height: getHeight({ maxHeight, value: max - min, domain }),
       ...overrideRectProps,
     }),
-    [domain, fill, isPositive, max, maxHeight, min, overrideRectProps, width, x]
+    [
+      domain,
+      fill,
+      isPositive,
+      margin,
+      max,
+      maxHeight,
+      min,
+      overrideRectProps,
+      width,
+      x,
+    ]
   );
   const animatedRectProps = useAnimatedProps(() => ({
-    x: withTiming(x + MARGIN),
+    x: withTiming(x + margin),
     y: withTiming(getY({ maxHeight, value: max, domain })),
     height: withTiming(getHeight({ maxHeight, value: max - min, domain })),
   }));

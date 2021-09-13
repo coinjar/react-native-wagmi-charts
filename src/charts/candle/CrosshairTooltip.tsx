@@ -13,6 +13,7 @@ import {
 } from './PriceText';
 
 export type CandlestickChartCrosshairTooltipProps = ViewProps & {
+  children?: React.ReactNode;
   xGutter?: number;
   yGutter?: number;
   tooltipTextProps?: CandlestickChartPriceTextProps;
@@ -29,6 +30,7 @@ export const CandlestickChartCrosshairTooltipContext =
   });
 
 export function CandlestickChartCrosshairTooltip({
+  children,
   xGutter = 8,
   yGutter = 8,
   tooltipTextProps = {},
@@ -63,7 +65,6 @@ export function CandlestickChartCrosshairTooltip({
   });
 
   const tooltip = useAnimatedStyle(() => ({
-    backgroundColor: 'black',
     position: 'absolute',
     display: 'flex',
     padding: 4,
@@ -86,24 +87,20 @@ export function CandlestickChartCrosshairTooltip({
         {...props}
         style={[tooltip, leftTooltip, props.style]}
       >
-        <CandlestickChartPriceText
-          {...tooltipTextProps}
-          style={[
-            { color: 'white', fontSize: 14 },
-            tooltipTextProps.style,
-            textStyle,
-          ]}
-        />
+        {children || (
+          <CandlestickChartPriceText
+            {...tooltipTextProps}
+            style={[{ fontSize: 14 }, tooltipTextProps.style, textStyle]}
+          />
+        )}
       </Animated.View>
       <Animated.View {...props} style={[tooltip, rightTooltip, props.style]}>
-        <CandlestickChartPriceText
-          {...tooltipTextProps}
-          style={[
-            { color: 'white', fontSize: 14 },
-            tooltipTextProps.style,
-            textStyle,
-          ]}
-        />
+        {children || (
+          <CandlestickChartPriceText
+            {...tooltipTextProps}
+            style={[{ fontSize: 14 }, tooltipTextProps.style, textStyle]}
+          />
+        )}
       </Animated.View>
     </>
   );

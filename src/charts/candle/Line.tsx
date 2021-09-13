@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import Svg, { Line as SVGLine } from 'react-native-svg';
+import Svg, { Line as SVGLine, LineProps } from 'react-native-svg';
 
-type CandlestickChartLineProps = {
+export type CandlestickChartLineProps = LineProps & {
   color?: string;
   x: number;
   y: number;
@@ -12,6 +12,7 @@ export const CandlestickChartLine = ({
   color = 'gray',
   x,
   y,
+  ...props
 }: CandlestickChartLineProps) => {
   return (
     <Svg style={StyleSheet.absoluteFill}>
@@ -23,6 +24,7 @@ export const CandlestickChartLine = ({
         strokeWidth={2}
         stroke={color}
         strokeDasharray="6 6"
+        {...props}
       />
     </Svg>
   );

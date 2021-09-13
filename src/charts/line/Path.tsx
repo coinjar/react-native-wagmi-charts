@@ -5,7 +5,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { Path } from 'react-native-svg';
+import { Path, PathProps } from 'react-native-svg';
 import { mixPath, parse } from 'react-native-redash';
 
 import { useLineChart } from './useLineChart';
@@ -13,13 +13,18 @@ import { usePrevious } from '../../utils';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-type LineChartPathProps = {
+export type LineChartPathProps = Animated.AnimateProps<PathProps> & {
   color?: string;
   width?: number;
-  height?: number;
+  isInactive?: boolean;
 };
 
-export function LineChartPath({ color = 'black' }: LineChartPathProps) {
+export function LineChartPath({
+  color = 'black',
+  width = 3,
+  isInactive,
+  ...props
+}: LineChartPathProps) {
   const { path } = useLineChart();
 
   ////////////////////////////////////////////////
@@ -60,7 +65,9 @@ export function LineChartPath({ color = 'black' }: LineChartPathProps) {
         animatedProps={animatedProps}
         fill="transparent"
         stroke={color}
-        strokeWidth={3}
+        strokeOpacity={isInactive ? 0.2 : 1}
+        strokeWidth={width}
+        {...props}
       />
     </>
   );
