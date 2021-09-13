@@ -5,7 +5,7 @@ import { CandlestickChartProvider } from './Context';
 import { CandlestickChartPriceText } from './PriceText';
 import { CandlestickChartDatetimeText } from './DatetimeText';
 import { CandlestickChartLine } from './Line';
-import { CandlestickChartTooltip } from './Tooltip';
+import { CandlestickChartCrosshairTooltip } from './CrosshairTooltip';
 import { useCandlestickChartDatetime } from './useDatetime';
 import { useCandlestickChartPrice } from './usePrice';
 import { useCandlestickChart } from './useCandlestickChart';
@@ -17,7 +17,7 @@ export * from './Crosshair';
 export * from './PriceText';
 export * from './DatetimeText';
 export * from './Line';
-export * from './Tooltip';
+export * from './CrosshairTooltip';
 export * from './types';
 export * from './useCandlestickChart';
 export * from './useDatetime';
@@ -32,7 +32,7 @@ export const CandlestickChart = {
   PriceText: CandlestickChartPriceText,
   DatetimeText: CandlestickChartDatetimeText,
   Line: CandlestickChartLine,
-  Tooltip: CandlestickChartTooltip,
+  Tooltip: CandlestickChartCrosshairTooltip,
   useDatetime: useCandlestickChartDatetime,
   usePrice: useCandlestickChartPrice,
   useChart: useCandlestickChart,

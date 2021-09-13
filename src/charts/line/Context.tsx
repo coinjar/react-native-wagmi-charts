@@ -20,7 +20,7 @@ export const LineChartContext = React.createContext<TLineChartContext>({
 type LineChartProviderProps = {
   children: React.ReactNode;
   data: TLineChartData;
-  gutter?: number;
+  yGutter?: number;
   width?: number;
   height?: number;
 };
@@ -30,7 +30,7 @@ const { width: screenWidth } = Dimensions.get('window');
 export function LineChartProvider({
   children,
   data,
-  gutter = 16,
+  yGutter = 16,
   width = screenWidth,
   height = screenWidth,
 }: LineChartProviderProps) {
@@ -42,8 +42,8 @@ export function LineChartProvider({
   const domain = React.useMemo(() => getDomain(data), [data]);
 
   const path = React.useMemo(() => {
-    return getPath({ data, width, height, gutter });
-  }, [data, gutter, height, width]);
+    return getPath({ data, width, height, gutter: yGutter });
+  }, [data, yGutter, height, width]);
 
   const contextValue = React.useMemo(
     () => ({
@@ -51,7 +51,7 @@ export function LineChartProvider({
       currentY,
       currentIndex,
       data,
-      gutter,
+      gutter: yGutter,
       path,
       width,
       height,
@@ -64,7 +64,7 @@ export function LineChartProvider({
       currentY,
       data,
       domain,
-      gutter,
+      yGutter,
       height,
       isActive,
       path,

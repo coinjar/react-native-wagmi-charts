@@ -21,10 +21,13 @@ export function LineChartCursor({ children, type }: LineChartCursorProps) {
 
   const onGestureEvent = useAnimatedGestureHandler({
     onActive: ({ x }) => {
+      const boundedX = x <= width ? x : width;
       isActive.value = true;
-      currentX.value = x;
-      currentY.value = getYForX(parsedPath, x) || 0;
-      currentIndex.value = Math.round(x / width / (1 / (data.length - 1)));
+      currentX.value = boundedX;
+      currentY.value = getYForX(parsedPath, boundedX) || 0;
+      currentIndex.value = Math.round(
+        boundedX / width / (1 / (data.length - 1))
+      );
     },
     onEnd: () => {
       isActive.value = false;

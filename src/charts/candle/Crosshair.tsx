@@ -13,7 +13,7 @@ import { clamp } from 'react-native-redash';
 
 import { CandlestickChartLine } from './Line';
 import { useCandlestickChart } from './useCandlestickChart';
-import { CandlestickChartTooltipContext } from './Tooltip';
+import { CandlestickChartCrosshairTooltipContext } from './CrosshairTooltip';
 
 type CandlestickChartCrosshairProps = {
   color?: string;
@@ -40,14 +40,15 @@ export function CandlestickChartCrosshair({
   const opacity = useSharedValue(0);
   const onGestureEvent = useAnimatedGestureHandler({
     onActive: ({ x, y }) => {
-      if (x < 100) {
+      const boundedX = x <= width - 1 ? x : width - 1;
+      if (boundedX < 100) {
         tooltipPosition.value = 'right';
       } else {
         tooltipPosition.value = 'left';
       }
       opacity.value = 1;
       currentY.value = clamp(y, 0, height);
-      currentX.value = x - (x % step) + step / 2;
+      currentX.value = boundedX - (boundedX % step) + step / 2;
     },
     onEnd: () => {
       opacity.value = 0;
@@ -78,11 +79,11 @@ export function CandlestickChartCrosshair({
       <Animated.View style={StyleSheet.absoluteFill}>
         <Animated.View style={[StyleSheet.absoluteFill, horizontal]}>
           <CandlestickChartLine color={color} x={width} y={0} />
-          <CandlestickChartTooltipContext.Provider
+          <CandlestickChartCrosshairTooltipContext.Provider
             value={{ position: tooltipPosition }}
           >
             {children}
-          </CandlestickChartTooltipContext.Provider>
+          </CandlestickChartCrosshairTooltipContext.Provider>
         </Animated.View>
         <Animated.View style={[StyleSheet.absoluteFill, vertical]}>
           <CandlestickChartLine color={color} x={0} y={height} />

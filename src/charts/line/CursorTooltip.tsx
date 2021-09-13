@@ -12,6 +12,7 @@ import { useLineChart } from './useLineChart';
 type LineChartCursorTooltipProps = Animated.AnimateProps<ViewProps> & {
   xGutter?: number;
   yGutter?: number;
+  cursorGutter?: number;
   position?: 'top' | 'bottom';
   textProps?: LineChartPriceTextProps;
   textStyle?: LineChartPriceTextProps['style'];
@@ -19,7 +20,8 @@ type LineChartCursorTooltipProps = Animated.AnimateProps<ViewProps> & {
 
 export function LineChartCursorTooltip({
   xGutter = 8,
-  yGutter = 80,
+  yGutter = 8,
+  cursorGutter = 48,
   position = 'top',
   textProps,
   textStyle,
@@ -52,16 +54,34 @@ export function LineChartCursorTooltip({
         currentX.value - (width - elementWidth.value / 2 - xGutter);
       translateXOffset = translateXOffset + xOffset;
     }
+
+    let translateYOffset = 0;
+    if (position === 'top') {
+      translateYOffset = elementHeight.value / 2 + cursorGutter;
+      if (currentY.value - translateYOffset < yGutter) {
+        translateYOffset = currentY.value - yGutter;
+      }
+    } else if (position === 'bottom') {
+      translateYOffset = -(elementHeight.value / 2) - cursorGutter / 2;
+      if (
+        currentY.value - translateYOffset + elementHeight.value >
+        height - yGutter
+      ) {
+        translateYOffset =
+          currentY.value - (height - yGutter) + elementHeight.value;
+      }
+    }
+
     return {
       transform: [
         { translateX: currentX.value - translateXOffset },
         {
           translateY:
             type === 'crosshair'
-              ? currentY.value - yGutter
+              ? currentY.value - translateYOffset
               : position === 'top'
-              ? -height
-              : -elementHeight.value,
+              ? yGutter
+              : height - elementHeight.value - yGutter,
         },
       ],
       opacity: isActive.value ? 1 : 0,
@@ -74,6 +94,7 @@ export function LineChartCursorTooltip({
       {...props}
       style={[
         {
+          position: 'absolute',
           backgroundColor: 'black',
           padding: 4,
           alignSelf: 'flex-start',
