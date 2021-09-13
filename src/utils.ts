@@ -41,11 +41,7 @@ export function formatPrice({
 export function formatDatetime({
   value,
   locale = 'en-US',
-  options = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  },
+  options = {},
 }: {
   value: number;
   locale?: string;
@@ -53,7 +49,7 @@ export function formatDatetime({
 }) {
   'worklet';
   const d = new Date(value);
-  return d.toLocaleTimeString(locale, options);
+  return d.toLocaleString(locale, options);
 }
 
 export function usePrevious(value: any) {

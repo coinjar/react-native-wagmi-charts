@@ -10,7 +10,7 @@ import { CursorContext } from './Cursor';
 import { LineChartPriceText, LineChartPriceTextProps } from './PriceText';
 import { useLineChart } from './useLineChart';
 
-type LineChartCursorTooltipProps = Animated.AnimateProps<ViewProps> & {
+type LineChartTooltipProps = Animated.AnimateProps<ViewProps> & {
   children?: React.ReactNode;
   xGutter?: number;
   yGutter?: number;
@@ -20,7 +20,7 @@ type LineChartCursorTooltipProps = Animated.AnimateProps<ViewProps> & {
   textStyle?: LineChartPriceTextProps['style'];
 };
 
-export function LineChartCursorTooltip({
+export function LineChartTooltip({
   children,
   xGutter = 8,
   yGutter = 8,
@@ -29,7 +29,7 @@ export function LineChartCursorTooltip({
   textProps,
   textStyle,
   ...props
-}: LineChartCursorTooltipProps) {
+}: LineChartTooltipProps) {
   const { width, height } = React.useContext(LineChartDimensionsContext);
   const { type } = React.useContext(CursorContext);
   const { currentX, currentY, isActive } = useLineChart();

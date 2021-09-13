@@ -14,18 +14,18 @@ export default function App() {
       </Heading.H5>
       <LineChart.Provider data={data}>
         <LineChart>
-          <LineChart.Path />
-          <LineChart.CursorCrosshair>
-            {/* <LineChart.CursorTooltip /> */}
-            {/* <LineChart.CursorTooltip position="bottom">
+          <LineChart.Path color="hotpink" />
+          <LineChart.CursorCrosshair color="hotpink">
+            {/* <LineChart.Tooltip />
+            <LineChart.Tooltip position="bottom">
               <LineChart.DatetimeText />
-            </LineChart.CursorTooltip> */}
+            </LineChart.Tooltip> */}
           </LineChart.CursorCrosshair>
         </LineChart>
-        <Box paddingX="major-2">
+        {/* <Box paddingX="major-2">
           <LineChart.PriceText />
           <LineChart.DatetimeText />
-        </Box>
+        </Box> */}
         <Box marginTop="major-2">
           <Button onPress={() => setData(mockData)}>Data 1</Button>
           <Button onPress={() => setData(mockData2)}>Data 2</Button>
@@ -66,6 +66,9 @@ export default function App() {
                 year: 'numeric',
                 month: 'numeric',
                 day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
               }}
             />
           </Flex>

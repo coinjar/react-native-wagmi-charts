@@ -67,6 +67,7 @@ export function CandlestickChartCrosshairTooltip({
   });
 
   const tooltip = useAnimatedStyle(() => ({
+    backgroundColor: 'white',
     position: 'absolute',
     display: 'flex',
     padding: 4,

@@ -4,7 +4,7 @@ import { LineChartProvider } from './Context';
 import { LineChartCursor } from './Cursor';
 import { LineChartCursorCrosshair } from './CursorCrosshair';
 import { LineChartCursorLine } from './CursorLine';
-import { LineChartCursorTooltip } from './CursorTooltip';
+import { LineChartTooltip } from './Tooltip';
 import { LineChartPriceText } from './PriceText';
 import { LineChartDatetimeText } from './DatetimeText';
 import { useLineChartDatetime } from './useDatetime';
@@ -17,7 +17,7 @@ export * from './Context';
 export * from './Cursor';
 export * from './CursorCrosshair';
 export * from './CursorLine';
-export * from './CursorTooltip';
+export * from './Tooltip';
 export * from './DatetimeText';
 export * from './Path';
 export * from './PriceText';
@@ -32,7 +32,7 @@ export const LineChart = Object.assign(_LineChart, {
   Cursor: LineChartCursor,
   CursorCrosshair: LineChartCursorCrosshair,
   CursorLine: LineChartCursorLine,
-  CursorTooltip: LineChartCursorTooltip,
+  Tooltip: LineChartTooltip,
   Provider: LineChartProvider,
   PriceText: LineChartPriceText,
   DatetimeText: LineChartDatetimeText,

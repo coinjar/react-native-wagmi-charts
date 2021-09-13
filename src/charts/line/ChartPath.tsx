@@ -15,8 +15,8 @@ const AnimatedSVG = Animated.createAnimatedComponent(Svg);
 type LineChartPathWrapperProps = {
   animationDuration?: number;
   animationProps?: Partial<Animated.WithTimingConfig>;
-  pathColor?: string;
-  pathWidth?: number;
+  color?: string;
+  width?: number;
   pathProps?: Partial<LineChartPathProps>;
   showInactivePath?: boolean;
 };
@@ -24,8 +24,8 @@ type LineChartPathWrapperProps = {
 export function LineChartPathWrapper({
   animationDuration = 300,
   animationProps = {},
-  pathColor = 'black',
-  pathWidth = 3,
+  color = 'black',
+  width: pathWidth = 3,
   pathProps = {},
   showInactivePath = true,
 }: LineChartPathWrapperProps) {
@@ -47,7 +47,7 @@ export function LineChartPathWrapper({
       <View style={[{ width, height }]}>
         <Svg width={width} height={height}>
           <LineChartPath
-            color={pathColor}
+            color={color}
             width={pathWidth}
             isInactive={showInactivePath}
             {...pathProps}
@@ -56,7 +56,7 @@ export function LineChartPathWrapper({
       </View>
       <View style={StyleSheet.absoluteFill}>
         <AnimatedSVG animatedProps={svgProps} height={height}>
-          <LineChartPath color={pathColor} width={pathWidth} {...pathProps} />
+          <LineChartPath color={color} width={pathWidth} {...pathProps} />
         </AnimatedSVG>
       </View>
     </>
