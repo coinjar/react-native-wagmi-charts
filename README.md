@@ -484,9 +484,53 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 
 <img src="https://user-images.githubusercontent.com/7336481/133054393-28d542c1-c9fc-4ba6-b4a0-86cf096ebcda.gif" width="200px" />
 
-## Components & API
+## Components
 
-<!-- date options: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat -->
+### LineChart.Provider
+
+### LineChart
+
+### LineChart.Path
+
+### LineChart.CursorCrosshair
+
+### LineChart.CursorLine
+
+### LineChart.Tooltip
+
+### LineChart.PriceText
+
+### LineChart.DatetimeText
+
+### CandlestickChart.Provider
+
+### CandlestickChart
+
+### CandlestickChart.Candles
+
+### CandlestickChart.Crosshair
+
+### CandlestickChart.Tooltip
+
+### CandlestickChart.PriceText
+
+### CandlestickChart.DatetimeText
+
+## Hooks
+
+### LineChart.useChart
+
+### LineChart.useDatetime
+
+### LineChart.usePrice
+
+### CandlestickChart.useChart
+
+### CandlestickChart.useCandleData
+
+### CandlestickChart.useDatetime
+
+### CandlestickChart.usePrice
 
 
 ### Credits
