@@ -34,23 +34,24 @@ export function CandlestickChartCandles({
 
   return (
     <Svg width={width} height={height} {...props}>
-      {data.map((candle, index) => (
-        <CandlestickChartCandle
-          key={index as React.Key}
-          domain={domain}
-          maxHeight={height}
-          width={step}
-          positiveColor={positiveColor}
-          negativeColor={negativeColor}
-          renderRect={renderRect}
-          renderLine={renderLine}
-          rectProps={rectProps}
-          lineProps={lineProps}
-          useAnimations={useAnimations}
-          candle={candle}
-          index={index}
-        />
-      ))}
+      {step > 0 &&
+        data.map((candle, index) => (
+          <CandlestickChartCandle
+            key={index as React.Key}
+            domain={domain}
+            maxHeight={height}
+            width={step}
+            positiveColor={positiveColor}
+            negativeColor={negativeColor}
+            renderRect={renderRect}
+            renderLine={renderLine}
+            rectProps={rectProps}
+            lineProps={lineProps}
+            useAnimations={useAnimations}
+            candle={candle}
+            index={index}
+          />
+        ))}
     </Svg>
   );
 }

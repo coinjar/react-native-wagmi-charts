@@ -31,7 +31,10 @@ export function LineChartPath({
 
   const transition = useSharedValue(0);
 
-  const parsedPath = React.useMemo(() => parse(path), [path]);
+  const parsedPath = React.useMemo(
+    () => (path ? parse(path) : undefined),
+    [path]
+  );
   const previousParsedPath = usePrevious(parsedPath);
 
   useAnimatedReaction(
@@ -48,6 +51,7 @@ export function LineChartPath({
   );
 
   const animatedProps = useAnimatedProps(() => {
+    if (!parsedPath) return { d: '' };
     return {
       d: mixPath(
         transition.value,

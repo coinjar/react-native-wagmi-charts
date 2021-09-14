@@ -18,7 +18,10 @@ type LineChartProviderProps = {
   data: TLineChartData;
 };
 
-export function LineChartProvider({ children, data }: LineChartProviderProps) {
+export function LineChartProvider({
+  children,
+  data = [],
+}: LineChartProviderProps) {
   const currentX = useSharedValue(-1);
   const currentY = useSharedValue(-1);
   const currentIndex = useSharedValue(-1);

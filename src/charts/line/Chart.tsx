@@ -32,7 +32,10 @@ export function LineChart({
   const { data } = useLineChart();
 
   const path = React.useMemo(() => {
-    return getPath({ data, width, height, gutter: yGutter, shape });
+    if (data && data.length > 0) {
+      return getPath({ data, width, height, gutter: yGutter, shape });
+    }
+    return '';
   }, [data, width, height, yGutter, shape]);
 
   const contextValue = React.useMemo(

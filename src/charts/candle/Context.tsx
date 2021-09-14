@@ -12,8 +12,8 @@ export const CandlestickChartContext = React.createContext<TContext>({
   width: 0,
   domain: [0, 0],
   step: 0,
-  setWidth: undefined,
-  setHeight: undefined,
+  setWidth: () => undefined,
+  setHeight: () => undefined,
 });
 
 type CandlestickChartProviderProps = {
@@ -25,7 +25,7 @@ type CandlestickChartProviderProps = {
 
 export function CandlestickChartProvider({
   children,
-  data,
+  data = [],
 }: CandlestickChartProviderProps) {
   const [width, setWidth] = React.useState(0);
   const [height, setHeight] = React.useState(0);
@@ -36,8 +36,10 @@ export function CandlestickChartProvider({
   const domain = React.useMemo(() => getDomain(data), [data]);
 
   React.useEffect(() => {
-    const newStep = width / data.length;
-    setStep(newStep);
+    if (data.length) {
+      const newStep = width / data.length;
+      setStep(newStep);
+    }
   }, [data.length, width]);
 
   const contextValue = React.useMemo(

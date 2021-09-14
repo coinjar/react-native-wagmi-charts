@@ -6,7 +6,8 @@ import mockData from './line-data.json';
 import mockData2 from './line-data2.json';
 
 export default function App() {
-  const [data, setData] = React.useState(mockData);
+  const [data, setData] = React.useState<any>(mockData);
+
   return (
     <>
       <Heading.H5 paddingX="major-2" marginBottom="major-2">
@@ -16,16 +17,12 @@ export default function App() {
         <LineChart>
           <LineChart.Path />
           <LineChart.CursorCrosshair>
-            <LineChart.Tooltip cursorGutter={60} xGutter={16} yGutter={16} />
+            <LineChart.Tooltip />
             {/* <LineChart.Tooltip position="bottom">
               <LineChart.DatetimeText />
             </LineChart.Tooltip> */}
           </LineChart.CursorCrosshair>
         </LineChart>
-        {/* <Box paddingX="major-2">
-          <LineChart.PriceText />
-          <LineChart.DatetimeText />
-        </Box> */}
         <Box marginTop="major-2">
           <Button onPress={() => setData(mockData)}>Data 1</Button>
           <Button onPress={() => setData(mockData2)}>Data 2</Button>

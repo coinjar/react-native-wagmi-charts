@@ -25,17 +25,22 @@ export function LineChartCursor({
   const { width, path } = React.useContext(LineChartDimensionsContext);
   const { currentX, currentY, currentIndex, isActive, data } = useLineChart();
 
-  const parsedPath = React.useMemo(() => parse(path), [path]);
+  const parsedPath = React.useMemo(
+    () => (path ? parse(path) : undefined),
+    [path]
+  );
 
   const onGestureEvent = useAnimatedGestureHandler({
     onActive: ({ x }) => {
-      const boundedX = x <= width ? x : width;
-      isActive.value = true;
-      currentX.value = boundedX;
-      currentY.value = getYForX(parsedPath, boundedX) || 0;
-      currentIndex.value = Math.round(
-        boundedX / width / (1 / (data.length - 1))
-      );
+      if (parsedPath) {
+        const boundedX = x <= width ? x : width;
+        isActive.value = true;
+        currentX.value = boundedX;
+        currentY.value = getYForX(parsedPath, boundedX) || 0;
+        currentIndex.value = Math.round(
+          boundedX / width / (1 / (data.length - 1))
+        );
+      }
     },
     onEnd: () => {
       isActive.value = false;

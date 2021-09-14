@@ -6,7 +6,8 @@ import mockData from './candlestick-data.json';
 import mockData2 from './candlestick-data2.json';
 
 export default function App() {
-  const [data, setData] = React.useState(mockData);
+  const [data, setData] = React.useState<any>(mockData);
+
   return (
     <>
       <Heading.H5 paddingX="major-2" marginBottom="major-2">
@@ -14,23 +15,11 @@ export default function App() {
       </Heading.H5>
       <CandlestickChart.Provider data={data}>
         <CandlestickChart>
-          <CandlestickChart.Candles
-            positiveColor="hotpink"
-            negativeColor="black"
-          />
-          <CandlestickChart.Crosshair color="hotpink">
-            {/* <CandlestickChart.Tooltip /> */}
+          <CandlestickChart.Candles />
+          <CandlestickChart.Crosshair>
+            <CandlestickChart.Tooltip />
           </CandlestickChart.Crosshair>
         </CandlestickChart>
-        {/* <Box padding="major-2">
-          <Level verticalBelow="">
-            <CandlestickChart.PriceText type="open" />
-            <CandlestickChart.PriceText type="high" />
-            <CandlestickChart.PriceText type="low" />
-            <CandlestickChart.PriceText type="close" />
-          </Level>
-          <CandlestickChart.DatetimeText />
-        </Box> */}
         <Button onPress={() => setData(mockData)}>Data 1</Button>
         <Button onPress={() => setData(mockData2)}>Data 2</Button>
         <Stack padding="major-2" spacing="major-1">
