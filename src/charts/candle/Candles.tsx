@@ -8,12 +8,14 @@ import { useCandlestickChart } from './useCandlestickChart';
 type CandlestickChartCandlesProps = SvgProps & {
   width?: number;
   height?: number;
+  margin?: CandlestickChartCandleProps['margin'];
   positiveColor?: CandlestickChartCandleProps['positiveColor'];
   negativeColor?: CandlestickChartCandleProps['negativeColor'];
   renderRect?: CandlestickChartCandleProps['renderRect'];
   renderLine?: CandlestickChartCandleProps['renderLine'];
   rectProps?: CandlestickChartCandleProps['rectProps'];
   lineProps?: CandlestickChartCandleProps['lineProps'];
+  candleProps?: Partial<CandlestickChartCandleProps>;
   useAnimations?: boolean;
 };
 
@@ -22,9 +24,11 @@ export function CandlestickChartCandles({
   negativeColor,
   rectProps,
   lineProps,
+  margin,
   useAnimations = true,
   renderRect,
   renderLine,
+  candleProps,
   ...props
 }: CandlestickChartCandlesProps) {
   const { width, height } = React.useContext(CandlestickChartDimensionsContext);
@@ -39,6 +43,7 @@ export function CandlestickChartCandles({
           <CandlestickChartCandle
             key={index as React.Key}
             domain={domain}
+            margin={margin}
             maxHeight={height}
             width={step}
             positiveColor={positiveColor}
@@ -50,6 +55,7 @@ export function CandlestickChartCandles({
             useAnimations={useAnimations}
             candle={candle}
             index={index}
+            {...candleProps}
           />
         ))}
     </Svg>
