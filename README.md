@@ -9,19 +9,19 @@ A sweet & simple chart library for React Native that will make us feel like **W*
 
 ## Features
 
-📈 - Line charts & candlestick charts (more to come 🔜)
+📈 Line charts & candlestick charts (more to come 🔜)
 
-🏷 - Interactive price & date/time label components
+🏷 Interactive price & date/time label components
 
-🧱 - Built with composability in mind
+🧱 Built with composability in mind
 
-🛠 - Highly customizable APIs
+🛠 Highly customizable APIs
 
-✨ - Uses React Native Reanimated 2 under-the-hood
+✨ Uses React Native Reanimated 2 under-the-hood
 
-🧈 - Slick data transition animations
+🧈 Slick data transition animations
 
-💬 - Interactive tooltips
+💬 Interactive tooltips
 
 ## Table of Contents
 
