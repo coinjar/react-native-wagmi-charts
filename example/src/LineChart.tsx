@@ -26,6 +26,17 @@ export default function App() {
         <Box marginTop="major-2">
           <Button onPress={() => setData(mockData)}>Data 1</Button>
           <Button onPress={() => setData(mockData2)}>Data 2</Button>
+          <Button onPress={() => setData([...mockData, ...mockData2])}>
+            Data 1 + Data 2
+          </Button>
+          <Button onPress={() => setData([...mockData2, ...mockData])}>
+            Data 2 + Data 1
+          </Button>
+          <Button
+            onPress={() => setData([...mockData2, ...mockData, ...mockData2])}
+          >
+            Data 2 + Data 1 + Data 2
+          </Button>
         </Box>
         <Stack padding="major-2" spacing="major-1">
           <Heading.H6>PriceText</Heading.H6>

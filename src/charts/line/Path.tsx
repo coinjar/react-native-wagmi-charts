@@ -10,6 +10,7 @@ import { mixPath, parse } from 'react-native-redash';
 
 import { LineChartDimensionsContext } from './Chart';
 import { usePrevious } from '../../utils';
+import { syncPaths } from './utils';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -52,12 +53,20 @@ export function LineChartPath({
 
   const animatedProps = useAnimatedProps(() => {
     if (!parsedPath) return { d: '' };
+
+    const {
+      parsedPath: newParsedPath,
+      previousParsedPath: newPreviousParsedPath,
+    } = syncPaths({
+      parsedPath,
+      previousParsedPath,
+    });
+
     return {
-      d: mixPath(
-        transition.value,
-        previousParsedPath || parsedPath,
-        parsedPath
-      ),
+      d:
+        transition.value === 1
+          ? path
+          : mixPath(transition.value, newPreviousParsedPath, newParsedPath),
     };
   });
 
