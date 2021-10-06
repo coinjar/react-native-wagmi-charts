@@ -6,11 +6,10 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Path, PathProps } from 'react-native-svg';
-import { mixPath, parse } from 'react-native-redash';
 
 import { LineChartDimensionsContext } from './Chart';
+import interpolatePath from './interpolatePath';
 import { usePrevious } from '../../utils';
-import { syncPaths } from './utils';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -32,11 +31,7 @@ export function LineChartPath({
 
   const transition = useSharedValue(0);
 
-  const parsedPath = React.useMemo(
-    () => (path ? parse(path) : undefined),
-    [path]
-  );
-  const previousParsedPath = usePrevious(parsedPath);
+  const previousPath = usePrevious(path);
 
   useAnimatedReaction(
     () => {
@@ -52,21 +47,13 @@ export function LineChartPath({
   );
 
   const animatedProps = useAnimatedProps(() => {
-    if (!parsedPath) return { d: '' };
-
-    const {
-      parsedPath: newParsedPath,
-      previousParsedPath: newPreviousParsedPath,
-    } = syncPaths({
-      parsedPath,
-      previousParsedPath,
-    });
-
+    let d = path || '';
+    if (previousPath) {
+      const pathInterpolator = interpolatePath(previousPath, path, null);
+      d = pathInterpolator(transition.value);
+    }
     return {
-      d:
-        transition.value === 1
-          ? path
-          : mixPath(transition.value, newPreviousParsedPath, newParsedPath),
+      d,
     };
   });
 

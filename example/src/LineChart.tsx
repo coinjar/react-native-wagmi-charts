@@ -37,6 +37,26 @@ export default function App() {
           >
             Data 2 + Data 1 + Data 2
           </Button>
+          <Button
+            onPress={() =>
+              setData([
+                ...mockData2,
+                ...mockData,
+                ...mockData2,
+                ...mockData,
+                ...mockData,
+                ...mockData2,
+                ...mockData2,
+                ...mockData,
+                ...mockData2,
+                ...mockData,
+                ...mockData,
+                ...mockData2,
+              ])
+            }
+          >
+            V large data
+          </Button>
         </Box>
         <Stack padding="major-2" spacing="major-1">
           <Heading.H6>PriceText</Heading.H6>

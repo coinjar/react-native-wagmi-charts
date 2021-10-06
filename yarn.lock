@@ -2752,6 +2752,11 @@ d3-format@1:
   resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-1.4.5.tgz#374f2ba1320e3717eb74a9356c67daee17a7edb4"
   integrity sha512-J0piedu6Z8iB6TbIGfZgDzfXxUFN3qQRMofy2oPdXzQibYGqPB/9iMcxr/TGalU+2RsyDO+U4f33id8tbnSRMQ==
 
+d3-interpolate-path@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/d3-interpolate-path/-/d3-interpolate-path-2.2.3.tgz#7a2a906231c316c5166872c13400aae918e604fa"
+  integrity sha512-1i1WUmOzSHI7nYqhjnL9v/gA5VQNgMMfX4u1Emv2vKmUUQsRPx/Ghl/AvcyOq3GRINW8iSz5elCdoHX0imyWCg==
+
 d3-interpolate@1:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/d3-interpolate/-/d3-interpolate-1.4.0.tgz#526e79e2d80daa383f9e0c1c1c7dcc0f0583e987"
