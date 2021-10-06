@@ -9,19 +9,19 @@ A sweet & simple chart library for React Native that will make us feel like **W*
 
 ## Features
 
-📈 Line charts & candlestick charts (more to come 🔜)
+📈 - Line charts & candlestick charts (more to come 🔜)
 
-🏷 Interactive price & date/time label components
+🏷 - Interactive price & date/time label components
 
-🧱 Built with composability in mind
+🧱 - Built with composability in mind
 
-🛠 Highly customizable APIs
+🛠 - Highly customizable APIs
 
-✨ Uses React Native Reanimated 2 under-the-hood
+✨ - Uses React Native Reanimated 2 under-the-hood
 
-🧈 Slick data transition animations
+🧈 - Slick data transition animations
 
-💬 Interactive tooltips
+💬 - Interactive tooltips
 
 ## Table of Contents
 
@@ -92,7 +92,7 @@ The `LineChart.Provider` component sets up the context of your chart, `LineChart
 > Note: This chart does not include an interactive cursor like in the animated example above. If you want one, [check out the "Interactive Cursors" guide](#interactive-cursors)
 
 ```jsx
-import { LineChart } from 'react-native-wagmi-charts'; 
+import { LineChart } from 'react-native-wagmi-charts';
 
 const data = [
   {
@@ -133,7 +133,7 @@ The `CandlestickChart.Provider` component sets up the context of your chart, `Ca
 > Note: This chart does not include an interactive cursor like in the animated example above. If you want one, [check out the "Interactive Cursors" guide](#interactive-cursors)
 
 ```jsx
-import { CandlestickChart } from 'react-native-wagmi-charts'; 
+import { CandlestickChart } from 'react-native-wagmi-charts';
 
 const data = [
   {
@@ -504,10 +504,10 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 `xGutter` and `yGutter` is the gutter on the x & y axis of the chart (the tooltip can't pass the gutter).
 
 ```jsx
-<LineChart.Tooltip 
-  cursorGutter={60} 
-  xGutter={16} 
-  yGutter={16} 
+<LineChart.Tooltip
+  cursorGutter={60}
+  xGutter={16}
+  yGutter={16}
 />
 ```
 
@@ -653,12 +653,12 @@ The `LineChart.useChart` hook returns the current state of the chart.
 
 ```jsx
 const {
-  currentX,     
-  currentY,     
-  currentIndex, 
-  data,         
-  domain,       
-  isActive      
+  currentX,
+  currentY,
+  currentIndex,
+  data,
+  domain,
+  isActive
 } = LineChart.useChart();
 ```
 
@@ -735,11 +735,11 @@ const {
 
 ```jsx
 const {
-  currentX,     
-  currentY,     
-  data,         
-  domain,       
-  step      
+  currentX,
+  currentY,
+  data,
+  domain,
+  step
 } = CandlestickChart.useChart();
 ```
 
@@ -765,7 +765,7 @@ const {
   open,
   high,
   low,
-  close    
+  close
 } = CandlestickChart.useCandleData();
 ```
 
@@ -846,4 +846,4 @@ const {
 This library wouldn't be possible if it weren't for:
 
 - [Rainbow's Animated Charts](https://github.com/rainbow-me/react-native-animated-charts)
-- @wcandillon and his [Can It Be Done In React Native](www.youtube.com/wcandillon) series 💪😍  
+- @wcandillon and his [Can It Be Done In React Native](www.youtube.com/wcandillon) series 💪😍

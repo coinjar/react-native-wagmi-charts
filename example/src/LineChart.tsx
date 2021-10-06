@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Box, Button, Flex, Heading, Stack, Text } from 'bumbag-native';
 import { LineChart } from 'react-native-wagmi-charts';
 
-import mockData from './line-data.json';
-import mockData2 from './line-data2.json';
+import mockData from './data/line-data.json';
+import mockData2 from './data/line-data2.json';
 
 export default function App() {
   const [data, setData] = React.useState<any>(mockData);
@@ -11,7 +11,7 @@ export default function App() {
   return (
     <>
       <Heading.H5 paddingX="major-2" marginBottom="major-2">
-        WAGMI Line Chart 📈
+        Line Chart 📈
       </Heading.H5>
       <LineChart.Provider data={data}>
         <LineChart>
@@ -23,40 +23,43 @@ export default function App() {
             </LineChart.Tooltip> */}
           </LineChart.CursorCrosshair>
         </LineChart>
+        <Heading.H6>Load Data</Heading.H6>
         <Box marginTop="major-2">
-          <Button onPress={() => setData(mockData)}>Data 1</Button>
-          <Button onPress={() => setData(mockData2)}>Data 2</Button>
-          <Button onPress={() => setData([...mockData, ...mockData2])}>
-            Data 1 + Data 2
-          </Button>
-          <Button onPress={() => setData([...mockData2, ...mockData])}>
-            Data 2 + Data 1
-          </Button>
-          <Button
-            onPress={() => setData([...mockData2, ...mockData, ...mockData2])}
-          >
-            Data 2 + Data 1 + Data 2
-          </Button>
-          <Button
-            onPress={() =>
-              setData([
-                ...mockData2,
-                ...mockData,
-                ...mockData2,
-                ...mockData,
-                ...mockData,
-                ...mockData2,
-                ...mockData2,
-                ...mockData,
-                ...mockData2,
-                ...mockData,
-                ...mockData,
-                ...mockData2,
-              ])
-            }
-          >
-            V large data
-          </Button>
+          <Flex flexWrap={'wrap'}>
+            <Button onPress={() => setData(mockData)}>Data 1</Button>
+            <Button onPress={() => setData(mockData2)}>Data 2</Button>
+            <Button onPress={() => setData([...mockData, ...mockData2])}>
+              Data 1 + Data 2
+            </Button>
+            <Button onPress={() => setData([...mockData2, ...mockData])}>
+              Data 2 + Data 1
+            </Button>
+            <Button
+              onPress={() => setData([...mockData2, ...mockData, ...mockData2])}
+            >
+              Data 2 + Data 1 + Data 2
+            </Button>
+            <Button
+              onPress={() =>
+                setData([
+                  ...mockData2,
+                  ...mockData,
+                  ...mockData2,
+                  ...mockData,
+                  ...mockData,
+                  ...mockData2,
+                  ...mockData2,
+                  ...mockData,
+                  ...mockData2,
+                  ...mockData,
+                  ...mockData,
+                  ...mockData2,
+                ])
+              }
+            >
+              V large data
+            </Button>
+          </Flex>
         </Box>
         <Stack padding="major-2" spacing="major-1">
           <Heading.H6>PriceText</Heading.H6>
