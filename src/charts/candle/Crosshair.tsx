@@ -71,8 +71,8 @@ export function CandlestickChartCrosshair({
 
   useAnimatedReaction(
     () => currentX.value,
-    (data) => {
-      if (currentX.value !== -1 && onCurrentXChange) {
+    (data, prevData) => {
+      if (data !== -1 && data !== prevData && onCurrentXChange) {
         runOnJS(onCurrentXChange)(data);
       }
     }
