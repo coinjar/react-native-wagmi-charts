@@ -4,11 +4,12 @@ import type { TextProps as RNTextProps } from 'react-native';
 import type Animated from 'react-native-reanimated';
 
 import { useLineChartDatetime } from './useDatetime';
+import type { TFormatterFn } from 'react-native-wagmi-charts';
 
-type LineChartPriceTextProps = {
+type LineChartDatetimeProps = {
   locale?: string;
-  options?: { [key: string]: any };
-  format?: any;
+  options?: Intl.DateTimeFormatOptions;
+  format?: TFormatterFn<number>;
   variant?: 'formatted' | 'value';
   style?: Animated.AnimateProps<RNTextProps>['style'];
 };
@@ -19,7 +20,7 @@ export function LineChartDatetimeText({
   format,
   variant = 'formatted',
   ...props
-}: LineChartPriceTextProps) {
+}: LineChartDatetimeProps) {
   const datetime = useLineChartDatetime({ format, locale, options });
   return <ReText text={datetime[variant]} {...props} />;
 }

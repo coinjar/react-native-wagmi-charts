@@ -1,12 +1,13 @@
 import { useDerivedValue } from 'react-native-reanimated';
 
 import { formatPrice } from '../../utils';
+import type { TFormatterFn } from '../candle/types';
 import { useLineChart } from './useLineChart';
 
 export function useLineChartPrice({
   format,
   precision = 2,
-}: { format?: any; precision?: number } = {}) {
+}: { format?: TFormatterFn<string>; precision?: number } = {}) {
   const { currentIndex, data } = useLineChart();
 
   const float = useDerivedValue(() => {
