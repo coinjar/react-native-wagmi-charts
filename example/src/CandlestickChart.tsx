@@ -1,16 +1,13 @@
 import * as React from 'react';
 import { Box, Button, Flex, Heading, Text, Stack } from 'bumbag-native';
 import { CandlestickChart } from 'react-native-wagmi-charts';
+import * as haptics from 'expo-haptics';
 
 import mockData from './data/candlestick-data.json';
 import mockData2 from './data/candlestick-data2.json';
 
-import * as haptics from 'expo-haptics';
-
-function invokeHaptic(value: number) {
-  if (value !== 0) {
-    haptics.impactAsync(haptics.ImpactFeedbackStyle.Light);
-  }
+function invokeHaptic() {
+  haptics.impactAsync(haptics.ImpactFeedbackStyle.Light);
 }
 
 export default function App() {

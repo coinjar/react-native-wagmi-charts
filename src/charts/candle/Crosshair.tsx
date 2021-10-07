@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { StyleSheet, ViewProps } from 'react-native';
 import {
-  PanGestureHandler,
-  PanGestureHandlerProps,
+  LongPressGestureHandler,
+  LongPressGestureHandlerProps,
 } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedGestureHandler,
@@ -18,7 +18,7 @@ import { CandlestickChartLine, CandlestickChartLineProps } from './Line';
 import { useCandlestickChart } from './useCandlestickChart';
 import { CandlestickChartCrosshairTooltipContext } from './CrosshairTooltip';
 
-type CandlestickChartCrosshairProps = PanGestureHandlerProps & {
+type CandlestickChartCrosshairProps = LongPressGestureHandlerProps & {
   color?: string;
   children?: React.ReactNode;
   onCurrentXChange?: (value: number) => unknown;
@@ -72,14 +72,18 @@ export function CandlestickChartCrosshair({
   useAnimatedReaction(
     () => currentX.value,
     (data) => {
-      if (onCurrentXChange) {
+      if (currentX.value !== -1 && onCurrentXChange) {
         runOnJS(onCurrentXChange)(data);
       }
     }
   );
 
   return (
-    <PanGestureHandler minDist={0} onGestureEvent={onGestureEvent} {...props}>
+    <LongPressGestureHandler
+      minDurationMs={0}
+      onGestureEvent={onGestureEvent as any}
+      {...props}
+    >
       <Animated.View style={StyleSheet.absoluteFill}>
         <Animated.View
           style={[StyleSheet.absoluteFill, horizontal]}
@@ -99,6 +103,6 @@ export function CandlestickChartCrosshair({
           <CandlestickChartLine color={color} x={0} y={height} {...lineProps} />
         </Animated.View>
       </Animated.View>
-    </PanGestureHandler>
+    </LongPressGestureHandler>
   );
 }

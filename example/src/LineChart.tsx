@@ -1,9 +1,14 @@
 import * as React from 'react';
 import { Box, Button, Flex, Heading, Stack, Text } from 'bumbag-native';
 import { LineChart } from 'react-native-wagmi-charts';
+import * as haptics from 'expo-haptics';
 
 import mockData from './data/line-data.json';
 import mockData2 from './data/line-data2.json';
+
+function invokeHaptic() {
+  haptics.impactAsync(haptics.ImpactFeedbackStyle.Light);
+}
 
 export default function App() {
   const [data, setData] = React.useState<any>(mockData);
@@ -16,7 +21,10 @@ export default function App() {
       <LineChart.Provider data={data}>
         <LineChart>
           <LineChart.Path />
-          <LineChart.CursorCrosshair>
+          <LineChart.CursorCrosshair
+            onActivated={invokeHaptic}
+            onEnded={invokeHaptic}
+          >
             <LineChart.Tooltip />
             {/* <LineChart.Tooltip position="bottom">
               <LineChart.DatetimeText />

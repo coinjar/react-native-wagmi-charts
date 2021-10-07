@@ -5,10 +5,10 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 
-import { LineChartCursor } from './Cursor';
+import { LineChartCursor, LineChartCursorProps } from './Cursor';
 import { useLineChart } from './useLineChart';
 
-type LineChartCursorCrosshairProps = {
+type LineChartCursorCrosshairProps = Omit<LineChartCursorProps, 'type'> & {
   children?: React.ReactNode;
   color?: string;
   size?: number;
@@ -26,6 +26,7 @@ export function LineChartCursorCrosshair({
   crosshairWrapperProps = {},
   crosshairProps = {},
   crosshairOuterProps = {},
+  ...props
 }: LineChartCursorCrosshairProps) {
   const { currentX, currentY, isActive } = useLineChart();
 
@@ -42,7 +43,7 @@ export function LineChartCursorCrosshair({
   }));
 
   return (
-    <LineChartCursor type="crosshair">
+    <LineChartCursor type="crosshair" {...props}>
       <Animated.View
         {...crosshairWrapperProps}
         style={[

@@ -10,7 +10,7 @@ import { getYForX, parse } from 'react-native-redash';
 import { LineChartDimensionsContext } from './Chart';
 import { useLineChart } from './useLineChart';
 
-type LineChartCursorProps = LongPressGestureHandlerProps & {
+export type LineChartCursorProps = LongPressGestureHandlerProps & {
   children: React.ReactNode;
   type: 'line' | 'crosshair';
 };

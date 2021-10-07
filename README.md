@@ -35,6 +35,7 @@ A sweet & simple chart library for React Native that will make us feel like **W*
   - [Interactive cursors](#interactive-cursors)
   - [Interactive labels](#interactive-labels)
   - [Interactive tooltips](#interactive-tooltips)
+  - [Haptic feedback](#haptic-feedback)
   - [Colors](#colors)
   - [Customizing size](#customizing-size)
   - [Customizing labels](#customizing-labels)
@@ -328,6 +329,64 @@ To render an interactive tooltip that follows your crosshair, you can use the `T
 
 <img src="https://user-images.githubusercontent.com/7336481/133036451-e1f2f12b-9e96-4a0f-8c69-4f630bb8ded3.gif" width="200px" />
 
+### Haptic feedback
+
+By making use of the chart event handlers, you are able to integrate haptic feedback into your charts.
+
+#### Line charts
+
+We can utilise the `onActivated` and `onEnded` events to create haptic feedback on our line chart.
+
+```jsx
+import * as haptics from 'expo-haptics';
+
+const data = [...];
+
+function invokeHaptic() {
+  haptics.impactAsync(haptics.ImpactFeedbackStyle.Light);
+}
+
+function Example() {
+  return (
+    <LineChart.Provider data={data}>
+      <LineChart>
+        <LineChart.Path />
+        <LineChart.CursorCrosshair onActivated={invokeHaptic} onEnded={invokeHaptic}>
+          <LineChart.Tooltip />
+        </LineChart.CursorCrosshair>
+      </LineChart>
+    </LineChart.Provider>
+  )
+}
+```
+
+#### Candlestick charts
+
+We can utilise the `onCurrentXChange` event to create haptic feedback on our candlestick chart.
+
+```jsx
+import * as haptics from 'expo-haptics';
+
+const data = [...];
+
+function invokeHaptic() {
+  haptics.impactAsync(haptics.ImpactFeedbackStyle.Light);
+}
+
+function Example() {
+  return (
+    <CandlestickChart.Provider data={data}>
+      <CandlestickChart>
+        <CandlestickChart.Candles />
+        <CandlestickChart.Crosshair onCurrentXChange={invokeHaptic}>
+          <CandlestickChart.Tooltip />
+        </CandlestickChart.Crosshair>
+      </CandlestickChart>
+    </CandlestickChart.Provider>
+  )
+}
+```
+
 ### Colors
 
 By default, the charts come with default colors out-of-the-box... But you probably will want to change these to suit your brand.
@@ -541,14 +600,15 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 
 ### LineChart.CursorCrosshair
 
-| Prop                    | Type        | Default   | Description                                     |
-| ----------------------- | ----------- | --------- | ----------------------------------------------- |
-| `color`                 | `string`    | `"black"` | Color of the crosshair dot                      |
-| `size`                  | `number`    | `8`       | Size of the crosshair dot                       |
-| `outerSize`             | `number`    | `32`      | Size of the outer crosshair dot (faded dot)     |
-| `crosshairWrapperProps` | `ViewProps` |           | Props of the wrapper component of the crosshair |
-| `crosshairProps`        | `ViewProps` |           | Props of the crosshair dot                      |
-| `crosshairOuterProps`   | `ViewProps` |           | Props of the crosshair outer dot                |
+| Prop                    | Type                           | Default   | Description                                     |
+| ----------------------- | ------------------------------ | --------- | ----------------------------------------------- |
+| `color`                 | `string`                       | `"black"` | Color of the crosshair dot                      |
+| `size`                  | `number`                       | `8`       | Size of the crosshair dot                       |
+| `outerSize`             | `number`                       | `32`      | Size of the outer crosshair dot (faded dot)     |
+| `crosshairWrapperProps` | `ViewProps`                    |           | Props of the wrapper component of the crosshair |
+| `crosshairProps`        | `ViewProps`                    |           | Props of the crosshair dot                      |
+| `crosshairOuterProps`   | `ViewProps`                    |           | Props of the crosshair outer dot                |
+| `...props`              | `LongPressGestureHandlerProps` |           |                                                 |
 
 ### LineChart.CursorLine
 
@@ -613,9 +673,11 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 
 ### CandlestickChart.Crosshair
 
-| Prop    | Type     | Default   | Description            |
-| ------- | -------- | --------- | ---------------------- |
-| `color` | `string` | `"black"` | Color of the crosshair |  |
+| Prop               | Type                           | Default   | Description                                      |
+| ------------------ | ------------------------------ | --------- | ------------------------------------------------ |
+| `color`            | `string`                       | `"black"` | Color of the crosshair                           |  |
+| `onCurrentXChange` | `(xValue: number) => void`     |           | Callback to invoke when the x coordinate changes |
+| `...props`         | `LongPressGestureHandlerProps` |           |                                                  |
 
 ### CandlestickChart.Tooltip
 
