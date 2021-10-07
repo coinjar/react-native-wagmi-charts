@@ -869,7 +869,7 @@ const { value, formatted } = CandlestickChart.usePrice({
 
 ## Web Support
 
-Web support is currently experimental. You can utilize disable chart path transitions via `isTransitionEnabled` prop to prevent minor flickering.
+Web support is currently experimental. Currently, transitions flicker a little. You can disable transitions on Web with the `isTransitionEnabled` prop.
 
 ### Disable Transitions
 
