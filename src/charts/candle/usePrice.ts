@@ -1,16 +1,23 @@
-import { useDerivedValue } from 'react-native-reanimated';
+import Animated, { useDerivedValue } from 'react-native-reanimated';
 
 import { formatPrice } from '../../utils';
 import { useCandlestickChart } from './useCandlestickChart';
 import { getPrice } from './utils';
-import type { TPriceType } from './types';
+import type { TFormatterFn, TPriceType } from './types';
 import { useCandleData } from './useCandleData';
 
 export function useCandlestickChartPrice({
   format,
   precision = 2,
   type = 'crosshair',
-}: { format?: any; precision?: number; type?: TPriceType } = {}) {
+}: {
+  format?: TFormatterFn<string>;
+  precision?: number;
+  type?: TPriceType;
+} = {}): {
+  value: Readonly<Animated.SharedValue<string>>;
+  formatted: Readonly<Animated.SharedValue<string>>;
+} {
   const { currentY, domain, height } = useCandlestickChart();
   const candle = useCandleData();
 

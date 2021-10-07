@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, Button, Flex, Heading, Stack, Text } from 'bumbag-native';
-import { LineChart } from 'react-native-wagmi-charts';
+import { LineChart, TLineChartPoint } from 'react-native-wagmi-charts';
 import * as haptics from 'expo-haptics';
 
 import mockData from './data/line-data.json';
@@ -11,7 +11,7 @@ function invokeHaptic() {
 }
 
 export default function App() {
-  const [data, setData] = React.useState<any>(mockData);
+  const [data, setData] = React.useState<TLineChartPoint[]>(mockData);
 
   return (
     <>
@@ -82,7 +82,7 @@ export default function App() {
           <Flex>
             <Text fontWeight="500">Custom format: </Text>
             <LineChart.PriceText
-              format={(d: any) => {
+              format={(d) => {
                 'worklet';
                 return `$${d.formatted} AUD`;
               }}

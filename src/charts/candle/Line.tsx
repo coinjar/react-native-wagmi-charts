@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import Svg, { Line as SVGLine, LineProps } from 'react-native-svg';
 
-export type CandlestickChartLineProps = LineProps & {
+export type CandlestickChartLineProps = Omit<LineProps, 'x' | 'y'> & {
   color?: string;
   x: number;
   y: number;

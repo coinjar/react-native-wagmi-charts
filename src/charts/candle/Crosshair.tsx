@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { StyleSheet, ViewProps } from 'react-native';
 import {
+  GestureEvent,
   LongPressGestureHandler,
+  LongPressGestureHandlerEventPayload,
   LongPressGestureHandlerProps,
 } from 'react-native-gesture-handler';
 import Animated, {
@@ -42,7 +44,9 @@ export function CandlestickChartCrosshair({
   const tooltipPosition = useSharedValue<'left' | 'right'>('left');
 
   const opacity = useSharedValue(0);
-  const onGestureEvent = useAnimatedGestureHandler({
+  const onGestureEvent = useAnimatedGestureHandler<
+    GestureEvent<LongPressGestureHandlerEventPayload>
+  >({
     onActive: ({ x, y }) => {
       const boundedX = x <= width - 1 ? x : width - 1;
       if (boundedX < 100) {
@@ -81,7 +85,7 @@ export function CandlestickChartCrosshair({
   return (
     <LongPressGestureHandler
       minDurationMs={0}
-      onGestureEvent={onGestureEvent as any}
+      onGestureEvent={onGestureEvent}
       {...props}
     >
       <Animated.View style={StyleSheet.absoluteFill}>

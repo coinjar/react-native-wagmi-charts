@@ -45,17 +45,17 @@ export function formatDatetime({
 }: {
   value: number;
   locale?: string;
-  options?: { [key: string]: string };
+  options?: Intl.DateTimeFormatOptions;
 }) {
   'worklet';
   const d = new Date(value);
   return d.toLocaleString(locale, options);
 }
 
-export function usePrevious(value: any) {
+export function usePrevious<T>(value: T) {
   // The ref object is a generic container whose current property is mutable ...
   // ... and can hold any value, similar to an instance property on a class
-  const ref = React.useRef();
+  const ref = React.useRef<T>();
   // Store current value in ref
   React.useEffect(() => {
     ref.current = value;

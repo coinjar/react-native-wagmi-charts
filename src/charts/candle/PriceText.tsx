@@ -2,12 +2,12 @@ import * as React from 'react';
 import { ReText } from 'react-native-redash';
 import type { TextProps as RNTextProps } from 'react-native';
 import type Animated from 'react-native-reanimated';
-import type { TPriceType } from './types';
+import type { TFormatterFn, TPriceType } from './types';
 
 import { useCandlestickChartPrice } from './usePrice';
 
 export type CandlestickChartPriceTextProps = {
-  format?: any;
+  format?: TFormatterFn<string>;
   precision?: number;
   variant?: 'formatted' | 'value';
   type?: TPriceType;

@@ -16,7 +16,7 @@ type LineChartProps = ViewProps & {
   yGutter?: number;
   width?: number;
   height?: number;
-  shape?: any;
+  shape?: string;
 };
 
 const { width: screenWidth } = Dimensions.get('window');

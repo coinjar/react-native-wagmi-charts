@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, Button, Flex, Heading, Text, Stack } from 'bumbag-native';
-import { CandlestickChart } from 'react-native-wagmi-charts';
+import { CandlestickChart, TCandle } from 'react-native-wagmi-charts';
 import * as haptics from 'expo-haptics';
 
 import mockData from './data/candlestick-data.json';
@@ -11,7 +11,7 @@ function invokeHaptic() {
 }
 
 export default function App() {
-  const [data, setData] = React.useState<any>(mockData);
+  const [data, setData] = React.useState<TCandle[]>(mockData);
 
   return (
     <>
@@ -92,7 +92,7 @@ export default function App() {
               <Box flex="1">
                 <Text fontSize="100">Current</Text>
                 <CandlestickChart.PriceText
-                  format={(d: any) => {
+                  format={(d) => {
                     'worklet';
                     return `$${d.formatted} AUD`;
                   }}
@@ -102,7 +102,7 @@ export default function App() {
                 <Text fontSize="100">Open</Text>
                 <CandlestickChart.PriceText
                   type="open"
-                  format={(d: any) => {
+                  format={(d) => {
                     'worklet';
                     return `$${d.formatted} AUD`;
                   }}
@@ -112,7 +112,7 @@ export default function App() {
                 <Text fontSize="100">Close</Text>
                 <CandlestickChart.PriceText
                   type="close"
-                  format={(d: any) => {
+                  format={(d) => {
                     'worklet';
                     return `$${d.formatted} AUD`;
                   }}

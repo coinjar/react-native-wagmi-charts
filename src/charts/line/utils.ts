@@ -34,8 +34,8 @@ export function getPath({
     .range([height - gutter, gutter]);
   const path = shape
     .line()
-    .x((_: any, i: number) => scaleX(i))
-    .y((data: any) => scaleY(data.value))
+    .x((_: unknown, i: number) => scaleX(i))
+    .y((d: { value: unknown }) => scaleY(d.value))
     .curve(_shape)(data);
   return path;
 }
