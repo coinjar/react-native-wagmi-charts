@@ -30,7 +30,7 @@ export const LineChartCursorLine = ({
   return (
     <LineChartCursor type="line">
       <Animated.View style={vertical}>
-        <Svg style={StyleSheet.absoluteFill}>
+        <Svg style={styles.svg}>
           <SVGLine
             x1={0}
             y1={0}
@@ -47,3 +47,11 @@ export const LineChartCursorLine = ({
     </LineChartCursor>
   );
 };
+
+const styles = StyleSheet.create({
+  svg: {
+    ...StyleSheet.absoluteFillObject,
+    // height: 100% is required for <svg /> on web
+    height: '100%',
+  },
+});
