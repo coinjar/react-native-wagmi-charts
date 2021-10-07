@@ -1,5 +1,6 @@
 import * as React from 'react';
 import type { StyleProp, TextStyle, ViewProps } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
@@ -34,8 +35,8 @@ export function CandlestickChartCrosshairTooltip({
   children,
   xGutter = 8,
   yGutter = 8,
-  tooltipTextProps = {},
-  textStyle = {},
+  tooltipTextProps,
+  textStyle,
   ...props
 }: CandlestickChartCrosshairTooltipProps) {
   const { width, height } = React.useContext(CandlestickChartDimensionsContext);
@@ -93,7 +94,7 @@ export function CandlestickChartCrosshairTooltip({
         {children || (
           <CandlestickChartPriceText
             {...tooltipTextProps}
-            style={[{ fontSize: 14 }, tooltipTextProps.style, textStyle]}
+            style={[styles.text, tooltipTextProps?.style, textStyle]}
           />
         )}
       </Animated.View>
@@ -101,10 +102,16 @@ export function CandlestickChartCrosshairTooltip({
         {children || (
           <CandlestickChartPriceText
             {...tooltipTextProps}
-            style={[{ fontSize: 14 }, tooltipTextProps.style, textStyle]}
+            style={[styles.text, tooltipTextProps?.style, textStyle]}
           />
         )}
       </Animated.View>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  text: {
+    fontSize: 14,
+  },
+});
