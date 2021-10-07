@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import {
+  GestureEvent,
   LongPressGestureHandler,
+  LongPressGestureHandlerEventPayload,
   LongPressGestureHandlerProps,
 } from 'react-native-gesture-handler';
 import Animated, { useAnimatedGestureHandler } from 'react-native-reanimated';
@@ -30,7 +32,9 @@ export function LineChartCursor({
     [path]
   );
 
-  const onGestureEvent = useAnimatedGestureHandler({
+  const onGestureEvent = useAnimatedGestureHandler<
+    GestureEvent<LongPressGestureHandlerEventPayload>
+  >({
     onActive: ({ x }) => {
       if (parsedPath) {
         const boundedX = x <= width ? x : width;
@@ -52,7 +56,7 @@ export function LineChartCursor({
     <CursorContext.Provider value={{ type }}>
       <LongPressGestureHandler
         minDurationMs={0}
-        onGestureEvent={onGestureEvent as any}
+        onGestureEvent={onGestureEvent}
         {...props}
       >
         <Animated.View style={StyleSheet.absoluteFill}>

@@ -2,7 +2,7 @@ import { interpolate, Extrapolate } from 'react-native-reanimated';
 
 import type { TCandle, TDomain } from './types';
 
-export function getDomain(rows: TCandle[]): [number, number] {
+export function getDomain(rows: TCandle[]): [min: number, max: number] {
   'worklet';
   const values = rows.map(({ high, low }) => [high, low]).flat();
   const min = Math.min(...values);
