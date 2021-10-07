@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { ReText } from 'react-native-redash';
 import type { TextProps as RNTextProps } from 'react-native';
 import type Animated from 'react-native-reanimated';
 
 import { useLineChartDatetime } from './useDatetime';
 import type { TFormatterFn } from 'react-native-wagmi-charts';
+import { AnimatedText } from '../../components/AnimatedText';
 
 type LineChartDatetimeProps = {
   locale?: string;
@@ -19,8 +19,8 @@ export function LineChartDatetimeText({
   options,
   format,
   variant = 'formatted',
-  ...props
+  style,
 }: LineChartDatetimeProps) {
   const datetime = useLineChartDatetime({ format, locale, options });
-  return <ReText text={datetime[variant]} {...props} />;
+  return <AnimatedText text={datetime[variant]} style={style} />;
 }

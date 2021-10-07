@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { ReText } from 'react-native-redash';
 import type { TextProps as RNTextProps } from 'react-native';
 import type Animated from 'react-native-reanimated';
 
 import { useLineChartPrice } from './usePrice';
 import type { TFormatterFn } from '../candle/types';
+import { AnimatedText } from '../../components/AnimatedText';
 
 export type LineChartPriceTextProps = {
   format?: TFormatterFn<string>;
@@ -17,8 +17,8 @@ export function LineChartPriceText({
   format,
   precision = 2,
   variant = 'formatted',
-  ...props
+  style,
 }: LineChartPriceTextProps) {
   const price = useLineChartPrice({ format, precision });
-  return <ReText text={price[variant]} {...props} />;
+  return <AnimatedText text={price[variant]} style={style} />;
 }
