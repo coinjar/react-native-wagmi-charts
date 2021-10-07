@@ -5,6 +5,14 @@ import { CandlestickChart } from 'react-native-wagmi-charts';
 import mockData from './data/candlestick-data.json';
 import mockData2 from './data/candlestick-data2.json';
 
+import * as haptics from 'expo-haptics';
+
+function invokeHaptic(value: number) {
+  if (value !== 0) {
+    haptics.impactAsync(haptics.ImpactFeedbackStyle.Light);
+  }
+}
+
 export default function App() {
   const [data, setData] = React.useState<any>(mockData);
 
@@ -16,7 +24,7 @@ export default function App() {
       <CandlestickChart.Provider data={data}>
         <CandlestickChart>
           <CandlestickChart.Candles />
-          <CandlestickChart.Crosshair>
+          <CandlestickChart.Crosshair onCurrentXChange={invokeHaptic}>
             <CandlestickChart.Tooltip />
           </CandlestickChart.Crosshair>
         </CandlestickChart>

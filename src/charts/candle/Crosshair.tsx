@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { StyleSheet, ViewProps } from 'react-native';
-import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import {
   PanGestureHandler,
   PanGestureHandlerProps,
@@ -22,22 +21,15 @@ import { CandlestickChartCrosshairTooltipContext } from './CrosshairTooltip';
 type CandlestickChartCrosshairProps = PanGestureHandlerProps & {
   color?: string;
   children?: React.ReactNode;
-  enableHapticFeedback?: boolean;
+  onCurrentXChange?: (value: number) => unknown;
   horizontalCrosshairProps?: Animated.AnimateProps<ViewProps>;
   verticalCrosshairProps?: Animated.AnimateProps<ViewProps>;
   lineProps?: Partial<CandlestickChartLineProps>;
 };
 
-function invokeHaptic() {
-  ReactNativeHapticFeedback.trigger('impactLight', {
-    enableVibrateFallback: true,
-    ignoreAndroidSystemSettings: false,
-  });
-}
-
 export function CandlestickChartCrosshair({
   color,
-  enableHapticFeedback = false,
+  onCurrentXChange,
   children,
   horizontalCrosshairProps = {},
   verticalCrosshairProps = {},
@@ -78,10 +70,10 @@ export function CandlestickChartCrosshair({
   }));
 
   useAnimatedReaction(
-    () => (enableHapticFeedback ? currentX.value : 0),
+    () => currentX.value,
     (data) => {
-      if (data !== 0) {
-        runOnJS(invokeHaptic)();
+      if (onCurrentXChange) {
+        runOnJS(onCurrentXChange)(data);
       }
     }
   );
