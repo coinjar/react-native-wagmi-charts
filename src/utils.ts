@@ -1,5 +1,8 @@
 import * as React from 'react';
 
+/**
+ * @worklet
+ */
 export function formatPrice({
   value: _value,
   defaultPrice: _defaultPrice = '',
@@ -38,6 +41,9 @@ export function formatPrice({
   return res;
 }
 
+/**
+ * @worklet
+ */
 export function formatDatetime({
   value,
   locale = 'en-US',
