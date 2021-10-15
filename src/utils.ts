@@ -25,7 +25,7 @@ export function formatPrice({
   }
 
   let decimals =
-    precision ||
+    precision ??
     (Number(value) < 1
       ? Math.min(8, value.toString().slice(2).search(/[^0]/g) + 3)
       : 2);
