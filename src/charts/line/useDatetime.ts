@@ -27,14 +27,15 @@ export function useLineChartDatetime({
   });
 
   const formatted = useDerivedValue(() => {
-    if (timestamp.value === '') return '';
-    const formattedDatetime = formatDatetime({
-      value: timestamp.value,
-      locale,
-      options,
-    });
+    const formattedDatetime = timestamp.value
+      ? formatDatetime({
+          value: timestamp.value,
+          locale,
+          options,
+        })
+      : '';
     return format
-      ? format({ value: timestamp.value, formatted: formattedDatetime })
+      ? format({ value: timestamp.value || -1, formatted: formattedDatetime })
       : formattedDatetime;
   });
 

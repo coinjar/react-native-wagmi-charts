@@ -37,7 +37,10 @@ export function LineChartPathWrapper({
   const svgProps = useAnimatedProps(() => ({
     width: isActive.value
       ? currentX.value
-      : withTiming(width, { duration: animationDuration, ...animationProps }),
+      : withTiming(
+          width,
+          Object.assign({ duration: animationDuration }, animationProps)
+        ),
   }));
 
   ////////////////////////////////////////////////

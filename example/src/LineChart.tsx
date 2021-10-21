@@ -84,7 +84,7 @@ export default function App() {
             <LineChart.PriceText
               format={(d) => {
                 'worklet';
-                return `$${d.formatted} AUD`;
+                return d.formatted ? `$${d.formatted} AUD` : '';
               }}
             />
           </Flex>

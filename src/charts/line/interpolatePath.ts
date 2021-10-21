@@ -553,7 +553,7 @@ export function interpolatePathCommands(
   );
 
   // create mutable interpolated command objects
-  const interpolatedCommands = aCommands.map((aCommand) => ({ ...aCommand }));
+  const interpolatedCommands = aCommands.map((aCommand) => aCommand);
 
   if (addZ) {
     interpolatedCommands.push({ type: 'Z' });

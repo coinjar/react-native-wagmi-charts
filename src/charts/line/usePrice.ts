@@ -18,10 +18,10 @@ export function useLineChartPrice({
     return price.toFixed(precision).toString();
   });
   const formatted = useDerivedValue(() => {
-    if (!float.value) return '';
-    const formattedPrice = formatPrice({ value: float.value });
+    let value = float.value || '';
+    const formattedPrice = value ? formatPrice({ value }) : '';
     return format
-      ? format({ value: float.value, formatted: formattedPrice })
+      ? format({ value, formatted: formattedPrice })
       : formattedPrice;
   });
 
