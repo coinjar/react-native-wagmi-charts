@@ -85,6 +85,7 @@ export function CandlestickChartCrosshair({
   return (
     <LongPressGestureHandler
       minDurationMs={0}
+      maxDist={999999}
       onGestureEvent={onGestureEvent}
       {...props}
     >

@@ -56,6 +56,7 @@ export function LineChartCursor({
     <CursorContext.Provider value={{ type }}>
       <LongPressGestureHandler
         minDurationMs={0}
+        maxDist={999999}
         onGestureEvent={onGestureEvent}
         {...props}
       >
