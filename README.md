@@ -473,6 +473,8 @@ By using the `LineChart.Gradient` component, you can apply a gradient to the are
 </LineChart.Provider>
 ```
 
+<img width="346" alt="Screen Shot 2021-10-25 at 8 32 07 pm" src="https://user-images.githubusercontent.com/7336481/138672128-c691036e-404f-4148-8a3b-00ea2f7df27f.png">
+
 The gradient will inherit your path's color by default, however, you can provide a color prop to `LineChart.Gradient`:
 
 ```jsx
@@ -484,6 +486,8 @@ The gradient will inherit your path's color by default, however, you can provide
   </LineChart>
 </LineChart.Provider>
 ```
+
+<img width="345" alt="Screen Shot 2021-10-25 at 8 32 26 pm" src="https://user-images.githubusercontent.com/7336481/138672153-9ba11b02-b750-4ab0-a2e2-c18a9af4635f.png">
 
 
 ### Customizing size
