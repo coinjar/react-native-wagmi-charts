@@ -39,3 +39,33 @@ export function getPath({
     .curve(_shape)(data);
   return path;
 }
+
+export function getArea({
+  data,
+  width,
+  height,
+  gutter,
+  shape: _shape = shape.curveBumpX,
+}: {
+  data: TLineChartData;
+  width: number;
+  height: number;
+  gutter: number;
+  shape?: string;
+}): string {
+  const timestamps = data.map(({}, i) => i);
+  const values = data.map(({ value }) => value);
+  const scaleX = scaleLinear()
+    .domain([Math.min(...timestamps), Math.max(...timestamps)])
+    .range([0, width]);
+  const scaleY = scaleLinear()
+    .domain([Math.min(...values), Math.max(...values)])
+    .range([height - gutter, gutter]);
+  const area = shape
+    .area()
+    .x((_: unknown, i: number) => scaleX(i))
+    .y0((d: { value: unknown }) => scaleY(d.value))
+    .y1(() => height)
+    .curve(_shape)(data);
+  return area;
+}

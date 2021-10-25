@@ -37,7 +37,7 @@ export type LineChartPathProps = Animated.AnimateProps<PathProps> & {
 
 export function LineChartPath({
   color = 'black',
-  width = 3,
+  width: strokeWidth = 3,
   isInactive,
   isTransitionEnabled = true,
   ...props
@@ -83,7 +83,7 @@ export function LineChartPath({
         fill="transparent"
         stroke={color}
         strokeOpacity={isInactive ? 0.2 : 1}
-        strokeWidth={width}
+        strokeWidth={strokeWidth}
         {...props}
       />
     </>

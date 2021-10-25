@@ -2,12 +2,13 @@ import * as React from 'react';
 import { Dimensions, View, ViewProps } from 'react-native';
 
 import { useLineChart } from './useLineChart';
-import { getPath } from './utils';
+import { getArea, getPath } from './utils';
 
 export const LineChartDimensionsContext = React.createContext({
   width: 0,
   height: 0,
   path: '',
+  area: '',
   gutter: 0,
 });
 
@@ -38,14 +39,22 @@ export function LineChart({
     return '';
   }, [data, width, height, yGutter, shape]);
 
+  const area = React.useMemo(() => {
+    if (data && data.length > 0) {
+      return getArea({ data, width, height, gutter: yGutter, shape });
+    }
+    return '';
+  }, [data, width, height, yGutter, shape]);
+
   const contextValue = React.useMemo(
     () => ({
       gutter: yGutter,
+      area,
       path,
       width,
       height,
     }),
-    [height, path, width, yGutter]
+    [area, height, path, width, yGutter]
   );
 
   return (

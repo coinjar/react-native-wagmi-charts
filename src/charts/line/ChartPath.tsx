@@ -12,9 +12,15 @@ import { useLineChart } from './useLineChart';
 
 const AnimatedSVG = Animated.createAnimatedComponent(Svg);
 
+export const LineChartPathContext = React.createContext({
+  color: '',
+  isTransitionEnabled: true,
+});
+
 type LineChartPathWrapperProps = {
   animationDuration?: number;
   animationProps?: Partial<Animated.WithTimingConfig>;
+  children?: React.ReactNode;
   color?: string;
   width?: number;
   pathProps?: Partial<LineChartPathProps>;
@@ -24,6 +30,7 @@ type LineChartPathWrapperProps = {
 export function LineChartPathWrapper({
   animationDuration = 300,
   animationProps = {},
+  children,
   color = 'black',
   width: pathWidth = 3,
   pathProps = {},
@@ -46,9 +53,15 @@ export function LineChartPathWrapper({
   ////////////////////////////////////////////////
 
   return (
-    <>
+    <LineChartPathContext.Provider
+      value={{
+        color,
+        isTransitionEnabled: pathProps.isTransitionEnabled ?? true,
+      }}
+    >
       <View style={[{ width, height }]}>
         <Svg width={width} height={height}>
+          {children}
           <LineChartPath
             color={color}
             width={pathWidth}
@@ -62,6 +75,6 @@ export function LineChartPathWrapper({
           <LineChartPath color={color} width={pathWidth} {...pathProps} />
         </AnimatedSVG>
       </View>
-    </>
+    </LineChartPathContext.Provider>
   );
 }

@@ -1,3 +1,4 @@
+import { LineChartGradient } from './Gradient';
 import { LineChart as _LineChart } from './Chart';
 import { LineChartPathWrapper } from './ChartPath';
 import { LineChartProvider } from './Context';
@@ -11,6 +12,7 @@ import { useLineChartDatetime } from './useDatetime';
 import { useLineChartPrice } from './usePrice';
 import { useLineChart } from './useLineChart';
 
+export * from './Gradient';
 export * from './Chart';
 export * from './ChartPath';
 export * from './Context';
@@ -27,6 +29,7 @@ export * from './usePrice';
 export * from './types';
 
 export const LineChart = Object.assign(_LineChart, {
+  Gradient: LineChartGradient,
   Chart: _LineChart,
   Path: LineChartPathWrapper,
   Cursor: LineChartCursor,
