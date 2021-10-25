@@ -37,6 +37,7 @@ A sweet & simple chart library for React Native that will make us feel like **W*
   - [Interactive tooltips](#interactive-tooltips)
   - [Haptic feedback](#haptic-feedback)
   - [Colors](#colors)
+  - [Gradients](#gradients)
   - [Customizing size](#customizing-size)
   - [Customizing labels](#customizing-labels)
   - [Customizing tooltips](#customizing-tooltips)
@@ -46,6 +47,7 @@ A sweet & simple chart library for React Native that will make us feel like **W*
   - [LineChart.Path](#linechartpath)
   - [LineChart.CursorCrosshair](#linechartcursorcrosshair-1)
   - [LineChart.CursorLine](#linechartcursorline-1)
+  - [LineChart.Gradient](#linechartgradient)
   - [LineChart.Tooltip](#linecharttooltip)
   - [LineChart.PriceText](#linechartpricetext)
   - [LineChart.DatetimeText](#linechartdatetimetext)
@@ -457,6 +459,33 @@ To customise the color of the line chart cursor, supply a `color` prop to `Candl
 
 <img width="200px" alt="Screen Shot 2021-09-13 at 4 58 52 pm" src="https://user-images.githubusercontent.com/7336481/133038181-33ee91bf-a5e2-4124-ab7b-df745a5ba804.gif">
 
+### Gradients
+
+By using the `LineChart.Gradient` component, you can apply a gradient to the area underneath your path.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path color="red">
+      <LineChart.Gradient />
+    <LineChart>
+  </LineChart>
+</LineChart.Provider>
+```
+
+The gradient will inherit your path's color by default, however, you can provide a color prop to `LineChart.Gradient`:
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path color="red">
+      <LineChart.Gradient color="black" />
+    <LineChart>
+  </LineChart>
+</LineChart.Provider>
+```
+
+
 ### Customizing size
 
 You can modify the width & height of the charts by providing `width` and `height` props to `LineChart` or `CandlestickChart`. Your chart should adapt to it's size.
@@ -613,33 +642,40 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 | `color`     | `string`    | `"gray"` | Color of the cursor line                                         |
 | `lineProps` | `LineProps` |          | Props of the cursor line. Takes React Native SVG's `Line` props. |
 
+### LineChart.Gradient
+
+| Prop       | Type        | Default | Description           |
+| ---------- | ----------- | ------- | --------------------- |
+| `color`    | `string`    |         | Color of the gradient |
+| `...props` | `PathProps` |         |                       |
+
 ### LineChart.Tooltip
 
-| Prop           | Type     | Default   | Description                                          |
-| -------------- | -------- | --------- | ---------------------------------------------------- | ----------------------------------------------- |
-| `xGutter`      | `number` | `8`       | X axis gutter in which the tooltip will not pass.    |
-| `yGutter`      | `number` | `8`       | Y axis gutter in which the tooltip will not pass.    |
-| `cursorGutter` | `number` | `48`      | Gutter (spacing) between the cursor and the tooltip. |
-| `position`     | `"top"   | "bottom"` | `"top"`                                              | Position of the tooltip relative to the cursor. |
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- ||
+| `xGutter`      | `number`             | `8`     | X axis gutter in which the tooltip will not pass.    |
+| `yGutter`      | `number`             | `8`     | Y axis gutter in which the tooltip will not pass.    |
+| `cursorGutter` | `number`             | `48`    | Gutter (spacing) between the cursor and the tooltip. |
+| `position`     | `"top"   | "bottom"` | `"top"` | Position of the tooltip relative to the cursor.      |
 
 ### LineChart.PriceText
 
-| Prop        | Type                               | Default  | Description                          |
-| ----------- | ---------------------------------- | -------- | ------------------------------------ | ------------------------------------------ |
-| `format`    | `({ value, formatted }) => string` |          | Custom format function of the price. |
-| `precision` | `number`                           | `2`      | Default precision of the price.      |
-| `variant`   | `"formatted"                       | "value"` | `"formatted"`                        | Default representation of the price value. |
-| `...props`  | `TextProps`                        |          | Inherits React Native's `Text` props |
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- ||
+| `format`    | `({ value, formatted }) => string`            |               | Custom format function of the price.       |
+| `precision` | `number`                                      | `2`           | Default precision of the price.            |
+| `variant`   | `"formatted"                       | "value"` | `"formatted"` | Default representation of the price value. |
+| `...props`  | `TextProps`                                   |               | Inherits React Native's `Text` props       |
 
 ### LineChart.DatetimeText
 
-| Prop      | Type                               | Default   | Description                                                                                                                                                               |
-| --------- | ---------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| `format`  | `({ value, formatted }) => string` |           | Custom format function of the timestamp.                                                                                                                                  |
-| `locale`  | `string`                           | `"en-US"` | Locale of the timestamp.                                                                                                                                                  |
-| `options` | `{}`                               |           | Options to pass to `toLocaleString()`. [Available options are here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) |
-| `style`   | `{}`                               |           | Style of the price text                                                                                                                                                   |
-| `variant` | `"formatted"                       | "value"`  | `"formatted"`                                                                                                                                                             | Default representation of the timestamp value. |
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- ||
+| `format`  | `({ value, formatted }) => string`            |               | Custom format function of the timestamp.                                                                                                                                  |
+| `locale`  | `string`                                      | `"en-US"`     | Locale of the timestamp.                                                                                                                                                  |
+| `options` | `{}`                                          |               | Options to pass to `toLocaleString()`. [Available options are here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) |
+| `style`   | `{}`                                          |               | Style of the price text                                                                                                                                                   |
+| `variant` | `"formatted"                       | "value"` | `"formatted"` | Default representation of the timestamp value.                                                                                                                            |
 
 ### CandlestickChart.Provider
 
@@ -686,22 +722,22 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 
 ### CandlestickChart.PriceText
 
-| Prop        | Type                               | Default  | Description                          |
-| ----------- | ---------------------------------- | -------- | ------------------------------------ | ------------------------------------------ |
-| `format`    | `({ value, formatted }) => string` |          | Custom format function of the price. |
-| `precision` | `number`                           | `2`      | Default precision of the price.      |
-| `variant`   | `"formatted"                       | "value"` | `"formatted"`                        | Default representation of the price value. |
-| `...props`  | `TextProps`                        |          | Inherits React Native's `Text` props |
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- ||
+| `format`    | `({ value, formatted }) => string`            |               | Custom format function of the price.       |
+| `precision` | `number`                                      | `2`           | Default precision of the price.            |
+| `variant`   | `"formatted"                       | "value"` | `"formatted"` | Default representation of the price value. |
+| `...props`  | `TextProps`                                   |               | Inherits React Native's `Text` props       |
 
 ### CandlestickChart.DatetimeText
 
-| Prop      | Type                               | Default   | Description                                                                                                                                                               |
-| --------- | ---------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| `format`  | `({ value, formatted }) => string` |           | Custom format function of the timestamp.                                                                                                                                  |
-| `locale`  | `string`                           | `"en-US"` | Locale of the timestamp.                                                                                                                                                  |
-| `options` | `{}`                               |           | Options to pass to `toLocaleString()`. [Available options are here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) |
-| `style`   | `{}`                               |           | Style of the price text                                                                                                                                                   |
-| `variant` | `"formatted"                       | "value"`  | `"formatted"`                                                                                                                                                             | Default representation of the timestamp value. |
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- ||
+| `format`  | `({ value, formatted }) => string`            |               | Custom format function of the timestamp.                                                                                                                                  |
+| `locale`  | `string`                                      | `"en-US"`     | Locale of the timestamp.                                                                                                                                                  |
+| `options` | `{}`                                          |               | Options to pass to `toLocaleString()`. [Available options are here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) |
+| `style`   | `{}`                                          |               | Style of the price text                                                                                                                                                   |
+| `variant` | `"formatted"                       | "value"` | `"formatted"` | Default representation of the timestamp value.                                                                                                                            |
 
 ## Hooks
 

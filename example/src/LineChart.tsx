@@ -20,8 +20,8 @@ export default function App() {
       </Heading.H5>
       <LineChart.Provider data={data}>
         <LineChart>
-          <LineChart.Path>
-            <LineChart.Gradient />
+          <LineChart.Path color="red">
+            <LineChart.Gradient color="black" />
           </LineChart.Path>
           <LineChart.CursorCrosshair
             onActivated={invokeHaptic}
