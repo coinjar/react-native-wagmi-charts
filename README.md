@@ -219,6 +219,22 @@ To render an interactive cursor on your line chart, you can include either the `
 
 <img src="https://user-images.githubusercontent.com/7336481/133027471-1c620ece-a95e-46b7-bd92-50f33757ce92.gif" width="200px" />
 
+##### `LineChart.FirstPositionLine`
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path>
+      <LineChart.FirstPositionLine />
+    </LineChart.Path>
+  </LineChart>
+</LineChart.Provider>
+```
+
+<img src="" width="200px" />
+
+
+
 #### Candlestick chart
 
 To render an interactive cursor on your candlestick chart, you can include the `CandlestickChart.Crosshair` component:
@@ -639,7 +655,7 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 | `crosshairOuterProps`   | `ViewProps`                    |           | Props of the crosshair outer dot                |
 | `...props`              | `LongPressGestureHandlerProps` |           |                                                 |
 
-### LineChart.CursorLine
+### LineChart.CursorLine & LineChart.FirstPositionLine
 
 | Prop        | Type        | Default  | Description                                                      |
 | ----------- | ----------- | -------- | ---------------------------------------------------------------- |
