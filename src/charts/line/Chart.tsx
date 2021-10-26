@@ -9,6 +9,7 @@ export const LineChartDimensionsContext = React.createContext({
   height: 0,
   path: '',
   area: '',
+  shape: undefined,
   gutter: 0,
 });
 
@@ -53,8 +54,9 @@ export function LineChart({
       path,
       width,
       height,
+      shape,
     }),
-    [area, height, path, width, yGutter]
+    [area, height, path, shape, width, yGutter]
   );
 
   return (

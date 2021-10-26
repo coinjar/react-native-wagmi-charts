@@ -20,14 +20,16 @@ export default function App() {
       </Heading.H5>
       <LineChart.Provider data={data}>
         <LineChart>
-          <LineChart.Path color="red">
-            <LineChart.Gradient color="black" />
+          <LineChart.Path color="lightgray">
+            <LineChart.Color color="#10b981" from={10} to={15} />
+            {/* <LineChart.Gradient /> */}
           </LineChart.Path>
           <LineChart.CursorCrosshair
+            color="hotpink"
             onActivated={invokeHaptic}
             onEnded={invokeHaptic}
           >
-            <LineChart.Tooltip />
+            {/* <LineChart.Tooltip /> */}
             {/* <LineChart.Tooltip position="bottom">
               <LineChart.DatetimeText />
             </LineChart.Tooltip> */}

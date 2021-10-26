@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Svg } from 'react-native-svg';
+import { Svg, Circle } from 'react-native-svg';
 import Animated, {
   useAnimatedProps,
   withTiming,
@@ -61,13 +61,13 @@ export function LineChartPathWrapper({
     >
       <View style={[{ width, height }]}>
         <Svg width={width} height={height}>
-          {children}
           <LineChartPath
             color={color}
             width={pathWidth}
             isInactive={showInactivePath}
             {...pathProps}
           />
+          {children}
         </Svg>
       </View>
       <View style={StyleSheet.absoluteFill}>
@@ -75,6 +75,9 @@ export function LineChartPathWrapper({
           <LineChartPath color={color} width={pathWidth} {...pathProps} />
         </AnimatedSVG>
       </View>
+      <Svg width={width} height={height} style={StyleSheet.absoluteFill}>
+        {children}
+      </Svg>
     </LineChartPathContext.Provider>
   );
 }

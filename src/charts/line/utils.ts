@@ -13,12 +13,16 @@ export function getDomain(rows: TLineChartPoint[]): [number, number] {
 
 export function getPath({
   data,
+  from,
+  to,
   width,
   height,
   gutter,
   shape: _shape = shape.curveBumpX,
 }: {
   data: TLineChartData;
+  from?: number;
+  to?: number;
   width: number;
   height: number;
   gutter: number;
@@ -34,8 +38,13 @@ export function getPath({
     .range([height - gutter, gutter]);
   const path = shape
     .line()
+    .defined((d: { timestamp: number }) =>
+      from || to
+        ? data.slice(from, to).find((item) => item.timestamp === d.timestamp)
+        : true
+    )
     .x((_: unknown, i: number) => scaleX(i))
-    .y((d: { value: unknown }) => scaleY(d.value))
+    .y((d: { value: number }) => scaleY(d.value))
     .curve(_shape)(data);
   return path;
 }

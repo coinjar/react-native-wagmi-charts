@@ -3,42 +3,47 @@ import Animated from 'react-native-reanimated';
 import { Path, PathProps } from 'react-native-svg';
 
 import { LineChartDimensionsContext } from './Chart';
+import { LineChartPathContext } from './ChartPath';
 import useAnimatedPath from './useAnimatedPath';
+import { useLineChart } from './useLineChart';
+import { getPath } from './utils';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-export type LineChartPathProps = Animated.AnimateProps<PathProps> & {
+export type LineChartColorProps = Animated.AnimateProps<PathProps> & {
   color?: string;
   width?: number;
-  isInactive?: boolean;
-  /**
-   * Default: `true`.
-   *
-   * If `false`, changes in the chart's path will not animate.
-   *
-   * While this use case is rare, it may be useful on web, where animations might not work as well.
-   *
-   * **Example**
-   *
-   * ```tsx
-   * <LineChart.Path
-   *   pathProps={{ isTransitionEnabled: Platform.OS !== 'web' }}
-   * />
-   * ```
-   */
-  isTransitionEnabled?: boolean;
 };
 
-export function LineChartPath({
+export function LineChartColor({
   color = 'black',
+  from,
+  to,
   width: strokeWidth = 3,
-  isInactive,
-  isTransitionEnabled = true,
   ...props
-}: LineChartPathProps) {
-  const { path } = React.useContext(LineChartDimensionsContext);
+}: LineChartColorProps) {
+  const { data } = useLineChart();
+  const { width, height, gutter, shape } = React.useContext(
+    LineChartDimensionsContext
+  );
+  const { isTransitionEnabled } = React.useContext(LineChartPathContext);
 
   ////////////////////////////////////////////////
+
+  const path = React.useMemo(() => {
+    if (data && data.length > 0) {
+      return getPath({
+        data,
+        from,
+        to,
+        width,
+        height,
+        gutter,
+        shape,
+      });
+    }
+    return '';
+  }, [data, from, to, width, height, gutter, shape]);
 
   const { animatedProps } = useAnimatedPath({
     enabled: isTransitionEnabled,
@@ -53,7 +58,6 @@ export function LineChartPath({
         animatedProps={animatedProps}
         fill="transparent"
         stroke={color}
-        strokeOpacity={isInactive ? 0.2 : 1}
         strokeWidth={strokeWidth}
         {...props}
       />
