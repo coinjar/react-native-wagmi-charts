@@ -27,7 +27,10 @@ export const LineChartHorizontalLine = ({
   const { data } = useLineChart();
 
   const parsedPath = React.useMemo(() => parse(path), [path]);
-  const pointWidth = React.useMemo(() => width / data.length, [data]);
+  const pointWidth = React.useMemo(
+    () => width / data.length,
+    [data.length, width]
+  );
 
   const y = useDerivedValue(() =>
     withTiming(getYForX(parsedPath!, pointWidth * at) || 0)
