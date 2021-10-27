@@ -47,6 +47,7 @@ A sweet & simple chart library for React Native that will make us feel like **W*
   - [LineChart.Path](#linechartpath)
   - [LineChart.CursorCrosshair](#linechartcursorcrosshair-1)
   - [LineChart.CursorLine](#linechartcursorline-1)
+  - [LineChart.HorizontalLine](#linecharthorizontalline-1)
   - [LineChart.Gradient](#linechartgradient)
   - [LineChart.Tooltip](#linecharttooltip)
   - [LineChart.PriceText](#linechartpricetext)
