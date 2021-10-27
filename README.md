@@ -47,6 +47,7 @@ A sweet & simple chart library for React Native that will make us feel like **W*
   - [LineChart.Path](#linechartpath)
   - [LineChart.CursorCrosshair](#linechartcursorcrosshair-1)
   - [LineChart.CursorLine](#linechartcursorline-1)
+  - [LineChart.HorizontalLine](#linecharthorizontalline-1)
   - [LineChart.Gradient](#linechartgradient)
   - [LineChart.Tooltip](#linecharttooltip)
   - [LineChart.PriceText](#linechartpricetext)
@@ -218,6 +219,24 @@ To render an interactive cursor on your line chart, you can include either the `
 ```
 
 <img src="https://user-images.githubusercontent.com/7336481/133027471-1c620ece-a95e-46b7-bd92-50f33757ce92.gif" width="200px" />
+
+##### `LineChart.HorizontalLine`
+
+It's a static horizontal line which moves whenever your data change. It's located on height of point which is on `at` position of provided data.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path>
+      <LineChart.HorizontalLine at={0} />
+    </LineChart.Path>
+  </LineChart>
+</LineChart.Provider>
+```
+
+<img src="" width="200px" />
+
+
 
 #### Candlestick chart
 
@@ -645,6 +664,14 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 | ----------- | ----------- | -------- | ---------------------------------------------------------------- |
 | `color`     | `string`    | `"gray"` | Color of the cursor line                                         |
 | `lineProps` | `LineProps` |          | Props of the cursor line. Takes React Native SVG's `Line` props. |
+
+### LineChart.HorizontalLine
+
+| Prop        | Type        | Default  | Description                                                      |
+| ----------- | ----------- | -------- | ---------------------------------------------------------------- |
+| `color`     | `string`    | `"gray"` | Color of the cursor line                                         |
+| `lineProps` | `LineProps` |          | Props of the cursor line. Takes React Native SVG's `Line` props. |
+| `at`        | `number`    |   `0`    | Index of followed `data` item.  |
 
 ### LineChart.Gradient
 
