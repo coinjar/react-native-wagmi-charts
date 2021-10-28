@@ -13,13 +13,40 @@ function invokeHaptic() {
 export default function App() {
   const [data, setData] = React.useState<TLineChartPoint[]>(mockData);
 
+  const [yRange, setYRange] = React.useState<undefined | 'low' | 'high'>(
+    undefined
+  );
+
+  const toggleYRange = () => {
+    setYRange((domain) => {
+      if (!domain) {
+        return 'low';
+      }
+      if (domain === 'low') {
+        return 'high';
+      }
+      return undefined;
+    });
+  };
+
   return (
     <>
       <Heading.H5 paddingX="major-2" marginBottom="major-2">
         Line Chart 📈
       </Heading.H5>
       <LineChart.Provider data={data}>
-        <LineChart>
+        <LineChart
+          yRange={{
+            min:
+              yRange === 'low'
+                ? Math.min(...data.map((d) => d.value)) / 1.1
+                : undefined,
+            max:
+              yRange === 'high'
+                ? Math.max(...data.map((d) => d.value)) * 1.1
+                : undefined,
+          }}
+        >
           <LineChart.Path color="red">
             <LineChart.Gradient color="black" />
           </LineChart.Path>
@@ -33,8 +60,8 @@ export default function App() {
             </LineChart.Tooltip> */}
           </LineChart.CursorCrosshair>
         </LineChart>
-        <Heading.H6>Load Data</Heading.H6>
-        <Box marginTop="major-2">
+        <Box marginX="major-2" marginTop="major-2">
+          <Heading.H6 marginBottom={'major-2'}>Load Data</Heading.H6>
           <Flex flexWrap={'wrap'}>
             <Button onPress={() => setData(mockData)}>Data 1</Button>
             <Button onPress={() => setData(mockData2)}>Data 2</Button>
@@ -68,6 +95,9 @@ export default function App() {
               }
             >
               V large data
+            </Button>
+            <Button onPress={toggleYRange}>
+              {`${yRange || 'Set'} Y Domain`}
             </Button>
           </Flex>
         </Box>

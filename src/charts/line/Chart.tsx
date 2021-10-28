@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Dimensions, View, ViewProps } from 'react-native';
+import type { YRange } from './types';
 
 import { useLineChart } from './useLineChart';
 import { getArea, getPath } from './utils';
@@ -18,6 +19,7 @@ type LineChartProps = ViewProps & {
   width?: number;
   height?: number;
   shape?: string;
+  yRange?: YRange;
 };
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -28,23 +30,47 @@ export function LineChart({
   width = screenWidth,
   height = screenWidth,
   shape,
+  yRange: yRange,
   ...props
 }: LineChartProps) {
   const { data } = useLineChart();
 
+  const yRangeMin = yRange?.min;
+  const yRangeMax = yRange?.max;
+
   const path = React.useMemo(() => {
     if (data && data.length > 0) {
-      return getPath({ data, width, height, gutter: yGutter, shape });
+      return getPath({
+        data,
+        width,
+        height,
+        gutter: yGutter,
+        shape,
+        yRange: {
+          min: yRangeMin,
+          max: yRangeMax,
+        },
+      });
     }
     return '';
-  }, [data, width, height, yGutter, shape]);
+  }, [data, width, height, yGutter, shape, yRangeMin, yRangeMax]);
 
   const area = React.useMemo(() => {
     if (data && data.length > 0) {
-      return getArea({ data, width, height, gutter: yGutter, shape });
+      return getArea({
+        data,
+        width,
+        height,
+        gutter: yGutter,
+        shape,
+        yRange: {
+          min: yRangeMin,
+          max: yRangeMax,
+        },
+      });
     }
     return '';
-  }, [data, width, height, yGutter, shape]);
+  }, [data, width, height, yGutter, shape, yRangeMin, yRangeMax]);
 
   const contextValue = React.useMemo(
     () => ({

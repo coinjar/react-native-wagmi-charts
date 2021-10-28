@@ -4,6 +4,7 @@ import * as shape from 'd3-shape';
 import { scaleLinear } from 'd3-scale';
 
 import type { TLineChartData, TLineChartPoint } from './types';
+import type { YRange } from './types';
 
 export function getDomain(rows: TLineChartPoint[]): [number, number] {
   'worklet';
@@ -17,20 +18,31 @@ export function getPath({
   height,
   gutter,
   shape: _shape = shape.curveBumpX,
+  yRange,
 }: {
   data: TLineChartData;
   width: number;
   height: number;
   gutter: number;
   shape?: string;
+  yRange?: YRange;
 }): string {
-  const timestamps = data.map(({}, i) => i);
-  const values = data.map(({ value }) => value);
+  const timestamps: number[] = [];
+  const values: number[] = [];
+
+  data.forEach(({ value }, index) => {
+    values.push(value);
+    timestamps.push(index);
+  });
+
+  const yMin = yRange?.min ?? Math.min(...values);
+  const yMax = yRange?.max ?? Math.max(...values);
+
   const scaleX = scaleLinear()
     .domain([Math.min(...timestamps), Math.max(...timestamps)])
     .range([0, width]);
   const scaleY = scaleLinear()
-    .domain([Math.min(...values), Math.max(...values)])
+    .domain([yMin, yMax])
     .range([height - gutter, gutter]);
   const path = shape
     .line()
@@ -46,20 +58,32 @@ export function getArea({
   height,
   gutter,
   shape: _shape = shape.curveBumpX,
+
+  yRange,
 }: {
   data: TLineChartData;
   width: number;
   height: number;
   gutter: number;
   shape?: string;
+  yRange?: YRange;
 }): string {
-  const timestamps = data.map(({}, i) => i);
-  const values = data.map(({ value }) => value);
+  const timestamps: number[] = [];
+  const values: number[] = [];
+
+  data.forEach(({ value }, index) => {
+    values.push(value);
+    timestamps.push(index);
+  });
+
+  const yMin = yRange?.min ?? Math.min(...values);
+  const yMax = yRange?.max ?? Math.max(...values);
+
   const scaleX = scaleLinear()
     .domain([Math.min(...timestamps), Math.max(...timestamps)])
     .range([0, width]);
   const scaleY = scaleLinear()
-    .domain([Math.min(...values), Math.max(...values)])
+    .domain([yMin, yMax])
     .range([height - gutter, gutter]);
   const area = shape
     .area()

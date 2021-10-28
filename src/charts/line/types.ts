@@ -14,3 +14,8 @@ export type TLineChartContext = {
   isActive: Animated.SharedValue<boolean>;
   domain: TLineChartDomain;
 };
+
+export type YRange = {
+  min?: number;
+  max?: number;
+};
