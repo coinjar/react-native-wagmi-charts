@@ -3,8 +3,7 @@ import * as shape from 'd3-shape';
 // @ts-ignore
 import { scaleLinear } from 'd3-scale';
 
-import type { TLineChartData, TLineChartPoint } from './types';
-import type { YRange } from './types';
+import type { TLineChartData, TLineChartPoint, YDomain } from './types';
 
 export function getDomain(rows: TLineChartPoint[]): [number, number] {
   'worklet';
@@ -18,14 +17,14 @@ export function getPath({
   height,
   gutter,
   shape: _shape = shape.curveBumpX,
-  yRange,
+  yDomain,
 }: {
   data: TLineChartData;
   width: number;
   height: number;
   gutter: number;
   shape?: string;
-  yRange?: YRange;
+  yDomain: YDomain;
 }): string {
   const timestamps: number[] = [];
   const values: number[] = [];
@@ -35,14 +34,11 @@ export function getPath({
     timestamps.push(index);
   });
 
-  const yMin = yRange?.min ?? Math.min(...values);
-  const yMax = yRange?.max ?? Math.max(...values);
-
   const scaleX = scaleLinear()
     .domain([Math.min(...timestamps), Math.max(...timestamps)])
     .range([0, width]);
   const scaleY = scaleLinear()
-    .domain([yMin, yMax])
+    .domain([yDomain.min, yDomain.max])
     .range([height - gutter, gutter]);
   const path = shape
     .line()
@@ -58,15 +54,14 @@ export function getArea({
   height,
   gutter,
   shape: _shape = shape.curveBumpX,
-
-  yRange,
+  yDomain,
 }: {
   data: TLineChartData;
   width: number;
   height: number;
   gutter: number;
   shape?: string;
-  yRange?: YRange;
+  yDomain: YDomain;
 }): string {
   const timestamps: number[] = [];
   const values: number[] = [];
@@ -76,14 +71,11 @@ export function getArea({
     timestamps.push(index);
   });
 
-  const yMin = yRange?.min ?? Math.min(...values);
-  const yMax = yRange?.max ?? Math.max(...values);
-
   const scaleX = scaleLinear()
     .domain([Math.min(...timestamps), Math.max(...timestamps)])
     .range([0, width]);
   const scaleY = scaleLinear()
-    .domain([yMin, yMax])
+    .domain([yDomain.min, yDomain.max])
     .range([height - gutter, gutter]);
   const area = shape
     .area()

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSharedValue } from 'react-native-reanimated';
 
-import type { TLineChartContext, TLineChartData } from './types';
+import type { TLineChartContext, TLineChartData, YRangeProp } from './types';
 import { getDomain } from './utils';
 
 export const LineChartContext = React.createContext<TLineChartContext>({
@@ -11,16 +11,22 @@ export const LineChartContext = React.createContext<TLineChartContext>({
   data: [],
   domain: [0, 0],
   isActive: { value: false },
+  yDomain: {
+    min: 0,
+    max: 0,
+  },
 });
 
 type LineChartProviderProps = {
   children: React.ReactNode;
   data: TLineChartData;
+  yRange?: YRangeProp;
 };
 
 export function LineChartProvider({
   children,
   data = [],
+  yRange,
 }: LineChartProviderProps) {
   const currentX = useSharedValue(-1);
   const currentY = useSharedValue(-1);
@@ -29,7 +35,7 @@ export function LineChartProvider({
 
   const domain = React.useMemo(() => getDomain(data), [data]);
 
-  const contextValue = React.useMemo(
+  const contextValue = React.useMemo<TLineChartContext>(
     () => ({
       currentX,
       currentY,
@@ -37,8 +43,21 @@ export function LineChartProvider({
       data,
       isActive,
       domain,
+      yDomain: {
+        min: yRange?.min ?? Math.min(...data.map(({ value }) => value)),
+        max: yRange?.max ?? Math.max(...data.map(({ value }) => value)),
+      },
     }),
-    [currentIndex, currentX, currentY, data, domain, isActive]
+    [
+      currentIndex,
+      currentX,
+      currentY,
+      data,
+      domain,
+      isActive,
+      yRange?.max,
+      yRange?.min,
+    ]
   );
 
   return (

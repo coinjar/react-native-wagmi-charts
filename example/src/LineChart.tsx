@@ -34,19 +34,20 @@ export default function App() {
       <Heading.H5 paddingX="major-2" marginBottom="major-2">
         Line Chart 📈
       </Heading.H5>
-      <LineChart.Provider data={data}>
-        <LineChart
-          yRange={{
-            min:
-              yRange === 'low'
-                ? Math.min(...data.map((d) => d.value)) / 1.1
-                : undefined,
-            max:
-              yRange === 'high'
-                ? Math.max(...data.map((d) => d.value)) * 1.1
-                : undefined,
-          }}
-        >
+      <LineChart.Provider
+        yRange={{
+          min:
+            yRange === 'low'
+              ? Math.min(...data.map((d) => d.value)) / 1.1
+              : undefined,
+          max:
+            yRange === 'high'
+              ? Math.max(...data.map((d) => d.value)) * 1.1
+              : undefined,
+        }}
+        data={data}
+      >
+        <LineChart>
           <LineChart.Path color="red">
             <LineChart.Gradient color="black" />
           </LineChart.Path>
