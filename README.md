@@ -621,20 +621,20 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 
 ### LineChart.Provider
 
-| Prop   | Type                                          | Default | Description                                                      |
-| ------ | --------------------------------------------- | ------- | ---------------------------------------------------------------- |
-| `data` | `Array<{ timestamp: number, value: number }>` |         | The line chart data as an array of timestamps & values (prices). |
+| Prop     | Type                                          | Default | Description                                                                                                                                  |
+| -------- | --------------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `data`   | `Array<{ timestamp: number, value: number }>` |         | The line chart data as an array of timestamps & values (prices).                                                                             |
+| `yRange` | `{ min?: number; max?: number }`              |         | Set a custom range for the y values of your chart. See [#20](https://github.com/coinjar/react-native-wagmi-charts/issues/20) for a use-case. |
 
 ### LineChart
 
-| Prop       | Type                             | Default                 | Description                                                                                                                                  |
-| ---------- | -------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `width`    | `number`                         | Width of device screen  | The width of the chart                                                                                                                       |
-| `height`   | `number`                         | Height of device screen | The height of the chart                                                                                                                      |
-| `yGutter`  | `number`                         | `16`                    | The gutter of the chart on the Y axis (the chart data will not exceed it's gutter)                                                           |
-| `shape`    | `function`                       | `shape.curveBumpX`      | The shape type/curve of the graph. [Accepts a curve function from d3-shape](https://www.npmjs.com/package/d3-shape#curves)                   |
-| `yRange`   | `{ min?: number; max?: number }` |                         | Set a custom range for the y values of your chart. See [#20](https://github.com/coinjar/react-native-wagmi-charts/issues/20) for a use-case. |
-| `...props` | `ViewProps`                      |                         | This component also inherits React Native's `View` props.                                                                                    |
+| Prop       | Type        | Default                 | Description                                                                                                                |
+| ---------- | ----------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `width`    | `number`    | Width of device screen  | The width of the chart                                                                                                     |
+| `height`   | `number`    | Height of device screen | The height of the chart                                                                                                    |
+| `yGutter`  | `number`    | `16`                    | The gutter of the chart on the Y axis (the chart data will not exceed it's gutter)                                         |
+| `shape`    | `function`  | `shape.curveBumpX`      | The shape type/curve of the graph. [Accepts a curve function from d3-shape](https://www.npmjs.com/package/d3-shape#curves) |
+| `...props` | `ViewProps` |                         | This component also inherits React Native's `View` props.                                                                  |
 
 ### LineChart.Path
 
