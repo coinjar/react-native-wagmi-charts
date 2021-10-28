@@ -6,6 +6,7 @@ import { LineChartCursor } from './Cursor';
 import { LineChartCursorCrosshair } from './CursorCrosshair';
 import { LineChartCursorLine } from './CursorLine';
 import { LineChartGradient } from './Gradient';
+import { LineChartHorizontalLine } from './HorizontalLine';
 import { LineChartTooltip } from './Tooltip';
 import { LineChartPriceText } from './PriceText';
 import { LineChartDatetimeText } from './DatetimeText';
@@ -38,6 +39,7 @@ export const LineChart = Object.assign(_LineChart, {
   Cursor: LineChartCursor,
   CursorCrosshair: LineChartCursorCrosshair,
   CursorLine: LineChartCursorLine,
+  HorizontalLine: LineChartHorizontalLine,
   Tooltip: LineChartTooltip,
   Provider: LineChartProvider,
   PriceText: LineChartPriceText,

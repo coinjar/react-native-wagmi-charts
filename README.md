@@ -47,6 +47,7 @@ A sweet & simple chart library for React Native that will make us feel like **W*
   - [LineChart.Path](#linechartpath)
   - [LineChart.CursorCrosshair](#linechartcursorcrosshair-1)
   - [LineChart.CursorLine](#linechartcursorline-1)
+  - [LineChart.HorizontalLine](#linecharthorizontalline-1)
   - [LineChart.Gradient](#linechartgradient)
   - [LineChart.Tooltip](#linecharttooltip)
   - [LineChart.PriceText](#linechartpricetext)
@@ -218,6 +219,24 @@ To render an interactive cursor on your line chart, you can include either the `
 ```
 
 <img src="https://user-images.githubusercontent.com/7336481/133027471-1c620ece-a95e-46b7-bd92-50f33757ce92.gif" width="200px" />
+
+##### `LineChart.HorizontalLine`
+
+It's a static horizontal line which moves whenever your data change. It's located on height of point which is on `at` position of provided data.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path>
+      <LineChart.HorizontalLine at={0} />
+    </LineChart.Path>
+  </LineChart>
+</LineChart.Provider>
+```
+
+<img src="" width="200px" />
+
+
 
 #### Candlestick chart
 
@@ -468,10 +487,12 @@ By using the `LineChart.Gradient` component, you can apply a gradient to the are
   <LineChart>
     <LineChart.Path color="red">
       <LineChart.Gradient />
-    <LineChart>
+    <LineChart.Path>
   </LineChart>
 </LineChart.Provider>
 ```
+
+<img width="346" alt="Screen Shot 2021-10-25 at 8 32 07 pm" src="https://user-images.githubusercontent.com/7336481/138672128-c691036e-404f-4148-8a3b-00ea2f7df27f.png">
 
 The gradient will inherit your path's color by default, however, you can provide a color prop to `LineChart.Gradient`:
 
@@ -480,10 +501,12 @@ The gradient will inherit your path's color by default, however, you can provide
   <LineChart>
     <LineChart.Path color="red">
       <LineChart.Gradient color="black" />
-    <LineChart>
+    <LineChart.Path>
   </LineChart>
 </LineChart.Provider>
 ```
+
+<img width="345" alt="Screen Shot 2021-10-25 at 8 32 26 pm" src="https://user-images.githubusercontent.com/7336481/138672153-9ba11b02-b750-4ab0-a2e2-c18a9af4635f.png">
 
 
 ### Customizing size
@@ -641,6 +664,14 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 | ----------- | ----------- | -------- | ---------------------------------------------------------------- |
 | `color`     | `string`    | `"gray"` | Color of the cursor line                                         |
 | `lineProps` | `LineProps` |          | Props of the cursor line. Takes React Native SVG's `Line` props. |
+
+### LineChart.HorizontalLine
+
+| Prop        | Type        | Default  | Description                                                      |
+| ----------- | ----------- | -------- | ---------------------------------------------------------------- |
+| `color`     | `string`    | `"gray"` | Color of the cursor line                                         |
+| `lineProps` | `LineProps` |          | Props of the cursor line. Takes React Native SVG's `Line` props. |
+| `at`        | `number`    |   `0`    | Index of followed `data` item.  |
 
 ### LineChart.Gradient
 

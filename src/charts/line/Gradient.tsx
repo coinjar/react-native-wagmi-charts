@@ -35,7 +35,7 @@ export function LineChartGradient({
 
   ////////////////////////////////////////////////
 
-  const localId = ++id;
+  const localId = React.useRef(++id);
 
   ////////////////////////////////////////////////
 
@@ -43,13 +43,25 @@ export function LineChartGradient({
     <>
       {children ? (
         <Defs>
-          <LinearGradient id={`${localId}`} x1="0" x2="0" y1="0" y2="100%">
+          <LinearGradient
+            id={`${localId.current}`}
+            x1="0"
+            x2="0"
+            y1="0"
+            y2="100%"
+          >
             {children}
           </LinearGradient>
         </Defs>
       ) : (
         <Defs>
-          <LinearGradient id={`${localId}`} x1="0" x2="0" y1="0" y2="100%">
+          <LinearGradient
+            id={`${localId.current}`}
+            x1="0"
+            x2="0"
+            y1="0"
+            y2="100%"
+          >
             <Stop offset="20%" stopColor={color} stopOpacity={0.15} />
             <Stop offset="40%" stopColor={color} stopOpacity={0.05} />
             <Stop offset="100%" stopColor={color} stopOpacity={0} />
@@ -58,7 +70,7 @@ export function LineChartGradient({
       )}
       <AnimatedPath
         animatedProps={animatedProps}
-        fill={`url(#${localId})`}
+        fill={`url(#${localId.current})`}
         {...props}
       />
     </>
