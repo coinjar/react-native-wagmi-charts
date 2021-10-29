@@ -20,9 +20,12 @@ export default function App() {
       </Heading.H5>
       <LineChart.Provider data={data}>
         <LineChart>
-          <LineChart.Path color="lightgray">
+          <LineChart.Path color="black">
+            <LineChart.Gradient />
+            <LineChart.HorizontalLine at={0} />
             <LineChart.Color color="#10b981" from={10} to={15} />
-            {/* <LineChart.Gradient /> */}
+            <LineChart.Dot color="#10b981" at={10} />
+            <LineChart.Dot color="#10b981" at={15} />
           </LineChart.Path>
           <LineChart.CursorCrosshair
             color="hotpink"

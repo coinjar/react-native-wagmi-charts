@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Dimensions, View, ViewProps } from 'react-native';
+// @ts-ignore
+import * as d3Shape from 'd3-shape';
 
 import { useLineChart } from './useLineChart';
 import { getArea, getPath } from './utils';
@@ -9,7 +11,7 @@ export const LineChartDimensionsContext = React.createContext({
   height: 0,
   path: '',
   area: '',
-  shape: undefined,
+  shape: d3Shape.curveBumpX,
   gutter: 0,
 });
 
@@ -18,17 +20,19 @@ type LineChartProps = ViewProps & {
   yGutter?: number;
   width?: number;
   height?: number;
-  shape?: string;
+  shape?: unknown;
 };
 
 const { width: screenWidth } = Dimensions.get('window');
+
+LineChart.displayName = 'LineChart';
 
 export function LineChart({
   children,
   yGutter = 16,
   width = screenWidth,
   height = screenWidth,
-  shape,
+  shape = d3Shape.curveBumpX,
   ...props
 }: LineChartProps) {
   const { data } = useLineChart();

@@ -18,6 +18,8 @@ type LineChartCursorCrosshairProps = Omit<LineChartCursorProps, 'type'> & {
   crosshairOuterProps?: ViewProps;
 };
 
+LineChartCursorCrosshair.displayName = 'LineChartCursorCrosshair';
+
 export function LineChartCursorCrosshair({
   children,
   color = 'black',

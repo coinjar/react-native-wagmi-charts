@@ -18,7 +18,7 @@ export function getPath({
   width,
   height,
   gutter,
-  shape: _shape = shape.curveBumpX,
+  shape: _shape,
 }: {
   data: TLineChartData;
   from?: number;
@@ -26,7 +26,7 @@ export function getPath({
   width: number;
   height: number;
   gutter: number;
-  shape?: string;
+  shape?: unknown;
 }): string {
   const timestamps = data.map(({}, i) => i);
   const values = data.map(({ value }) => value);
@@ -40,7 +40,9 @@ export function getPath({
     .line()
     .defined((d: { timestamp: number }) =>
       from || to
-        ? data.slice(from, to).find((item) => item.timestamp === d.timestamp)
+        ? data
+            .slice(from, to ? to + 1 : undefined)
+            .find((item) => item.timestamp === d.timestamp)
         : true
     )
     .x((_: unknown, i: number) => scaleX(i))
@@ -54,13 +56,13 @@ export function getArea({
   width,
   height,
   gutter,
-  shape: _shape = shape.curveBumpX,
+  shape: _shape,
 }: {
   data: TLineChartData;
   width: number;
   height: number;
   gutter: number;
-  shape?: string;
+  shape?: unknown;
 }): string {
   const timestamps = data.map(({}, i) => i);
   const values = data.map(({ value }) => value);

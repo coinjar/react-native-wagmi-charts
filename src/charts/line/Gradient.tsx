@@ -15,6 +15,8 @@ export type LineChartGradientProps = Animated.AnimateProps<PathProps> & {
 
 let id = 0;
 
+LineChartGradient.displayName = 'LineChartGradient';
+
 export function LineChartGradient({
   color: overrideColor = undefined,
   children,

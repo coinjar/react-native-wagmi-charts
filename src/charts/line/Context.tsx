@@ -18,6 +18,8 @@ type LineChartProviderProps = {
   data: TLineChartData;
 };
 
+LineChartProvider.displayName = 'LineChartProvider';
+
 export function LineChartProvider({
   children,
   data = [],

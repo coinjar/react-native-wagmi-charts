@@ -12,11 +12,19 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 export type LineChartColorProps = Animated.AnimateProps<PathProps> & {
   color?: string;
+  from: number;
+  to: number;
+  showInactiveColor?: boolean;
+  inactiveColor?: string;
   width?: number;
 };
 
+LineChartColor.displayName = 'LineChartColor';
+
 export function LineChartColor({
   color = 'black',
+  inactiveColor,
+  showInactiveColor = true,
   from,
   to,
   width: strokeWidth = 3,
@@ -26,7 +34,9 @@ export function LineChartColor({
   const { width, height, gutter, shape } = React.useContext(
     LineChartDimensionsContext
   );
-  const { isTransitionEnabled } = React.useContext(LineChartPathContext);
+  const { isTransitionEnabled, isInactive: _isInactive } =
+    React.useContext(LineChartPathContext);
+  const isInactive = showInactiveColor && _isInactive;
 
   ////////////////////////////////////////////////
 
@@ -57,8 +67,9 @@ export function LineChartColor({
       <AnimatedPath
         animatedProps={animatedProps}
         fill="transparent"
-        stroke={color}
+        stroke={isInactive ? inactiveColor || color : color}
         strokeWidth={strokeWidth}
+        strokeOpacity={isInactive && !inactiveColor ? 0.5 : 1}
         {...props}
       />
     </>

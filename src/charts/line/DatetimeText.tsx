@@ -14,6 +14,8 @@ type LineChartDatetimeProps = {
   style?: Animated.AnimateProps<RNTextProps>['style'];
 };
 
+LineChartDatetimeText.displayName = 'LineChartDatetimeText';
+
 export function LineChartDatetimeText({
   locale,
   options,

@@ -18,11 +18,13 @@ type HorizontalLineProps = {
   at?: number;
 };
 
-export const LineChartHorizontalLine = ({
+LineChartHorizontalLine.displayName = 'LineChartHorizontalLine';
+
+export function LineChartHorizontalLine({
   color = 'gray',
   lineProps = {},
   at = 0,
-}: HorizontalLineProps) => {
+}: HorizontalLineProps) {
   const { width, path } = React.useContext(LineChartDimensionsContext);
   const { data } = useLineChart();
 
@@ -52,4 +54,4 @@ export const LineChartHorizontalLine = ({
       {...lineProps}
     />
   );
-};
+}
