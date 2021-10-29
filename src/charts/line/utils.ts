@@ -26,7 +26,7 @@ export function getPath({
   shape?: string;
   yDomain: YDomain;
 }): string {
-  const timestamps: number[] = data.map(({ timestamp }) => timestamp);
+  const timestamps = data.map(({ timestamp }) => timestamp);
 
   const scaleX = scaleLinear()
     .domain([Math.min(...timestamps), Math.max(...timestamps)])
