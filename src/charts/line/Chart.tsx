@@ -30,21 +30,35 @@ export function LineChart({
   shape,
   ...props
 }: LineChartProps) {
-  const { data } = useLineChart();
+  const { data, yDomain } = useLineChart();
 
   const path = React.useMemo(() => {
     if (data && data.length > 0) {
-      return getPath({ data, width, height, gutter: yGutter, shape });
+      return getPath({
+        data,
+        width,
+        height,
+        gutter: yGutter,
+        shape,
+        yDomain,
+      });
     }
     return '';
-  }, [data, width, height, yGutter, shape]);
+  }, [data, width, height, yGutter, shape, yDomain]);
 
   const area = React.useMemo(() => {
     if (data && data.length > 0) {
-      return getArea({ data, width, height, gutter: yGutter, shape });
+      return getArea({
+        data,
+        width,
+        height,
+        gutter: yGutter,
+        shape,
+        yDomain,
+      });
     }
     return '';
-  }, [data, width, height, yGutter, shape]);
+  }, [data, width, height, yGutter, shape, yDomain]);
 
   const contextValue = React.useMemo(
     () => ({
