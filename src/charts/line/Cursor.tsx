@@ -41,9 +41,17 @@ export function LineChartCursor({
         isActive.value = true;
         currentX.value = boundedX;
         currentY.value = getYForX(parsedPath, boundedX) || 0;
-        currentIndex.value = Math.round(
-          boundedX / width / (1 / (data.length - 1))
+
+        // on Web, we could drag the cursor to be negative, breaking it
+        // so we clamp the index at 0 to fix it
+        // https://github.com/coinjar/react-native-wagmi-charts/issues/24
+        const minIndex = 0;
+        const boundedIndex = Math.max(
+          minIndex,
+          Math.round(boundedX / width / (1 / (data.length - 1)))
         );
+
+        currentIndex.value = boundedIndex;
       }
     },
     onEnd: () => {
