@@ -9,7 +9,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "start": "expo start",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "bumbag": "^2.2.1",
@@ -21,7 +22,7 @@
     "react-dom": "16.13.1",
     "react-native": "0.63.4",
     "react-native-gesture-handler": "~1.10.2",
-    "react-native-reanimated": "~2.2.0",
+    "react-native-reanimated": "2.2.2",
     "react-native-unimodules": "~0.14.5",
     "react-native-web": "~0.13.12"
   },
@@ -31,6 +32,8 @@
     "babel-plugin-module-resolver": "^4.1.0",
     "babel-preset-expo": "8.3.0",
     "expo-cli": "^4.8.1",
-    "jsonfile": "^6.1.0"
+    "jsonfile": "^6.1.0",
+    "patch-package": "^6.4.7",
+    "postinstall-postinstall": "^2.1.0"
   }
 }

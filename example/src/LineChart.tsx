@@ -2,12 +2,15 @@ import * as React from 'react';
 import { Box, Button, Flex, Heading, Stack, Text } from 'bumbag-native';
 import { LineChart, TLineChartPoint } from 'react-native-wagmi-charts';
 import * as haptics from 'expo-haptics';
+import { Platform } from 'react-native';
 
 import mockData from './data/line-data.json';
 import mockData2 from './data/line-data2.json';
 
 function invokeHaptic() {
-  haptics.impactAsync(haptics.ImpactFeedbackStyle.Light);
+  if (['ios', 'android'].includes(Platform.OS)) {
+    haptics.impactAsync(haptics.ImpactFeedbackStyle.Light);
+  }
 }
 
 export default function App() {
