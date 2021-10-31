@@ -26,7 +26,7 @@ export function getPath({
   shape?: string;
   yDomain: YDomain;
 }): string {
-  const timestamps = data.map(({ timestamp }) => timestamp);
+  const timestamps = data.map((_, i) => i);
 
   const scaleX = scaleLinear()
     .domain([Math.min(...timestamps), Math.max(...timestamps)])
@@ -57,13 +57,7 @@ export function getArea({
   shape?: string;
   yDomain: YDomain;
 }): string {
-  const timestamps: number[] = [];
-  const values: number[] = [];
-
-  data.forEach(({ value }, index) => {
-    values.push(value);
-    timestamps.push(index);
-  });
+  const timestamps = data.map((_, i) => i);
 
   const scaleX = scaleLinear()
     .domain([Math.min(...timestamps), Math.max(...timestamps)])
