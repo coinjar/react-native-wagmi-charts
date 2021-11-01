@@ -405,7 +405,6 @@ function invokeHaptic() {
 function Example() {
   const onCurrentXChange = useCallback((index: number) => {
     // ...
-    invokeHaptic()
   }, [])
 
   return (
