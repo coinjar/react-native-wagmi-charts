@@ -228,13 +228,23 @@ It's a static horizontal line which moves whenever your data change. It's locate
 <LineChart.Provider data={data}>
   <LineChart>
     <LineChart.Path>
-      <LineChart.HorizontalLine at={0} />
+      <LineChart.HorizontalLine at={{ index: 0 }} />
     </LineChart.Path>
   </LineChart>
 </LineChart.Provider>
 ```
+ 
+To pass a Y value to your `HorizontalLine` instead, you can use `value`:
 
-<img src="" width="200px" />
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path>
+      <LineChart.HorizontalLine at={{ value: 3027.84 }} />
+    </LineChart.Path>
+  </LineChart>
+</LineChart.Provider>
+``` 
 
 #### Candlestick chart
 
@@ -665,11 +675,11 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 
 ### LineChart.HorizontalLine
 
-| Prop        | Type        | Default  | Description                                                      |
-| ----------- | ----------- | -------- | ---------------------------------------------------------------- |
-| `color`     | `string`    | `"gray"` | Color of the cursor line                                         |
-| `lineProps` | `LineProps` |          | Props of the cursor line. Takes React Native SVG's `Line` props. |
-| `at`        | `number`    | `0`      | Index of followed `data` item.                                   |
+| Prop        | Type        | Default           | Description                                                      |
+| ----------- | ----------- | ----------------- | ---------------------------------------------------------------- | --- | ---------------------------------------------------------------------------------------------------------- |
+| `color`     | `string`    | `"gray"`          | Color of the cursor line                                         |
+| `lineProps` | `LineProps` |                   | Props of the cursor line. Takes React Native SVG's `Line` props. |
+| `at`        | `number     | { index: number } | { value: number }`                                               | `0` | Index of followed `data` item. You can alternatively pass `{ value: number }`, corresponding to a y value. |
 
 ### LineChart.Gradient
 
