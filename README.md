@@ -233,7 +233,7 @@ It's a static horizontal line which moves whenever your data change. It's locate
   </LineChart>
 </LineChart.Provider>
 ```
-
+ 
 To pass a Y value to your `HorizontalLine` instead, you can use `value`:
 
 ```jsx
@@ -244,7 +244,7 @@ To pass a Y value to your `HorizontalLine` instead, you can use `value`:
     </LineChart.Path>
   </LineChart>
 </LineChart.Provider>
-```
+``` 
 
 #### Candlestick chart
 
