@@ -53,6 +53,7 @@ export default function App() {
         <LineChart>
           <LineChart.Path color="red">
             <LineChart.Gradient color="black" />
+            <LineChart.HorizontalLine at={{ value: 33215.61 }} />
           </LineChart.Path>
           <LineChart.CursorCrosshair
             onActivated={invokeHaptic}

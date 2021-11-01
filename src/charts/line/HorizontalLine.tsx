@@ -15,16 +15,46 @@ const AnimatedLine = Animated.createAnimatedComponent(SVGLine);
 type HorizontalLineProps = {
   color?: string;
   lineProps?: Partial<LineProps>;
-  at?: number;
+  /**
+   * (Optional) A pixel value to nudge the line up or down.
+   *
+   * This may be useful to customize the line's position based on the thickness of your cursor or chart path.
+   *
+   * ```tsx
+   * <LineChart.HorizontalLine
+   *   at={{ index: 3 }}
+   * />
+   *
+   * // or
+   *
+   * <LineChart.HorizontalLine
+   *   at={{ value: 320.32}}
+   * />
+   * ```
+   */
+  offsetY?: number;
+  at?:
+    | {
+        index: number;
+        value?: never;
+      }
+    | {
+        index?: never;
+        value: number;
+      }
+    | number;
 };
 
 export const LineChartHorizontalLine = ({
   color = 'gray',
   lineProps = {},
-  at = 0,
+  at = { index: 0 },
+  offsetY = 0,
 }: HorizontalLineProps) => {
-  const { width, path } = React.useContext(LineChartDimensionsContext);
-  const { data } = useLineChart();
+  const { width, path, height, gutter } = React.useContext(
+    LineChartDimensionsContext
+  );
+  const { data, yDomain } = useLineChart();
 
   const parsedPath = React.useMemo(() => parse(path), [path]);
   const pointWidth = React.useMemo(
@@ -32,9 +62,31 @@ export const LineChartHorizontalLine = ({
     [data.length, width]
   );
 
-  const y = useDerivedValue(() =>
-    withTiming(getYForX(parsedPath!, pointWidth * at) || 0)
-  );
+  const y = useDerivedValue(() => {
+    if (typeof at === 'number' || at.index != null) {
+      const index = typeof at === 'number' ? at : at.index;
+      const yForX = getYForX(parsedPath!, pointWidth * index) || 0;
+      return withTiming(yForX + offsetY);
+    }
+    /**
+     * <gutter>
+     * | ---------- | <- yDomain.max  |
+     * |            |                 | offsetTop
+     * |            | <- value        |
+     * |            |
+     * |            | <- yDomain.min
+     * <gutter>
+     */
+
+    const offsetTop = yDomain.max - at.value;
+    const percentageOffsetTop = offsetTop / (yDomain.max - yDomain.min);
+
+    const heightBetweenGutters = height - gutter * 2;
+
+    const offsetTopPixels = gutter + percentageOffsetTop * heightBetweenGutters;
+
+    return withTiming(offsetTopPixels + offsetY);
+  });
 
   const lineAnimatedProps = useAnimatedProps(() => ({
     x1: 0,
