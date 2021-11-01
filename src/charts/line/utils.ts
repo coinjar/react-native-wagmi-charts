@@ -3,7 +3,7 @@ import * as shape from 'd3-shape';
 // @ts-ignore
 import { scaleLinear } from 'd3-scale';
 
-import type { TLineChartData, TLineChartPoint } from './types';
+import type { TLineChartData, TLineChartPoint, YDomain } from './types';
 
 export function getDomain(rows: TLineChartPoint[]): [number, number] {
   'worklet';
@@ -17,20 +17,22 @@ export function getPath({
   height,
   gutter,
   shape: _shape = shape.curveBumpX,
+  yDomain,
 }: {
   data: TLineChartData;
   width: number;
   height: number;
   gutter: number;
   shape?: string;
+  yDomain: YDomain;
 }): string {
-  const timestamps = data.map(({}, i) => i);
-  const values = data.map(({ value }) => value);
+  const timestamps = data.map((_, i) => i);
+
   const scaleX = scaleLinear()
     .domain([Math.min(...timestamps), Math.max(...timestamps)])
     .range([0, width]);
   const scaleY = scaleLinear()
-    .domain([Math.min(...values), Math.max(...values)])
+    .domain([yDomain.min, yDomain.max])
     .range([height - gutter, gutter]);
   const path = shape
     .line()
@@ -46,20 +48,22 @@ export function getArea({
   height,
   gutter,
   shape: _shape = shape.curveBumpX,
+  yDomain,
 }: {
   data: TLineChartData;
   width: number;
   height: number;
   gutter: number;
   shape?: string;
+  yDomain: YDomain;
 }): string {
-  const timestamps = data.map(({}, i) => i);
-  const values = data.map(({ value }) => value);
+  const timestamps = data.map((_, i) => i);
+
   const scaleX = scaleLinear()
     .domain([Math.min(...timestamps), Math.max(...timestamps)])
     .range([0, width]);
   const scaleY = scaleLinear()
-    .domain([Math.min(...values), Math.max(...values)])
+    .domain([yDomain.min, yDomain.max])
     .range([height - gutter, gutter]);
   const area = shape
     .area()

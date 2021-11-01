@@ -2,26 +2,58 @@ import * as React from 'react';
 import { Box, Button, Flex, Heading, Stack, Text } from 'bumbag-native';
 import { LineChart, TLineChartPoint } from 'react-native-wagmi-charts';
 import * as haptics from 'expo-haptics';
+import { Platform } from 'react-native';
 
 import mockData from './data/line-data.json';
 import mockData2 from './data/line-data2.json';
 
 function invokeHaptic() {
-  haptics.impactAsync(haptics.ImpactFeedbackStyle.Light);
+  if (['ios', 'android'].includes(Platform.OS)) {
+    haptics.impactAsync(haptics.ImpactFeedbackStyle.Light);
+  }
 }
 
 export default function App() {
   const [data, setData] = React.useState<TLineChartPoint[]>(mockData);
+
+  const [yRange, setYRange] = React.useState<undefined | 'low' | 'high'>(
+    undefined
+  );
+
+  const toggleYRange = () => {
+    setYRange((domain) => {
+      if (!domain) {
+        return 'low';
+      }
+      if (domain === 'low') {
+        return 'high';
+      }
+      return undefined;
+    });
+  };
 
   return (
     <>
       <Heading.H5 paddingX="major-2" marginBottom="major-2">
         Line Chart 📈
       </Heading.H5>
-      <LineChart.Provider data={data}>
+      <LineChart.Provider
+        yRange={{
+          min:
+            yRange === 'low'
+              ? Math.min(...data.map((d) => d.value)) / 1.1
+              : undefined,
+          max:
+            yRange === 'high'
+              ? Math.max(...data.map((d) => d.value)) * 1.1
+              : undefined,
+        }}
+        data={data}
+      >
         <LineChart>
           <LineChart.Path color="red">
             <LineChart.Gradient color="black" />
+            <LineChart.HorizontalLine at={{ value: 33215.61 }} />
           </LineChart.Path>
           <LineChart.CursorCrosshair
             onActivated={invokeHaptic}
@@ -33,8 +65,8 @@ export default function App() {
             </LineChart.Tooltip> */}
           </LineChart.CursorCrosshair>
         </LineChart>
-        <Heading.H6>Load Data</Heading.H6>
-        <Box marginTop="major-2">
+        <Box marginX="major-2" marginTop="major-2">
+          <Heading.H6 marginBottom={'major-2'}>Load Data</Heading.H6>
           <Flex flexWrap={'wrap'}>
             <Button onPress={() => setData(mockData)}>Data 1</Button>
             <Button onPress={() => setData(mockData2)}>Data 2</Button>
@@ -68,6 +100,9 @@ export default function App() {
               }
             >
               V large data
+            </Button>
+            <Button onPress={toggleYRange}>
+              {`${yRange || 'Set'} Y Domain`}
             </Button>
           </Flex>
         </Box>
