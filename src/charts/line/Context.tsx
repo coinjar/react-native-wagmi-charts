@@ -1,5 +1,9 @@
 import * as React from 'react';
-import { useSharedValue } from 'react-native-reanimated';
+import {
+  runOnJS,
+  useAnimatedReaction,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 import type { TLineChartContext, TLineChartData, YRangeProp } from './types';
 import { getDomain } from './utils';
@@ -21,12 +25,14 @@ type LineChartProviderProps = {
   children: React.ReactNode;
   data: TLineChartData;
   yRange?: YRangeProp;
+  onCurrentXChange?: (x: number) => void;
 };
 
 export function LineChartProvider({
   children,
   data = [],
   yRange,
+  onCurrentXChange,
 }: LineChartProviderProps) {
   const currentX = useSharedValue(-1);
   const currentY = useSharedValue(-1);
@@ -58,6 +64,15 @@ export function LineChartProvider({
       yRange?.max,
       yRange?.min,
     ]
+  );
+
+  useAnimatedReaction(
+    () => currentX.value,
+    (x, prevX) => {
+      if (x !== -1 && x !== prevX && onCurrentXChange) {
+        runOnJS(onCurrentXChange)(x);
+      }
+    }
   );
 
   return (
