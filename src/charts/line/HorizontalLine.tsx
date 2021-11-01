@@ -15,6 +15,7 @@ const AnimatedLine = Animated.createAnimatedComponent(SVGLine);
 type HorizontalLineProps = {
   color?: string;
   lineProps?: Partial<LineProps>;
+  offsetY?: number;
   /**
    * (Optional) A pixel value to nudge the line up or down.
    *
@@ -32,7 +33,6 @@ type HorizontalLineProps = {
    * />
    * ```
    */
-  offsetY?: number;
   at?:
     | {
         index: number;
