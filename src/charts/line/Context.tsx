@@ -67,7 +67,7 @@ export function LineChartProvider({
   );
 
   useAnimatedReaction(
-    () => currentX.value,
+    () => currentIndex.value,
     (x, prevX) => {
       if (x !== -1 && x !== prevX && onCurrentXChange) {
         runOnJS(onCurrentXChange)(x);
