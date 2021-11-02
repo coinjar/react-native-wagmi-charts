@@ -25,14 +25,14 @@ type LineChartProviderProps = {
   children: React.ReactNode;
   data: TLineChartData;
   yRange?: YRangeProp;
-  onCurrentXChange?: (x: number) => void;
+  onCurrentIndexChange?: (x: number) => void;
 };
 
 export function LineChartProvider({
   children,
   data = [],
   yRange,
-  onCurrentXChange,
+  onCurrentIndexChange,
 }: LineChartProviderProps) {
   const currentX = useSharedValue(-1);
   const currentY = useSharedValue(-1);
@@ -69,8 +69,8 @@ export function LineChartProvider({
   useAnimatedReaction(
     () => currentIndex.value,
     (x, prevX) => {
-      if (x !== -1 && x !== prevX && onCurrentXChange) {
-        runOnJS(onCurrentXChange)(x);
+      if (x !== -1 && x !== prevX && onCurrentIndexChange) {
+        runOnJS(onCurrentIndexChange)(x);
       }
     }
   );

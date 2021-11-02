@@ -391,7 +391,7 @@ function Example() {
 }
 ```
 
-We can also use the `onCurrentXChange` callback, passed to `LineChart.Provider`:
+We can also use the `onCurrentIndexChange` callback, passed to `LineChart.Provider`:
 
 ```tsx
 import * as haptics from 'expo-haptics';
@@ -403,12 +403,12 @@ function invokeHaptic() {
 }
 
 function Example() {
-  const onCurrentXChange = useCallback((index: number) => {
+  const onCurrentIndexChange = useCallback((index: number) => {
     // ...
   }, [])
 
   return (
-    <LineChart.Provider data={data} onCurrentXChange={onCurrentXChange}>
+    <LineChart.Provider data={data} onCurrentIndexChange={onCurrentIndexChange}>
       <LineChart>
         <LineChart.Path />
         <LineChart.CursorCrosshair onActivated={invokeHaptic} onEnded={invokeHaptic}>
