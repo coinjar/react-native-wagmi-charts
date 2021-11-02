@@ -233,7 +233,7 @@ It's a static horizontal line which moves whenever your data change. It's locate
   </LineChart>
 </LineChart.Provider>
 ```
- 
+
 To pass a Y value to your `HorizontalLine` instead, you can use `value`:
 
 ```jsx
@@ -244,7 +244,7 @@ To pass a Y value to your `HorizontalLine` instead, you can use `value`:
     </LineChart.Path>
   </LineChart>
 </LineChart.Provider>
-``` 
+```
 
 #### Candlestick chart
 
@@ -380,6 +380,35 @@ function invokeHaptic() {
 function Example() {
   return (
     <LineChart.Provider data={data}>
+      <LineChart>
+        <LineChart.Path />
+        <LineChart.CursorCrosshair onActivated={invokeHaptic} onEnded={invokeHaptic}>
+          <LineChart.Tooltip />
+        </LineChart.CursorCrosshair>
+      </LineChart>
+    </LineChart.Provider>
+  )
+}
+```
+
+We can also use the `onCurrentIndexChange` callback, passed to `LineChart.Provider`:
+
+```tsx
+import * as haptics from 'expo-haptics';
+
+const data = [...];
+
+function invokeHaptic() {
+  haptics.impactAsync(haptics.ImpactFeedbackStyle.Light);
+}
+
+function Example() {
+  const onCurrentIndexChange = useCallback((index: number) => {
+    // ...
+  }, [])
+
+  return (
+    <LineChart.Provider data={data} onCurrentIndexChange={onCurrentIndexChange}>
       <LineChart>
         <LineChart.Path />
         <LineChart.CursorCrosshair onActivated={invokeHaptic} onEnded={invokeHaptic}>
