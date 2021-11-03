@@ -35,7 +35,6 @@ export function LineChartProvider({
   onCurrentIndexChange,
 }: LineChartProviderProps) {
   const currentX = useSharedValue(-1);
-  // const currentY = useSharedValue(-1);
   const currentIndex = useSharedValue(-1);
   const isActive = useSharedValue(false);
 
