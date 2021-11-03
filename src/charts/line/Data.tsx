@@ -82,7 +82,7 @@ function validateLineChartId(dataContext: LineChartDataContext, id?: string) {
       : `You didn't pass any IDs to your <LineChart.Provider />'s data prop. Did you mean to pass an array instead?`;
 
     console.warn(
-      `[react-native-wagmi-charts] Invalid usage of "id" prop on LineChart. You passed id={${id}}, but this ID does not exist in your <LineChart.Provider />'s "data" prop.
+      `[react-native-wagmi-charts] Invalid usage of "id" prop on LineChart. You passed id="${id}", but this ID does not exist in your <LineChart.Provider />'s "data" prop.
 
 ${suggestion}`
     );
