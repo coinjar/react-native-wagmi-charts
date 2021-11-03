@@ -7,7 +7,7 @@ import {
   LongPressGestureHandlerProps,
 } from 'react-native-gesture-handler';
 import Animated, { useAnimatedGestureHandler } from 'react-native-reanimated';
-import { getYForX, parse } from 'react-native-redash';
+import { parse } from 'react-native-redash';
 
 import { LineChartDimensionsContext } from './Chart';
 import { useLineChart } from './useLineChart';

@@ -6,7 +6,7 @@ import {
   TLineChartPoint,
 } from 'react-native-wagmi-charts';
 import * as haptics from 'expo-haptics';
-import { Platform, View } from 'react-native';
+import { Platform } from 'react-native';
 
 import mockData from './data/line-data.json';
 import mockData2 from './data/line-data2.json';
