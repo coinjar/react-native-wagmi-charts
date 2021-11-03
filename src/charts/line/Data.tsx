@@ -75,7 +75,7 @@ function validateLineChartId(dataContext: LineChartDataContext, id?: string) {
 
     const joinedIds = otherIds.join(', ');
 
-    const suggestion = joinedIds.length
+    const suggestion = otherIds.length
       ? `Did you mean to use ${
           singular ? 'this ID' : 'one of these IDs'
         }: ${joinedIds}`
@@ -91,7 +91,7 @@ ${suggestion}`
     const singular = otherIds.length <= 1;
 
     const joinedIds = otherIds.join(', ');
-    const suggestion = joinedIds.length
+    const suggestion = otherIds.length
       ? `Did you mean to use ${
           singular ? 'this ID' : 'one of these IDs'
         }: ${joinedIds}`
