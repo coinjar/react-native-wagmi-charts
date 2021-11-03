@@ -4,15 +4,15 @@ import {
   useAnimatedReaction,
   useSharedValue,
 } from 'react-native-reanimated';
+import type { TLineChartDataProp } from './types';
+import { LineChartDataProvider } from './Data';
 
-import type { TLineChartContext, TLineChartData, YRangeProp } from './types';
-import { getDomain } from './utils';
+import type { TLineChartContext, YRangeProp } from './types';
+import { getDomain, lineChartDataPropToArray } from './utils';
 
 export const LineChartContext = React.createContext<TLineChartContext>({
   currentX: { value: -1 },
-  currentY: { value: -1 },
   currentIndex: { value: -1 },
-  data: [],
   domain: [0, 0],
   isActive: { value: false },
   yDomain: {
@@ -23,7 +23,7 @@ export const LineChartContext = React.createContext<TLineChartContext>({
 
 type LineChartProviderProps = {
   children: React.ReactNode;
-  data: TLineChartData;
+  data: TLineChartDataProp;
   yRange?: YRangeProp;
   onCurrentIndexChange?: (x: number) => void;
 };
@@ -35,36 +35,37 @@ export function LineChartProvider({
   onCurrentIndexChange,
 }: LineChartProviderProps) {
   const currentX = useSharedValue(-1);
-  const currentY = useSharedValue(-1);
+  // const currentY = useSharedValue(-1);
   const currentIndex = useSharedValue(-1);
   const isActive = useSharedValue(false);
 
-  const domain = React.useMemo(() => getDomain(data), [data]);
+  const domain = React.useMemo(
+    () => getDomain(Array.isArray(data) ? data : Object.values(data)[0]),
+    [data]
+  );
 
-  const contextValue = React.useMemo<TLineChartContext>(
-    () => ({
+  const contextValue = React.useMemo<TLineChartContext>(() => {
+    const values = lineChartDataPropToArray(data).map(({ value }) => value);
+
+    return {
       currentX,
-      currentY,
       currentIndex,
-      data,
       isActive,
       domain,
       yDomain: {
-        min: yRange?.min ?? Math.min(...data.map(({ value }) => value)),
-        max: yRange?.max ?? Math.max(...data.map(({ value }) => value)),
+        min: yRange?.min ?? Math.min(...values),
+        max: yRange?.max ?? Math.max(...values),
       },
-    }),
-    [
-      currentIndex,
-      currentX,
-      currentY,
-      data,
-      domain,
-      isActive,
-      yRange?.max,
-      yRange?.min,
-    ]
-  );
+    };
+  }, [
+    currentIndex,
+    currentX,
+    data,
+    domain,
+    isActive,
+    yRange?.max,
+    yRange?.min,
+  ]);
 
   useAnimatedReaction(
     () => currentIndex.value,
@@ -76,8 +77,10 @@ export function LineChartProvider({
   );
 
   return (
-    <LineChartContext.Provider value={contextValue}>
-      {children}
-    </LineChartContext.Provider>
+    <LineChartDataProvider data={data}>
+      <LineChartContext.Provider value={contextValue}>
+        {children}
+      </LineChartContext.Provider>
+    </LineChartDataProvider>
   );
 }

@@ -25,7 +25,7 @@ export function LineChartCursor({
   ...props
 }: LineChartCursorProps) {
   const { width, path } = React.useContext(LineChartDimensionsContext);
-  const { currentX, currentY, currentIndex, isActive, data } = useLineChart();
+  const { currentX, currentIndex, isActive, data } = useLineChart();
 
   const parsedPath = React.useMemo(
     () => (path ? parse(path) : undefined),
@@ -40,7 +40,7 @@ export function LineChartCursor({
         const boundedX = x <= width ? x : width;
         isActive.value = true;
         currentX.value = boundedX;
-        currentY.value = getYForX(parsedPath, boundedX) || 0;
+        // currentY.value = getYForX(parsedPath, boundedX) || 0;
 
         // on Web, we could drag the cursor to be negative, breaking it
         // so we clamp the index at 0 to fix it

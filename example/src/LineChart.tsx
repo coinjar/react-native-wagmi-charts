@@ -1,8 +1,12 @@
 import * as React from 'react';
 import { Box, Button, Flex, Heading, Stack, Text } from 'bumbag-native';
-import { LineChart, TLineChartPoint } from 'react-native-wagmi-charts';
+import {
+  LineChart,
+  TLineChartDataProp,
+  TLineChartPoint,
+} from 'react-native-wagmi-charts';
 import * as haptics from 'expo-haptics';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 
 import mockData from './data/line-data.json';
 import mockData2 from './data/line-data2.json';
@@ -15,6 +19,10 @@ function invokeHaptic() {
 
 export default function App() {
   const [data, setData] = React.useState<TLineChartPoint[]>(mockData);
+  const [multiData, toggleMultiData] = React.useReducer(
+    (state) => !state,
+    false
+  );
 
   const [yRange, setYRange] = React.useState<undefined | 'low' | 'high'>(
     undefined
@@ -32,6 +40,55 @@ export default function App() {
     });
   };
 
+  let dataProp: TLineChartDataProp = data;
+
+  let chart = (
+    <LineChart>
+      <LineChart.Path color="red">
+        <LineChart.Gradient color="black" />
+        <LineChart.HorizontalLine at={{ value: 33215.61 }} />
+      </LineChart.Path>
+      <LineChart.CursorCrosshair
+        onActivated={invokeHaptic}
+        onEnded={invokeHaptic}
+      >
+        <LineChart.Tooltip />
+      </LineChart.CursorCrosshair>
+    </LineChart>
+  );
+
+  if (multiData) {
+    dataProp = {
+      one: mockData,
+      two: mockData2,
+    };
+    chart = (
+      <LineChart.Group>
+        <LineChart id="one">
+          <LineChart.Path color="blue" />
+          <LineChart.CursorCrosshair
+            onActivated={invokeHaptic}
+            onEnded={invokeHaptic}
+          >
+            <LineChart.Tooltip />
+          </LineChart.CursorCrosshair>
+        </LineChart>
+        <LineChart id="two">
+          <LineChart.Path color="red">
+            <LineChart.Gradient color="black" />
+            <LineChart.HorizontalLine at={{ index: 4 }} />
+          </LineChart.Path>
+          <LineChart.CursorCrosshair
+            onActivated={invokeHaptic}
+            onEnded={invokeHaptic}
+          >
+            <LineChart.Tooltip />
+          </LineChart.CursorCrosshair>
+        </LineChart>
+      </LineChart.Group>
+    );
+  }
+
   return (
     <>
       <Heading.H5 paddingX="major-2" marginBottom="major-2">
@@ -48,23 +105,9 @@ export default function App() {
               ? Math.max(...data.map((d) => d.value)) * 1.1
               : undefined,
         }}
-        data={data}
+        data={dataProp}
       >
-        <LineChart>
-          <LineChart.Path color="red">
-            <LineChart.Gradient color="black" />
-            <LineChart.HorizontalLine at={{ value: 33215.61 }} />
-          </LineChart.Path>
-          <LineChart.CursorCrosshair
-            onActivated={invokeHaptic}
-            onEnded={invokeHaptic}
-          >
-            <LineChart.Tooltip />
-            {/* <LineChart.Tooltip position="bottom">
-              <LineChart.DatetimeText />
-            </LineChart.Tooltip> */}
-          </LineChart.CursorCrosshair>
-        </LineChart>
+        {chart}
         <Box marginX="major-2" marginTop="major-2">
           <Heading.H6 marginBottom={'major-2'}>Load Data</Heading.H6>
           <Flex flexWrap={'wrap'}>
@@ -104,51 +147,54 @@ export default function App() {
             <Button onPress={toggleYRange}>
               {`${yRange || 'Set'} Y Domain`}
             </Button>
+            <Button onPress={toggleMultiData}>{`Multi Data`}</Button>
           </Flex>
         </Box>
-        <Stack padding="major-2" spacing="major-1">
-          <Heading.H6>PriceText</Heading.H6>
-          <Flex>
-            <Text fontWeight="500">Formatted: </Text>
-            <LineChart.PriceText />
-          </Flex>
-          <Flex>
-            <Text fontWeight="500">Value: </Text>
-            <LineChart.PriceText variant="value" />
-          </Flex>
-          <Flex>
-            <Text fontWeight="500">Custom format: </Text>
-            <LineChart.PriceText
-              format={(d) => {
-                'worklet';
-                return d.formatted ? `$${d.formatted} AUD` : '';
-              }}
-            />
-          </Flex>
-          <Heading.H6>DatetimeText</Heading.H6>
-          <Flex>
-            <Text fontWeight="500">Formatted: </Text>
-            <LineChart.DatetimeText />
-          </Flex>
-          <Flex>
-            <Text fontWeight="500">Value: </Text>
-            <LineChart.DatetimeText variant="value" />
-          </Flex>
-          <Flex>
-            <Text fontWeight="500">Custom format: </Text>
-            <LineChart.DatetimeText
-              locale="en-AU"
-              options={{
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric',
-              }}
-            />
-          </Flex>
-        </Stack>
+        {!multiData && (
+          <Stack padding="major-2" spacing="major-1">
+            <Heading.H6>PriceText</Heading.H6>
+            <Flex>
+              <Text fontWeight="500">Formatted: </Text>
+              <LineChart.PriceText />
+            </Flex>
+            <Flex>
+              <Text fontWeight="500">Value: </Text>
+              <LineChart.PriceText variant="value" />
+            </Flex>
+            <Flex>
+              <Text fontWeight="500">Custom format: </Text>
+              <LineChart.PriceText
+                format={(d) => {
+                  'worklet';
+                  return d.formatted ? `$${d.formatted} AUD` : '';
+                }}
+              />
+            </Flex>
+            <Heading.H6>DatetimeText</Heading.H6>
+            <Flex>
+              <Text fontWeight="500">Formatted: </Text>
+              <LineChart.DatetimeText />
+            </Flex>
+            <Flex>
+              <Text fontWeight="500">Value: </Text>
+              <LineChart.DatetimeText variant="value" />
+            </Flex>
+            <Flex>
+              <Text fontWeight="500">Custom format: </Text>
+              <LineChart.DatetimeText
+                locale="en-AU"
+                options={{
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric',
+                  hour: 'numeric',
+                  minute: 'numeric',
+                  second: 'numeric',
+                }}
+              />
+            </Flex>
+          </Stack>
+        )}
       </LineChart.Provider>
     </>
   );

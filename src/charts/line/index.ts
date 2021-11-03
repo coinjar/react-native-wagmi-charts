@@ -12,6 +12,7 @@ import { LineChartDatetimeText } from './DatetimeText';
 import { useLineChartDatetime } from './useDatetime';
 import { useLineChartPrice } from './usePrice';
 import { useLineChart } from './useLineChart';
+import { LineChartGroup } from './Group';
 
 export * from './Gradient';
 export * from './Chart';
@@ -44,4 +45,5 @@ export const LineChart = Object.assign(_LineChart, {
   useDatetime: useLineChartDatetime,
   usePrice: useLineChartPrice,
   useChart: useLineChart,
+  Group: LineChartGroup,
 });
