@@ -20,6 +20,7 @@ export default function flattenChildren(
   keys: (string | number)[] = []
 ): ReactChild[] {
   return Children.toArray(children).reduce(
+    // eslint-disable-next-line
     (acc: ReactChild[], node: any, nodeIndex) => {
       if (node.type === React.Fragment) {
         acc.push.apply(
@@ -56,6 +57,7 @@ export function LineChartGroup({ children, ...props }: Props) {
   const flatChildrenCount = Children.count(flatChildren);
   return (
     <View {...props}>
+      {/* eslint-disable-next-line */}
       {Children.map(flatChildren, (child: any, index) => {
         const isLast = index === flatChildrenCount - 1;
         if (!isLast && child.type === LineChart) {
