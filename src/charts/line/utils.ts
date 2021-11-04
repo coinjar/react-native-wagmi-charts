@@ -4,11 +4,36 @@ import * as shape from 'd3-shape';
 import { scaleLinear } from 'd3-scale';
 
 import type { TLineChartData, TLineChartPoint, YDomain } from './types';
+import type { TLineChartDataProp } from './types';
 
 export function getDomain(rows: TLineChartPoint[]): [number, number] {
   'worklet';
   const values = rows.map(({ value }) => value);
   return [Math.min(...values), Math.max(...values)];
+}
+
+export function lineChartDataPropToArray(
+  dataProp: TLineChartDataProp
+): TLineChartData {
+  'worklet';
+
+  if (!dataProp) {
+    return [];
+  }
+
+  if (Array.isArray(dataProp)) {
+    return dataProp;
+  }
+
+  const data: TLineChartData = [];
+
+  Object.values(dataProp).forEach((dataSet) => {
+    if (dataSet) {
+      data.push(...dataSet);
+    }
+  });
+
+  return data;
 }
 
 export function getPath({
