@@ -51,6 +51,7 @@ export default function App() {
       <LineChart.Path color="red">
         <LineChart.Gradient color="black" />
         <LineChart.HorizontalLine at={{ value: 33215.61 }} />
+        {partialDay && <LineChart.Dot at={data.length - 1} color="red" />}
       </LineChart.Path>
       <LineChart.CursorCrosshair
         onActivated={invokeHaptic}
