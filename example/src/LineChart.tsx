@@ -23,6 +23,10 @@ export default function App() {
     (state) => !state,
     false
   );
+  const [partialDay, togglePartialDay] = React.useReducer(
+    (state) => !state,
+    false
+  );
 
   const [yRange, setYRange] = React.useState<undefined | 'low' | 'high'>(
     undefined
@@ -95,6 +99,7 @@ export default function App() {
         Line Chart 📈
       </Heading.H5>
       <LineChart.Provider
+        xLength={partialDay ? data.length * 2 : undefined}
         yRange={{
           min:
             yRange === 'low'
@@ -148,6 +153,7 @@ export default function App() {
               {`${yRange || 'Set'} Y Domain`}
             </Button>
             <Button onPress={toggleMultiData}>{`Multi Data`}</Button>
+            <Button onPress={togglePartialDay}>{`Partial Day`}</Button>
           </Flex>
         </Box>
         {!multiData && (
