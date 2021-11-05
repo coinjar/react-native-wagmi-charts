@@ -50,7 +50,7 @@ export function LineChart({
       allowedWidth = (width * data.length) / xLength;
     }
     return allowedWidth;
-  }, [data.length, width, xLength]);
+  }, [data.length, width, xLength]); 
 
   const path = React.useMemo(() => {
     if (data && data.length > 0) {
