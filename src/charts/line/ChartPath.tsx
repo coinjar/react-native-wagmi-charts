@@ -43,18 +43,16 @@ export function LineChartPathWrapper({
 
   ////////////////////////////////////////////////
 
-  const svgProps = useAnimatedProps(() => {
-    return {
-      width: isActive.value
-        ? // on Web, <svg /> elements don't support negative widths
-          // https://github.com/coinjar/react-native-wagmi-charts/issues/24#issuecomment-955789904
-          Math.max(currentX.value, 0)
-        : withTiming(
-            pathWidth,
-            Object.assign({ duration: animationDuration }, animationProps)
-          ),
-    };
-  });
+  const svgProps = useAnimatedProps(() => ({
+    width: isActive.value
+      ? // on Web, <svg /> elements don't support negative widths
+        // https://github.com/coinjar/react-native-wagmi-charts/issues/24#issuecomment-955789904
+        Math.max(currentX.value, 0)
+      : withTiming(
+          pathWidth,
+          Object.assign({ duration: animationDuration }, animationProps)
+        ),
+  }));
 
   const viewSize = React.useMemo(() => ({ width, height }), [width, height]);
 
