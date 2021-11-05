@@ -50,7 +50,7 @@ export function LineChart({
       allowedWidth = (width * data.length) / xLength;
     }
     return allowedWidth;
-  }, [data.length, width, xLength]); 
+  }, [data.length, width, xLength]);
 
   const path = React.useMemo(() => {
     if (data && data.length > 0) {
@@ -80,16 +80,17 @@ export function LineChart({
     return '';
   }, [data, pathWidth, height, yGutter, shape, yDomain]);
 
-  const contextValue = React.useMemo(() => {
-    return {
+  const contextValue = React.useMemo(
+    () => ({
       gutter: yGutter,
       area,
       path,
       width,
       height,
       pathWidth,
-    };
-  }, [area, height, path, width, yGutter, pathWidth]);
+    }),
+    [area, height, path, width, yGutter, pathWidth]
+  );
 
   return (
     <LineChartIdProvider id={id}>
