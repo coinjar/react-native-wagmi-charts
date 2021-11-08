@@ -22,6 +22,10 @@ export default function App() {
   const [multiData, toggleMultiData] = React.useReducer(
     (state) => !state,
     false
+  ); 
+  const [partialDay, togglePartialDay] = React.useReducer(
+    (state) => !state,
+    false
   );
 
   const [yRange, setYRange] = React.useState<undefined | 'low' | 'high'>(
@@ -46,7 +50,8 @@ export default function App() {
     <LineChart>
       <LineChart.Path color="red">
         <LineChart.Gradient color="black" />
-        <LineChart.HorizontalLine at={{ value: 33215.61 }} />
+        <LineChart.HorizontalLine at={{ value: 33215.61 }} /> 
+        {partialDay && <LineChart.Dot at={data.length - 1} color="red" />} 
       </LineChart.Path>
       <LineChart.CursorCrosshair
         onActivated={invokeHaptic}
@@ -95,6 +100,7 @@ export default function App() {
         Line Chart 📈
       </Heading.H5>
       <LineChart.Provider
+        xLength={partialDay ? data.length * 2 : undefined}
         yRange={{
           min:
             yRange === 'low'
@@ -148,6 +154,7 @@ export default function App() {
               {`${yRange || 'Set'} Y Domain`}
             </Button>
             <Button onPress={toggleMultiData}>{`Multi Data`}</Button>
+            <Button onPress={togglePartialDay}>{`Partial Day`}</Button>
           </Flex>
         </Box>
         {!multiData && (
