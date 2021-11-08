@@ -29,6 +29,7 @@ export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
       if (Platform.OS === 'web' && data !== prevData && inputRef.current) {
         inputRef.current.setNativeProps({
           value: data,
+          style
         });
       }
     }
