@@ -47,5 +47,5 @@ export const LineChart = Object.assign(_LineChart, {
   usePrice: useLineChartPrice,
   useChart: useLineChart,
   Group: LineChartGroup,
-  Dot: LineChartDot, 
+  Dot: LineChartDot,
 });

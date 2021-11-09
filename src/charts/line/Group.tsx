@@ -19,7 +19,7 @@ export default function flattenChildren(
   depth: number = 0,
   keys: (string | number)[] = []
 ): ReactChild[] {
-  return Children.toArray(children).reduce( 
+  return Children.toArray(children).reduce(
     // eslint-disable-next-line
     (acc: ReactChild[], node: any, nodeIndex) => {
       if (node.type === React.Fragment) {
