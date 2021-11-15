@@ -10,7 +10,7 @@ import Animated, {
 import { View } from 'react-native';
 import { getYForX, parse } from 'react-native-redash';
 import { useMemo } from 'react';
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native';
 
 import { LineChartDimensionsContext } from './Chart';
 import { useLineChart } from './useLineChart';
