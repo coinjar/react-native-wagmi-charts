@@ -10,6 +10,7 @@ import Animated, {
 import { View } from 'react-native';
 import { getYForX, parse } from 'react-native-redash';
 import { useMemo } from 'react';
+import { StyleSheet } from 'react-native'
 
 import { LineChartDimensionsContext } from './Chart';
 import { useLineChart } from './useLineChart';
@@ -130,11 +131,10 @@ export function LineChartDot({
       pointerEvents="none"
       style={useMemo(
         () => [
+          styles.container,
           {
             width: outerSize,
             height: outerSize,
-            alignItems: 'center',
-            justifyContent: 'center',
           },
           containerStyle,
         ],
@@ -176,3 +176,13 @@ export function LineChartDot({
     </Animated.View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+})
