@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Svg } from 'react-native-svg';
 import Animated, {
   useAnimatedProps,
+  useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
 
@@ -25,6 +26,9 @@ type LineChartPathWrapperProps = {
   width?: number;
   pathProps?: Partial<LineChartPathProps>;
   showInactivePath?: boolean;
+  animateOnMount?: 'foreground';
+  mountAnimationDuration?: number;
+  mountAnimationProps?: Partial<Animated.WithTimingConfig>;
 };
 
 export function LineChartPathWrapper({
@@ -35,24 +39,48 @@ export function LineChartPathWrapper({
   width: strokeWidth = 3,
   pathProps = {},
   showInactivePath = true,
+  animateOnMount,
+  mountAnimationDuration = animationDuration,
+  mountAnimationProps = animationProps,
 }: LineChartPathWrapperProps) {
   const { height, pathWidth, width } = React.useContext(
     LineChartDimensionsContext
   );
   const { currentX, isActive } = useLineChart();
+  const isMounted = useSharedValue(false);
+  const hasMountedAnimation = useSharedValue(false);
+
+  React.useEffect(() => {
+    isMounted.value = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   ////////////////////////////////////////////////
 
-  const svgProps = useAnimatedProps(() => ({
-    width: isActive.value
-      ? // on Web, <svg /> elements don't support negative widths
-        // https://github.com/coinjar/react-native-wagmi-charts/issues/24#issuecomment-955789904
-        Math.max(currentX.value, 0)
-      : withTiming(
-          pathWidth,
-          Object.assign({ duration: animationDuration }, animationProps)
-        ),
-  }));
+  const svgProps = useAnimatedProps(() => {
+    const shouldAnimateOnMount = animateOnMount === 'foreground';
+    const inactiveWidth =
+      !isMounted.value && shouldAnimateOnMount ? 0 : pathWidth;
+
+    const duration =
+      shouldAnimateOnMount && !hasMountedAnimation.value
+        ? mountAnimationDuration
+        : animationDuration;
+    const props =
+      shouldAnimateOnMount && !hasMountedAnimation.value
+        ? mountAnimationProps
+        : animationProps;
+
+    return {
+      width: isActive.value
+        ? // on Web, <svg /> elements don't support negative widths
+          // https://github.com/coinjar/react-native-wagmi-charts/issues/24#issuecomment-955789904
+          Math.max(currentX.value, 0)
+        : withTiming(inactiveWidth, Object.assign({ duration }, props), () => {
+            hasMountedAnimation.value = true;
+          }),
+    };
+  });
 
   const viewSize = React.useMemo(() => ({ width, height }), [width, height]);
 
