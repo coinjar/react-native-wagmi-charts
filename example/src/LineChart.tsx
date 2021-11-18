@@ -70,7 +70,7 @@ export default function App() {
     chart = (
       <LineChart.Group>
         <LineChart id="one">
-          <LineChart.Path color="blue" />
+          <LineChart.Path animateOnMount="foreground" color="blue" />
           <LineChart.CursorCrosshair
             onActivated={invokeHaptic}
             onEnded={invokeHaptic}
