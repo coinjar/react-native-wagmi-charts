@@ -32,11 +32,13 @@ export function LineChartPathWrapper({
   animationProps = {},
   children,
   color = 'black',
-  width: pathWidth = 3,
+  width: strokeWidth = 3,
   pathProps = {},
   showInactivePath = true,
 }: LineChartPathWrapperProps) {
-  const { width, height } = React.useContext(LineChartDimensionsContext);
+  const { height, pathWidth, width } = React.useContext(
+    LineChartDimensionsContext
+  );
   const { currentX, isActive } = useLineChart();
 
   ////////////////////////////////////////////////
@@ -47,7 +49,7 @@ export function LineChartPathWrapper({
         // https://github.com/coinjar/react-native-wagmi-charts/issues/24#issuecomment-955789904
         Math.max(currentX.value, 0)
       : withTiming(
-          width,
+          pathWidth,
           Object.assign({ duration: animationDuration }, animationProps)
         ),
   }));
@@ -68,7 +70,7 @@ export function LineChartPathWrapper({
           {children}
           <LineChartPath
             color={color}
-            width={pathWidth}
+            width={strokeWidth}
             isInactive={showInactivePath}
             {...pathProps}
           />
@@ -76,7 +78,7 @@ export function LineChartPathWrapper({
       </View>
       <View style={StyleSheet.absoluteFill}>
         <AnimatedSVG animatedProps={svgProps} height={height}>
-          <LineChartPath color={color} width={pathWidth} {...pathProps} />
+          <LineChartPath color={color} width={strokeWidth} {...pathProps} />
         </AnimatedSVG>
       </View>
     </LineChartPathContext.Provider>

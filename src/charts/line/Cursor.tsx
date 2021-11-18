@@ -24,7 +24,9 @@ export function LineChartCursor({
   type,
   ...props
 }: LineChartCursorProps) {
-  const { width, path } = React.useContext(LineChartDimensionsContext);
+  const { pathWidth: width, path } = React.useContext(
+    LineChartDimensionsContext
+  );
   const { currentX, currentIndex, isActive, data } = useLineChart();
 
   const parsedPath = React.useMemo(
