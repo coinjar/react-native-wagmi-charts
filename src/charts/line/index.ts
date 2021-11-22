@@ -1,12 +1,13 @@
 import { LineChart as _LineChart } from './Chart';
 import { LineChartPathWrapper } from './ChartPath';
-import { LineChartColor } from './Color';
+import { LineChartHighlight } from './Highlight';
 import { LineChartProvider } from './Context';
 import { LineChartCursor } from './Cursor';
 import { LineChartCursorCrosshair } from './CursorCrosshair';
 import { LineChartCursorLine } from './CursorLine';
 import { LineChartDot } from './Dot';
 import { LineChartGradient } from './Gradient';
+import { LineChartGroup } from './Group';
 import { LineChartHorizontalLine } from './HorizontalLine';
 import { LineChartTooltip } from './Tooltip';
 import { LineChartPriceText } from './PriceText';
@@ -17,7 +18,7 @@ import { useLineChart } from './useLineChart';
 
 export * from './Chart';
 export * from './ChartPath';
-export * from './Color';
+export * from './Highlight';
 export * from './Context';
 export * from './Cursor';
 export * from './CursorCrosshair';
@@ -34,14 +35,15 @@ export * from './usePrice';
 export * from './types';
 
 export const LineChart = Object.assign(_LineChart, {
-  Color: LineChartColor,
-  Gradient: LineChartGradient,
   Chart: _LineChart,
   Dot: LineChartDot,
   Path: LineChartPathWrapper,
   Cursor: LineChartCursor,
   CursorCrosshair: LineChartCursorCrosshair,
   CursorLine: LineChartCursorLine,
+  Gradient: LineChartGradient,
+  Group: LineChartGroup,
+  Highlight: LineChartHighlight,
   HorizontalLine: LineChartHorizontalLine,
   Tooltip: LineChartTooltip,
   Provider: LineChartProvider,

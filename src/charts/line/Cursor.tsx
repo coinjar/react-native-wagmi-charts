@@ -7,7 +7,7 @@ import {
   LongPressGestureHandlerProps,
 } from 'react-native-gesture-handler';
 import Animated, { useAnimatedGestureHandler } from 'react-native-reanimated';
-import { getYForX, parse } from 'react-native-redash';
+import { parse } from 'react-native-redash';
 
 import { LineChartDimensionsContext } from './Chart';
 import { useLineChart } from './useLineChart';
@@ -26,8 +26,10 @@ export function LineChartCursor({
   type,
   ...props
 }: LineChartCursorProps) {
-  const { width, path } = React.useContext(LineChartDimensionsContext);
-  const { currentX, currentY, currentIndex, isActive, data } = useLineChart();
+  const { pathWidth: width, path } = React.useContext(
+    LineChartDimensionsContext
+  );
+  const { currentX, currentIndex, isActive, data } = useLineChart();
 
   const parsedPath = React.useMemo(
     () => (path ? parse(path) : undefined),
@@ -42,10 +44,17 @@ export function LineChartCursor({
         const boundedX = x <= width ? x : width;
         isActive.value = true;
         currentX.value = boundedX;
-        currentY.value = getYForX(parsedPath, boundedX) || 0;
-        currentIndex.value = Math.round(
-          boundedX / width / (1 / (data.length - 1))
+
+        // on Web, we could drag the cursor to be negative, breaking it
+        // so we clamp the index at 0 to fix it
+        // https://github.com/coinjar/react-native-wagmi-charts/issues/24
+        const minIndex = 0;
+        const boundedIndex = Math.max(
+          minIndex,
+          Math.round(boundedX / width / (1 / (data.length - 1)))
         );
+
+        currentIndex.value = boundedIndex;
       }
     },
     onEnd: () => {

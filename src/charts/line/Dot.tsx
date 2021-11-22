@@ -1,40 +1,58 @@
 import * as React from 'react';
 import Animated, {
-  useAnimatedProps,
+  Easing,
+  useAnimatedStyle,
   useDerivedValue,
+  withRepeat,
+  withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { Circle, CircleProps } from 'react-native-svg';
+import { View } from 'react-native';
 import { getYForX, parse } from 'react-native-redash';
+import { useMemo } from 'react';
 
 import { LineChartDimensionsContext } from './Chart';
-import { LineChartPathContext } from './ChartPath';
 import { useLineChart } from './useLineChart';
+import type { ViewProps } from 'react-native';
 
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
-
-export type LineChartDotProps = Animated.AnimateProps<CircleProps> & {
+export type LineChartDotProps = {
+  dotProps?: ViewProps;
+  outerDotProps?: ViewProps;
   color?: string;
-  inactiveColor?: string;
-  showInactiveColor?: boolean;
   at: number;
   size?: number;
+  /**
+   * If `always`, the outer dot will still animate when interaction is active.
+   *
+   * If `never`, the outer dot will never animate.
+   *
+   * If `while-inactive`, the outer dot will animate only when the interaction is inactive.
+   *
+   * Default: `while-inactive`
+   */
+  pulsesOuter?: 'always' | 'while-inactive' | 'never';
+  /**
+   * Defaults to `size * 4`
+   */
+  outerSize?: number;
+  pulseDurationMs?: number;
 };
 
 LineChartDot.displayName = 'LineChartDot';
 
 export function LineChartDot({
   color = 'black',
-  inactiveColor,
-  showInactiveColor = true,
   at,
-  size = 4,
-  ...props
+  size = 8,
+  pulsesOuter = 'while-inactive',
+  outerSize = size * 4,
+  dotProps,
+  outerDotProps,
 }: LineChartDotProps) {
-  const { data } = useLineChart();
-  const { path, width } = React.useContext(LineChartDimensionsContext);
-  const { isInactive: _isInactive } = React.useContext(LineChartPathContext);
-  const isInactive = showInactiveColor && _isInactive;
+  const { data, isActive } = useLineChart();
+  const { path, pathWidth: width } = React.useContext(
+    LineChartDimensionsContext
+  );
 
   const parsedPath = React.useMemo(() => parse(path), [path]);
   const pointWidth = React.useMemo(
@@ -47,20 +65,115 @@ export function LineChartDot({
     withTiming(getYForX(parsedPath!, x.value) || 0)
   );
 
-  const animatedProps = useAnimatedProps(() => ({
-    cx: x.value,
-    cy: y.value,
-  }));
+  const containerStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: x.value - outerSize / 2 },
+        { translateY: y.value - outerSize / 2 },
+      ],
+    };
+  });
+  const outerStyle = useAnimatedStyle(() => {
+    let opacity = 0.1;
+    if (pulsesOuter === 'never') {
+      return {
+        opacity,
+      };
+    }
+    const enterMs = 800;
+    const easing = Easing.out(Easing.sin);
+    const animatedOpacity = withRepeat(
+      withSequence(
+        withTiming(0.8),
+        withTiming(0, {
+          duration: enterMs,
+          easing,
+        })
+      ),
+      -1,
+      false
+    );
+    const scale = withRepeat(
+      withSequence(
+        withTiming(0),
+        withTiming(1, {
+          duration: enterMs,
+          easing,
+        })
+      ),
+      -1,
+      false
+    );
+
+    if (pulsesOuter === 'while-inactive') {
+      return {
+        opacity: isActive.value ? withTiming(0) : animatedOpacity,
+        transform: [
+          {
+            scale: isActive.value ? withTiming(0) : scale,
+          },
+        ],
+      };
+    }
+    return {
+      opacity: animatedOpacity,
+      transform: [
+        {
+          scale,
+        },
+      ],
+    };
+  }, [pulsesOuter]);
 
   return (
-    <>
-      <AnimatedCircle
-        animatedProps={animatedProps}
-        r={size}
-        fill={isInactive ? inactiveColor || color : color}
-        opacity={isInactive && !inactiveColor ? 0.5 : 1}
-        {...props}
+    <Animated.View
+      pointerEvents="none"
+      style={useMemo(
+        () => [
+          {
+            width: outerSize,
+            height: outerSize,
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'absolute',
+          },
+          containerStyle,
+        ],
+        [containerStyle, outerSize]
+      )}
+    >
+      <Animated.View
+        {...outerDotProps}
+        style={useMemo(
+          () => [
+            {
+              backgroundColor: color,
+              width: outerSize,
+              height: outerSize,
+              borderRadius: outerSize,
+              position: 'absolute',
+            },
+            outerStyle,
+            outerDotProps?.style,
+          ],
+          [color, outerSize, outerStyle, outerDotProps?.style]
+        )}
       />
-    </>
+      <View
+        {...dotProps}
+        style={useMemo(
+          () => [
+            {
+              backgroundColor: color,
+              width: size,
+              height: size,
+              borderRadius: size,
+            },
+            dotProps?.style,
+          ],
+          [color, size, dotProps?.style]
+        )}
+      />
+    </Animated.View>
   );
 }

@@ -19,9 +19,9 @@ export type LineChartColorProps = Animated.AnimateProps<PathProps> & {
   width?: number;
 };
 
-LineChartColor.displayName = 'LineChartColor';
+LineChartHighlight.displayName = 'LineChartHighlight';
 
-export function LineChartColor({
+export function LineChartHighlight({
   color = 'black',
   inactiveColor,
   showInactiveColor = true,
@@ -30,7 +30,7 @@ export function LineChartColor({
   width: strokeWidth = 3,
   ...props
 }: LineChartColorProps) {
-  const { data } = useLineChart();
+  const { data, yDomain } = useLineChart();
   const { width, height, gutter, shape } = React.useContext(
     LineChartDimensionsContext
   );
@@ -50,10 +50,11 @@ export function LineChartColor({
         height,
         gutter,
         shape,
+        yDomain,
       });
     }
     return '';
-  }, [data, from, to, width, height, gutter, shape]);
+  }, [data, from, to, width, height, gutter, shape, yDomain]);
 
   const { animatedProps } = useAnimatedPath({
     enabled: isTransitionEnabled,
