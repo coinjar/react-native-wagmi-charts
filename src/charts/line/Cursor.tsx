@@ -19,6 +19,8 @@ export type LineChartCursorProps = LongPressGestureHandlerProps & {
 
 export const CursorContext = React.createContext({ type: '' });
 
+LineChartCursor.displayName = 'LineChartCursor';
+
 export function LineChartCursor({
   children,
   type,

@@ -1,37 +1,39 @@
 import * as React from 'react';
 import Animated, {
   Easing,
-  useAnimatedStyle,
+  useAnimatedProps,
   useDerivedValue,
   withRepeat,
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { View } from 'react-native';
+import { Circle, CircleProps } from 'react-native-svg';
 import { getYForX, parse } from 'react-native-redash';
-import { useMemo } from 'react';
-import { StyleSheet } from 'react-native';
 
 import { LineChartDimensionsContext } from './Chart';
+import { LineChartPathContext } from './ChartPath';
 import { useLineChart } from './useLineChart';
-import type { ViewProps } from 'react-native';
+
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export type LineChartDotProps = {
-  dotProps?: ViewProps;
-  outerDotProps?: ViewProps;
+  dotProps?: Animated.AnimateProps<CircleProps>;
+  outerDotProps?: Animated.AnimateProps<CircleProps>;
   color?: string;
+  inactiveColor?: string;
+  showInactiveColor?: boolean;
   at: number;
   size?: number;
+  hasPulse?: boolean;
+  hasOuterDot?: boolean;
   /**
    * If `always`, the outer dot will still animate when interaction is active.
-   *
-   * If `never`, the outer dot will never animate.
    *
    * If `while-inactive`, the outer dot will animate only when the interaction is inactive.
    *
    * Default: `while-inactive`
    */
-  pulsesOuter?: 'always' | 'while-inactive' | 'never';
+  pulseBehaviour?: 'always' | 'while-inactive';
   /**
    * Defaults to `size * 4`
    */
@@ -42,52 +44,82 @@ export type LineChartDotProps = {
 LineChartDot.displayName = 'LineChartDot';
 
 export function LineChartDot({
-  color = 'black',
   at,
-  size = 8,
-  pulsesOuter = 'while-inactive',
-  outerSize = size * 4,
+  color: defaultColor = 'black',
   dotProps,
+  hasOuterDot: defaultHasOuterDot = false,
+  hasPulse = false,
+  inactiveColor,
   outerDotProps,
+  pulseBehaviour = 'while-inactive',
+  pulseDurationMs = 800,
+  showInactiveColor = true,
+  size = 4,
+  outerSize = size * 4,
 }: LineChartDotProps) {
   const { data, isActive } = useLineChart();
   const { path, pathWidth: width } = React.useContext(
     LineChartDimensionsContext
   );
 
+  ////////////////////////////////////////////////////////////
+
+  const { isInactive: _isInactive } = React.useContext(LineChartPathContext);
+  const isInactive = showInactiveColor && _isInactive;
+  const color = isInactive ? inactiveColor || defaultColor : defaultColor;
+  const opacity = isInactive && !inactiveColor ? 0.5 : 1;
+  const hasOuterDot = defaultHasOuterDot || hasPulse;
+
+  ////////////////////////////////////////////////////////////
+
   const parsedPath = React.useMemo(() => parse(path), [path]);
+
+  ////////////////////////////////////////////////////////////
+
   const pointWidth = React.useMemo(
     () => width / (data.length - 1),
     [data.length, width]
   );
+
+  ////////////////////////////////////////////////////////////
 
   const x = useDerivedValue(() => withTiming(pointWidth * at));
   const y = useDerivedValue(() =>
     withTiming(getYForX(parsedPath!, x.value) || 0)
   );
 
-  const containerStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateX: x.value - outerSize / 2 },
-        { translateY: y.value - outerSize / 2 },
-      ],
+  ////////////////////////////////////////////////////////////
+
+  const animatedDotProps = useAnimatedProps(() => ({
+    cx: x.value,
+    cy: y.value,
+  }));
+
+  const animatedOuterDotProps = useAnimatedProps(() => {
+    let defaultProps = {
+      cx: x.value,
+      cy: y.value,
+      opacity: 0.1,
+      r: outerSize,
     };
-  });
-  const outerStyle = useAnimatedStyle(() => {
-    let opacity = 0.1;
-    if (pulsesOuter === 'never') {
+
+    if (!hasPulse) {
+      return defaultProps;
+    }
+
+    if (isActive.value && pulseBehaviour === 'while-inactive') {
       return {
-        opacity,
+        ...defaultProps,
+        r: 0,
       };
     }
-    const enterMs = 800;
+
     const easing = Easing.out(Easing.sin);
     const animatedOpacity = withRepeat(
       withSequence(
         withTiming(0.8),
         withTiming(0, {
-          duration: enterMs,
+          duration: pulseDurationMs,
           easing,
         })
       ),
@@ -97,8 +129,8 @@ export function LineChartDot({
     const scale = withRepeat(
       withSequence(
         withTiming(0),
-        withTiming(1, {
-          duration: enterMs,
+        withTiming(outerSize, {
+          duration: pulseDurationMs,
           easing,
         })
       ),
@@ -106,83 +138,38 @@ export function LineChartDot({
       false
     );
 
-    if (pulsesOuter === 'while-inactive') {
+    if (pulseBehaviour === 'while-inactive') {
       return {
+        ...defaultProps,
         opacity: isActive.value ? withTiming(0) : animatedOpacity,
-        transform: [
-          {
-            scale: isActive.value ? withTiming(0) : scale,
-          },
-        ],
+        r: isActive.value ? withTiming(0) : scale,
       };
     }
     return {
+      ...defaultProps,
       opacity: animatedOpacity,
-      transform: [
-        {
-          scale,
-        },
-      ],
+      r: scale,
     };
-  }, [pulsesOuter]);
+  }, [outerSize]);
+
+  ////////////////////////////////////////////////////////////
 
   return (
-    <Animated.View
-      pointerEvents="none"
-      style={useMemo(
-        () => [
-          styles.container,
-          {
-            width: outerSize,
-            height: outerSize,
-          },
-          containerStyle,
-        ],
-        [containerStyle, outerSize]
-      )}
-    >
-      <Animated.View
-        {...outerDotProps}
-        style={useMemo(
-          () => [
-            {
-              backgroundColor: color,
-              width: outerSize,
-              height: outerSize,
-              borderRadius: outerSize,
-              position: 'absolute',
-            },
-            outerStyle,
-            outerDotProps?.style,
-          ],
-          [color, outerSize, outerStyle, outerDotProps?.style]
-        )}
-      />
-      <View
+    <>
+      <AnimatedCircle
+        animatedProps={animatedDotProps}
+        r={size}
+        fill={color}
+        opacity={opacity}
         {...dotProps}
-        style={useMemo(
-          () => [
-            {
-              backgroundColor: color,
-              width: size,
-              height: size,
-              borderRadius: size,
-            },
-            dotProps?.style,
-          ],
-          [color, size, dotProps?.style]
-        )}
       />
-    </Animated.View>
+      {hasOuterDot && (
+        <AnimatedCircle
+          animatedProps={animatedOuterDotProps}
+          fill={color}
+          {...outerDotProps}
+        />
+      )}
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
-})

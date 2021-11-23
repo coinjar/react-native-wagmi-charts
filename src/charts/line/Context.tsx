@@ -30,6 +30,8 @@ type LineChartProviderProps = {
   xLength?: number;
 };
 
+LineChartProvider.displayName = 'LineChartProvider';
+
 export function LineChartProvider({
   children,
   data = [],

@@ -1,4 +1,6 @@
 import * as React from 'react';
+// @ts-ignore
+import * as d3Shape from 'd3-shape';
 import { Dimensions, StyleSheet, View, ViewProps } from 'react-native';
 import { LineChartContext } from './Context';
 import { LineChartIdProvider, useLineChartData } from './Data';
@@ -10,6 +12,7 @@ export const LineChartDimensionsContext = React.createContext({
   height: 0,
   path: '',
   area: '',
+  shape: d3Shape.curveBumpX,
   gutter: 0,
   pathWidth: 0,
 });
@@ -19,7 +22,7 @@ type LineChartProps = ViewProps & {
   yGutter?: number;
   width?: number;
   height?: number;
-  shape?: string;
+  shape?: unknown;
   /**
    * If your `LineChart.Provider` uses a dictionary with multiple IDs for multiple paths, then this field is required.
    */
@@ -29,12 +32,14 @@ type LineChartProps = ViewProps & {
 
 const { width: screenWidth } = Dimensions.get('window');
 
+LineChart.displayName = 'LineChart';
+
 export function LineChart({
   children,
   yGutter = 16,
   width = screenWidth,
   height = screenWidth,
-  shape,
+  shape = d3Shape.curveBumpX,
   id,
   absolute,
   ...props
@@ -88,8 +93,9 @@ export function LineChart({
       width,
       height,
       pathWidth,
+      shape,
     }),
-    [area, height, path, width, yGutter, pathWidth]
+    [yGutter, area, path, width, height, pathWidth, shape]
   );
 
   return (

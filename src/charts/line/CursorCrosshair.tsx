@@ -8,7 +8,10 @@ import Animated, {
 import { LineChartCursor, LineChartCursorProps } from './Cursor';
 import { useLineChart } from './useLineChart';
 
-type LineChartCursorCrosshairProps = Omit<LineChartCursorProps, 'type'> & {
+type LineChartCursorCrosshairProps = Omit<
+  LineChartCursorProps,
+  'children' | 'type'
+> & {
   children?: React.ReactNode;
   color?: string;
   size?: number;
@@ -17,6 +20,8 @@ type LineChartCursorCrosshairProps = Omit<LineChartCursorProps, 'type'> & {
   crosshairProps?: ViewProps;
   crosshairOuterProps?: ViewProps;
 };
+
+LineChartCursorCrosshair.displayName = 'LineChartCursorCrosshair';
 
 export function LineChartCursorCrosshair({
   children,
