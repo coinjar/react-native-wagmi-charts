@@ -418,6 +418,8 @@ You can render dots on your line chart with `LineChart.Dot`.
 </LineChart.Provider>
 ```
 
+<img width="153" alt="Screen Shot 2021-11-23 at 11 15 23 am" src="https://user-images.githubusercontent.com/7336481/143009734-04aa3be6-8737-4dae-8202-98ac738f127b.png">
+
 Your dot can also have an animated pulse by passing the `hasPulse` prop.
 
 ```jsx
@@ -429,6 +431,8 @@ Your dot can also have an animated pulse by passing the `hasPulse` prop.
   </LineChart>
 </LineChart.Provider>
 ```
+
+![Kapture 2021-11-23 at 11 50 54](https://user-images.githubusercontent.com/7336481/143009802-981160fe-a997-4346-8bdd-b4b80a4cfd30.gif)
 
 ### Path highlighting
 
@@ -444,6 +448,8 @@ You can highlight a section of your path with `LineChart.Highlight`.
 </LineChart.Provider>
 ```
 
+<img width="345" alt="Screen Shot 2021-11-23 at 11 54 02 am" src="https://user-images.githubusercontent.com/7336481/143009637-03b227e4-c36b-43d8-bdc0-8b73a15b126b.png">
+
 ### Horizontal lines
 
 You can render a static horizontal line on your line chart which moves whenever your data change. It's located on height of point which is on `at` position of provided data.
@@ -457,6 +463,8 @@ You can render a static horizontal line on your line chart which moves whenever 
   </LineChart>
 </LineChart.Provider>
 ```
+
+<img width="345" alt="Screen Shot 2021-11-23 at 11 51 45 am" src="https://user-images.githubusercontent.com/7336481/143009672-54dac2c7-7de1-4299-a96f-7cc380e82b46.png">
 
 You can also pass a (y) value to `HorizontalLine` with the `value` attribute:
 
