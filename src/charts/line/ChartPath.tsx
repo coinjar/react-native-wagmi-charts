@@ -33,6 +33,7 @@ type LineChartPathWrapperProps = {
   color?: string;
   inactiveColor?: string;
   width?: number;
+  widthOffset?: number;
   pathProps?: Partial<LineChartPathProps>;
   showInactivePath?: boolean;
 };
@@ -46,6 +47,7 @@ export function LineChartPathWrapper({
   color = 'black',
   inactiveColor,
   width: strokeWidth = 3,
+  widthOffset = 20,
   pathProps = {},
   showInactivePath = true,
 }: LineChartPathWrapperProps) {
@@ -62,7 +64,7 @@ export function LineChartPathWrapper({
         // https://github.com/coinjar/react-native-wagmi-charts/issues/24#issuecomment-955789904
         Math.max(currentX.value, 0)
       : withTiming(
-          pathWidth,
+          pathWidth + widthOffset,
           Object.assign({ duration: animationDuration }, animationProps)
         ),
   }));
@@ -77,11 +79,11 @@ export function LineChartPathWrapper({
     const iterableChildren = Array.isArray(children) ? children : [children];
     backgroundChildren = iterableChildren.filter((child) =>
       // @ts-ignore
-      BACKGROUND_COMPONENTS.includes(child?.type.displayName)
+      BACKGROUND_COMPONENTS.includes(child?.type?.displayName)
     );
     foregroundChildren = iterableChildren.filter((child) =>
       // @ts-ignore
-      FOREGROUND_COMPONENTS.includes(child?.type.displayName)
+      FOREGROUND_COMPONENTS.includes(child?.type?.displayName)
     );
   }
 
