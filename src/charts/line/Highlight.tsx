@@ -31,7 +31,7 @@ export function LineChartHighlight({
   ...props
 }: LineChartColorProps) {
   const { data, yDomain } = useLineChart();
-  const { width, height, gutter, shape } = React.useContext(
+  const { pathWidth, height, gutter, shape } = React.useContext(
     LineChartDimensionsContext
   );
   const { isTransitionEnabled, isInactive: _isInactive } =
@@ -46,7 +46,7 @@ export function LineChartHighlight({
         data,
         from,
         to,
-        width,
+        width: pathWidth,
         height,
         gutter,
         shape,
@@ -54,7 +54,7 @@ export function LineChartHighlight({
       });
     }
     return '';
-  }, [data, from, to, width, height, gutter, shape, yDomain]);
+  }, [data, from, to, pathWidth, height, gutter, shape, yDomain]);
 
   const { animatedProps } = useAnimatedPath({
     enabled: isTransitionEnabled,

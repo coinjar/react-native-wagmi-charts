@@ -50,28 +50,19 @@ export default function App() {
     <LineChart>
       <LineChart.Path color="black">
         <LineChart.Gradient color="black" />
-        {/* <LineChart.HorizontalLine at={{ index: 0 }} /> */}
+        <LineChart.HorizontalLine at={{ index: 0 }} />
         <LineChart.Highlight color="red" from={10} to={15} />
-        {/* <LineChart.Dot
-          color="red"
-          at={10}
-          // pulsesOuter="never"
-          // outerSize={0}
-        />
-        <LineChart.Dot
-          color="red"
-          at={15}
-          // hasPulse
-          // outerSize={0}
-        /> */}
-        {partialDay && <LineChart.Dot at={data.length - 1} color="red" />}
+        <LineChart.Dot color="red" at={10} hasPulse />
+        {partialDay && (
+          <LineChart.Dot at={data.length - 1} color="red" hasPulse />
+        )}
       </LineChart.Path>
-      <LineChart.CursorCrosshair
+      {/* <LineChart.CursorCrosshair
         onActivated={invokeHaptic}
         onEnded={invokeHaptic}
       >
         <LineChart.Tooltip />
-      </LineChart.CursorCrosshair>
+      </LineChart.CursorCrosshair> */}
     </LineChart>
   );
 

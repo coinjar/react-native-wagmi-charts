@@ -5,6 +5,7 @@ import Animated, {
   useAnimatedProps,
   withTiming,
 } from 'react-native-reanimated';
+import flattenChildren from 'react-keyed-flatten-children';
 
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartPath, LineChartPathProps } from './Path';
@@ -76,7 +77,7 @@ export function LineChartPathWrapper({
   let backgroundChildren;
   let foregroundChildren;
   if (children) {
-    const iterableChildren = Array.isArray(children) ? children : [children];
+    const iterableChildren = flattenChildren(children);
     backgroundChildren = iterableChildren.filter((child) =>
       // @ts-ignore
       BACKGROUND_COMPONENTS.includes(child?.type?.displayName)
