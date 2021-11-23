@@ -48,7 +48,8 @@ export default function App() {
 
   let chart = (
     <LineChart>
-      <LineChart.Path color="black">
+      <LineChart.Path color="black" />
+      {/* <LineChart.Path color="black">
         <LineChart.Gradient color="black" />
         <LineChart.HorizontalLine at={{ index: 0 }} />
         <LineChart.Highlight color="red" from={10} to={15} />
@@ -58,6 +59,7 @@ export default function App() {
           <LineChart.Dot at={data.length - 1} color="red" hasPulse />
         )}
       </LineChart.Path>
+        */}
       <LineChart.CursorCrosshair
         onActivated={invokeHaptic}
         onEnded={invokeHaptic}

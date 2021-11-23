@@ -40,7 +40,9 @@ export function LineChartCursorCrosshair({
     Platform.OS === 'ios'
   );
   React.useEffect(() => {
-    setEnableSpringAnimation(true);
+    setTimeout(() => {
+      setEnableSpringAnimation(true);
+    }, 100);
   }, []);
 
   const animatedCursorStyle = useAnimatedStyle(() => ({
