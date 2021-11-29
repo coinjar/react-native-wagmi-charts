@@ -18,7 +18,7 @@ interface AnimatedTextProps {
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
 export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
-  const inputRef = React.useRef<TextInput>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   if (Platform.OS === 'web') {
     // For some reason, the worklet reaction evaluates upfront regardless of any
@@ -33,10 +33,7 @@ export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
       },
       (data, prevData) => {
         if (data !== prevData && inputRef.current) {
-          inputRef.current.setNativeProps({
-            value: data,
-            style,
-          });
+          inputRef.current.value = data;
         }
       }
     );
@@ -52,7 +49,7 @@ export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
     <AnimatedTextInput
       underlineColorAndroid="transparent"
       editable={false}
-      ref={Platform.select({ web: inputRef })}
+      ref={Platform.select({ web: inputRef as any })}
       value={text.value}
       style={[styles.text, style]}
       animatedProps={animatedProps}
