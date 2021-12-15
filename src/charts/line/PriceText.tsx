@@ -13,6 +13,8 @@ export type LineChartPriceTextProps = {
   style?: Animated.AnimateProps<RNTextProps>['style'];
 };
 
+LineChartPriceText.displayName = 'LineChartPriceText';
+
 export function LineChartPriceText({
   format,
   precision = 2,

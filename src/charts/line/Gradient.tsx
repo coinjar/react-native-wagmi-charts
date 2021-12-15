@@ -1,16 +1,10 @@
 import * as React from 'react';
-import Animated, {
-  useAnimatedProps,
-  useAnimatedReaction,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { Defs, LinearGradient, Stop, Path, PathProps } from 'react-native-svg';
 
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartPathContext } from './ChartPath';
-import interpolatePath from './interpolatePath';
-import { usePrevious } from '../../utils';
+import useAnimatedPath from './useAnimatedPath';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -20,6 +14,8 @@ export type LineChartGradientProps = Animated.AnimateProps<PathProps> & {
 };
 
 let id = 0;
+
+LineChartGradient.displayName = 'LineChartGradient';
 
 export function LineChartGradient({
   color: overrideColor = undefined,
@@ -34,32 +30,9 @@ export function LineChartGradient({
 
   ////////////////////////////////////////////////
 
-  const transition = useSharedValue(0);
-
-  const previousPath = usePrevious(area);
-
-  useAnimatedReaction(
-    () => {
-      return area;
-    },
-    (_, previous) => {
-      if (previous) {
-        transition.value = 0;
-        transition.value = withTiming(1);
-      }
-    },
-    [area]
-  );
-
-  const animatedProps = useAnimatedProps(() => {
-    let d = area || '';
-    if (previousPath && isTransitionEnabled) {
-      const pathInterpolator = interpolatePath(previousPath, area, null);
-      d = pathInterpolator(transition.value);
-    }
-    return {
-      d,
-    };
+  const { animatedProps } = useAnimatedPath({
+    enabled: isTransitionEnabled,
+    path: area,
   });
 
   ////////////////////////////////////////////////

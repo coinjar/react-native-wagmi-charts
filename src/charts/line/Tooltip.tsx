@@ -20,6 +20,8 @@ type LineChartTooltipProps = Animated.AnimateProps<ViewProps> & {
   textStyle?: LineChartPriceTextProps['style'];
 };
 
+LineChartTooltip.displayName = 'LineChartTooltip';
+
 export function LineChartTooltip({
   children,
   xGutter = 8,

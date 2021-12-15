@@ -17,6 +17,7 @@ export type TLineChartContext = {
   isActive: Animated.SharedValue<boolean>;
   domain: TLineChartDomain;
   yDomain: YDomain;
+  xLength: number;
 };
 
 export type YRangeProp = {

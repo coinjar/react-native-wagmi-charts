@@ -31,23 +31,34 @@ A sweet & simple chart library for React Native that will make us feel like **W*
 - [Basic Usage](#basic-usage)
   - [Line chart](#line-chart)
   - [Candlestick chart](#candlestick-chart)
-- [Guides](#guides)
+- [Line Chart Guides](#line-chart-guides)
   - [Interactive cursors](#interactive-cursors)
   - [Interactive labels](#interactive-labels)
   - [Interactive tooltips](#interactive-tooltips)
   - [Haptic feedback](#haptic-feedback)
   - [Colors](#colors)
   - [Gradients](#gradients)
+  - [Dots](#dots)
+  - [Horizontal lines](#horizontal-lines)
   - [Customizing size](#customizing-size)
   - [Customizing labels](#customizing-labels)
   - [Customizing tooltips](#customizing-tooltips)
+- [Candlestick Chart Guides](#candlestick-chart-guides)
+  - [Interactive cursors](#interactive-cursors-1)
+  - [Interactive labels](#interactive-labels-1)
+  - [Interactive tooltips](#interactive-tooltips-1)
+  - [Haptic feedback](#haptic-feedback-1)
+  - [Colors](#colors-1)
+  - [Customizing labels](#customizing-labels-1)
 - [Component APIs](#component-apis)
   - [LineChart.Provider](#linechartprovider)
   - [LineChart](#linechart)
   - [LineChart.Path](#linechartpath)
   - [LineChart.CursorCrosshair](#linechartcursorcrosshair-1)
   - [LineChart.CursorLine](#linechartcursorline-1)
-  - [LineChart.HorizontalLine](#linecharthorizontalline-1)
+  - [LineChart.Dot](#linechartdot)
+  - [LineChart.Highlight](#linechartdot)
+  - [LineChart.HorizontalLine](#linecharthorizontalline)
   - [LineChart.Gradient](#linechartgradient)
   - [LineChart.Tooltip](#linecharttooltip)
   - [LineChart.PriceText](#linechartpricetext)
@@ -55,7 +66,7 @@ A sweet & simple chart library for React Native that will make us feel like **W*
   - [CandlestickChart.Provider](#candlestickchartprovider)
   - [CandlestickChart](#candlestickchart)
   - [CandlestickChart.Candles](#candlestickchartcandles)
-  - [CandlestickChart.Crosshair](#candlestickchartcrosshair-1)
+  - [CandlestickChart.Crosshair](#candlestickchartcrosshair)
   - [CandlestickChart.Tooltip](#candlestickcharttooltip)
   - [CandlestickChart.PriceText](#candlestickchartpricetext)
   - [CandlestickChart.DatetimeText](#candlestickchartdatetimetext)
@@ -67,9 +78,7 @@ A sweet & simple chart library for React Native that will make us feel like **W*
   - [CandlestickChart.useCandleData](#candlestickchartusecandledata)
   - [CandlestickChart.useDatetime](#candlestickchartusedatetime)
   - [CandlestickChart.usePrice](#candlestickchartuseprice)
-- [Web Support (Experimental)](#web-support)
-  - [Disable Transitions](#disable-transitions)
-  - [Reanimated Version](#reanimated-version)
+- [Web Support](#web-support)
 - [Credits](#credits)
 
 ## Install
@@ -184,13 +193,11 @@ function Example() {
 }
 ```
 
-## Guides
+## Line Chart Guides
 
-Below are some guides to help you make your charts suit your brand. Hopefully a combination of the below will enable you to make a great chart! :-)
+Below are some line chart guides to help you make your charts suit your brand. Hopefully a combination of the below will enable you to make a great chart! :-)
 
 ### Interactive cursors
-
-#### Line chart
 
 To render an interactive cursor on your line chart, you can include either the `LineChart.CursorCrosshair` or `LineChart.CursorLine` components:
 
@@ -220,52 +227,7 @@ To render an interactive cursor on your line chart, you can include either the `
 
 <img src="https://user-images.githubusercontent.com/7336481/133027471-1c620ece-a95e-46b7-bd92-50f33757ce92.gif" width="200px" />
 
-##### `LineChart.HorizontalLine`
-
-It's a static horizontal line which moves whenever your data change. It's located on height of point which is on `at` position of provided data.
-
-```jsx
-<LineChart.Provider data={data}>
-  <LineChart>
-    <LineChart.Path>
-      <LineChart.HorizontalLine at={{ index: 0 }} />
-    </LineChart.Path>
-  </LineChart>
-</LineChart.Provider>
-```
-
-To pass a Y value to your `HorizontalLine` instead, you can use `value`:
-
-```jsx
-<LineChart.Provider data={data}>
-  <LineChart>
-    <LineChart.Path>
-      <LineChart.HorizontalLine at={{ value: 3027.84 }} />
-    </LineChart.Path>
-  </LineChart>
-</LineChart.Provider>
-```
-
-#### Candlestick chart
-
-To render an interactive cursor on your candlestick chart, you can include the `CandlestickChart.Crosshair` component:
-
-##### `CandlestickChart.Crosshair`
-
-```jsx
-<CandlestickChart.Provider data={data}>
-  <CandlestickChart>
-    <CandlestickChart.Candles />
-    <CandlestickChart.Crosshair />
-  </CandlestickChart>
-</CandlestickChart.Provider>
-```
-
-<img src="https://user-images.githubusercontent.com/7336481/133027656-a877b248-77c1-4bf3-822f-a05dee4efa20.gif" width="200px" />
-
 ### Interactive labels
-
-#### Line chart
 
 To render an interactive label on your line chart as your cursor moves along the graph, you can use the `PriceText` or `DatetimeText` components:
 
@@ -284,31 +246,7 @@ To render an interactive label on your line chart as your cursor moves along the
 
 <img src="https://user-images.githubusercontent.com/7336481/133028134-a0b65499-9edf-4535-9fcc-fcf8c1e4e0c4.gif" width="200px" />
 
-#### Candlestick chart
-
-To render an interactive label on your candlestick chart, you can use the `PriceText` or `DatetimeText` components:
-
-> Note: These components **must** be within the `CandlestickChart.Provider` component.
-
-```jsx
-<CandlestickChart.Provider data={data}>
-  <CandlestickChart>
-    <CandlestickChart.Candles />
-    <CandlestickChart.Crosshair />
-  </CandlestickChart>
-  <CandlestickChart.PriceText type="open" />
-  <CandlestickChart.PriceText type="high" />
-  <CandlestickChart.PriceText type="low" />
-  <CandlestickChart.PriceText type="close" />
-  <CandlestickChart.DatetimeText />
-</LineChart.Provider>
-```
-
-<img src="https://user-images.githubusercontent.com/7336481/133034935-faea61e6-09c2-4dba-a1ab-555d1ebee880.gif" width="200px" />
-
 ### Interactive tooltips
-
-#### Line charts
 
 To render an interactive tooltip that follows your cursor, you can use the `Tooltip` component.
 
@@ -343,28 +281,9 @@ You can even add another tooltip to show something like date/time:
 
 <img src="https://user-images.githubusercontent.com/7336481/133036011-8a9b4865-10dd-4e88-9fd1-1e109435a73c.gif" width="200px" />
 
-#### Candlestick charts
-
-To render an interactive tooltip that follows your crosshair, you can use the `Tooltip` component.
-
-```jsx
-<CandlestickChart.Provider data={data}>
-  <CandlestickChart>
-    <CandlestickChart.Candles />
-    <CandlestickChart.Crosshair>
-      <CandlestickChart.Tooltip />
-    </CandlestickChart.Crosshair>
-  </CandlestickChart>
-</CandlestickChart.Provider>
-```
-
-<img src="https://user-images.githubusercontent.com/7336481/133036451-e1f2f12b-9e96-4a0f-8c69-4f630bb8ded3.gif" width="200px" />
-
 ### Haptic feedback
 
 By making use of the chart event handlers, you are able to integrate haptic feedback into your charts.
-
-#### Line charts
 
 We can utilise the `onActivated` and `onEnded` events to create haptic feedback on our line chart.
 
@@ -420,40 +339,11 @@ function Example() {
 }
 ```
 
-#### Candlestick charts
-
-We can utilise the `onCurrentXChange` event to create haptic feedback on our candlestick chart.
-
-```jsx
-import * as haptics from 'expo-haptics';
-
-const data = [...];
-
-function invokeHaptic() {
-  haptics.impactAsync(haptics.ImpactFeedbackStyle.Light);
-}
-
-function Example() {
-  return (
-    <CandlestickChart.Provider data={data}>
-      <CandlestickChart>
-        <CandlestickChart.Candles />
-        <CandlestickChart.Crosshair onCurrentXChange={invokeHaptic}>
-          <CandlestickChart.Tooltip />
-        </CandlestickChart.Crosshair>
-      </CandlestickChart>
-    </CandlestickChart.Provider>
-  )
-}
-```
-
 ### Colors
 
 By default, the charts come with default colors out-of-the-box... But you probably will want to change these to suit your brand.
 
-#### Line charts
-
-##### Coloring the path
+#### Coloring the path
 
 To customise the color of the line chart path, supply a `color` prop to `LineChart.Path`. This can be any valid React Native `StyleSheet` compatible color.
 
@@ -467,7 +357,7 @@ To customise the color of the line chart path, supply a `color` prop to `LineCha
 
 <img src="https://user-images.githubusercontent.com/7336481/133037040-ce13ba5b-6ee5-45a2-ba14-18bf12e13746.png" width="200px" />
 
-##### Coloring the cursor
+#### Coloring the cursor
 
 To customise the color of the line chart cursor, supply a `color` prop to `LineChart.CursorCrosshair`. This can be any valid React Native `StyleSheet` compatible color.
 
@@ -483,37 +373,6 @@ To customise the color of the line chart cursor, supply a `color` prop to `LineC
 ```
 
 <img width="200px" alt="Screen Shot 2021-09-13 at 4 53 46 pm" src="https://user-images.githubusercontent.com/7336481/133037333-6b1345e5-a98b-459c-b3b1-6e5b08143f33.png">
-
-#### Candlestick charts
-
-##### Coloring the candles
-
-To customise the color of the candlestick chart candles, supply a `negativeColor` and a `positiveColor` to `CandlestickChart.Candles`. This can be any valid React Native `StyleSheet` compatible color.
-
-```jsx
-<CandlestickChart.Provider data={data}>
-  <CandlestickChart>
-    <CandlestickChart.Candles positiveColor="hotpink" negativeColor="black" />
-  </CandlestickChart>
-</CandlestickChart.Provider>
-```
-
-<img width="200px" alt="Screen Shot 2021-09-13 at 4 58 52 pm" src="https://user-images.githubusercontent.com/7336481/133037949-aba76daa-20bb-4d4e-b05e-b0cff42b69a6.png">
-
-##### Coloring the crosshair
-
-To customise the color of the line chart cursor, supply a `color` prop to `CandlestickChart.Crosshair`. This can be any valid React Native `StyleSheet` compatible color.
-
-```jsx
-<CandlestickChart.Provider data={data}>
-  <CandlestickChart>
-    <CandlestickChart.Candles positiveColor="hotpink" negativeColor="black" />
-    <CandlestickChart.Crosshair color="hotpink" />
-  </CandlestickChart>
-</CandlestickChart.Provider>
-```
-
-<img width="200px" alt="Screen Shot 2021-09-13 at 4 58 52 pm" src="https://user-images.githubusercontent.com/7336481/133038181-33ee91bf-a5e2-4124-ab7b-df745a5ba804.gif">
 
 ### Gradients
 
@@ -545,6 +404,80 @@ The gradient will inherit your path's color by default, however, you can provide
 
 <img width="345" alt="Screen Shot 2021-10-25 at 8 32 26 pm" src="https://user-images.githubusercontent.com/7336481/138672153-9ba11b02-b750-4ab0-a2e2-c18a9af4635f.png">
 
+### Dots
+
+You can render dots on your line chart with `LineChart.Dot`.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path>
+      <LineChart.Dot color="red" at={10} />
+    </LineChart.Path>
+  </LineChart>
+</LineChart.Provider>
+```
+
+<img width="153" alt="Screen Shot 2021-11-23 at 11 15 23 am" src="https://user-images.githubusercontent.com/7336481/143009734-04aa3be6-8737-4dae-8202-98ac738f127b.png">
+
+Your dot can also have an animated pulse by passing the `hasPulse` prop.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path>
+      <LineChart.Dot color="red" at={10} hasPulse />
+    </LineChart.Path>
+  </LineChart>
+</LineChart.Provider>
+```
+
+![Kapture 2021-11-23 at 11 50 54](https://user-images.githubusercontent.com/7336481/143009802-981160fe-a997-4346-8bdd-b4b80a4cfd30.gif)
+
+### Path highlighting
+
+You can highlight a section of your path with `LineChart.Highlight`.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path>
+      <LineChart.Highlight color="red" from={10} to={15} />
+    </LineChart.Path>
+  </LineChart>
+</LineChart.Provider>
+```
+
+<img width="345" alt="Screen Shot 2021-11-23 at 11 54 02 am" src="https://user-images.githubusercontent.com/7336481/143009637-03b227e4-c36b-43d8-bdc0-8b73a15b126b.png">
+
+### Horizontal lines
+
+You can render a static horizontal line on your line chart which moves whenever your data change. It's located on height of point which is on `at` position of provided data.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path>
+      <LineChart.HorizontalLine at={{ index: 0 }} />
+    </LineChart.Path>
+  </LineChart>
+</LineChart.Provider>
+```
+
+<img width="345" alt="Screen Shot 2021-11-23 at 11 51 45 am" src="https://user-images.githubusercontent.com/7336481/143009672-54dac2c7-7de1-4299-a96f-7cc380e82b46.png">
+
+You can also pass a (y) value to `HorizontalLine` with the `value` attribute:
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path>
+      <LineChart.HorizontalLine at={{ value: 3027.84 }} />
+    </LineChart.Path>
+  </LineChart>
+</LineChart.Provider>
+```
+
 ### Customizing size
 
 You can modify the width & height of the charts by providing `width` and `height` props to `LineChart` or `CandlestickChart`. Your chart should adapt to it's size.
@@ -567,7 +500,6 @@ By default, the price labels have a precision of `2`, meaning that the prices wi
 
 ```jsx
 <LineChart.PriceText precision={4} />
-<CandlestickChart.PriceText precision={4} />
 ```
 
 ##### Custom formatting
@@ -656,6 +588,188 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 
 <img src="https://user-images.githubusercontent.com/7336481/133054393-28d542c1-c9fc-4ba6-b4a0-86cf096ebcda.gif" width="200px" />
 
+## Candlestick Chart Guides
+
+### Interactive cursors
+
+To render an interactive cursor on your candlestick chart, you can include the `CandlestickChart.Crosshair` component:
+
+```jsx
+<CandlestickChart.Provider data={data}>
+  <CandlestickChart>
+    <CandlestickChart.Candles />
+    <CandlestickChart.Crosshair />
+  </CandlestickChart>
+</CandlestickChart.Provider>
+```
+
+<img src="https://user-images.githubusercontent.com/7336481/133027656-a877b248-77c1-4bf3-822f-a05dee4efa20.gif" width="200px" />
+
+### Interactive labels
+
+To render an interactive label on your candlestick chart, you can use the `PriceText` or `DatetimeText` components:
+
+> Note: These components **must** be within the `CandlestickChart.Provider` component.
+
+```jsx
+<CandlestickChart.Provider data={data}>
+  <CandlestickChart>
+    <CandlestickChart.Candles />
+    <CandlestickChart.Crosshair />
+  </CandlestickChart>
+  <CandlestickChart.PriceText type="open" />
+  <CandlestickChart.PriceText type="high" />
+  <CandlestickChart.PriceText type="low" />
+  <CandlestickChart.PriceText type="close" />
+  <CandlestickChart.DatetimeText />
+</LineChart.Provider>
+```
+
+<img src="https://user-images.githubusercontent.com/7336481/133034935-faea61e6-09c2-4dba-a1ab-555d1ebee880.gif" width="200px" />
+
+### Interactive tooltips
+
+To render an interactive tooltip that follows your crosshair, you can use the `Tooltip` component.
+
+```jsx
+<CandlestickChart.Provider data={data}>
+  <CandlestickChart>
+    <CandlestickChart.Candles />
+    <CandlestickChart.Crosshair>
+      <CandlestickChart.Tooltip />
+    </CandlestickChart.Crosshair>
+  </CandlestickChart>
+</CandlestickChart.Provider>
+```
+
+<img src="https://user-images.githubusercontent.com/7336481/133036451-e1f2f12b-9e96-4a0f-8c69-4f630bb8ded3.gif" width="200px" />
+
+### Haptic feedback
+
+By making use of the chart event handlers, you are able to integrate haptic feedback into your charts.
+
+We can utilise the `onCurrentXChange` event to create haptic feedback on our candlestick chart.
+
+```jsx
+import * as haptics from 'expo-haptics';
+
+const data = [...];
+
+function invokeHaptic() {
+  haptics.impactAsync(haptics.ImpactFeedbackStyle.Light);
+}
+
+function Example() {
+  return (
+    <CandlestickChart.Provider data={data}>
+      <CandlestickChart>
+        <CandlestickChart.Candles />
+        <CandlestickChart.Crosshair onCurrentXChange={invokeHaptic}>
+          <CandlestickChart.Tooltip />
+        </CandlestickChart.Crosshair>
+      </CandlestickChart>
+    </CandlestickChart.Provider>
+  )
+}
+```
+
+### Colors
+
+By default, the charts come with default colors out-of-the-box... But you probably will want to change these to suit your brand.
+
+#### Coloring the candles
+
+To customise the color of the candlestick chart candles, supply a `negativeColor` and a `positiveColor` to `CandlestickChart.Candles`. This can be any valid React Native `StyleSheet` compatible color.
+
+```jsx
+<CandlestickChart.Provider data={data}>
+  <CandlestickChart>
+    <CandlestickChart.Candles positiveColor="hotpink" negativeColor="black" />
+  </CandlestickChart>
+</CandlestickChart.Provider>
+```
+
+<img width="200px" alt="Screen Shot 2021-09-13 at 4 58 52 pm" src="https://user-images.githubusercontent.com/7336481/133037949-aba76daa-20bb-4d4e-b05e-b0cff42b69a6.png">
+
+#### Coloring the crosshair
+
+To customise the color of the line chart cursor, supply a `color` prop to `CandlestickChart.Crosshair`. This can be any valid React Native `StyleSheet` compatible color.
+
+```jsx
+<CandlestickChart.Provider data={data}>
+  <CandlestickChart>
+    <CandlestickChart.Candles positiveColor="hotpink" negativeColor="black" />
+    <CandlestickChart.Crosshair color="hotpink" />
+  </CandlestickChart>
+</CandlestickChart.Provider>
+```
+
+<img width="200px" alt="Screen Shot 2021-09-13 at 4 58 52 pm" src="https://user-images.githubusercontent.com/7336481/133038181-33ee91bf-a5e2-4124-ab7b-df745a5ba804.gif">
+
+### Customizing labels
+
+#### Price labels
+
+##### Precision
+
+By default, the price labels have a precision of `2`, meaning that the prices will always be to 2 decimal places. However, you can customize this with the `precision` prop:
+
+```jsx
+<CandlestickChart.PriceText precision={4} />
+```
+
+##### Custom formatting
+
+To customize the formatting of the price text, you can supply a `format` function in the form of a [reanimated worklet](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets):
+
+> Note: due to the nature of reanimated worklets, you cannot define functions that run on the React Native JS thread. [Read more here](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets)
+
+```jsx
+<CandlestickChart.PriceText
+  format={({ value }) => {
+    'worklet';
+    const formattedPrice = yourOwnFormatValueFn(value);
+    return `$${formattedPrice} AUD`;
+  }}
+/>
+```
+
+#### Datetime labels
+
+##### Date/time options
+
+Internally, WAGMI charts uses [`Date.prototype.toLocaleString()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) to generate the date/time label. You can customise it's options like so:
+
+```jsx
+<CandlestickChart.DatetimeText
+  locale="en-AU"
+  options={{
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  }}
+/>
+```
+
+##### Custom formatting
+
+To customize the formatting of the date/time text, you can supply a `format` function in the form of a [reanimated worklet](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets):
+
+> Note: due to the nature of reanimated worklets, you cannot define functions that run on the React Native JS thread. [Read more here](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets)
+
+```jsx
+<CandlestickChart.DatetimeText
+  format={({ value }) => {
+    'worklet';
+    const formattedDate = yourOwnFormatValueFn(value);
+    return formattedDate;
+  }}
+/>
+```
+
 ## Component APIs
 
 ### LineChart.Provider
@@ -702,13 +816,42 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 | `color`     | `string`    | `"gray"` | Color of the cursor line                                         |
 | `lineProps` | `LineProps` |          | Props of the cursor line. Takes React Native SVG's `Line` props. |
 
+### LineChart.Dot
+
+| Prop                | Type                             | Default            | Description                                                                                                                                                                              |
+| ------------------- | -------------------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `at`                | `number`                         |                    | Index of followed `data` item.                                                                                                                                                           |
+| `color`             | `string`                         | `"black"`          | Color of the dot                                                                                                                                                                         |
+| `size`              | `number`                         | `4`                | Size of the dot.                                                                                                                                                                         |
+| `inactiveColor`     | `string`                         |                    | Color of the dot when the chart is inactive.                                                                                                                                             |
+| `showInactiveColor` | `boolean`                        | `true`             | Whether or not to show the inactive dot when the chart is inactive.                                                                                                                      |
+| `hasOuterDot`       | `boolean`                        | `false`            | Whether or not the dot has an outer circle.                                                                                                                                              |
+| `hasPulse`          | `boolean`                        | `false`            | Whether or not the dot has an animated pulse.                                                                                                                                            |
+| `outerSize`         | `number`                         | `16`               | Size of the outer dot.                                                                                                                                                                   |
+| `pulseBehaviour`    | `"while-inactive"` or `"always"` | `"while-inactive"` | Behaviour of the pulse. If `always`, the outer dot will still animate when interaction is active. If `while-inactive`, the outer dot will animate only when the interaction is inactive. |
+| `pulseDurationMs`   | `number`                         | `800`              | Duration in ms of the pulse animation.                                                                                                                                                   |
+| `dotProps`          | `CircleProps`                    |                    | Props of the dot (accepts React Native SVG's `Circle` props).                                                                                                                            |
+| `outerDotProps`     | `CircleProps`                    |                    | Props of the outer dot (accepts React Native SVG's `Circle` props).                                                                                                                      |
+
+### LineChart.Highlight
+
+| Prop                | Type      | Default   | Description                                                               |
+| ------------------- | --------- | --------- | ------------------------------------------------------------------------- |
+| `from`              | `number`  |           | Data index of where to start the highlight.                               |
+| `to`                | `number`  |           | Data index of where to end the highlight.                                 |
+| `color`             | `string`  | `"black"` | Color of the highlighted path.                                            |
+| `inactiveColor`     | `string`  |           | Color of the highlight when the chart is inactive.                        |
+| `showInactiveColor` | `boolean` | `true`    | Whether or not to show the inactive highlight when the chart is inactive. |
+| `width`             | `number`  | `3`       | Width of the highlight stroke.                                            |
+
+
 ### LineChart.HorizontalLine
 
-| Prop        | Type        | Default           | Description                                                      |
-| ----------- | ----------- | ----------------- | ---------------------------------------------------------------- | --- | ---------------------------------------------------------------------------------------------------------- |
-| `color`     | `string`    | `"gray"`          | Color of the cursor line                                         |
-| `lineProps` | `LineProps` |                   | Props of the cursor line. Takes React Native SVG's `Line` props. |
-| `at`        | `number     | { index: number } | { value: number }`                                               | `0` | Index of followed `data` item. You can alternatively pass `{ value: number }`, corresponding to a y value. |
+| Prop        | Type                                                   | Default  | Description                                                                                                |
+| ----------- | ------------------------------------------------------ | -------- | ---------------------------------------------------------------------------------------------------------- |
+| `color`     | `string`                                               | `"gray"` | Color of the cursor line                                                                                   |
+| `lineProps` | `LineProps`                                            |          | Props of the cursor line. Takes React Native SVG's `Line` props.                                           |
+| `at`        | `number` or `{ index: number }` or `{ value: number }` | `0`      | Index of followed `data` item. You can alternatively pass `{ value: number }`, corresponding to a y value. |
 
 ### LineChart.Gradient
 
@@ -719,31 +862,31 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 
 ### LineChart.Tooltip
 
-| Prop | Type | Default | Description |
-| ---- | ---- | ------- | ----------- ||
-| `xGutter` | `number` | `8` | X axis gutter in which the tooltip will not pass. |
-| `yGutter` | `number` | `8` | Y axis gutter in which the tooltip will not pass. |
-| `cursorGutter` | `number` | `48` | Gutter (spacing) between the cursor and the tooltip. |
-| `position` | `"top" | "bottom"` | `"top"` | Position of the tooltip relative to the cursor. |
+| Prop           | Type                  | Default | Description                                          |
+| -------------- | --------------------- | ------- | ---------------------------------------------------- |
+| `xGutter`      | `number`              | `8`     | X axis gutter in which the tooltip will not pass.    |
+| `yGutter`      | `number`              | `8`     | Y axis gutter in which the tooltip will not pass.    |
+| `cursorGutter` | `number`              | `48`    | Gutter (spacing) between the cursor and the tooltip. |
+| `position`     | `"top"` or `"bottom"` | `"top"` | Position of the tooltip relative to the cursor.      |
 
 ### LineChart.PriceText
 
-| Prop | Type | Default | Description |
-| ---- | ---- | ------- | ----------- ||
-| `format` | `({ value, formatted }) => string` | | Custom format function of the price. |
-| `precision` | `number` | `2` | Default precision of the price. |
-| `variant` | `"formatted" | "value"` | `"formatted"` | Default representation of the price value. |
-| `...props` | `TextProps` | | Inherits React Native's `Text` props |
+| Prop        | Type                               | Default       | Description                                |
+| ----------- | ---------------------------------- | ------------- | ------------------------------------------ |
+| `format`    | `({ value, formatted }) => string` |               | Custom format function of the price.       |
+| `precision` | `number`                           | `2`           | Default precision of the price.            |
+| `variant`   | `"formatted"` or `"value"`         | `"formatted"` | Default representation of the price value. |
+| `...props`  | `TextProps`                        |               | Inherits React Native's `Text` props       |
 
 ### LineChart.DatetimeText
 
-| Prop | Type | Default | Description |
-| ---- | ---- | ------- | ----------- ||
-| `format` | `({ value, formatted }) => string` | | Custom format function of the timestamp. |
-| `locale` | `string` | `"en-US"` | Locale of the timestamp. |
-| `options` | `{}` | | Options to pass to `toLocaleString()`. [Available options are here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) |
-| `style` | `{}` | | Style of the price text |
-| `variant` | `"formatted" | "value"` | `"formatted"` | Default representation of the timestamp value. |
+| Prop      | Type                               | Default       | Description                                                                                                                                                               |
+| --------- | ---------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`  | `({ value, formatted }) => string` |               | Custom format function of the timestamp.                                                                                                                                  |
+| `locale`  | `string`                           | `"en-US"`     | Locale of the timestamp.                                                                                                                                                  |
+| `options` | `{}`                               |               | Options to pass to `toLocaleString()`. [Available options are here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) |
+| `style`   | `{}`                               |               | Style of the price text                                                                                                                                                   |
+| `variant` | `"formatted"` or `"value"`         | `"formatted"` | Default representation of the timestamp value.                                                                                                                            |
 
 ### CandlestickChart.Provider
 
@@ -774,8 +917,8 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 ### CandlestickChart.Crosshair
 
 | Prop               | Type                           | Default   | Description                                      |
-| ------------------ | ------------------------------ | --------- | ------------------------------------------------ | --- |
-| `color`            | `string`                       | `"black"` | Color of the crosshair                           |     |
+| ------------------ | ------------------------------ | --------- | ------------------------------------------------ |
+| `color`            | `string`                       | `"black"` | Color of the crosshair                           |
 | `onCurrentXChange` | `(xValue: number) => void`     |           | Callback to invoke when the x coordinate changes |
 | `...props`         | `LongPressGestureHandlerProps` |           |                                                  |
 
@@ -790,22 +933,22 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 
 ### CandlestickChart.PriceText
 
-| Prop | Type | Default | Description |
-| ---- | ---- | ------- | ----------- ||
-| `format` | `({ value, formatted }) => string` | | Custom format function of the price. |
-| `precision` | `number` | `2` | Default precision of the price. |
-| `variant` | `"formatted" | "value"` | `"formatted"` | Default representation of the price value. |
-| `...props` | `TextProps` | | Inherits React Native's `Text` props |
+| Prop        | Type                               | Default       | Description                                |
+| ----------- | ---------------------------------- | ------------- | ------------------------------------------ |
+| `format`    | `({ value, formatted }) => string` |               | Custom format function of the price.       |
+| `precision` | `number`                           | `2`           | Default precision of the price.            |
+| `variant`   | `"formatted"` or `"value"`         | `"formatted"` | Default representation of the price value. |
+| `...props`  | `TextProps`                        |               | Inherits React Native's `Text` props       |
 
 ### CandlestickChart.DatetimeText
 
-| Prop | Type | Default | Description |
-| ---- | ---- | ------- | ----------- ||
-| `format` | `({ value, formatted }) => string` | | Custom format function of the timestamp. |
-| `locale` | `string` | `"en-US"` | Locale of the timestamp. |
-| `options` | `{}` | | Options to pass to `toLocaleString()`. [Available options are here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) |
-| `style` | `{}` | | Style of the price text |
-| `variant` | `"formatted" | "value"` | `"formatted"` | Default representation of the timestamp value. |
+| Prop      | Type                               | Default       | Description                                                                                                                                                               |
+| --------- | ---------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`  | `({ value, formatted }) => string` |               | Custom format function of the timestamp.                                                                                                                                  |
+| `locale`  | `string`                           | `"en-US"`     | Locale of the timestamp.                                                                                                                                                  |
+| `options` | `{}`                               |               | Options to pass to `toLocaleString()`. [Available options are here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) |
+| `style`   | `{}`                               |               | Style of the price text                                                                                                                                                   |
+| `variant` | `"formatted"` or `"value"`         | `"formatted"` | Default representation of the timestamp value.                                                                                                                            |
 
 ## Hooks
 

@@ -1,20 +1,16 @@
 import * as React from 'react';
-import Animated, {
-  useAnimatedProps,
-  useAnimatedReaction,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { Path, PathProps } from 'react-native-svg';
 
 import { LineChartDimensionsContext } from './Chart';
-import interpolatePath from './interpolatePath';
-import { usePrevious } from '../../utils';
+import { LineChartPathContext } from './ChartPath';
+import useAnimatedPath from './useAnimatedPath';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 export type LineChartPathProps = Animated.AnimateProps<PathProps> & {
   color?: string;
+  inactiveColor?: string;
   width?: number;
   isInactive?: boolean;
   /**
@@ -35,43 +31,23 @@ export type LineChartPathProps = Animated.AnimateProps<PathProps> & {
   isTransitionEnabled?: boolean;
 };
 
+LineChartPath.displayName = 'LineChartPath';
+
 export function LineChartPath({
   color = 'black',
+  inactiveColor,
   width: strokeWidth = 3,
-  isInactive,
-  isTransitionEnabled = true,
   ...props
 }: LineChartPathProps) {
   const { path } = React.useContext(LineChartDimensionsContext);
+  const { isTransitionEnabled, isInactive } =
+    React.useContext(LineChartPathContext);
 
   ////////////////////////////////////////////////
 
-  const transition = useSharedValue(0);
-
-  const previousPath = usePrevious(path);
-
-  useAnimatedReaction(
-    () => {
-      return path;
-    },
-    (_, previous) => {
-      if (previous) {
-        transition.value = 0;
-        transition.value = withTiming(1);
-      }
-    },
-    [path]
-  );
-
-  const animatedProps = useAnimatedProps(() => {
-    let d = path || '';
-    if (previousPath && isTransitionEnabled) {
-      const pathInterpolator = interpolatePath(previousPath, path, null);
-      d = pathInterpolator(transition.value);
-    }
-    return {
-      d,
-    };
+  const { animatedProps } = useAnimatedPath({
+    enabled: isTransitionEnabled,
+    path,
   });
 
   ////////////////////////////////////////////////
@@ -81,8 +57,8 @@ export function LineChartPath({
       <AnimatedPath
         animatedProps={animatedProps}
         fill="transparent"
-        stroke={color}
-        strokeOpacity={isInactive ? 0.2 : 1}
+        stroke={isInactive ? inactiveColor || color : color}
+        strokeOpacity={isInactive && !inactiveColor ? 0.2 : 1}
         strokeWidth={strokeWidth}
         {...props}
       />
