@@ -18,7 +18,7 @@ interface AnimatedTextProps {
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
 export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const inputRef = React.useRef<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
 
   if (Platform.OS === 'web') {
     // For some reason, the worklet reaction evaluates upfront regardless of any
@@ -49,7 +49,7 @@ export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
     <AnimatedTextInput
       underlineColorAndroid="transparent"
       editable={false}
-      ref={Platform.select({ web: inputRef as any })}
+      ref={Platform.select({ web: inputRef })}
       value={text.value}
       style={[styles.text, style]}
       animatedProps={animatedProps}
