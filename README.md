@@ -63,6 +63,7 @@ A sweet & simple chart library for React Native that will make us feel like **W*
   - [LineChart.Tooltip](#linecharttooltip)
   - [LineChart.PriceText](#linechartpricetext)
   - [LineChart.DatetimeText](#linechartdatetimetext)
+  - [LineChart.HoverTrap](#linecharthovertrap)
   - [CandlestickChart.Provider](#candlestickchartprovider)
   - [CandlestickChart](#candlestickchart)
   - [CandlestickChart.Candles](#candlestickchartcandles)
@@ -373,6 +374,25 @@ To customise the color of the line chart cursor, supply a `color` prop to `LineC
 ```
 
 <img width="200px" alt="Screen Shot 2021-09-13 at 4 53 46 pm" src="https://user-images.githubusercontent.com/7336481/133037333-6b1345e5-a98b-459c-b3b1-6e5b08143f33.png">
+
+#### Hovering the chart
+
+By default, the cursor is triggered whenever you press the chart.
+
+If your app runs on Web, you may want to trigger the cursor when a user hovers, too.
+
+To achieve this, simply add `<LineChart.HoverTrap />` as the child of your cursor.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path color="hotpink" />
+    <LineChart.CursorCrosshair color="hotpink>
+      <LineChart.HoverTrap />
+    </LineChart.CursorCrosshair>
+  </LineChart>
+</LineChart.Provider>
+```
 
 ### Gradients
 
@@ -844,7 +864,6 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 | `showInactiveColor` | `boolean` | `true`    | Whether or not to show the inactive highlight when the chart is inactive. |
 | `width`             | `number`  | `3`       | Width of the highlight stroke.                                            |
 
-
 ### LineChart.HorizontalLine
 
 | Prop        | Type                                                   | Default  | Description                                                                                                |
@@ -887,6 +906,16 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 | `options` | `{}`                               |               | Options to pass to `toLocaleString()`. [Available options are here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) |
 | `style`   | `{}`                               |               | Style of the price text                                                                                                                                                   |
 | `variant` | `"formatted"` or `"value"`         | `"formatted"` | Default representation of the timestamp value.                                                                                                                            |
+
+### LineChart.HoverTrap
+
+This component doesn't take any props.
+
+Place it as the child of your cursor component to trap hover events on Web. If you're using mutliple cursors, place this as the child of your lowest-rendered cursor.
+
+```tsx
+<LineChart.HoverTrap />
+```
 
 ### CandlestickChart.Provider
 

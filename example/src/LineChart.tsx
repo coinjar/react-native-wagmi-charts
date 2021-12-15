@@ -64,7 +64,8 @@ export default function App() {
         onActivated={invokeHaptic}
         onEnded={invokeHaptic}
       >
-        <LineChart.Tooltip />
+        <LineChart.Tooltip position="top" />
+        <LineChart.HoverTrap />
       </LineChart.CursorCrosshair>
     </LineChart>
   );
