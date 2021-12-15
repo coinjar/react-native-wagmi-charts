@@ -13,11 +13,13 @@ type LineChartCursorLineProps = {
   lineProps?: Partial<LineProps>;
 };
 
-export const LineChartCursorLine = ({
+LineChartCursorLine.displayName = 'LineChartCursorLine';
+
+export function LineChartCursorLine({
   children,
   color = 'gray',
   lineProps = {},
-}: LineChartCursorLineProps) => {
+}: LineChartCursorLineProps) {
   const { height } = React.useContext(LineChartDimensionsContext);
   const { currentX, isActive } = useLineChart();
 
@@ -46,7 +48,7 @@ export const LineChartCursorLine = ({
       {children}
     </LineChartCursor>
   );
-};
+}
 
 const styles = StyleSheet.create({
   svg: {

@@ -1,4 +1,6 @@
 import * as React from 'react';
+// @ts-ignore
+import * as d3Shape from 'd3-shape';
 import { Dimensions, StyleSheet, View, ViewProps } from 'react-native';
 import { LineChartContext } from './Context';
 import { LineChartIdProvider, useLineChartData } from './Data';
@@ -10,7 +12,9 @@ export const LineChartDimensionsContext = React.createContext({
   height: 0,
   path: '',
   area: '',
+  shape: d3Shape.curveBumpX,
   gutter: 0,
+  pathWidth: 0,
 });
 
 type LineChartProps = ViewProps & {
@@ -18,7 +22,7 @@ type LineChartProps = ViewProps & {
   yGutter?: number;
   width?: number;
   height?: number;
-  shape?: string;
+  shape?: unknown;
   /**
    * If your `LineChart.Provider` uses a dictionary with multiple IDs for multiple paths, then this field is required.
    */
@@ -28,26 +32,36 @@ type LineChartProps = ViewProps & {
 
 const { width: screenWidth } = Dimensions.get('window');
 
+LineChart.displayName = 'LineChart';
+
 export function LineChart({
   children,
   yGutter = 16,
   width = screenWidth,
   height = screenWidth,
-  shape,
+  shape = d3Shape.curveBumpX,
   id,
   absolute,
   ...props
 }: LineChartProps) {
-  const { yDomain } = React.useContext(LineChartContext);
+  const { yDomain, xLength } = React.useContext(LineChartContext);
   const { data } = useLineChartData({
     id,
   });
+
+  const pathWidth = React.useMemo(() => {
+    let allowedWidth = width;
+    if (xLength > data.length) {
+      allowedWidth = (width * data.length) / xLength;
+    }
+    return allowedWidth;
+  }, [data.length, width, xLength]);
 
   const path = React.useMemo(() => {
     if (data && data.length > 0) {
       return getPath({
         data,
-        width,
+        width: pathWidth,
         height,
         gutter: yGutter,
         shape,
@@ -55,13 +69,13 @@ export function LineChart({
       });
     }
     return '';
-  }, [data, width, height, yGutter, shape, yDomain]);
+  }, [data, pathWidth, height, yGutter, shape, yDomain]);
 
   const area = React.useMemo(() => {
     if (data && data.length > 0) {
       return getArea({
         data,
-        width,
+        width: pathWidth,
         height,
         gutter: yGutter,
         shape,
@@ -69,7 +83,7 @@ export function LineChart({
       });
     }
     return '';
-  }, [data, width, height, yGutter, shape, yDomain]);
+  }, [data, pathWidth, height, yGutter, shape, yDomain]);
 
   const contextValue = React.useMemo(
     () => ({
@@ -78,8 +92,10 @@ export function LineChart({
       path,
       width,
       height,
+      pathWidth,
+      shape,
     }),
-    [area, height, path, width, yGutter]
+    [yGutter, area, path, width, height, pathWidth, shape]
   );
 
   return (
