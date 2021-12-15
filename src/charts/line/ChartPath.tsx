@@ -5,6 +5,7 @@ import Animated, {
   useAnimatedProps,
   useSharedValue,
   withTiming,
+  WithTimingConfig,
 } from 'react-native-reanimated';
 import flattenChildren from 'react-keyed-flatten-children';
 
@@ -30,7 +31,7 @@ export const LineChartPathContext = React.createContext({
 
 type LineChartPathWrapperProps = {
   animationDuration?: number;
-  animationProps?: Partial<Animated.WithTimingConfig>;
+  animationProps?: Omit<Partial<WithTimingConfig>, 'duration'>;
   children?: React.ReactNode;
   color?: string;
   inactiveColor?: string;
@@ -40,7 +41,7 @@ type LineChartPathWrapperProps = {
   showInactivePath?: boolean;
   animateOnMount?: 'foreground';
   mountAnimationDuration?: number;
-  mountAnimationProps?: Partial<Animated.WithTimingConfig>;
+  mountAnimationProps?: Partial<WithTimingConfig>;
 };
 
 LineChartPathWrapper.displayName = 'LineChartPathWrapper';
@@ -78,7 +79,7 @@ export function LineChartPathWrapper({
     const inactiveWidth =
       !isMounted.value && shouldAnimateOnMount ? 0 : pathWidth;
 
-    const duration =
+    let duration =
       shouldAnimateOnMount && !hasMountedAnimation.value
         ? mountAnimationDuration
         : animationDuration;
@@ -87,18 +88,22 @@ export function LineChartPathWrapper({
         ? mountAnimationProps
         : animationProps;
 
+    if (isActive.value) {
+      duration = 0;
+    }
+
     return {
-      width: isActive.value
-        ? // on Web, <svg /> elements don't support negative widths
-          // https://github.com/coinjar/react-native-wagmi-charts/issues/24#issuecomment-955789904
-          Math.max(currentX.value, 0)
-        : withTiming(
-            inactiveWidth + widthOffset,
-            Object.assign({ duration }, props),
-            () => {
-              hasMountedAnimation.value = true;
-            }
-          ),
+      width: withTiming(
+        isActive.value
+          ? // on Web, <svg /> elements don't support negative widths
+            // https://github.com/coinjar/react-native-wagmi-charts/issues/24#issuecomment-955789904
+            Math.max(currentX.value, 0)
+          : inactiveWidth + widthOffset,
+        Object.assign({ duration }, props),
+        () => {
+          hasMountedAnimation.value = true;
+        }
+      ),
     };
   });
 
