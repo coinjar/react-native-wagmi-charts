@@ -15,22 +15,21 @@
   "dependencies": {
     "bumbag": "^2.2.1",
     "bumbag-native": "^2.3.0",
-    "expo": "42.0.1",
-    "expo-haptics": "^10.1.0",
-    "expo-splash-screen": "~0.11.2",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-native": "0.63.4",
-    "react-native-gesture-handler": "~1.10.2",
-    "react-native-reanimated": "2.2.2",
-    "react-native-unimodules": "~0.14.5",
-    "react-native-web": "~0.13.12"
+    "expo": "^44.0.0-beta.2",
+    "expo-haptics": "~11.1.0",
+    "expo-splash-screen": "~0.14.0",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "react-native": "0.64.3",
+    "react-native-gesture-handler": "~2.1.0",
+    "react-native-reanimated": "~2.3.1",
+    "react-native-web": "0.17.1"
   },
   "devDependencies": {
-    "@babel/core": "~7.9.0",
+    "@babel/core": "^7.12.9",
     "@babel/runtime": "^7.14.6",
     "babel-plugin-module-resolver": "^4.1.0",
-    "babel-preset-expo": "8.3.0",
+    "babel-preset-expo": "9.0.1",
     "jsonfile": "^6.1.0",
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0"
