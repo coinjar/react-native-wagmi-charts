@@ -20,7 +20,7 @@ export const LineChartPathContext = React.createContext({
 
 type LineChartPathWrapperProps = {
   animationDuration?: number;
-  animationProps?: Partial<WithTimingConfig>;
+  animationProps?: Omit<Partial<WithTimingConfig>, 'duration'>;
   children?: React.ReactNode;
   color?: string;
   width?: number;
@@ -43,14 +43,17 @@ export function LineChartPathWrapper({
   ////////////////////////////////////////////////
 
   const svgProps = useAnimatedProps(() => ({
-    width: isActive.value
-      ? // on Web, <svg /> elements don't support negative widths
-        // https://github.com/coinjar/react-native-wagmi-charts/issues/24#issuecomment-955789904
-        Math.max(currentX.value, 0)
-      : withTiming(
-          width,
-          Object.assign({ duration: animationDuration }, animationProps)
-        ),
+    width: withTiming(
+      isActive.value
+        ? // on Web, <svg /> elements don't support negative widths
+          // https://github.com/coinjar/react-native-wagmi-charts/issues/24#issuecomment-955789904
+          Math.max(currentX.value, 0)
+        : width,
+      Object.assign(
+        { duration: isActive.value ? 0 : animationDuration },
+        animationProps
+      )
+    ),
   }));
 
   const viewSize = React.useMemo(() => ({ width, height }), [width, height]);
