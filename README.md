@@ -379,7 +379,7 @@ To customise the color of the line chart cursor, supply a `color` prop to `LineC
 
 By default, the cursor is triggered whenever you press the chart.
 
-If your app runs on Web, you may want to trigger based on a user's mouse position when they hover the chart.
+If your app runs on Web, you may want to trigger the cursor when a user hovers, too.
 
 To achieve this, simply add `<LineChart.HoverTrap />` as the child of your cursor.
 
