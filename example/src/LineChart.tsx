@@ -23,6 +23,10 @@ export default function App() {
     (state) => !state,
     false
   );
+  const [partialDay, togglePartialDay] = React.useReducer(
+    (state) => !state,
+    false
+  );
 
   const [yRange, setYRange] = React.useState<undefined | 'low' | 'high'>(
     undefined
@@ -44,15 +48,24 @@ export default function App() {
 
   let chart = (
     <LineChart>
-      <LineChart.Path color="red">
+      <LineChart.Path color="black" />
+      {/* <LineChart.Path color="black">
         <LineChart.Gradient color="black" />
-        <LineChart.HorizontalLine at={{ value: 33215.61 }} />
+        <LineChart.HorizontalLine at={{ index: 0 }} />
+        <LineChart.Highlight color="red" from={10} to={15} />
+        <LineChart.Dot color="red" at={10} />
+        <LineChart.Dot color="red" at={15} />
+        {partialDay && (
+          <LineChart.Dot at={data.length - 1} color="red" hasPulse />
+        )}
       </LineChart.Path>
+        */}
       <LineChart.CursorCrosshair
         onActivated={invokeHaptic}
         onEnded={invokeHaptic}
       >
-        <LineChart.Tooltip />
+        <LineChart.Tooltip position="top" />
+        <LineChart.HoverTrap />
       </LineChart.CursorCrosshair>
     </LineChart>
   );
@@ -65,7 +78,7 @@ export default function App() {
     chart = (
       <LineChart.Group>
         <LineChart id="one">
-          <LineChart.Path color="blue" />
+          <LineChart.Path animateOnMount="foreground" color="blue" />
           <LineChart.CursorCrosshair
             onActivated={invokeHaptic}
             onEnded={invokeHaptic}
@@ -79,6 +92,7 @@ export default function App() {
             <LineChart.HorizontalLine at={{ index: 4 }} />
           </LineChart.Path>
           <LineChart.CursorCrosshair
+            color="hotpink"
             onActivated={invokeHaptic}
             onEnded={invokeHaptic}
           >
@@ -95,6 +109,7 @@ export default function App() {
         Line Chart 📈
       </Heading.H5>
       <LineChart.Provider
+        xLength={partialDay ? data.length * 2 : undefined}
         yRange={{
           min:
             yRange === 'low'
@@ -148,6 +163,7 @@ export default function App() {
               {`${yRange || 'Set'} Y Domain`}
             </Button>
             <Button onPress={toggleMultiData}>{`Multi Data`}</Button>
+            <Button onPress={togglePartialDay}>{`Partial Day`}</Button>
           </Flex>
         </Box>
         {!multiData && (

@@ -19,12 +19,16 @@ export type LineChartCursorProps = LongPressGestureHandlerProps & {
 
 export const CursorContext = React.createContext({ type: '' });
 
+LineChartCursor.displayName = 'LineChartCursor';
+
 export function LineChartCursor({
   children,
   type,
   ...props
 }: LineChartCursorProps) {
-  const { width, path } = React.useContext(LineChartDimensionsContext);
+  const { pathWidth: width, path } = React.useContext(
+    LineChartDimensionsContext
+  );
   const { currentX, currentIndex, isActive, data } = useLineChart();
 
   const parsedPath = React.useMemo(

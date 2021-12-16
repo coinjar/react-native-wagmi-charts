@@ -608,7 +608,7 @@ export function interpolatePathCommands(
  *   end command object and returns true if the segment should be excluded from splitting.
  * @returns {Function} Interpolation function that maps t ([0, 1]) to a path `d` string.
  */
-export default function interpolatePath(a, b, excludeSegment) {
+export function interpolatePath(a, b, excludeSegment) {
   'worklet';
 
   let aCommands = pathCommandsFromString(a);

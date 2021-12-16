@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, ViewProps } from 'react-native';
+import { Platform, View, ViewProps } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -8,7 +8,10 @@ import Animated, {
 import { LineChartCursor, LineChartCursorProps } from './Cursor';
 import { useLineChart } from './useLineChart';
 
-type LineChartCursorCrosshairProps = Omit<LineChartCursorProps, 'type'> & {
+type LineChartCursorCrosshairProps = Omit<
+  LineChartCursorProps,
+  'children' | 'type'
+> & {
   children?: React.ReactNode;
   color?: string;
   size?: number;
@@ -17,6 +20,8 @@ type LineChartCursorCrosshairProps = Omit<LineChartCursorProps, 'type'> & {
   crosshairProps?: ViewProps;
   crosshairOuterProps?: ViewProps;
 };
+
+LineChartCursorCrosshair.displayName = 'LineChartCursorCrosshair';
 
 export function LineChartCursorCrosshair({
   children,
@@ -30,14 +35,26 @@ export function LineChartCursorCrosshair({
 }: LineChartCursorCrosshairProps) {
   const { currentX, currentY, isActive } = useLineChart();
 
+  // It seems that enabling spring animation on initial render on Android causes a crash.
+  const [enableSpringAnimation, setEnableSpringAnimation] = React.useState(
+    Platform.OS === 'ios'
+  );
+  React.useEffect(() => {
+    setTimeout(() => {
+      setEnableSpringAnimation(true);
+    }, 100);
+  }, []);
+
   const animatedCursorStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: currentX.value - outerSize / 2 },
       { translateY: currentY.value - outerSize / 2 },
       {
-        scale: withSpring(isActive.value ? 1 : 0, {
-          damping: 10,
-        }),
+        scale: enableSpringAnimation
+          ? withSpring(isActive.value ? 1 : 0, {
+              damping: 10,
+            })
+          : 0,
       },
     ],
   }));
