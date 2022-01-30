@@ -582,7 +582,7 @@ You can customize the style of the tooltip by providing the `textStyle` prop:
 
 ```jsx
 <LineChart.Tooltip
-  style={{
+  textStyle={{
     backgroundColor: 'black',
     borderRadius: 4,
     color: 'white',
@@ -887,6 +887,7 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 | `yGutter`      | `number`              | `8`     | Y axis gutter in which the tooltip will not pass.    |
 | `cursorGutter` | `number`              | `48`    | Gutter (spacing) between the cursor and the tooltip. |
 | `position`     | `"top"` or `"bottom"` | `"top"` | Position of the tooltip relative to the cursor.      |
+| `textStyle`    | `{}`                  |         | Style of the tooltip text                            |
 
 ### LineChart.PriceText
 
