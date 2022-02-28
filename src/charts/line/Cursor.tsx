@@ -41,7 +41,7 @@ export function LineChartCursor({
   >({
     onActive: ({ x }) => {
       if (parsedPath) {
-        const boundedX = x <= width ? x : width;
+        const boundedX = Math.max(0, x <= width ? x : width);
         isActive.value = true;
         currentX.value = boundedX;
 
