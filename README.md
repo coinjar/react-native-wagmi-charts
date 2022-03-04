@@ -403,7 +403,7 @@ By using the `LineChart.Gradient` component, you can apply a gradient to the are
   <LineChart>
     <LineChart.Path color="red">
       <LineChart.Gradient />
-    <LineChart.Path>
+    </LineChart.Path>
   </LineChart>
 </LineChart.Provider>
 ```
@@ -417,7 +417,7 @@ The gradient will inherit your path's color by default, however, you can provide
   <LineChart>
     <LineChart.Path color="red">
       <LineChart.Gradient color="black" />
-    <LineChart.Path>
+    </LineChart.Path>
   </LineChart>
 </LineChart.Provider>
 ```
