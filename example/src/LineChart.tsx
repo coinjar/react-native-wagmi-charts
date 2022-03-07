@@ -66,9 +66,7 @@ export default function App() {
       {!toggleMinMaxLabels && <LineChart.Path color="black" />}
       {toggleMinMaxLabels && (
         <LineChart.Path color="black">
-          <LineChart.Dot color="green" at={max} />
           <LineChart.Tooltip position="top" at={max} />
-          <LineChart.Dot color="red" at={min} />
           <LineChart.Tooltip position="bottom" at={min} yGutter={-10} />
         </LineChart.Path>
       )}
