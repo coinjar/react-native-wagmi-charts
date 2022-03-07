@@ -18,6 +18,7 @@ const BACKGROUND_COMPONENTS = [
   'LineChartHorizontalLine',
   'LineChartGradient',
   'LineChartDot',
+  'LineChartTooltip',
 ];
 const FOREGROUND_COMPONENTS = ['LineChartHighlight', 'LineChartDot'];
 

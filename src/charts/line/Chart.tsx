@@ -6,10 +6,13 @@ import { LineChartContext } from './Context';
 import { LineChartIdProvider, useLineChartData } from './Data';
 
 import { getArea, getPath } from './utils';
+import { parse, Path } from 'react-native-redash';
 
 export const LineChartDimensionsContext = React.createContext({
   width: 0,
   height: 0,
+  pointWidth: 0,
+  parsedPath: {} as Path,
   path: '',
   area: '',
   shape: d3Shape.curveBumpX,
@@ -85,9 +88,18 @@ export function LineChart({
     return '';
   }, [data, pathWidth, height, yGutter, shape, yDomain]);
 
+  const dataLength = data.length;
+  const parsedPath = React.useMemo(() => parse(path), [path]);
+  const pointWidth = React.useMemo(
+    () => width / (dataLength - 1),
+    [dataLength, width]
+  );
+
   const contextValue = React.useMemo(
     () => ({
       gutter: yGutter,
+      parsedPath,
+      pointWidth,
       area,
       path,
       width,
@@ -95,7 +107,17 @@ export function LineChart({
       pathWidth,
       shape,
     }),
-    [yGutter, area, path, width, height, pathWidth, shape]
+    [
+      yGutter,
+      parsedPath,
+      pointWidth,
+      area,
+      path,
+      width,
+      height,
+      pathWidth,
+      shape,
+    ]
   );
 
   return (

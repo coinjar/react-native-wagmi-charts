@@ -7,14 +7,19 @@ import { useLineChart } from './useLineChart';
 export function useLineChartPrice({
   format,
   precision = 2,
-}: { format?: TFormatterFn<string>; precision?: number } = {}) {
+  index,
+}: { format?: TFormatterFn<string>; precision?: number; index?: number } = {}) {
   const { currentIndex, data } = useLineChart();
 
   const float = useDerivedValue(() => {
-    if (typeof currentIndex.value === 'undefined' || currentIndex.value === -1)
+    if (
+      (typeof currentIndex.value === 'undefined' ||
+        currentIndex.value === -1) &&
+      index == null
+    )
       return '';
     let price = 0;
-    price = data[currentIndex.value].value;
+    price = data[Math.min(index ?? currentIndex.value, data.length - 1)].value;
     return price.toFixed(precision).toString();
   });
   const formatted = useDerivedValue(() => {

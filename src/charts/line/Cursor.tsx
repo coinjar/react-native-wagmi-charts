@@ -7,7 +7,6 @@ import {
   LongPressGestureHandlerProps,
 } from 'react-native-gesture-handler';
 import Animated, { useAnimatedGestureHandler } from 'react-native-reanimated';
-import { parse } from 'react-native-redash';
 
 import { LineChartDimensionsContext } from './Chart';
 import { useLineChart } from './useLineChart';
@@ -26,15 +25,10 @@ export function LineChartCursor({
   type,
   ...props
 }: LineChartCursorProps) {
-  const { pathWidth: width, path } = React.useContext(
+  const { pathWidth: width, parsedPath } = React.useContext(
     LineChartDimensionsContext
   );
   const { currentX, currentIndex, isActive, data } = useLineChart();
-
-  const parsedPath = React.useMemo(
-    () => (path ? parse(path) : undefined),
-    [path]
-  );
 
   const onGestureEvent = useAnimatedGestureHandler<
     GestureEvent<LongPressGestureHandlerEventPayload>
