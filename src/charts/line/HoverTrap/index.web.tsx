@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { parse } from 'react-native-redash';
 
 import { LineChartDimensionsContext } from '../Chart';
 import { useLineChart } from '../useLineChart';
@@ -50,13 +49,8 @@ function isHoverEnabled(): boolean {
 }
 
 export const LineChartHoverTrap = () => {
-  const { width, path } = React.useContext(LineChartDimensionsContext);
+  const { width, parsedPath } = React.useContext(LineChartDimensionsContext);
   const { currentX, currentIndex, isActive, data } = useLineChart();
-
-  const parsedPath = React.useMemo(
-    () => (path ? parse(path) : undefined),
-    [path]
-  );
 
   const onMouseMove = React.useCallback(
     ({ x }: { x: number }) => {

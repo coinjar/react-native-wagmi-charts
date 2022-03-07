@@ -11,7 +11,7 @@ import { LineChartDimensionsContext } from './Chart';
 import { CursorContext } from './Cursor';
 import { LineChartPriceText, LineChartPriceTextProps } from './PriceText';
 import { useLineChart } from './useLineChart';
-import { getYForX, parse } from 'react-native-redash';
+import { getYForX } from 'react-native-redash';
 import { useMemo } from 'react';
 
 export type LineChartTooltipProps = Animated.AnimateProps<ViewProps> & {
@@ -45,10 +45,11 @@ export function LineChartTooltip({
   at,
   ...props
 }: LineChartTooltipProps) {
-  const { width, height, path } = React.useContext(LineChartDimensionsContext);
+  const { width, height, parsedPath, pointWidth } = React.useContext(
+    LineChartDimensionsContext
+  );
   const { type } = React.useContext(CursorContext);
-  const { currentX, currentY, isActive, data } = useLineChart();
-  const dataLength = data.length;
+  const { currentX, currentY, isActive } = useLineChart();
 
   const x = useSharedValue(0);
   const elementWidth = useSharedValue(0);
@@ -61,13 +62,6 @@ export function LineChartTooltip({
       elementHeight.value = event.nativeEvent.layout.height;
     },
     [elementHeight, elementWidth, x]
-  );
-
-  // TODO: put these two in context, as they are used in other parts like this as well?
-  const parsedPath = React.useMemo(() => parse(path), [path]);
-  const pointWidth = React.useMemo(
-    () => width / (dataLength - 1),
-    [dataLength, width]
   );
 
   // When the user set a `at` index, get the index's y & x positions
