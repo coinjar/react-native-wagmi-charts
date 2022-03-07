@@ -4,6 +4,7 @@ import Animated, {
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
+  withTiming,
 } from 'react-native-reanimated';
 
 import { LineChartDimensionsContext } from './Chart';
@@ -121,6 +122,12 @@ export function LineChartTooltip({
       }
     }
 
+    let opacity = isActive.value ? 1 : 0;
+    if (isStatic) {
+      // Only show static when there is no active cursor
+      opacity = withTiming(isActive.value ? 0 : 1);
+    }
+
     return {
       transform: [
         { translateX: x - translateXOffset },
@@ -128,8 +135,7 @@ export function LineChartTooltip({
           translateY: translateY,
         },
       ],
-      // XOR, either its active or its static. When active fade out static ones
-      opacity: isActive.value !== isStatic ? 1 : 0,
+      opacity: opacity,
     };
   });
 
