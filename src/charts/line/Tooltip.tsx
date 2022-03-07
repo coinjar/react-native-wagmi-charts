@@ -2,6 +2,7 @@ import * as React from 'react';
 import type { ViewProps } from 'react-native';
 import Animated, {
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
 } from 'react-native-reanimated';
 
@@ -9,8 +10,10 @@ import { LineChartDimensionsContext } from './Chart';
 import { CursorContext } from './Cursor';
 import { LineChartPriceText, LineChartPriceTextProps } from './PriceText';
 import { useLineChart } from './useLineChart';
+import { getYForX, parse } from 'react-native-redash';
+import { useMemo } from 'react';
 
-type LineChartTooltipProps = Animated.AnimateProps<ViewProps> & {
+export type LineChartTooltipProps = Animated.AnimateProps<ViewProps> & {
   children?: React.ReactNode;
   xGutter?: number;
   yGutter?: number;
@@ -18,6 +21,8 @@ type LineChartTooltipProps = Animated.AnimateProps<ViewProps> & {
   position?: 'top' | 'bottom';
   textProps?: LineChartPriceTextProps;
   textStyle?: LineChartPriceTextProps['style'];
+
+  at?: number;
 };
 
 LineChartTooltip.displayName = 'LineChartTooltip';
@@ -30,11 +35,13 @@ export function LineChartTooltip({
   position = 'top',
   textProps,
   textStyle,
+  at,
   ...props
 }: LineChartTooltipProps) {
-  const { width, height } = React.useContext(LineChartDimensionsContext);
+  const { width, height, path } = React.useContext(LineChartDimensionsContext);
   const { type } = React.useContext(CursorContext);
-  const { currentX, currentY, isActive } = useLineChart();
+  const { currentX, currentY, isActive, data } = useLineChart();
+  const dataLength = data.length;
 
   const x = useSharedValue(0);
   const elementWidth = useSharedValue(0);
@@ -49,48 +56,72 @@ export function LineChartTooltip({
     [elementHeight, elementWidth, x]
   );
 
+  // TODO: put these two in context, as they are used in other parts like this as well
+  const parsedPath = React.useMemo(() => parse(path), [path]);
+  const pointWidth = React.useMemo(
+    () => width / dataLength,
+    [dataLength, width]
+  );
+
+  const atXPosition = useMemo(
+    () => (at == null ? undefined : pointWidth * at),
+    [at, pointWidth]
+  );
+  const atYPosition = useDerivedValue(() => {
+    return atXPosition == null
+      ? undefined
+      : getYForX(parsedPath, atXPosition) ?? 0;
+  }, [atXPosition]);
+
   const animatedCursorStyle = useAnimatedStyle(() => {
     let translateXOffset = elementWidth.value / 2;
-    if (currentX.value < elementWidth.value / 2 + xGutter) {
-      const xOffset = elementWidth.value / 2 + xGutter - currentX.value;
+    const isStatic = atYPosition.value != null;
+
+    const x = atXPosition ?? currentX.value;
+    if (x < elementWidth.value / 2 + xGutter) {
+      const xOffset = elementWidth.value / 2 + xGutter - x;
       translateXOffset = translateXOffset - xOffset;
     }
-    if (currentX.value > width - elementWidth.value / 2 - xGutter) {
-      const xOffset =
-        currentX.value - (width - elementWidth.value / 2 - xGutter);
+    if (x > width - elementWidth.value / 2 - xGutter) {
+      const xOffset = x - (width - elementWidth.value / 2 - xGutter);
       translateXOffset = translateXOffset + xOffset;
     }
 
     let translateYOffset = 0;
+    const y = atYPosition.value ?? currentY.value;
+
     if (position === 'top') {
       translateYOffset = elementHeight.value / 2 + cursorGutter;
-      if (currentY.value - translateYOffset < yGutter) {
-        translateYOffset = currentY.value - yGutter;
+      if (y - translateYOffset < yGutter) {
+        translateYOffset = y - yGutter;
       }
     } else if (position === 'bottom') {
       translateYOffset = -(elementHeight.value / 2) - cursorGutter / 2;
-      if (
-        currentY.value - translateYOffset + elementHeight.value >
-        height - yGutter
-      ) {
-        translateYOffset =
-          currentY.value - (height - yGutter) + elementHeight.value;
+      if (y - translateYOffset + elementHeight.value > height - yGutter) {
+        translateYOffset = y - (height - yGutter) + elementHeight.value;
+      }
+    }
+
+    let translateY: number | undefined;
+    if (type === 'crosshair' || isStatic) {
+      translateY = y - translateYOffset;
+    } else {
+      if (position === 'top') {
+        translateY = yGutter;
+      } else {
+        translateY = height - elementHeight.value - yGutter;
       }
     }
 
     return {
       transform: [
-        { translateX: currentX.value - translateXOffset },
+        { translateX: x - translateXOffset },
         {
-          translateY:
-            type === 'crosshair'
-              ? currentY.value - translateYOffset
-              : position === 'top'
-              ? yGutter
-              : height - elementHeight.value - yGutter,
+          translateY: translateY,
         },
       ],
-      opacity: isActive.value ? 1 : 0,
+      // XOR, either its active or its static. When active fade out static ones
+      opacity: isActive.value !== isStatic ? 1 : 0,
     };
   });
 
@@ -108,7 +139,9 @@ export function LineChartTooltip({
         props.style,
       ]}
     >
-      {children || <LineChartPriceText style={[textStyle]} {...textProps} />}
+      {children || (
+        <LineChartPriceText index={at} style={[textStyle]} {...textProps} />
+      )}
     </Animated.View>
   );
 }

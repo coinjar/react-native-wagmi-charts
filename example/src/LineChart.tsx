@@ -60,6 +60,8 @@ export default function App() {
         )}
       </LineChart.Path>
         */}
+      <LineChart.Tooltip position="bottom" at={3} yGutter={-10} />
+      <LineChart.Tooltip position="top" at={data.length} />
       <LineChart.CursorCrosshair
         onActivated={invokeHaptic}
         onEnded={invokeHaptic}
