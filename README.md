@@ -75,6 +75,7 @@ A sweet & simple chart library for React Native that will make us feel like **W*
   - [LineChart.useChart](#linechartusechart)
   - [LineChart.useDatetime](#linechartusedatetime)
   - [LineChart.usePrice](#linechartuseprice)
+  - [LineChart.useYAt](#linechartuseyat)
   - [CandlestickChart.useChart](#candlestickchartusechart)
   - [CandlestickChart.useCandleData](#candlestickchartusecandledata)
   - [CandlestickChart.useDatetime](#candlestickchartusedatetime)
@@ -1047,6 +1048,31 @@ const { value, formatted } = LineChart.usePrice({
 | ----------- | ---------------------------------- | ------- | ------------------------------------ |
 | `format`    | `({ value, formatted }) => string` |         | Custom format function of the price. |
 | `precision` | `number`                           | `2`     | Precision of the price value.        |
+
+**Returns**
+
+| Variable    | Type     | Default | Description           |
+| ----------- | -------- | ------- | --------------------- |
+| `value`     | `string` |         | Price value           |
+| `formatted` | `string` |         | Formatted price value |
+
+### LineChart.useYAt
+
+Get the y value on the chart for a given value or index.
+
+```jsx
+const y = LineChart.useYAt({
+  at,
+  offsetY,
+});
+```
+
+**Arguments**
+
+| Variable  | Type                                                   | Default | Description                                                                                                |
+|-----------|--------------------------------------------------------|---------|------------------------------------------------------------------------------------------------------------|
+| `at`      | `number` or `{ index: number }` or `{ value: number }` | `0`     | Index of followed `data` item. You can alternatively pass `{ value: number }`, corresponding to a y value. |
+| `offsetY` | `number`                                               | `0`     | An optional offset for the y value.                                                                        |
 
 **Returns**
 
