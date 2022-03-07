@@ -21,7 +21,13 @@ export type LineChartTooltipProps = Animated.AnimateProps<ViewProps> & {
   position?: 'top' | 'bottom';
   textProps?: LineChartPriceTextProps;
   textStyle?: LineChartPriceTextProps['style'];
-
+  /**
+   * When specified the tooltip is considered static, and will
+   * always be rendered at the given index, unless there is interaction
+   * with the chart (like interacting with a cursor).
+   *
+   * @default undefined
+   */
   at?: number;
 };
 
@@ -63,6 +69,7 @@ export function LineChartTooltip({
     [dataLength, width]
   );
 
+  // When the user set a `at` index, get the index's y & x positions
   const atXPosition = useMemo(
     () => (at == null ? undefined : pointWidth * at),
     [at, pointWidth]
@@ -75,6 +82,7 @@ export function LineChartTooltip({
 
   const animatedCursorStyle = useAnimatedStyle(() => {
     let translateXOffset = elementWidth.value / 2;
+    // the tooltip is considered static when the user specified an `at` prop
     const isStatic = atYPosition.value != null;
 
     const x = atXPosition ?? currentX.value;
