@@ -66,7 +66,7 @@ export function LineChartTooltip({
   // TODO: put these two in context, as they are used in other parts like this as well
   const parsedPath = React.useMemo(() => parse(path), [path]);
   const pointWidth = React.useMemo(
-    () => width / dataLength,
+    () => width / (dataLength - 1),
     [dataLength, width]
   );
 
