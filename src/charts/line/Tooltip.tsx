@@ -63,7 +63,7 @@ export function LineChartTooltip({
     [elementHeight, elementWidth, x]
   );
 
-  // TODO: put these two in context, as they are used in other parts like this as well
+  // TODO: put these two in context, as they are used in other parts like this as well?
   const parsedPath = React.useMemo(() => parse(path), [path]);
   const pointWidth = React.useMemo(
     () => width / (dataLength - 1),
@@ -86,6 +86,7 @@ export function LineChartTooltip({
     // the tooltip is considered static when the user specified an `at` prop
     const isStatic = atYPosition.value != null;
 
+    // Calculate X position:
     const x = atXPosition ?? currentX.value;
     if (x < elementWidth.value / 2 + xGutter) {
       const xOffset = elementWidth.value / 2 + xGutter - x;
@@ -96,9 +97,9 @@ export function LineChartTooltip({
       translateXOffset = translateXOffset + xOffset;
     }
 
+    // Calculate Y position:
     let translateYOffset = 0;
     const y = atYPosition.value ?? currentY.value;
-
     if (position === 'top') {
       translateYOffset = elementHeight.value / 2 + cursorGutter;
       if (y - translateYOffset < yGutter) {
@@ -111,6 +112,7 @@ export function LineChartTooltip({
       }
     }
 
+    // determine final translateY value
     let translateY: number | undefined;
     if (type === 'crosshair' || isStatic) {
       translateY = y - translateYOffset;
