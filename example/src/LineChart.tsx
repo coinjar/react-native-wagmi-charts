@@ -48,7 +48,10 @@ export default function App() {
 
   let chart = (
     <LineChart>
-      <LineChart.Path color="black" />
+      <LineChart.Path color="black">
+        <LineChart.Tooltip position="bottom" at={3} yGutter={-10} />
+        <LineChart.Tooltip position="top" at={data.length} />
+      </LineChart.Path>
       {/* <LineChart.Path color="black">
         <LineChart.Gradient color="black" />
         <LineChart.HorizontalLine at={{ index: 0 }} />
@@ -60,8 +63,6 @@ export default function App() {
         )}
       </LineChart.Path>
         */}
-      <LineChart.Tooltip position="bottom" at={3} yGutter={-10} />
-      <LineChart.Tooltip position="top" at={data.length} />
       <LineChart.CursorCrosshair
         onActivated={invokeHaptic}
         onEnded={invokeHaptic}
