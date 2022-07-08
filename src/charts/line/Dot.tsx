@@ -11,7 +11,7 @@ import { Circle, CircleProps } from 'react-native-svg';
 import { getYForX, parse } from 'react-native-redash';
 
 import { LineChartDimensionsContext } from './Chart';
-import { LineChartPathContext } from './ChartPath';
+import { LineChartPathContext } from './LineChartPathContext';
 import { useLineChart } from './useLineChart';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
