@@ -15,6 +15,7 @@ import { useLineChart } from './useLineChart';
 export type LineChartCursorProps = LongPressGestureHandlerProps & {
   children: React.ReactNode;
   type: 'line' | 'crosshair';
+  holdValue: boolean;
 };
 
 export const CursorContext = React.createContext({ type: '' });
@@ -24,6 +25,7 @@ LineChartCursor.displayName = 'LineChartCursor';
 export function LineChartCursor({
   children,
   type,
+  holdValue,
   ...props
 }: LineChartCursorProps) {
   const { pathWidth: width, path } = React.useContext(
@@ -58,8 +60,12 @@ export function LineChartCursor({
       }
     },
     onEnd: () => {
-      isActive.value = false;
-      currentIndex.value = -1;
+      if (holdValue === true)  {
+        isActive.value = true;
+      } else {
+        isActive.value = false;
+        currentIndex.value = -1;
+      }
     },
   });
 
