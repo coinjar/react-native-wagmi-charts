@@ -15,7 +15,7 @@ import { useLineChart } from './useLineChart';
 export type LineChartCursorProps = LongPressGestureHandlerProps & {
   children: React.ReactNode;
   type: 'line' | 'crosshair';
-  holdValue: boolean;
+  holdValue?: boolean;
 };
 
 export const CursorContext = React.createContext({ type: '' });
