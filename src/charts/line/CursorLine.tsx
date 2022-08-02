@@ -12,6 +12,7 @@ type LineChartCursorLineProps = {
   color?: string;
   lineProps?: Partial<LineProps>;
   holdValue?: boolean;
+  mountWithActivatedCursor?: boolean;
 };
 
 LineChartCursorLine.displayName = 'LineChartCursorLine';
@@ -20,7 +21,8 @@ export function LineChartCursorLine({
   children,
   color = 'gray',
   lineProps = {},
-  holdValue = false
+  holdValue = false,
+  mountWithActivatedCursor = false,
 }: LineChartCursorLineProps) {
   const { height } = React.useContext(LineChartDimensionsContext);
   const { currentX, isActive } = useLineChart();
@@ -32,7 +34,11 @@ export function LineChartCursorLine({
   }));
 
   return (
-    <LineChartCursor type="line" holdValue={holdValue}>
+    <LineChartCursor
+      type="line"
+      holdValue={holdValue}
+      mountWithActivatedCursor={mountWithActivatedCursor}
+    >
       <Animated.View style={vertical}>
         <Svg style={styles.svg}>
           <SVGLine
