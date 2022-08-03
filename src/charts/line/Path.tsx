@@ -1,14 +1,10 @@
 import * as React from 'react';
-import Animated from 'react-native-reanimated';
 import { Path, PathProps } from 'react-native-svg';
 
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartPathContext } from './ChartPath';
-import useAnimatedPath from './useAnimatedPath';
 
-const AnimatedPath = Animated.createAnimatedComponent(Path);
-
-export type LineChartPathProps = Animated.AnimateProps<PathProps> & {
+export type LineChartPathProps = PathProps & {
   color?: string;
   inactiveColor?: string;
   width?: number;
@@ -35,33 +31,21 @@ LineChartPath.displayName = 'LineChartPath';
 
 export function LineChartPath({
   color = 'black',
-  inactiveColor,
   width: strokeWidth = 3,
-  ...props
 }: LineChartPathProps) {
   const { path } = React.useContext(LineChartDimensionsContext);
-  const { isTransitionEnabled, isInactive } =
-    React.useContext(LineChartPathContext);
+  const { isInactive } = React.useContext(LineChartPathContext);
 
   ////////////////////////////////////////////////
 
-  const { animatedProps } = useAnimatedPath({
-    enabled: isTransitionEnabled,
-    path,
-  });
+  const pathProps = {
+    fill: 'transparent',
+    stroke: color,
+    strokeWidth,
+    strokeOpacity: isInactive ? 0.2 : 1,
+  };
 
   ////////////////////////////////////////////////
 
-  return (
-    <>
-      <AnimatedPath
-        animatedProps={animatedProps}
-        fill="transparent"
-        stroke={isInactive ? inactiveColor || color : color}
-        strokeOpacity={isInactive && !inactiveColor ? 0.2 : 1}
-        strokeWidth={strokeWidth}
-        {...props}
-      />
-    </>
-  );
+  return <Path d={path || ''} {...pathProps} />;
 }
