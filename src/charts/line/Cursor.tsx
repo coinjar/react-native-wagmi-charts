@@ -16,6 +16,7 @@ export type LineChartCursorProps = LongPressGestureHandlerProps & {
   children: React.ReactNode;
   type: 'line' | 'crosshair';
   holdValue?: boolean;
+  mountWithActivatedCursor?: boolean;
 };
 
 export const CursorContext = React.createContext({ type: '' });
@@ -26,6 +27,7 @@ export function LineChartCursor({
   children,
   type,
   holdValue,
+  mountWithActivatedCursor = false,
   ...props
 }: LineChartCursorProps) {
   const { pathWidth: width, path } = React.useContext(
@@ -37,6 +39,19 @@ export function LineChartCursor({
     () => (path ? parse(path) : undefined),
     [path]
   );
+
+  if (mountWithActivatedCursor === true) {
+    const boundedX = width;
+    isActive.value = true;
+    currentX.value = boundedX;
+
+    const minIndex = 0;
+    const boundedIndex = Math.max(
+      minIndex,
+      Math.round(boundedX / width / (1 / (data.length - 1)))
+    );
+    currentIndex.value = boundedIndex;
+  }
 
   const onGestureEvent = useAnimatedGestureHandler<
     GestureEvent<LongPressGestureHandlerEventPayload>
@@ -60,7 +75,7 @@ export function LineChartCursor({
       }
     },
     onEnd: () => {
-      if (holdValue === true)  {
+      if (holdValue === true) {
         isActive.value = true;
       } else {
         isActive.value = false;
