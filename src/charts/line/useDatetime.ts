@@ -18,12 +18,12 @@ export function useLineChartDatetime({
   const timestamp = useDerivedValue(() => {
     if (typeof currentIndex.value === 'undefined' || currentIndex.value === -1)
       return '';
-    return data[currentIndex.value].timestamp;
+    return data[currentIndex.value]?.timestamp;
   });
 
   const timestampString = useDerivedValue(() => {
     if (timestamp.value === '') return '';
-    return timestamp.value.toString();
+    return timestamp?.value?.toString();
   });
 
   const formatted = useDerivedValue(() => {
