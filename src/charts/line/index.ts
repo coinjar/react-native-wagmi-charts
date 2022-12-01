@@ -4,6 +4,7 @@ import { LineChartHighlight } from './Highlight';
 import { LineChartProvider } from './Context';
 import { LineChartCursor } from './Cursor';
 import { LineChartCursorCrosshair } from './CursorCrosshair';
+import { LineChartCursorTrustee } from './CursorTrustee';
 import { LineChartCursorLine } from './CursorLine';
 import { LineChartDot } from './Dot';
 import { LineChartGradient } from './Gradient';
@@ -23,6 +24,7 @@ export * from './Highlight';
 export * from './Context';
 export * from './Cursor';
 export * from './CursorCrosshair';
+export * from './CursorTrustee';
 export * from './CursorLine';
 export * from './Dot';
 export * from './Gradient';
@@ -41,6 +43,7 @@ export const LineChart = Object.assign(_LineChart, {
   Path: LineChartPathWrapper,
   Cursor: LineChartCursor,
   CursorCrosshair: LineChartCursorCrosshair,
+  CursorTrustee: LineChartCursorTrustee,
   CursorLine: LineChartCursorLine,
   Gradient: LineChartGradient,
   Group: LineChartGroup,

@@ -83,7 +83,7 @@ export function LineChartTooltip({
         { translateX: currentX.value - translateXOffset },
         {
           translateY:
-            type === 'crosshair'
+            type === 'crosshair' || type === 'trustee'
               ? currentY.value - translateYOffset
               : position === 'top'
               ? yGutter

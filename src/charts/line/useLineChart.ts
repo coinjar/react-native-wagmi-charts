@@ -12,8 +12,14 @@ export function useLineChart() {
   });
   const currentY = useCurrentY();
 
+  let tmpContext = { data: [] }
+
+  for (const item of dataContext?.data) {
+    tmpContext.data.push({ ...item })
+  }
+
   return React.useMemo(
-    () => ({ ...lineChartContext, ...dataContext, currentY }),
+    () => ({ ...lineChartContext, ...tmpContext, currentY }),
     [lineChartContext, dataContext, currentY]
   );
 }
