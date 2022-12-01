@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Platform, View, ViewProps, StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
-  withSpring
+  withSpring,
 } from 'react-native-reanimated';
 import Svg, { Line as SVGLine, LineProps } from 'react-native-svg';
 
@@ -16,6 +16,8 @@ type LineChartCursorTrusteeProps = Omit<
 > & {
   children?: React.ReactNode;
   color?: string;
+  horizontalLineColor?: string;
+  verticalLineColor?: string;
   size?: number;
   outerSize?: number;
   crosshairWrapperProps?: Animated.AnimateProps<ViewProps>;
@@ -27,7 +29,7 @@ type LineChartCursorTrusteeProps = Omit<
 
 LineChartCursorTrustee.displayName = 'LineChartCursorTrustee';
 
-const AnimatedSvgLine = Animated.createAnimatedComponent(SVGLine)
+const AnimatedSvgLine = Animated.createAnimatedComponent(SVGLine);
 
 export function LineChartCursorTrustee({
   children,
@@ -81,11 +83,11 @@ export function LineChartCursorTrustee({
   }));
 
   const vertical2 = useAnimatedStyle(() => ({
-      y1: currentY.value || 0
+    y1: currentY.value || 0,
   }));
 
   return (
-    <LineChartCursor type='trustee' {...props}>
+    <LineChartCursor type="trustee" {...props}>
       <Animated.View
         {...crosshairWrapperProps}
         style={[
@@ -94,7 +96,7 @@ export function LineChartCursorTrustee({
             height: outerSize,
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 5
+            zIndex: 5,
           },
           animatedCursorStyle,
           crosshairWrapperProps.style,
@@ -127,20 +129,22 @@ export function LineChartCursorTrustee({
           ]}
         />
       </Animated.View>
-      <Animated.View style={[horizontal, { ...StyleSheet.absoluteFillObject, width: width }]}>
-          <Svg>
-            <SVGLine 
-              x1={0}
-              y1={0}
-              x2={width}
-              y2={0}
-              strokeWidth={2}
-              stroke={horizontalLineColor}
-              {...lineHorizontalProps}
-            />
-          </Svg>
+      <Animated.View
+        style={[horizontal, { ...StyleSheet.absoluteFillObject, width: width }]}
+      >
+        <Svg>
+          <SVGLine
+            x1={0}
+            y1={0}
+            x2={width}
+            y2={0}
+            strokeWidth={2}
+            stroke={horizontalLineColor}
+            {...lineHorizontalProps}
+          />
+        </Svg>
       </Animated.View>
-      <Animated.View style={[vertical, { ...StyleSheet.absoluteFillObject  }]}>
+      <Animated.View style={[vertical, { ...StyleSheet.absoluteFillObject }]}>
         <Svg>
           <AnimatedSvgLine
             x1={0}
