@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.tsx"],"names":["LineChartHoverTrap"],"mappings":";;;;;;;AAAA;;;;AAEO,MAAMA,kBAAkB,GAAG,mBAAM,2DAAjC","sourcesContent":["import React from 'react';\n\nexport const LineChartHoverTrap = () => <></>;\n"]}
