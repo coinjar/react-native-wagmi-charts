@@ -8,10 +8,12 @@ export function useLineChartDatetime({
   format,
   locale,
   options,
+  trustee
 }: {
   format?: TFormatterFn<number>;
   locale?: string;
   options?: Intl.DateTimeFormatOptions;
+  trustee?: string;
 } = {}) {
   const { currentIndex, data } = useLineChart();
 
@@ -32,6 +34,7 @@ export function useLineChartDatetime({
           value: timestamp.value,
           locale,
           options,
+          trustee
         })
       : '';
     return format

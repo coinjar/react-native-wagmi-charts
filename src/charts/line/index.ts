@@ -12,6 +12,7 @@ import { LineChartGroup } from './Group';
 import { LineChartHorizontalLine } from './HorizontalLine';
 import { LineChartTooltip } from './Tooltip';
 import { LineChartPriceText } from './PriceText';
+import { LineChartTrusteePriceText } from './TrusteePriceText';
 import { LineChartDatetimeText } from './DatetimeText';
 import { useLineChartDatetime } from './useDatetime';
 import { useLineChartPrice } from './usePrice';
@@ -32,6 +33,7 @@ export * from './Tooltip';
 export * from './DatetimeText';
 export * from './Path';
 export * from './PriceText';
+export * from './TrusteePriceText';
 export * from './useDatetime';
 export * from './useLineChart';
 export * from './usePrice';
@@ -52,6 +54,7 @@ export const LineChart = Object.assign(_LineChart, {
   Tooltip: LineChartTooltip,
   Provider: LineChartProvider,
   PriceText: LineChartPriceText,
+  TrusteePriceText: LineChartTrusteePriceText,
   DatetimeText: LineChartDatetimeText,
   useDatetime: useLineChartDatetime,
   usePrice: useLineChartPrice,

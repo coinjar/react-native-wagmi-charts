@@ -8,6 +8,7 @@ import { AnimatedText } from '../../components/AnimatedText';
 
 type LineChartDatetimeProps = {
   locale?: string;
+  trustee?: string;
   options?: Intl.DateTimeFormatOptions;
   format?: TFormatterFn<number>;
   variant?: 'formatted' | 'value';
@@ -22,7 +23,8 @@ export function LineChartDatetimeText({
   format,
   variant = 'formatted',
   style,
+  trustee
 }: LineChartDatetimeProps) {
-  const datetime = useLineChartDatetime({ format, locale, options });
+  const datetime = useLineChartDatetime({ format, locale, options, trustee });
   return <AnimatedText text={datetime[variant]} style={style} />;
 }
