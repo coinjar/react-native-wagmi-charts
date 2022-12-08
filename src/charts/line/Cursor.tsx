@@ -61,6 +61,10 @@ export function LineChartCursor({
       isActive.value = false;
       currentIndex.value = -1;
     },
+    onCancel: () => {
+      isActive.value = false;
+      currentIndex.value = -1;
+    }
   });
 
   return (

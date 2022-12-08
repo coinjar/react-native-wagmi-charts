@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Platform, View, ViewProps, StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
+  useAnimatedProps,
   withSpring,
 } from 'react-native-reanimated';
 import Svg, { Line as SVGLine, LineProps } from 'react-native-svg';
@@ -82,7 +83,7 @@ export function LineChartCursorTrustee({
     transform: [{ translateX: currentX.value }],
   }));
 
-  const vertical2 = useAnimatedStyle(() => ({
+  const vertical2 = useAnimatedProps(() => ({
     y1: currentY.value || 0,
   }));
 

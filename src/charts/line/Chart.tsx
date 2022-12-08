@@ -12,7 +12,7 @@ export const LineChartDimensionsContext = React.createContext({
   height: 0,
   path: '',
   area: '',
-  shape: d3Shape.curveBumpX,
+  shape: d3Shape.curveCatmullRom.alpha(0.5),
   gutter: 0,
   pathWidth: 0,
 });
@@ -39,7 +39,7 @@ export function LineChart({
   yGutter = 16,
   width = screenWidth,
   height = screenWidth,
-  shape = d3Shape.curveBumpX,
+  shape = d3Shape.curveCatmullRom.alpha(0.5),
   id,
   absolute,
   ...props

@@ -53,6 +53,7 @@ export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
       value={text.value}
       style={[styles.text, style]}
       animatedProps={animatedProps}
+      placeholder=''
     />
   );
 };
