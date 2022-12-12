@@ -44,7 +44,7 @@ export function formatDatetime({
     const hours = getHours(d)
     const minutes = getMinutes(d)
 
-    if (locale === 'en') {
+    if (locale !== 'en') {
       return `${hours}:${minutes}, ${numberDay}.${numberMonth}.${shortYear}`
     }
     return `${hours}:${minutes}, ${numberMonth}.${numberDay}.${shortYear}`
