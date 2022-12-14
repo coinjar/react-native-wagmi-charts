@@ -25,6 +25,8 @@ export const LineChartContext = React.createContext<TLineChartContext>({
 type LineChartProviderProps = {
   children: React.ReactNode;
   data: TLineChartDataProp;
+  high: number;
+  low: number;
   yRange?: YRangeProp;
   onCurrentIndexChange?: (x: number) => void;
   xLength?: number;
@@ -35,6 +37,8 @@ LineChartProvider.displayName = 'LineChartProvider';
 export function LineChartProvider({
   children,
   data = [],
+  high,
+  low,
   yRange,
   onCurrentIndexChange,
   xLength,
@@ -43,13 +47,27 @@ export function LineChartProvider({
   const currentIndex = useSharedValue(-1);
   const isActive = useSharedValue(false);
 
+  const trusteeData = React.useMemo(() => {
+    if (!high && !low) return data
+    return data?.map((item) => {
+      const _item = {...item}
+      if (_item?.value * 1 > high * 1) {
+        _item.value = high
+      } else if (_item?.value * 1 < low * 1) {
+        _item.value = low
+      }
+
+      return _item
+    })
+  }, [data]);
+
   const domain = React.useMemo(
-    () => getDomain(Array.isArray(data) ? data : Object.values(data)[0]),
-    [data]
+    () => getDomain(Array.isArray(trusteeData) ? trusteeData : Object.values(trusteeData)[0]),
+    [trusteeData]
   );
 
   const contextValue = React.useMemo<TLineChartContext>(() => {
-    const values = lineChartDataPropToArray(data).map(({ value }) => value);
+    const values = lineChartDataPropToArray(trusteeData).map(({ value }) => value);
 
     return {
       currentX,
@@ -61,12 +79,12 @@ export function LineChartProvider({
         max: yRange?.max ?? Math.max(...values),
       },
       xLength:
-        xLength ?? (Array.isArray(data) ? data : Object.values(data)[0]).length,
+        xLength ?? (Array.isArray(trusteeData) ? trusteeData : Object.values(trusteeData)[0]).length,
     };
   }, [
     currentIndex,
     currentX,
-    data,
+    trusteeData,
     domain,
     isActive,
     yRange?.max,
@@ -84,7 +102,7 @@ export function LineChartProvider({
   );
 
   return (
-    <LineChartDataProvider data={data}>
+    <LineChartDataProvider data={trusteeData}>
       <LineChartContext.Provider value={contextValue}>
         {children}
       </LineChartContext.Provider>
