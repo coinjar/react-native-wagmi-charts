@@ -600,7 +600,7 @@ You can customize the style of the tooltip by providing the `textStyle` prop:
 
 ```jsx
 <LineChart.Tooltip
-  style={{
+  textStyle={{
     backgroundColor: 'black',
     borderRadius: 4,
     color: 'white',
@@ -899,12 +899,13 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 
 ### LineChart.Tooltip
 
-| Prop           | Type                  | Default | Description                                                                                                                    |
-|----------------|-----------------------|---------|--------------------------------------------------------------------------------------------------------------------------------|
-| `xGutter`      | `number`              | `8`     | X axis gutter in which the tooltip will not pass.                                                                              |
-| `yGutter`      | `number`              | `8`     | Y axis gutter in which the tooltip will not pass.                                                                              |
-| `cursorGutter` | `number`              | `48`    | Gutter (spacing) between the cursor and the tooltip.                                                                           |
-| `position`     | `"top"` or `"bottom"` | `"top"` | Position of the tooltip relative to the cursor.                                                                                |
+| Prop           | Type                  | Default | Description                                          |
+| -------------- | --------------------- | ------- | ---------------------------------------------------- |
+| `xGutter`      | `number`              | `8`     | X axis gutter in which the tooltip will not pass.    |
+| `yGutter`      | `number`              | `8`     | Y axis gutter in which the tooltip will not pass.    |
+| `cursorGutter` | `number`              | `48`    | Gutter (spacing) between the cursor and the tooltip. |
+| `position`     | `"top"` or `"bottom"` | `"top"` | Position of the tooltip relative to the cursor.      |
+| `textStyle`    | `{}`                  |         | Style of the tooltip text                            |
 | `at`           | `number`              |         | Make the tooltip static at the given `data` index (which shows the tooltip always, unless there is interaction with the chart) |
 
 ### LineChart.PriceText
