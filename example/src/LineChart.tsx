@@ -10,6 +10,7 @@ import { Platform } from 'react-native';
 
 import mockData from './data/line-data.json';
 import mockData2 from './data/line-data2.json';
+import { useMemo } from 'react';
 
 function invokeHaptic() {
   if (['ios', 'android'].includes(Platform.OS)) {
@@ -44,11 +45,31 @@ export default function App() {
     });
   };
 
+  const [toggleMinMaxLabels, setToggleMinMaxLabels] = React.useState(false);
+
   let dataProp: TLineChartDataProp = data;
+  const [min, max] = useMemo(() => {
+    if (Array.isArray(dataProp)) {
+      const values = dataProp.map((d) => d.value);
+      const _min = Math.min(...values);
+      const _max = Math.max(...values);
+      return [
+        values.findIndex((v) => v === _min),
+        values.findIndex((v) => v === _max),
+      ];
+    }
+    return [0, 0];
+  }, [dataProp]);
 
   let chart = (
     <LineChart>
-      <LineChart.Path color="black" />
+      {!toggleMinMaxLabels && <LineChart.Path color="black" />}
+      {toggleMinMaxLabels && (
+        <LineChart.Path color="black">
+          <LineChart.Tooltip position="top" at={max} />
+          <LineChart.Tooltip position="bottom" at={min} yGutter={-10} />
+        </LineChart.Path>
+      )}
       {/* <LineChart.Path color="black">
         <LineChart.Gradient color="black" />
         <LineChart.HorizontalLine at={{ index: 0 }} />
@@ -164,6 +185,7 @@ export default function App() {
             </Button>
             <Button onPress={toggleMultiData}>{`Multi Data`}</Button>
             <Button onPress={togglePartialDay}>{`Partial Day`}</Button>
+            <Button onPress={() => setToggleMinMaxLabels((p) => !p)}>{`Toggle min/max labels`}</Button>
           </Flex>
         </Box>
         {!multiData && (
