@@ -29,7 +29,11 @@ export default function App() {
               React Native WAGMI Charts 💸
             </Heading.H5>
             {selected ? (
-              <Button size="small" onPress={() => setSelected('')}>
+              <Button
+                size="small"
+                key="back-button"
+                onPress={() => setSelected('')}
+              >
                 Back
               </Button>
             ) : null}
