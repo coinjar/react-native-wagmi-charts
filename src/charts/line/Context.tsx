@@ -19,6 +19,7 @@ export const LineChartContext = React.createContext<TLineChartContext>({
     min: 0,
     max: 0,
   },
+  xDomain: undefined,
   xLength: 0,
 });
 
@@ -28,6 +29,7 @@ type LineChartProviderProps = {
   yRange?: YRangeProp;
   onCurrentIndexChange?: (x: number) => void;
   xLength?: number;
+  xDomain?: [number, number];
 };
 
 LineChartProvider.displayName = 'LineChartProvider';
@@ -38,6 +40,7 @@ export function LineChartProvider({
   yRange,
   onCurrentIndexChange,
   xLength,
+  xDomain,
 }: LineChartProviderProps) {
   const currentX = useSharedValue(-1);
   const currentIndex = useSharedValue(-1);
@@ -60,6 +63,7 @@ export function LineChartProvider({
         min: yRange?.min ?? Math.min(...values),
         max: yRange?.max ?? Math.max(...values),
       },
+      xDomain,
       xLength:
         xLength ?? (Array.isArray(data) ? data : Object.values(data)[0]).length,
     };
@@ -72,6 +76,7 @@ export function LineChartProvider({
     yRange?.max,
     yRange?.min,
     xLength,
+    xDomain,
   ]);
 
   useAnimatedReaction(

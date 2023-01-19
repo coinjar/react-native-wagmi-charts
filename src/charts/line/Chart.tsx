@@ -47,7 +47,7 @@ export function LineChart({
   absolute,
   ...props
 }: LineChartProps) {
-  const { yDomain, xLength } = React.useContext(LineChartContext);
+  const { yDomain, xLength, xDomain } = React.useContext(LineChartContext);
   const { data } = useLineChartData({
     id,
   });
@@ -69,10 +69,11 @@ export function LineChart({
         gutter: yGutter,
         shape,
         yDomain,
+        xDomain,
       });
     }
     return '';
-  }, [data, pathWidth, height, yGutter, shape, yDomain]);
+  }, [data, pathWidth, height, yGutter, shape, yDomain, xDomain]);
 
   const area = React.useMemo(() => {
     if (data && data.length > 0) {
