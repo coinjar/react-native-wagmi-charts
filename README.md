@@ -845,6 +845,7 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 | `crosshairWrapperProps` | `ViewProps`                    |           | Props of the wrapper component of the crosshair |
 | `crosshairProps`        | `ViewProps`                    |           | Props of the crosshair dot                      |
 | `crosshairOuterProps`   | `ViewProps`                    |           | Props of the crosshair outer dot                |
+| `snapToPoint`           | `boolean`                      | `false`   | Snap cursor to X position of nearest data point |
 | `...props`              | `LongPressGestureHandlerProps` |           |                                                 |
 
 ### LineChart.CursorLine
