@@ -107,6 +107,39 @@ export function LineChartPathWrapper({
     };
   });
 
+  const animatedStyle = useAnimatedProps(() => {
+    const shouldAnimateOnMount = animateOnMount === 'foreground';
+    const inactiveWidth =
+      !isMounted.value && shouldAnimateOnMount ? 0 : pathWidth;
+
+    let duration =
+      shouldAnimateOnMount && !hasMountedAnimation.value
+        ? mountAnimationDuration
+        : animationDuration;
+    const props =
+      shouldAnimateOnMount && !hasMountedAnimation.value
+        ? mountAnimationProps
+        : animationProps;
+
+    if (isActive.value) {
+      // duration = 0;
+    }
+
+    return {
+      width: withTiming(
+        isActive.value
+          ? // on Web, <svg /> elements don't support negative widths
+            // https://github.com/coinjar/react-native-wagmi-charts/issues/24#issuecomment-955789904
+            Math.max(currentX.value, 0)
+          : inactiveWidth + widthOffset,
+        Object.assign({ duration }, props),
+        () => {
+          hasMountedAnimation.value = true;
+        }
+      ),
+    };
+  });
+
   const viewSize = React.useMemo(() => ({ width, height }), [width, height]);
 
   ////////////////////////////////////////////////
@@ -155,12 +188,18 @@ export function LineChartPathWrapper({
           isTransitionEnabled: pathProps.isTransitionEnabled ?? true,
         }}
       >
-        <View style={StyleSheet.absoluteFill}>
-          <AnimatedSVG animatedProps={svgProps} height={height}>
+        <Animated.View
+          style={[
+            StyleSheet.absoluteFill,
+            { overflow: 'hidden' },
+            animatedStyle,
+          ]}
+        >
+          <AnimatedSVG width={width} height={height}>
             <LineChartPath color={color} width={strokeWidth} {...pathProps} />
             {foregroundChildren}
           </AnimatedSVG>
-        </View>
+        </Animated.View>
       </LineChartPathContext.Provider>
     </>
   );
