@@ -4,21 +4,22 @@ import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import Svg, { Line as SVGLine, LineProps } from 'react-native-svg';
 
 import { LineChartDimensionsContext } from './Chart';
-import { LineChartCursor } from './Cursor';
+import { LineChartCursor, LineChartCursorProps } from './Cursor';
 import { useLineChart } from './useLineChart';
 
 type LineChartCursorLineProps = {
   children?: React.ReactNode;
   color?: string;
   lineProps?: Partial<LineProps>;
-};
+} & Omit<LineChartCursorProps, 'type' | 'children'>;
 
 LineChartCursorLine.displayName = 'LineChartCursorLine';
 
 export function LineChartCursorLine({
   children,
   color = 'gray',
-  lineProps = {},
+  lineProps,
+  ...cursorProps
 }: LineChartCursorLineProps) {
   const { height } = React.useContext(LineChartDimensionsContext);
   const { currentX, isActive } = useLineChart();
@@ -30,7 +31,7 @@ export function LineChartCursorLine({
   }));
 
   return (
-    <LineChartCursor type="line">
+    <LineChartCursor {...cursorProps} type="line">
       <Animated.View style={vertical}>
         <Svg style={styles.svg}>
           <SVGLine
