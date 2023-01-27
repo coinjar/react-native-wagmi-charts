@@ -105,7 +105,19 @@ export function LineChartPathWrapper({
         }
       ),
     };
-  });
+  }, [
+    animateOnMount,
+    isMounted,
+    pathWidth,
+    hasMountedAnimation,
+    mountAnimationDuration,
+    animationDuration,
+    mountAnimationProps,
+    animationProps,
+    isActive,
+    currentX,
+    widthOffset,
+  ]);
 
   const viewSize = React.useMemo(() => ({ width, height }), [width, height]);
 

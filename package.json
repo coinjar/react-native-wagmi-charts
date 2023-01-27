@@ -99,7 +99,7 @@
       "react-hooks/exhaustive-deps": [
         "error",
         {
-          "additionalHooks": "(useAnimatedStyle|useDerivedValue|useAnimatedProps|useAnimatedReaction)"
+          "additionalHooks": "(useAnimatedStyle|useDerivedValue|useAnimatedProps)"
         }
       ]
     }

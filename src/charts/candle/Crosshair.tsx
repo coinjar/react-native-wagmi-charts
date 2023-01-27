@@ -79,7 +79,8 @@ export function CandlestickChartCrosshair({
       if (data !== -1 && data !== prevData && onCurrentXChange) {
         runOnJS(onCurrentXChange)(data);
       }
-    }
+    },
+    [currentX]
   );
 
   return (
