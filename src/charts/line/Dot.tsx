@@ -8,10 +8,10 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Circle, CircleProps } from 'react-native-svg';
-import { getYForX, parse } from 'react-native-redash';
+import { getYForX } from 'react-native-redash';
 
 import { LineChartDimensionsContext } from './Chart';
-import { LineChartPathContext } from './ChartPath';
+import { LineChartPathContext } from './LineChartPathContext';
 import { useLineChart } from './useLineChart';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
@@ -57,8 +57,8 @@ export function LineChartDot({
   size = 4,
   outerSize = size * 4,
 }: LineChartDotProps) {
-  const { data, isActive } = useLineChart();
-  const { path, pathWidth: width } = React.useContext(
+  const { isActive } = useLineChart();
+  const { parsedPath, pointWidth } = React.useContext(
     LineChartDimensionsContext
   );
 
@@ -72,24 +72,9 @@ export function LineChartDot({
 
   ////////////////////////////////////////////////////////////
 
-  const parsedPath = React.useMemo(() => parse(path), [path]);
-
-  ////////////////////////////////////////////////////////////
-
-  const pointWidth = React.useMemo(
-    () => width / (data.length - 1),
-    [data.length, width]
-  );
-
-  ////////////////////////////////////////////////////////////
-
-  const x = useDerivedValue(
-    () => withTiming(pointWidth * at),
-    [pointWidth, at]
-  );
-  const y = useDerivedValue(
-    () => withTiming(getYForX(parsedPath!, x.value) || 0),
-    [parsedPath, x]
+  const x = useDerivedValue(() => withTiming(pointWidth * at));
+  const y = useDerivedValue(() =>
+    withTiming(getYForX(parsedPath!, x.value) || 0)
   );
 
   ////////////////////////////////////////////////////////////

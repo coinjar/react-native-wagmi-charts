@@ -35,6 +35,7 @@ A sweet & simple chart library for React Native that will make us feel like **W*
   - [Interactive cursors](#interactive-cursors)
   - [Interactive labels](#interactive-labels)
   - [Interactive tooltips](#interactive-tooltips)
+  - [Tooltips / labels](#tooltips--labels)
   - [Haptic feedback](#haptic-feedback)
   - [Colors](#colors)
   - [Gradients](#gradients)
@@ -282,6 +283,23 @@ You can even add another tooltip to show something like date/time:
 
 <img src="https://user-images.githubusercontent.com/7336481/133036011-8a9b4865-10dd-4e88-9fd1-1e109435a73c.gif" width="200px" />
 
+### Tooltips / Labels
+
+You can also use the `Tooltip` component to render a "static" tooltip at a given index, by specifying the `at` prop (similar to [Dots](#dots)).
+Note that the tooltip will disappear when there is interaction with a cursor on the chart.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path>
+      <LineChart.Tooltip at={3} />
+    </LineChart.Path>
+  </LineChart>
+</LineChart.Provider>
+```
+
+<img src="https://user-images.githubusercontent.com/16821682/157064279-c0923a60-edf8-4942-a029-0145dd225d3f.gif" width="200px" />
+
 ### Haptic feedback
 
 By making use of the chart event handlers, you are able to integrate haptic feedback into your charts.
@@ -403,7 +421,7 @@ By using the `LineChart.Gradient` component, you can apply a gradient to the are
   <LineChart>
     <LineChart.Path color="red">
       <LineChart.Gradient />
-    <LineChart.Path>
+    </LineChart.Path>
   </LineChart>
 </LineChart.Provider>
 ```
@@ -417,7 +435,7 @@ The gradient will inherit your path's color by default, however, you can provide
   <LineChart>
     <LineChart.Path color="red">
       <LineChart.Gradient color="black" />
-    <LineChart.Path>
+    </LineChart.Path>
   </LineChart>
 </LineChart.Provider>
 ```
@@ -582,7 +600,7 @@ You can customize the style of the tooltip by providing the `textStyle` prop:
 
 ```jsx
 <LineChart.Tooltip
-  style={{
+  textStyle={{
     backgroundColor: 'black',
     borderRadius: 4,
     color: 'white',
@@ -887,6 +905,8 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 | `yGutter`      | `number`              | `8`     | Y axis gutter in which the tooltip will not pass.    |
 | `cursorGutter` | `number`              | `48`    | Gutter (spacing) between the cursor and the tooltip. |
 | `position`     | `"top"` or `"bottom"` | `"top"` | Position of the tooltip relative to the cursor.      |
+| `textStyle`    | `{}`                  |         | Style of the tooltip text                            |
+| `at`           | `number`              |         | Make the tooltip static at the given `data` index (which shows the tooltip always, unless there is interaction with the chart) |
 
 ### LineChart.PriceText
 
@@ -1044,9 +1064,10 @@ const { value, formatted } = LineChart.usePrice({
 **Arguments**
 
 | Variable    | Type                               | Default | Description                          |
-| ----------- | ---------------------------------- | ------- | ------------------------------------ |
+| ----------- |------------------------------------|---------|--------------------------------------|
 | `format`    | `({ value, formatted }) => string` |         | Custom format function of the price. |
 | `precision` | `number`                           | `2`     | Precision of the price value.        |
+| `index`     | `number`                           |         | Get the price for a specific index   |
 
 **Returns**
 
