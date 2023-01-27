@@ -72,9 +72,13 @@ export function LineChartDot({
 
   ////////////////////////////////////////////////////////////
 
-  const x = useDerivedValue(() => withTiming(pointWidth * at));
-  const y = useDerivedValue(() =>
-    withTiming(getYForX(parsedPath!, x.value) || 0)
+  const x = useDerivedValue(
+    () => withTiming(pointWidth * at),
+    [at, pointWidth]
+  );
+  const y = useDerivedValue(
+    () => withTiming(getYForX(parsedPath!, x.value) || 0),
+    [parsedPath, x]
   );
 
   ////////////////////////////////////////////////////////////
