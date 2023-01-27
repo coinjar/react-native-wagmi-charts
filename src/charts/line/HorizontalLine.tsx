@@ -5,7 +5,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Line as SVGLine, LineProps } from 'react-native-svg';
-import { getYForX, parse } from 'react-native-redash';
+import { getYForX } from 'react-native-redash';
 
 import { LineChartDimensionsContext } from './Chart';
 import { useLineChart } from './useLineChart';
@@ -53,16 +53,10 @@ export function LineChartHorizontalLine({
   at = { index: 0 },
   offsetY = 0,
 }: HorizontalLineProps) {
-  const { width, path, height, gutter } = React.useContext(
+  const { width, parsedPath, pointWidth, height, gutter } = React.useContext(
     LineChartDimensionsContext
   );
-  const { data, yDomain } = useLineChart();
-
-  const parsedPath = React.useMemo(() => parse(path), [path]);
-  const pointWidth = React.useMemo(
-    () => width / data.length,
-    [data.length, width]
-  );
+  const { yDomain } = useLineChart();
 
   const y = useDerivedValue(() => {
     if (typeof at === 'number' || at.index != null) {
