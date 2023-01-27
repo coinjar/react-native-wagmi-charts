@@ -10,7 +10,6 @@ import Animated, {
 import flattenChildren from 'react-keyed-flatten-children';
 
 import { LineChartDimensionsContext } from './Chart';
-import { LineChartPathContext } from './LineChartPathContext';
 import { LineChartPath, LineChartPathProps } from './Path';
 import { useLineChart } from './useLineChart';
 
@@ -19,11 +18,16 @@ const BACKGROUND_COMPONENTS = [
   'LineChartHorizontalLine',
   'LineChartGradient',
   'LineChartDot',
-  'LineChartTooltip',
 ];
 const FOREGROUND_COMPONENTS = ['LineChartHighlight', 'LineChartDot'];
 
 const AnimatedSVG = Animated.createAnimatedComponent(Svg);
+
+export const LineChartPathContext = React.createContext({
+  color: '',
+  isInactive: false,
+  isTransitionEnabled: true,
+});
 
 type LineChartPathWrapperProps = {
   animationDuration?: number;
