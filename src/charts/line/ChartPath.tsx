@@ -70,7 +70,7 @@ export function LineChartPathWrapper({
 
   ////////////////////////////////////////////////
 
-  const animatedStyle = useAnimatedProps(() => {
+  const svgProps = useAnimatedProps(() => {
     const shouldAnimateOnMount = animateOnMount === 'foreground';
     const inactiveWidth =
       !isMounted.value && shouldAnimateOnMount ? 0 : pathWidth;
@@ -85,7 +85,7 @@ export function LineChartPathWrapper({
         : animationProps;
 
     if (isActive.value) {
-      // duration = 0;
+      duration = 0;
     }
 
     return {
@@ -103,15 +103,15 @@ export function LineChartPathWrapper({
     };
   }, [
     animateOnMount,
-    isMounted,
-    pathWidth,
-    hasMountedAnimation,
-    mountAnimationDuration,
     animationDuration,
-    mountAnimationProps,
     animationProps,
-    isActive,
     currentX,
+    hasMountedAnimation,
+    isActive,
+    isMounted,
+    mountAnimationDuration,
+    mountAnimationProps,
+    pathWidth,
     widthOffset,
   ]);
 
@@ -163,18 +163,12 @@ export function LineChartPathWrapper({
           isTransitionEnabled: pathProps.isTransitionEnabled ?? true,
         }}
       >
-        <Animated.View
-          style={[
-            StyleSheet.absoluteFill,
-            { overflow: 'hidden' },
-            animatedStyle,
-          ]}
-        >
-          <AnimatedSVG width={width} height={height}>
+        <View style={StyleSheet.absoluteFill}>
+          <AnimatedSVG animatedProps={svgProps} height={height}>
             <LineChartPath color={color} width={strokeWidth} {...pathProps} />
             {foregroundChildren}
           </AnimatedSVG>
-        </Animated.View>
+        </View>
       </LineChartPathContext.Provider>
     </>
   );
