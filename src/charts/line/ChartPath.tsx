@@ -74,39 +74,6 @@ export function LineChartPathWrapper({
 
   ////////////////////////////////////////////////
 
-  const svgProps = useAnimatedProps(() => {
-    const shouldAnimateOnMount = animateOnMount === 'foreground';
-    const inactiveWidth =
-      !isMounted.value && shouldAnimateOnMount ? 0 : pathWidth;
-
-    let duration =
-      shouldAnimateOnMount && !hasMountedAnimation.value
-        ? mountAnimationDuration
-        : animationDuration;
-    const props =
-      shouldAnimateOnMount && !hasMountedAnimation.value
-        ? mountAnimationProps
-        : animationProps;
-
-    if (isActive.value) {
-      duration = 0;
-    }
-
-    return {
-      width: withTiming(
-        isActive.value
-          ? // on Web, <svg /> elements don't support negative widths
-            // https://github.com/coinjar/react-native-wagmi-charts/issues/24#issuecomment-955789904
-            Math.max(currentX.value, 0)
-          : inactiveWidth + widthOffset,
-        Object.assign({ duration }, props),
-        () => {
-          hasMountedAnimation.value = true;
-        }
-      ),
-    };
-  });
-
   const animatedStyle = useAnimatedProps(() => {
     const shouldAnimateOnMount = animateOnMount === 'foreground';
     const inactiveWidth =
