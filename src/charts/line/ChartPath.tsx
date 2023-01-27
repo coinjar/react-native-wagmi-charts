@@ -10,6 +10,7 @@ import Animated, {
 import flattenChildren from 'react-keyed-flatten-children';
 
 import { LineChartDimensionsContext } from './Chart';
+import { LineChartPathContext } from './LineChartPathContext';
 import { LineChartPath, LineChartPathProps } from './Path';
 import { useLineChart } from './useLineChart';
 
@@ -18,16 +19,11 @@ const BACKGROUND_COMPONENTS = [
   'LineChartHorizontalLine',
   'LineChartGradient',
   'LineChartDot',
+  'LineChartTooltip',
 ];
 const FOREGROUND_COMPONENTS = ['LineChartHighlight', 'LineChartDot'];
 
 const AnimatedSVG = Animated.createAnimatedComponent(Svg);
-
-export const LineChartPathContext = React.createContext({
-  color: '',
-  isInactive: false,
-  isTransitionEnabled: true,
-});
 
 type LineChartPathWrapperProps = {
   animationDuration?: number;
@@ -107,39 +103,6 @@ export function LineChartPathWrapper({
     };
   });
 
-  const animatedStyle = useAnimatedProps(() => {
-    const shouldAnimateOnMount = animateOnMount === 'foreground';
-    const inactiveWidth =
-      !isMounted.value && shouldAnimateOnMount ? 0 : pathWidth;
-
-    let duration =
-      shouldAnimateOnMount && !hasMountedAnimation.value
-        ? mountAnimationDuration
-        : animationDuration;
-    const props =
-      shouldAnimateOnMount && !hasMountedAnimation.value
-        ? mountAnimationProps
-        : animationProps;
-
-    if (isActive.value) {
-      // duration = 0;
-    }
-
-    return {
-      width: withTiming(
-        isActive.value
-          ? // on Web, <svg /> elements don't support negative widths
-            // https://github.com/coinjar/react-native-wagmi-charts/issues/24#issuecomment-955789904
-            Math.max(currentX.value, 0)
-          : inactiveWidth + widthOffset,
-        Object.assign({ duration }, props),
-        () => {
-          hasMountedAnimation.value = true;
-        }
-      ),
-    };
-  });
-
   const viewSize = React.useMemo(() => ({ width, height }), [width, height]);
 
   ////////////////////////////////////////////////
@@ -188,18 +151,12 @@ export function LineChartPathWrapper({
           isTransitionEnabled: pathProps.isTransitionEnabled ?? true,
         }}
       >
-        <Animated.View
-          style={[
-            StyleSheet.absoluteFill,
-            { overflow: 'hidden' },
-            animatedStyle,
-          ]}
-        >
-          <AnimatedSVG width={width} height={height}>
+        <View style={StyleSheet.absoluteFill}>
+          <AnimatedSVG animatedProps={svgProps} height={height}>
             <LineChartPath color={color} width={strokeWidth} {...pathProps} />
             {foregroundChildren}
           </AnimatedSVG>
-        </Animated.View>
+        </View>
       </LineChartPathContext.Provider>
     </>
   );
