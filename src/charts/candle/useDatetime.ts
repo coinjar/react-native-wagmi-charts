@@ -25,7 +25,7 @@ export function useCandlestickChartDatetime({
   const timestampString = useDerivedValue(() => {
     if (timestamp.value === -1) return '';
     return timestamp.value.toString();
-  });
+  }, [timestamp]);
 
   const formatted = useDerivedValue(() => {
     if (timestamp.value === -1) return '';
@@ -37,7 +37,7 @@ export function useCandlestickChartDatetime({
     return format
       ? format({ value: timestamp.value, formatted: formattedDatetime })
       : formattedDatetime;
-  });
+  }, [timestamp, locale, options, format]);
 
   return { value: timestampString, formatted };
 }

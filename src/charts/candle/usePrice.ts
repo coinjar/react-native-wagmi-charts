@@ -34,14 +34,14 @@ export function useCandlestickChartPrice({
     }
     if (price === -1) return '';
     return price.toFixed(precision).toString();
-  });
+  }, [currentY, domain, height, candle, type, precision]);
   const formatted = useDerivedValue(() => {
     if (!float.value) return '';
     const formattedPrice = formatPrice({ value: float.value });
     return format
       ? format({ value: float.value, formatted: formattedPrice })
       : formattedPrice;
-  });
+  }, [float, format]);
 
   return { value: float, formatted };
 }
