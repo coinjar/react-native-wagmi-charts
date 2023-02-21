@@ -31,7 +31,7 @@ export function getArea({
   const area = shape
     .area()
     .x((_: unknown, i: number) => scaleX(i))
-    .y0((d: { value: unknown }) => scaleY(d.value))
+    .y0((d: { value: unknown }) => scaleY(d.value as number))
     .y1(() => height)
     .curve(_shape)(data);
   return area;
