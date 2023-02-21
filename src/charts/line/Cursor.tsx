@@ -63,6 +63,7 @@ export function LineChartCursor({
         minDurationMs={0}
         maxDist={999999}
         onGestureEvent={onGestureEvent}
+        shouldCancelWhenOutside={false}
         {...props}
       >
         <Animated.View style={StyleSheet.absoluteFill}>
