@@ -14,6 +14,7 @@ export function getPath({
   gutter,
   shape: _shape,
   yDomain,
+  xDomain,
 }: {
   data: TLineChartData;
   from?: number;
@@ -23,11 +24,12 @@ export function getPath({
   gutter: number;
   shape?: unknown;
   yDomain: YDomain;
+  xDomain?: [number, number];
 }): string {
-  const timestamps = data.map((_, i) => i);
+  const timestamps = data.map(({ timestamp }, i) => (xDomain ? timestamp : i));
 
   const scaleX = scaleLinear()
-    .domain([Math.min(...timestamps), Math.max(...timestamps)])
+    .domain(xDomain ?? [Math.min(...timestamps), Math.max(...timestamps)])
     .range([0, width]);
   const scaleY = scaleLinear()
     .domain([yDomain.min, yDomain.max])
@@ -41,7 +43,7 @@ export function getPath({
             .find((item) => item.timestamp === d.timestamp)
         : true
     )
-    .x((_: unknown, i: number) => scaleX(i))
+    .x((_: unknown, i: number) => scaleX(xDomain ? timestamps[i] : i))
     .y((d: { value: number }) => scaleY(d.value))
     .curve(_shape)(data);
   return path;
