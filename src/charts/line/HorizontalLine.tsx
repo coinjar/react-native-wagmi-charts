@@ -82,14 +82,26 @@ export function LineChartHorizontalLine({
     const offsetTopPixels = gutter + percentageOffsetTop * heightBetweenGutters;
 
     return withTiming(offsetTopPixels + offsetY);
-  });
+  }, [
+    at,
+    gutter,
+    height,
+    offsetY,
+    parsedPath,
+    pointWidth,
+    yDomain.max,
+    yDomain.min,
+  ]);
 
-  const lineAnimatedProps = useAnimatedProps(() => ({
-    x1: 0,
-    x2: width,
-    y1: y.value,
-    y2: y.value,
-  }));
+  const lineAnimatedProps = useAnimatedProps(
+    () => ({
+      x1: 0,
+      x2: width,
+      y1: y.value,
+      y2: y.value,
+    }),
+    [width, y]
+  );
 
   return (
     <AnimatedLine

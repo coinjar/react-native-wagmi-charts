@@ -80,7 +80,8 @@ export function LineChartProvider({
       if (x !== -1 && x !== prevX && onCurrentIndexChange) {
         runOnJS(onCurrentIndexChange)(x);
       }
-    }
+    },
+    [currentIndex]
   );
 
   return (

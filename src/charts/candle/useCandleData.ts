@@ -11,7 +11,7 @@ export function useCandleData(): Readonly<Animated.SharedValue<TCandle>> {
       return { timestamp: -1, low: -1, open: -1, high: -1, close: -1 };
     }
     return data[Math.floor(currentX.value / step)];
-  });
+  }, [currentX, data, step]);
 
   return candle;
 }

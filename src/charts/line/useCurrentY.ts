@@ -15,7 +15,7 @@ export function useCurrentY() {
     }
     const boundedX = Math.min(width, currentX.value);
     return getYForX(parsedPath, boundedX) || 0;
-  });
+  }, [parsedPath, width, currentX]);
 
   return currentY;
 }

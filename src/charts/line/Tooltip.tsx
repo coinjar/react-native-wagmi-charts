@@ -133,7 +133,20 @@ export function LineChartTooltip({
       ],
       opacity: opacity,
     };
-  });
+  }, [
+    currentX,
+    currentY,
+    cursorGutter,
+    elementHeight,
+    elementWidth,
+    height,
+    isActive,
+    position,
+    type,
+    width,
+    xGutter,
+    yGutter,
+  ]);
 
   return (
     <Animated.View

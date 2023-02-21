@@ -72,17 +72,24 @@ export function LineChartDot({
 
   ////////////////////////////////////////////////////////////
 
-  const x = useDerivedValue(() => withTiming(pointWidth * at));
-  const y = useDerivedValue(() =>
-    withTiming(getYForX(parsedPath!, x.value) || 0)
+  const x = useDerivedValue(
+    () => withTiming(pointWidth * at),
+    [at, pointWidth]
+  );
+  const y = useDerivedValue(
+    () => withTiming(getYForX(parsedPath!, x.value) || 0),
+    [parsedPath, x]
   );
 
   ////////////////////////////////////////////////////////////
 
-  const animatedDotProps = useAnimatedProps(() => ({
-    cx: x.value,
-    cy: y.value,
-  }));
+  const animatedDotProps = useAnimatedProps(
+    () => ({
+      cx: x.value,
+      cy: y.value,
+    }),
+    [x, y]
+  );
 
   const animatedOuterDotProps = useAnimatedProps(() => {
     let defaultProps = {
@@ -139,7 +146,7 @@ export function LineChartDot({
       opacity: animatedOpacity,
       r: scale,
     };
-  }, [outerSize]);
+  }, [hasPulse, isActive, outerSize, pulseBehaviour, pulseDurationMs, x, y]);
 
   ////////////////////////////////////////////////////////////
 

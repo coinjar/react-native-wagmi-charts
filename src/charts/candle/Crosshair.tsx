@@ -64,14 +64,20 @@ export function CandlestickChartCrosshair({
       currentX.value = -1;
     },
   });
-  const horizontal = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-    transform: [{ translateY: currentY.value }],
-  }));
-  const vertical = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-    transform: [{ translateX: currentX.value }],
-  }));
+  const horizontal = useAnimatedStyle(
+    () => ({
+      opacity: opacity.value,
+      transform: [{ translateY: currentY.value }],
+    }),
+    [opacity, currentY]
+  );
+  const vertical = useAnimatedStyle(
+    () => ({
+      opacity: opacity.value,
+      transform: [{ translateX: currentX.value }],
+    }),
+    [opacity, currentX]
+  );
 
   useAnimatedReaction(
     () => currentX.value,
@@ -79,7 +85,8 @@ export function CandlestickChartCrosshair({
       if (data !== -1 && data !== prevData && onCurrentXChange) {
         runOnJS(onCurrentXChange)(data);
       }
-    }
+    },
+    [currentX]
   );
 
   return (

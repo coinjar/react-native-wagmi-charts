@@ -23,11 +23,14 @@ export function LineChartCursorLine({
   const { height } = React.useContext(LineChartDimensionsContext);
   const { currentX, isActive } = useLineChart();
 
-  const vertical = useAnimatedStyle(() => ({
-    opacity: isActive.value ? 1 : 0,
-    height: '100%',
-    transform: [{ translateX: currentX.value }],
-  }));
+  const vertical = useAnimatedStyle(
+    () => ({
+      opacity: isActive.value ? 1 : 0,
+      height: '100%',
+      transform: [{ translateX: currentX.value }],
+    }),
+    [currentX, isActive]
+  );
 
   return (
     <LineChartCursor type="line">
