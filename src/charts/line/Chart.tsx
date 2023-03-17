@@ -5,7 +5,7 @@ import { Dimensions, StyleSheet, View, ViewProps } from 'react-native';
 import { LineChartContext } from './Context';
 import { LineChartIdProvider, useLineChartData } from './Data';
 
-import { getArea, getPath } from './utils';
+import {getArea, getPath, smoothData} from './utils';
 import { parse, Path } from 'react-native-redash';
 
 export const LineChartDimensionsContext = React.createContext({
@@ -33,6 +33,7 @@ type LineChartProps = ViewProps & {
    */
   id?: string;
   absolute?: boolean;
+  smoothDataRadius?: number;
 };
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -47,6 +48,7 @@ export function LineChart({
   shape = d3Shape.curveBumpX,
   id,
   absolute,
+  smoothDataRadius,
   ...props
 }: LineChartProps) {
   const { yDomain, xLength, xDomain } = React.useContext(LineChartContext);
@@ -80,8 +82,9 @@ export function LineChart({
 
   const smoothedPath = React.useMemo(() => {
     if (data && data.length > 0) {
+      const radius = smoothDataRadius ? smoothDataRadius : 2;
       return getPath({
-        data,
+        data: smoothData(data, radius),
         width: pathWidth,
         height,
         gutter: yGutter,
@@ -92,7 +95,16 @@ export function LineChart({
       });
     }
     return '';
-  }, [data, pathWidth, height, yGutter, shape, yDomain, xDomain]);
+  }, [
+    data,
+    smoothDataRadius,
+    pathWidth,
+    height,
+    yGutter,
+    shape,
+    yDomain,
+    xDomain,
+  ]);
 
   const area = React.useMemo(() => {
     if (data && data.length > 0) {
