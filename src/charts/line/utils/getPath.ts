@@ -15,6 +15,7 @@ export function getPath({
   shape: _shape,
   yDomain,
   xDomain,
+  isOriginalData,
 }: {
   data: TLineChartData;
   from?: number;
@@ -25,6 +26,7 @@ export function getPath({
   shape?: unknown;
   yDomain: YDomain;
   xDomain?: [number, number];
+  isOriginalData: boolean;
 }): string {
   const timestamps = data.map(({ timestamp }, i) => (xDomain ? timestamp : i));
 
@@ -44,7 +46,7 @@ export function getPath({
         : true
     )
     .x((_: unknown, i: number) => scaleX(xDomain ? timestamps[i] : i))
-    .y((d: { value: number }) => scaleY(d.value))
+    .y((d: { value: number, smoothedValue: number }) => scaleY(isOriginalData ? d.value : d.smoothedValue))
     .curve(_shape)(data);
   return path;
 }
