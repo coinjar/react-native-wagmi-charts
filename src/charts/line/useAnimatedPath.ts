@@ -4,24 +4,30 @@ import {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-
+import {SharedValue} from "react-native-reanimated/lib/types/lib";
 import { usePrevious } from '../../utils';
 import { interpolatePath } from './utils';
 
 export default function useAnimatedPath({
   enabled = true,
   path,
+  smoothedPath,
+  isActive
 }: {
   enabled?: boolean;
   path: string;
+  smoothedPath: string;
+  isActive: SharedValue<boolean>;
 }) {
   const transition = useSharedValue(0);
 
-  const previousPath = usePrevious(path);
+  const currentPath = useSharedValue(smoothedPath);
+  const previousPath = smoothedPath;
 
   useAnimatedReaction(
     () => {
-      return path;
+      currentPath.value = isActive.value ? path: smoothedPath;
+      return currentPath.value;
     },
     (_, previous) => {
       if (previous) {
@@ -29,13 +35,13 @@ export default function useAnimatedPath({
         transition.value = withTiming(1);
       }
     },
-    [path]
+    [path, smoothedPath, isActive]
   );
 
   const animatedProps = useAnimatedProps(() => {
-    let d = path || '';
+    let d = currentPath.value || '';
     if (previousPath && enabled) {
-      const pathInterpolator = interpolatePath(previousPath, path, null);
+      const pathInterpolator = interpolatePath(previousPath, currentPath.value, null);
       d = pathInterpolator(transition.value);
     }
     return {

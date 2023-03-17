@@ -3,6 +3,7 @@ import type Animated from 'react-native-reanimated';
 export type TLineChartPoint = {
   timestamp: number;
   value: number;
+  smoothedValue: number;
 };
 export type TLineChartDataProp =
   | TLineChartData
