@@ -127,7 +127,7 @@ const data = [
   },
   {
     timestamp: 1625948100000,
-    value: 33215.26,
+    value: 33215.25,
   },
 ];
 
