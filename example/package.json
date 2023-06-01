@@ -13,28 +13,28 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "bumbag": "^2.2.1",
-    "bumbag-native": "^2.3.0",
-    "expo": "^44.0.0-beta.2",
-    "expo-haptics": "~11.1.0",
-    "expo-splash-screen": "~0.14.0",
-    "react": "17.0.1",
-    "react-dom": "17.0.1",
-    "react-native": "0.64.3",
-    "react-native-gesture-handler": "~2.1.0",
-    "react-native-reanimated": "~2.3.1",
-    "react-native-svg": "12.1.1",
-    "react-native-web": "0.17.1"
+    "bumbag": "^2.7.21",
+    "bumbag-native": "^2.7.21",
+    "expo": "^48.0.19",
+    "expo-haptics": "~12.2.1",
+    "expo-splash-screen": "~0.18.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "0.71.8",
+    "react-native-gesture-handler": "~2.9.0",
+    "react-native-reanimated": "~2.14.4",
+    "react-native-svg": "13.4.0",
+    "react-native-web": "0.18.10"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9",
-    "@babel/runtime": "^7.14.6",
-    "@expo/webpack-config": "^0.16.14",
-    "babel-loader": "^8.2.3",
-    "babel-plugin-module-resolver": "^4.1.0",
-    "babel-preset-expo": "9.0.1",
+    "@babel/core": "^7.22.1",
+    "@babel/runtime": "^7.22.3",
+    "@expo/webpack-config": "^18.1.0",
+    "babel-loader": "^9.1.2",
+    "babel-plugin-module-resolver": "^5.0.0",
+    "babel-preset-expo": "9.3.2",
     "jsonfile": "^6.1.0",
-    "patch-package": "^6.4.7",
+    "patch-package": "^7.0.0",
     "postinstall-postinstall": "^2.1.0"
   }
 }
