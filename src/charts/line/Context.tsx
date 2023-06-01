@@ -86,7 +86,7 @@ export function LineChartProvider({
         runOnJS(onCurrentIndexChange)(x);
       }
     },
-    [currentIndex]
+    [currentIndex, onCurrentIndexChange]
   );
 
   return (
