@@ -54,7 +54,7 @@ export function LineChartHorizontalLine({
   at = { index: 0 },
   offsetY = 0,
 }: HorizontalLineProps) {
-  const { width, parsedPath, pointWidth, height, gutter } = React.useContext(
+  const { width, parsedPath, height, gutter } = React.useContext(
     LineChartDimensionsContext
   );
   const { yDomain } = useLineChart();
