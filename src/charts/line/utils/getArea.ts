@@ -1,9 +1,10 @@
 // @ts-ignore
 import * as shape from 'd3-shape';
-// @ts-ignore
-import { scaleLinear } from 'd3-scale';
 
 import type { TLineChartData, YDomain } from '../types';
+
+// @ts-ignore
+import { scaleLinear } from 'd3-scale';
 
 export function getArea({
   data,
@@ -12,6 +13,7 @@ export function getArea({
   gutter,
   shape: _shape,
   yDomain,
+  xDomain,
 }: {
   data: TLineChartData;
   width: number;
@@ -19,18 +21,19 @@ export function getArea({
   gutter: number;
   shape?: unknown;
   yDomain: YDomain;
+  xDomain?: [number, number];
 }): string {
-  const timestamps = data.map((_, i) => i);
+  const timestamps = data.map(({ timestamp }, i) => (xDomain ? timestamp : i));
 
   const scaleX = scaleLinear()
-    .domain([Math.min(...timestamps), Math.max(...timestamps)])
+    .domain(xDomain ?? [Math.min(...timestamps), Math.max(...timestamps)])
     .range([0, width]);
   const scaleY = scaleLinear()
     .domain([yDomain.min, yDomain.max])
     .range([height - gutter, gutter]);
   const area = shape
     .area()
-    .x((_: unknown, i: number) => scaleX(i))
+    .x((_: unknown, i: number) => scaleX(xDomain ? timestamps[i] : i))
     .y0((d: { value: unknown }) => scaleY(d.value as number))
     .y1(() => height)
     .curve(_shape)(data);

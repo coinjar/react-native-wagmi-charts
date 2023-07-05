@@ -1,15 +1,17 @@
 import * as React from 'react';
+import * as haptics from 'expo-haptics';
+
 import { Box, Button, Flex, Heading, Stack, Text } from 'bumbag-native';
 import {
   LineChart,
   TLineChartDataProp,
   TLineChartPoint,
 } from 'react-native-wagmi-charts';
-import * as haptics from 'expo-haptics';
-import { Platform } from 'react-native';
 
+import { Platform } from 'react-native';
 import mockData from './data/line-data.json';
 import mockData2 from './data/line-data2.json';
+import mockDataNonLinear from './data/line-data-non-linear-domain.json';
 import { useMemo } from 'react';
 
 function invokeHaptic() {
@@ -28,6 +30,8 @@ export default function App() {
     (state) => !state,
     false
   );
+
+  const [scaleRelativeToTime, setScaleRelativeToTime] = React.useState(false);
 
   const [yRange, setYRange] = React.useState<undefined | 'low' | 'high'>(
     undefined
@@ -66,6 +70,7 @@ export default function App() {
       {!toggleMinMaxLabels && <LineChart.Path color="black" />}
       {toggleMinMaxLabels && (
         <LineChart.Path color="black">
+          <LineChart.Gradient color="black" />
           <LineChart.Tooltip position="top" at={max} />
           <LineChart.Tooltip position="bottom" at={min} yGutter={-10} />
         </LineChart.Path>
@@ -130,6 +135,11 @@ export default function App() {
         Line Chart 📈
       </Heading.H5>
       <LineChart.Provider
+        xDomain={
+          scaleRelativeToTime
+            ? [data[0].timestamp, data[data.length - 1].timestamp]
+            : undefined
+        }
         xLength={partialDay ? data.length * 2 : undefined}
         yRange={{
           min:
@@ -149,6 +159,7 @@ export default function App() {
           <Flex flexWrap={'wrap'}>
             <Button onPress={() => setData(mockData)}>Data 1</Button>
             <Button onPress={() => setData(mockData2)}>Data 2</Button>
+            <Button onPress={() => setData(mockDataNonLinear)}>Data 3</Button>
             <Button onPress={() => setData([...mockData, ...mockData2])}>
               Data 1 + Data 2
             </Button>
@@ -185,7 +196,17 @@ export default function App() {
             </Button>
             <Button onPress={toggleMultiData}>{`Multi Data`}</Button>
             <Button onPress={togglePartialDay}>{`Partial Day`}</Button>
-            <Button onPress={() => setToggleMinMaxLabels((p) => !p)}>{`Toggle min/max labels`}</Button>
+            <Button
+              onPress={() => setToggleMinMaxLabels((p) => !p)}
+            >{`Toggle min/max labels`}</Button>
+            <Button
+              onPress={() => {
+                // Use with data 3 for best demonstration
+                setScaleRelativeToTime((val) => !val);
+              }}
+            >
+              {`Toggle ${scaleRelativeToTime ? 'off' : 'on'} XDomain`}
+            </Button>
           </Flex>
         </Box>
         {!multiData && (
