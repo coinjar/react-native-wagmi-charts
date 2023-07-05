@@ -11,6 +11,7 @@ import { LineChartPriceText, LineChartPriceTextProps } from './PriceText';
 import { CursorContext } from './Cursor';
 import { LineChartDimensionsContext } from './Chart';
 import type { ViewProps } from 'react-native';
+import { getXPositionForCurve } from './utils/getXPositionForCurve';
 import { getYForX } from 'react-native-redash';
 import { useLineChart } from './useLineChart';
 import { useMemo } from 'react';
@@ -69,11 +70,9 @@ export function LineChartTooltip({
   const atXPosition = useMemo(
     () =>
       at !== null && at !== undefined
-        ? at === 0
-          ? 0
-          : parsedPath.curves[at - 1].to.x
+        ? getXPositionForCurve(parsedPath, at)
         : undefined,
-    [at, parsedPath.curves]
+    [at, parsedPath]
   );
 
   const atYPosition = useDerivedValue(() => {
