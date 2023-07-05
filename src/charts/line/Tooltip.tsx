@@ -1,17 +1,18 @@
 import * as React from 'react';
-import type { ViewProps } from 'react-native';
+
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-
-import { LineChartDimensionsContext } from './Chart';
-import { CursorContext } from './Cursor';
 import { LineChartPriceText, LineChartPriceTextProps } from './PriceText';
-import { useLineChart } from './useLineChart';
+
+import { CursorContext } from './Cursor';
+import { LineChartDimensionsContext } from './Chart';
+import type { ViewProps } from 'react-native';
 import { getYForX } from 'react-native-redash';
+import { useLineChart } from './useLineChart';
 import { useMemo } from 'react';
 
 export type LineChartTooltipProps = Animated.AnimateProps<ViewProps> & {
@@ -45,7 +46,7 @@ export function LineChartTooltip({
   at,
   ...props
 }: LineChartTooltipProps) {
-  const { width, height, parsedPath, pointWidth } = React.useContext(
+  const { width, height, parsedPath } = React.useContext(
     LineChartDimensionsContext
   );
   const { type } = React.useContext(CursorContext);
@@ -66,9 +67,15 @@ export function LineChartTooltip({
 
   // When the user set a `at` index, get the index's y & x positions
   const atXPosition = useMemo(
-    () => (at == null ? undefined : pointWidth * at),
-    [at, pointWidth]
+    () =>
+      at !== null && at !== undefined
+        ? at === 0
+          ? 0
+          : parsedPath.curves[at - 1].to.x
+        : undefined,
+    [at, parsedPath.curves]
   );
+
   const atYPosition = useDerivedValue(() => {
     return atXPosition == null
       ? undefined
@@ -134,13 +141,15 @@ export function LineChartTooltip({
       opacity: opacity,
     };
   }, [
-    currentX,
-    currentY,
+    atXPosition,
+    atYPosition.value,
+    currentX.value,
+    currentY.value,
     cursorGutter,
-    elementHeight,
-    elementWidth,
+    elementHeight.value,
+    elementWidth.value,
     height,
-    isActive,
+    isActive.value,
     position,
     type,
     width,
