@@ -50,6 +50,7 @@ export default function App() {
   };
 
   const [toggleMinMaxLabels, setToggleMinMaxLabels] = React.useState(false);
+  const [toggleSnapToPoint, setToggleSnapToPoint] = React.useState(false);
 
   let dataProp: TLineChartDataProp = data;
   const [min, max] = useMemo(() => {
@@ -87,6 +88,7 @@ export default function App() {
       </LineChart.Path>
         */}
       <LineChart.CursorCrosshair
+        snapToPoint={toggleSnapToPoint}
         onActivated={invokeHaptic}
         onEnded={invokeHaptic}
       >
@@ -106,6 +108,7 @@ export default function App() {
         <LineChart id="one">
           <LineChart.Path animateOnMount="foreground" color="blue" />
           <LineChart.CursorCrosshair
+            snapToPoint={toggleSnapToPoint}
             onActivated={invokeHaptic}
             onEnded={invokeHaptic}
           >
@@ -118,6 +121,7 @@ export default function App() {
             <LineChart.HorizontalLine at={{ index: 4 }} />
           </LineChart.Path>
           <LineChart.CursorCrosshair
+            snapToPoint={toggleSnapToPoint}
             color="hotpink"
             onActivated={invokeHaptic}
             onEnded={invokeHaptic}
@@ -207,6 +211,9 @@ export default function App() {
             >
               {`Toggle ${scaleRelativeToTime ? 'off' : 'on'} XDomain`}
             </Button>
+            <Button
+              onPress={() => setToggleSnapToPoint((val) => !val)}
+            >{`Toggle Snap ${toggleSnapToPoint ? 'Off' : 'On'}`}</Button>
           </Flex>
         </Box>
         {!multiData && (
