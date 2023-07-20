@@ -816,6 +816,7 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 | -------- | --------------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | `data`   | `Array<{ timestamp: number, value: number }>` |         | The line chart data as an array of timestamps & values (prices).                                                                             |
 | `yRange` | `{ min?: number; max?: number }`              |         | Set a custom range for the y values of your chart. See [#20](https://github.com/coinjar/react-native-wagmi-charts/issues/20) for a use-case. |
+| `xDomain` | `[ min: number; max: number ]`              |         | Scale x values proportionate to their time scale. Distance between points will be relative to each other instead of same spacing between in point. See [#140](https://github.com/coinjar/react-native-wagmi-charts/issues/140#issuecomment-1614264020) for a use-case.  |
 
 ### LineChart
 

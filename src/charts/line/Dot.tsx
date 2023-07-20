@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import Animated, {
   Easing,
   useAnimatedProps,
@@ -8,10 +9,11 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Circle, CircleProps } from 'react-native-svg';
-import { getYForX } from 'react-native-redash';
 
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartPathContext } from './LineChartPathContext';
+import { getXPositionForCurve } from './utils/getXPositionForCurve';
+import { getYForX } from 'react-native-redash';
 import { useLineChart } from './useLineChart';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
@@ -58,9 +60,7 @@ export function LineChartDot({
   outerSize = size * 4,
 }: LineChartDotProps) {
   const { isActive } = useLineChart();
-  const { parsedPath, pointWidth } = React.useContext(
-    LineChartDimensionsContext
-  );
+  const { parsedPath } = React.useContext(LineChartDimensionsContext);
 
   ////////////////////////////////////////////////////////////
 
@@ -72,10 +72,10 @@ export function LineChartDot({
 
   ////////////////////////////////////////////////////////////
 
-  const x = useDerivedValue(
-    () => withTiming(pointWidth * at),
-    [at, pointWidth]
-  );
+  const x = useDerivedValue(() => {
+    return withTiming(getXPositionForCurve(parsedPath, at));
+  }, [at, parsedPath]);
+
   const y = useDerivedValue(
     () => withTiming(getYForX(parsedPath!, x.value) || 0),
     [parsedPath, x]

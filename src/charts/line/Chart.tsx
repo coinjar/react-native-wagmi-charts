@@ -1,12 +1,13 @@
 import * as React from 'react';
 // @ts-ignore
 import * as d3Shape from 'd3-shape';
-import { Dimensions, StyleSheet, View, ViewProps } from 'react-native';
-import { LineChartContext } from './Context';
-import { LineChartIdProvider, useLineChartData } from './Data';
 
+import { Dimensions, StyleSheet, View, ViewProps } from 'react-native';
+import { LineChartIdProvider, useLineChartData } from './Data';
+import { Path, parse } from 'react-native-redash';
 import { getArea, getPath } from './utils';
-import { parse, Path } from 'react-native-redash';
+
+import { LineChartContext } from './Context';
 
 export const LineChartDimensionsContext = React.createContext({
   width: 0,
@@ -84,10 +85,11 @@ export function LineChart({
         gutter: yGutter,
         shape,
         yDomain,
+        xDomain,
       });
     }
     return '';
-  }, [data, pathWidth, height, yGutter, shape, yDomain]);
+  }, [data, pathWidth, height, yGutter, shape, yDomain, xDomain]);
 
   const dataLength = data.length;
   const parsedPath = React.useMemo(() => parse(path), [path]);
