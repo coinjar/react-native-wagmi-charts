@@ -13,7 +13,6 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@shopify/react-native-skia": "0.1.196",
     "@types/react": "~18.2.14",
     "bumbag": "^2.2.1",
     "bumbag-native": "^2.3.0",
