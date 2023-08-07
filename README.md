@@ -812,11 +812,11 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 
 ### LineChart.Provider
 
-| Prop     | Type                                          | Default | Description                                                                                                                                  |
-| -------- | --------------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `data`   | `Array<{ timestamp: number, value: number }>` |         | The line chart data as an array of timestamps & values (prices).                                                                             |
-| `yRange` | `{ min?: number; max?: number }`              |         | Set a custom range for the y values of your chart. See [#20](https://github.com/coinjar/react-native-wagmi-charts/issues/20) for a use-case. |
-| `xDomain` | `[ min: number; max: number ]`              |         | Scale x values proportionate to their time scale. Distance between points will be relative to each other instead of same spacing between in point. See [#140](https://github.com/coinjar/react-native-wagmi-charts/issues/140#issuecomment-1614264020) for a use-case.  |
+| Prop      | Type                                          | Default | Description                                                                                                                                                                                                                                                            |
+| --------- | --------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `data`    | `Array<{ timestamp: number, value: number }>` |         | The line chart data as an array of timestamps & values (prices).                                                                                                                                                                                                       |
+| `yRange`  | `{ min?: number; max?: number }`              |         | Set a custom range for the y values of your chart. See [#20](https://github.com/coinjar/react-native-wagmi-charts/issues/20) for a use-case.                                                                                                                           |
+| `xDomain` | `[ min: number; max: number ]`                |         | Scale x values proportionate to their time scale. Distance between points will be relative to each other instead of same spacing between in point. See [#140](https://github.com/coinjar/react-native-wagmi-charts/issues/140#issuecomment-1614264020) for a use-case. |
 
 ### LineChart
 
@@ -838,16 +838,16 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 
 ### LineChart.CursorCrosshair
 
-| Prop                    | Type                           | Default   | Description                                     |
-| ----------------------- | ------------------------------ | --------- | ----------------------------------------------- |
-| `color`                 | `string`                       | `"black"` | Color of the crosshair dot                      |
-| `size`                  | `number`                       | `8`       | Size of the crosshair dot                       |
-| `outerSize`             | `number`                       | `32`      | Size of the outer crosshair dot (faded dot)     |
-| `crosshairWrapperProps` | `ViewProps`                    |           | Props of the wrapper component of the crosshair |
-| `crosshairProps`        | `ViewProps`                    |           | Props of the crosshair dot                      |
-| `crosshairOuterProps`   | `ViewProps`                    |           | Props of the crosshair outer dot                |
-| `snapToPoint`           | `boolean`                      | `false`   | Snap cursor to X position of nearest data point |
-| `...props`              | `LongPressGestureHandlerProps` |           |                                                 |
+| Prop                    | Type                           | Default   | Description                                                           |
+| ----------------------- | ------------------------------ | --------- | --------------------------------------------------------------------- |
+| `color`                 | `string`                       | `"black"` | Color of the crosshair dot                                            |
+| `size`                  | `number`                       | `8`       | Size of the crosshair dot                                             |
+| `outerSize`             | `number`                       | `32`      | Size of the outer crosshair dot (faded dot)                           |
+| `crosshairWrapperProps` | `ViewProps`                    |           | Props of the wrapper component of the crosshair                       |
+| `crosshairProps`        | `ViewProps`                    |           | Props of the crosshair dot                                            |
+| `crosshairOuterProps`   | `ViewProps`                    |           | Props of the crosshair outer dot                                      |
+| `snapToPoint`           | `boolean`                      | `false`   | **REACT NATIVE ONLY** Snap cursor to X position of nearest data point |
+| `...props`              | `LongPressGestureHandlerProps` |           |                                                                       |
 
 ### LineChart.CursorLine
 
@@ -901,13 +901,13 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 
 ### LineChart.Tooltip
 
-| Prop           | Type                  | Default | Description                                          |
-| -------------- | --------------------- | ------- | ---------------------------------------------------- |
-| `xGutter`      | `number`              | `8`     | X axis gutter in which the tooltip will not pass.    |
-| `yGutter`      | `number`              | `8`     | Y axis gutter in which the tooltip will not pass.    |
-| `cursorGutter` | `number`              | `48`    | Gutter (spacing) between the cursor and the tooltip. |
-| `position`     | `"top"` or `"bottom"` | `"top"` | Position of the tooltip relative to the cursor.      |
-| `textStyle`    | `{}`                  |         | Style of the tooltip text                            |
+| Prop           | Type                  | Default | Description                                                                                                                    |
+| -------------- | --------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `xGutter`      | `number`              | `8`     | X axis gutter in which the tooltip will not pass.                                                                              |
+| `yGutter`      | `number`              | `8`     | Y axis gutter in which the tooltip will not pass.                                                                              |
+| `cursorGutter` | `number`              | `48`    | Gutter (spacing) between the cursor and the tooltip.                                                                           |
+| `position`     | `"top"` or `"bottom"` | `"top"` | Position of the tooltip relative to the cursor.                                                                                |
+| `textStyle`    | `{}`                  |         | Style of the tooltip text                                                                                                      |
 | `at`           | `number`              |         | Make the tooltip static at the given `data` index (which shows the tooltip always, unless there is interaction with the chart) |
 
 ### LineChart.PriceText
@@ -1066,7 +1066,7 @@ const { value, formatted } = LineChart.usePrice({
 **Arguments**
 
 | Variable    | Type                               | Default | Description                          |
-| ----------- |------------------------------------|---------|--------------------------------------|
+| ----------- | ---------------------------------- | ------- | ------------------------------------ |
 | `format`    | `({ value, formatted }) => string` |         | Custom format function of the price. |
 | `precision` | `number`                           | `2`     | Precision of the price value.        |
 | `index`     | `number`                           |         | Get the price for a specific index   |

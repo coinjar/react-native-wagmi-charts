@@ -5,8 +5,8 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 
-import { usePrevious } from '../../utils';
 import { interpolatePath } from './utils';
+import { usePrevious } from '../../utils';
 
 export default function useAnimatedPath({
   enabled = true,
@@ -23,8 +23,8 @@ export default function useAnimatedPath({
     () => {
       return path;
     },
-    (_, previous) => {
-      if (previous) {
+    (result, previous) => {
+      if (result !== previous) {
         transition.value = 0;
         transition.value = withTiming(1);
       }
