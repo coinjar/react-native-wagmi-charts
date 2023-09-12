@@ -17,6 +17,7 @@ export const LineChartDimensionsContext = React.createContext({
   smoothedParsedPath: {} as Path,
   smoothedPath: '',
   area: '',
+  smoothedArea: '',
   shape: d3Shape.curveBumpX,
   gutter: 0,
   pathWidth: 0,
@@ -115,10 +116,27 @@ export function LineChart({
         gutter: yGutter,
         shape,
         yDomain,
+        isOriginalData: true,
       });
     }
     return '';
   }, [data, pathWidth, height, yGutter, shape, yDomain]);
+
+  const smoothedArea = React.useMemo(() => {
+    if (data && data.length > 0) {
+      const radius = smoothDataRadius ? smoothDataRadius : 2;
+      return getArea({
+        data: smoothData(data, radius),
+        width: pathWidth,
+        height,
+        gutter: yGutter,
+        shape,
+        yDomain,
+        isOriginalData: false,
+      });
+    }
+    return '';
+  }, [data, pathWidth, height, yGutter, shape, yDomain, smoothDataRadius]);
 
   const dataLength = data.length;
   const parsedPath = React.useMemo(() => parse(path), [path]);
@@ -135,6 +153,7 @@ export function LineChart({
       smoothedParsedPath,
       pointWidth,
       area,
+      smoothedArea,
       path,
       smoothedPath,
       width,
@@ -148,6 +167,7 @@ export function LineChart({
       smoothedParsedPath,
       pointWidth,
       area,
+      smoothedArea,
       path,
       smoothedPath,
       width,

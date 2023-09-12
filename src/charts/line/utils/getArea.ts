@@ -12,6 +12,7 @@ export function getArea({
   gutter,
   shape: _shape,
   yDomain,
+  isOriginalData,
 }: {
   data: TLineChartData;
   width: number;
@@ -19,6 +20,7 @@ export function getArea({
   gutter: number;
   shape?: unknown;
   yDomain: YDomain;
+  isOriginalData: boolean;
 }): string {
   const timestamps = data.map((_, i) => i);
 
@@ -31,7 +33,7 @@ export function getArea({
   const area = shape
     .area()
     .x((_: unknown, i: number) => scaleX(i))
-    .y0((d: { value: unknown }) => scaleY(d.value as number))
+    .y0((d: { value: number, smoothedValue: number }) => scaleY(isOriginalData ? d.value : d.smoothedValue))
     .y1(() => height)
     .curve(_shape)(data);
   return area;
