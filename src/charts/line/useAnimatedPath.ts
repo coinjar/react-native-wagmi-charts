@@ -23,8 +23,8 @@ export default function useAnimatedPath({
     () => {
       return path;
     },
-    (_, previous) => {
-      if (previous) {
+    (result, previous) => {
+      if (result !== previous) {
         transition.value = 0;
         transition.value = withTiming(1);
       }
