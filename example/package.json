@@ -13,6 +13,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@types/react": "~18.2.14",
     "bumbag": "^2.2.1",
     "bumbag-native": "^2.3.0",
     "expo": "^49.0.0",
@@ -35,6 +36,7 @@
     "babel-preset-expo": "^9.5.0",
     "jsonfile": "^6.1.0",
     "patch-package": "^6.4.7",
-    "postinstall-postinstall": "^2.1.0"
+    "postinstall-postinstall": "^2.1.0",
+    "typescript": "^5.1.3"
   }
 }
