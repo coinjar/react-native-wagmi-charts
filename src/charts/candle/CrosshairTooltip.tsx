@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { StyleProp, TextStyle, ViewProps } from 'react-native';
+import type { LayoutChangeEvent, StyleProp, TextStyle, ViewProps } from 'react-native';
 import { StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -49,7 +49,7 @@ export function CandlestickChartCrosshairTooltip({
   const elementWidth = useSharedValue(0);
 
   const handleLayout = React.useCallback(
-    (event) => {
+    (event: LayoutChangeEvent) => {
       elementHeight.value = event.nativeEvent.layout.height;
       elementWidth.value = event.nativeEvent.layout.width;
     },

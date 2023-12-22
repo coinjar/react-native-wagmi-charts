@@ -1,6 +1,6 @@
 {
   "name": "react-native-wagmi-charts",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "A sweet candlestick chart for React Native",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
@@ -49,8 +49,8 @@
     "@types/d3-array": "^3.0.5",
     "@types/d3-scale": "^4.0.3",
     "@types/jest": "^26.0.24",
-    "@types/react": "^17.0.14",
-    "@types/react-native": "^0.64.12",
+    "@types/react": "^18.2.45",
+    "@types/react-native": "^0.72.8",
     "eslint": "^7.31.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
@@ -59,13 +59,13 @@
     "jest": "^27.0.6",
     "pod-install": "^0.1.24",
     "prettier": "^2.3.2",
-    "react": "17.0.1",
-    "react-native": "0.63.4",
-    "react-native-builder-bob": "^0.18.1",
+    "react": "^18.2.0",
+    "react-native": "^0.72.8",
+    "react-native-builder-bob": "^0.23.2",
     "react-native-gesture-handler": "^2.1.0",
     "react-native-reanimated": "~3.3.0",
     "react-native-svg": "^12.1.1",
-    "typescript": "^4.3.5"
+    "typescript": "^5.3.3"
   },
   "peerDependencies": {
     "react": "*",

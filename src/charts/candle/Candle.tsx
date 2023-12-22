@@ -4,7 +4,6 @@ import Animated, {
   useAnimatedProps,
 } from 'react-native-reanimated';
 import {
-  Color,
   Line,
   LineProps,
   NumberProp,
@@ -14,6 +13,7 @@ import {
 
 import type { TCandle, TDomain } from './types';
 import { getY, getHeight } from './utils';
+import { ColorValue } from 'react-native';
 
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
 const AnimatedLine = Animated.createAnimatedComponent(Line);
@@ -41,7 +41,7 @@ export type CandlestickChartCandleProps = {
     y: NumberProp;
     width: NumberProp;
     height: NumberProp;
-    fill: Color;
+    fill: ColorValue;
     useAnimations: boolean;
   }) => React.ReactNode;
   renderLine?: ({
@@ -56,7 +56,7 @@ export type CandlestickChartCandleProps = {
     y1: NumberProp;
     x2: NumberProp;
     y2: NumberProp;
-    stroke: Color;
+    stroke: ColorValue;
     strokeWidth: NumberProp;
     useAnimations: boolean;
   }) => React.ReactNode;

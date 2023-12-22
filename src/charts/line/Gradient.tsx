@@ -52,6 +52,7 @@ export function LineChartGradient({
             y1="0"
             y2="100%"
           >
+            {/*@ts-ignore*/}
             {children}
           </LinearGradient>
         </Defs>

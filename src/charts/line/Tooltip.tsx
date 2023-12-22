@@ -10,7 +10,7 @@ import { LineChartPriceText, LineChartPriceTextProps } from './PriceText';
 
 import { CursorContext } from './Cursor';
 import { LineChartDimensionsContext } from './Chart';
-import type { ViewProps } from 'react-native';
+import type { LayoutChangeEvent, ViewProps } from 'react-native';
 import { getXPositionForCurve } from './utils/getXPositionForCurve';
 import { getYForX } from 'react-native-redash';
 import { useLineChart } from './useLineChart';
@@ -58,7 +58,7 @@ export function LineChartTooltip({
   const elementHeight = useSharedValue(0);
 
   const handleLayout = React.useCallback(
-    (event) => {
+    (event: LayoutChangeEvent) => {
       x.value = event.nativeEvent.layout.x;
       elementWidth.value = event.nativeEvent.layout.width;
       elementHeight.value = event.nativeEvent.layout.height;
