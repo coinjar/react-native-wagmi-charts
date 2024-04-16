@@ -4,7 +4,6 @@ import { View, StyleSheet } from 'react-native';
 import { LineChartDimensionsContext } from '../Chart';
 import { useLineChart } from '../useLineChart';
 
-// @ts-expect-error missing types
 import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
 
 let isEnabled = false;

@@ -5,7 +5,6 @@ import { parse } from 'react-native-redash';
 import { LineChartDimensionsContext } from '../../line/Chart';
 import { useLineChart } from '../../line/useLineChart';
 
-// @ts-expect-error missing types
 import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
 
 let isEnabled = false;
