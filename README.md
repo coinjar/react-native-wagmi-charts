@@ -386,7 +386,7 @@ To customise the color of the line chart cursor, supply a `color` prop to `LineC
 <LineChart.Provider data={data}>
   <LineChart>
     <LineChart.Path color="hotpink" />
-    <LineChart.CursorCrosshair color="hotpink />
+    <LineChart.CursorCrosshair color="hotpink" />
   </LineChart>
 </LineChart.Provider>
 ```
@@ -405,7 +405,7 @@ To achieve this, simply add `<LineChart.HoverTrap />` as the child of your curso
 <LineChart.Provider data={data}>
   <LineChart>
     <LineChart.Path color="hotpink" />
-    <LineChart.CursorCrosshair color="hotpink>
+    <LineChart.CursorCrosshair color="hotpink" >
       <LineChart.HoverTrap />
     </LineChart.CursorCrosshair>
   </LineChart>
