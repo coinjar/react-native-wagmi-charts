@@ -2,23 +2,31 @@
 
 ## Getting Started
 
-First install project dependencies in this directory:
+First install project dependencies in this directory (`yarn` is recommended):
 
-`npm install`
+```bash
+yarn install
+```
 
 After dependencies are installed, you can go ahead and run the project on either a simulator, or a real device using the following commands
 
 For iOS:
 
-`npm run ios`
+```bash
+yarn run ios
+```
 
 For Android:
 
-`npm run android`
+```bash
+yarn run android
+```
 
 For Web:
 
-`npm run web`
+```bash
+yarn run web
+```
 
 
 ## Example Charts
@@ -29,4 +37,5 @@ The following charts are included:
 - Line Chart
 
 ### Sample Data
+
 The charts in this example use hardcoded data, which is stored in the `src/data` directory

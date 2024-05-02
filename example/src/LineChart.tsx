@@ -51,6 +51,7 @@ export default function App() {
 
   const [toggleMinMaxLabels, setToggleMinMaxLabels] = React.useState(false);
   const [toggleSnapToPoint, setToggleSnapToPoint] = React.useState(false);
+  const [toggleHighlight, setToggleHighlight] = React.useState(false);
 
   let dataProp: TLineChartDataProp = data;
   const [min, max] = useMemo(() => {
@@ -68,25 +69,22 @@ export default function App() {
 
   let chart = (
     <LineChart>
-      {!toggleMinMaxLabels && <LineChart.Path color="black" />}
-      {toggleMinMaxLabels && (
-        <LineChart.Path color="black">
-          <LineChart.Gradient color="black" />
-          <LineChart.Tooltip position="top" at={max} />
-          <LineChart.Tooltip position="bottom" at={min} yGutter={-10} />
-        </LineChart.Path>
-      )}
-      {/* <LineChart.Path color="black">
-        <LineChart.Gradient color="black" />
-        <LineChart.HorizontalLine at={{ index: 0 }} />
-        <LineChart.Highlight color="red" from={10} to={15} />
-        <LineChart.Dot color="red" at={10} />
-        <LineChart.Dot color="red" at={15} />
-        {partialDay && (
-          <LineChart.Dot at={data.length - 1} color="red" hasPulse />
+      <LineChart.Path color="black">
+        {toggleMinMaxLabels && (
+          <>
+            <LineChart.Gradient color="black" />
+            <LineChart.Tooltip position="top" at={max} />
+            <LineChart.Tooltip position="bottom" at={min} yGutter={-10} />
+          </>
+        )}
+        {toggleHighlight && (
+          <LineChart.Highlight
+            color="red"
+            from={Math.floor(data.length / 3)}
+            to={Math.floor(data.length * (2/3))}
+          />
         )}
       </LineChart.Path>
-        */}
       <LineChart.CursorCrosshair
         snapToPoint={toggleSnapToPoint}
         onActivated={invokeHaptic}
@@ -200,6 +198,9 @@ export default function App() {
             </Button>
             <Button onPress={toggleMultiData}>{`Multi Data`}</Button>
             <Button onPress={togglePartialDay}>{`Partial Day`}</Button>
+            <Button onPress={() => setToggleHighlight((val) => !val)}>
+              Toggle highlight
+            </Button>
             <Button
               onPress={() => setToggleMinMaxLabels((p) => !p)}
             >{`Toggle min/max labels`}</Button>

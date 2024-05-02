@@ -405,7 +405,7 @@ To achieve this, simply add `<LineChart.HoverTrap />` as the child of your curso
 <LineChart.Provider data={data}>
   <LineChart>
     <LineChart.Path color="hotpink" />
-    <LineChart.CursorCrosshair color="hotpink" >
+    <LineChart.CursorCrosshair color="hotpink">
       <LineChart.HoverTrap />
     </LineChart.CursorCrosshair>
   </LineChart>

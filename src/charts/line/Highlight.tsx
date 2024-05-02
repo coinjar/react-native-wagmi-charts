@@ -1,12 +1,11 @@
 import * as React from 'react';
 import Animated from 'react-native-reanimated';
-import { Path, PathProps } from 'react-native-svg';
+import { ClipPath, Defs, G, Path, PathProps, Rect } from 'react-native-svg';
 
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartPathContext } from './LineChartPathContext';
 import useAnimatedPath from './useAnimatedPath';
-import { useLineChart } from './useLineChart';
-import { getPath } from './utils';
+import { getXPositionForCurve } from './utils/getXPositionForCurve';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -30,8 +29,7 @@ export function LineChartHighlight({
   width: strokeWidth = 3,
   ...props
 }: LineChartColorProps) {
-  const { data, yDomain } = useLineChart();
-  const { pathWidth, height, gutter, shape } = React.useContext(
+  const { path, parsedPath, height } = React.useContext(
     LineChartDimensionsContext
   );
   const { isTransitionEnabled, isInactive: _isInactive } =
@@ -40,22 +38,6 @@ export function LineChartHighlight({
 
   ////////////////////////////////////////////////
 
-  const path = React.useMemo(() => {
-    if (data && data.length > 0) {
-      return getPath({
-        data,
-        from,
-        to,
-        width: pathWidth,
-        height,
-        gutter,
-        shape,
-        yDomain,
-      });
-    }
-    return '';
-  }, [data, from, to, pathWidth, height, gutter, shape, yDomain]);
-
   const { animatedProps } = useAnimatedPath({
     enabled: isTransitionEnabled,
     path,
@@ -63,9 +45,24 @@ export function LineChartHighlight({
 
   ////////////////////////////////////////////////
 
+  const clipStart = getXPositionForCurve(parsedPath, from);
+  const clipEnd = getXPositionForCurve(parsedPath, to);
+
   return (
-    <>
+    <G>
+      <Defs>
+        <ClipPath id="clip">
+          <Rect
+            x={clipStart}
+            y="0"
+            width={clipEnd - clipStart}
+            height={height}
+            fill="white"
+          />
+        </ClipPath>
+      </Defs>
       <AnimatedPath
+        clipPath="url(#clip)"
         animatedProps={animatedProps}
         fill="transparent"
         stroke={isInactive ? inactiveColor || color : color}
@@ -73,6 +70,6 @@ export function LineChartHighlight({
         strokeOpacity={isInactive && !inactiveColor ? 0.5 : 1}
         {...props}
       />
-    </>
+    </G>
   );
 }
