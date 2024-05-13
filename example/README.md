@@ -28,7 +28,6 @@ For Web:
 yarn run web
 ```
 
-
 ## Example Charts
 
 The following charts are included:
