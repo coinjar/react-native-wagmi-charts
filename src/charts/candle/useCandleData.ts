@@ -1,9 +1,9 @@
-import Animated, { useDerivedValue } from 'react-native-reanimated';
+import { useDerivedValue } from 'react-native-reanimated';
 import type { TCandle } from './types';
-
+import type { SharedValue } from 'react-native-reanimated';
 import { useCandlestickChart } from './useCandlestickChart';
 
-export function useCandleData(): Readonly<Animated.SharedValue<TCandle>> {
+export function useCandleData(): Readonly<SharedValue<TCandle>> {
   const { currentX, data, step } = useCandlestickChart();
 
   const candle = useDerivedValue(() => {

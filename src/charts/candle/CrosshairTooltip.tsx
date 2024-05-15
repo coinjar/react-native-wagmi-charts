@@ -1,12 +1,17 @@
 import * as React from 'react';
-import type { LayoutChangeEvent, StyleProp, TextStyle, ViewProps } from 'react-native';
+import type {
+  LayoutChangeEvent,
+  StyleProp,
+  TextStyle,
+  ViewProps,
+} from 'react-native';
 import { StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
 } from 'react-native-reanimated';
-
+import type { SharedValue, AnimatedStyle } from 'react-native-reanimated';
 import { CandlestickChartDimensionsContext } from './Chart';
 import { useCandlestickChart } from './useCandlestickChart';
 import {
@@ -19,16 +24,18 @@ export type CandlestickChartCrosshairTooltipProps = ViewProps & {
   xGutter?: number;
   yGutter?: number;
   tooltipTextProps?: CandlestickChartPriceTextProps;
-  textStyle?: Animated.AnimateStyle<StyleProp<TextStyle>>;
+  textStyle?: AnimatedStyle<StyleProp<TextStyle>>;
 };
 
 export type CandlestickChartCrosshairTooltipContext = {
-  position: Animated.SharedValue<'left' | 'right'>;
+  position: SharedValue<'left' | 'right'>;
 };
 
 export const CandlestickChartCrosshairTooltipContext =
   React.createContext<CandlestickChartCrosshairTooltipContext>({
-    position: { value: 'left' },
+    position: {
+      value: 'left',
+    } as CandlestickChartCrosshairTooltipContext['position'],
   });
 
 export function CandlestickChartCrosshairTooltip({

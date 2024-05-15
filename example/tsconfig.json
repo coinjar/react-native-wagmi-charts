@@ -1,6 +1,8 @@
 {
-  "compilerOptions": {
-    "alias": {}
-  },
-  "extends": "../tsconfig.json"
+  "extends": "../tsconfig",
+  "compilerOptions": {},
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ]
 }

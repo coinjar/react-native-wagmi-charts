@@ -7,12 +7,12 @@ import Animated, {
   useAnimatedProps,
   useAnimatedReaction,
 } from 'react-native-reanimated';
-
+import type { SharedValue, AnimatedProps } from 'react-native-reanimated';
 Animated.addWhitelistedNativeProps({ text: true });
 
 interface AnimatedTextProps {
-  text: Animated.SharedValue<string>;
-  style?: Animated.AnimateProps<RNTextProps>['style'];
+  text: SharedValue<string>;
+  style?: AnimatedProps<RNTextProps>['style'];
 }
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
