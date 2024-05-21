@@ -1,4 +1,3 @@
-import * as React from 'react';
 import type { TextProps as RNTextProps } from 'react-native';
 import type Animated from 'react-native-reanimated';
 

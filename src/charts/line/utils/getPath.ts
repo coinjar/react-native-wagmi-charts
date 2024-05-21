@@ -43,7 +43,7 @@ export function getPath({
             .find((item) => item.timestamp === d.timestamp)
         : true
     )
-    .x((_: unknown, i: number) => scaleX(xDomain ? timestamps[i] : i))
+    .x((_: unknown, i: number) => scaleX(xDomain ? timestamps[i] ?? i : i))
     .y((d: { value: number }) => scaleY(d.value))
     .curve(_shape)(data);
   return path;

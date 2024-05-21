@@ -39,7 +39,7 @@ export function LineChartCursor({
   );
   const { currentX, currentIndex, isActive, data, xDomain } = useLineChart();
   const xValues = React.useMemo(
-    () => data.map(({ timestamp }, i) => (xDomain ? timestamp : i)),
+    () => (data ?? []).map(({ timestamp }, i) => (xDomain ? timestamp : i)),
     [data, xDomain]
   );
 
@@ -70,7 +70,7 @@ export function LineChartCursor({
 
     const newXPosition = (
       closestIndex > 0
-        ? parsedPath.curves[closestPathCurve].to
+        ? parsedPath.curves[closestPathCurve]!.to
         : parsedPath.move
     ).x;
     // Update values
@@ -92,7 +92,7 @@ export function LineChartCursor({
         const minIndex = 0;
         const boundedIndex = Math.max(
           minIndex,
-          Math.round(xPosition / width / (1 / (data.length - 1)))
+          Math.round(xPosition / width / (1 / (data ? data.length - 1 : 1)))
         );
 
         if (snapToPoint) {

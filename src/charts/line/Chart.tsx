@@ -55,11 +55,11 @@ export function LineChart({
 
   const pathWidth = React.useMemo(() => {
     let allowedWidth = width;
-    if (xLength > data.length) {
+    if (data && xLength > data.length) {
       allowedWidth = (width * data.length) / xLength;
     }
     return allowedWidth;
-  }, [data.length, width, xLength]);
+  }, [data, width, xLength]);
 
   const path = React.useMemo(() => {
     if (data && data.length > 0) {
@@ -91,11 +91,10 @@ export function LineChart({
     return '';
   }, [data, pathWidth, height, yGutter, shape, yDomain, xDomain]);
 
-  const dataLength = data.length;
   const parsedPath = React.useMemo(() => parse(path), [path]);
   const pointWidth = React.useMemo(
-    () => width / (dataLength - 1),
-    [dataLength, width]
+    () => width / (data ? data.length - 1 : 1),
+    [data, width]
   );
 
   const contextValue = React.useMemo(

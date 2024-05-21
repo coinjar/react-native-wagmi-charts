@@ -139,7 +139,7 @@ export default function App() {
       <LineChart.Provider
         xDomain={
           scaleRelativeToTime
-            ? [data[0].timestamp, data[data.length - 1].timestamp]
+            ? [data[0]!.timestamp, data[data.length - 1]!.timestamp]
             : undefined
         }
         xLength={partialDay ? data.length * 2 : undefined}

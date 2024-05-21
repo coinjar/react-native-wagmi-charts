@@ -12,14 +12,20 @@ export function useLineChartPrice({
   const { currentIndex, data } = useLineChart();
 
   const float = useDerivedValue(() => {
+    if (!data) {
+      return '';
+    }
+
     if (
       (typeof currentIndex.value === 'undefined' ||
         currentIndex.value === -1) &&
       index == null
-    )
+    ) {
       return '';
+    }
+
     let price = 0;
-    price = data[Math.min(index ?? currentIndex.value, data.length - 1)].value;
+    price = data[Math.min(index ?? currentIndex.value, data.length - 1)]!.value;
     return price.toFixed(precision).toString();
   }, [currentIndex, data, precision]);
   const formatted = useDerivedValue(() => {
