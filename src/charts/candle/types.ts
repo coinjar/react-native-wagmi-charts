@@ -1,5 +1,5 @@
 import type React from 'react';
-import type Animated from 'react-native-reanimated';
+import type { SharedValue } from 'react-native-reanimated';
 
 export type TCandle = {
   timestamp: number;
@@ -11,8 +11,8 @@ export type TCandle = {
 export type TData = Array<TCandle>;
 export type TDomain = [min: number, max: number];
 export type TContext = {
-  currentX: Animated.SharedValue<number>;
-  currentY: Animated.SharedValue<number>;
+  currentX: SharedValue<number>;
+  currentY: SharedValue<number>;
   data: TData;
   width: number;
   height: number;

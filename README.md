@@ -1020,12 +1020,12 @@ const { currentX, currentY, currentIndex, data, domain, isActive } =
 
 | Variable       | Type                                          | Default | Description                     |
 | -------------- | --------------------------------------------- | ------- | ------------------------------- |
-| `currentX`     | `Animated.SharedValue<number>`                |         | Current x position              |
-| `currentY`     | `Animated.SharedValue<number>`                |         | Current y position              |
-| `currentIndex` | `Animated.SharedValue<number>`                |         | Current index of the data       |
+| `currentX`     | `SharedValue<number>`                |         | Current x position              |
+| `currentY`     | `SharedValue<number>`                |         | Current y position              |
+| `currentIndex` | `SharedValue<number>`                |         | Current index of the data       |
 | `data`         | `Array<{ timestamp: number, value: number }>` |         | Data of the chart               |
 | `domain`       | `[number, number]`                            |         | Y domain of the chart           |
-| `isActive`     | `Animated.SharedValue<boolean>`               |         | Is the chart active by gesture? |
+| `isActive`     | `SharedValue<boolean>`               |         | Is the chart active by gesture? |
 
 ### LineChart.useDatetime
 
@@ -1090,8 +1090,8 @@ const { currentX, currentY, data, domain, step } = CandlestickChart.useChart();
 
 | Variable   | Type                                                                                   | Default | Description               |
 | ---------- | -------------------------------------------------------------------------------------- | ------- | ------------------------- |
-| `currentX` | `Animated.SharedValue<number>`                                                         |         | Current x position        |
-| `currentY` | `Animated.SharedValue<number>`                                                         |         | Current y position        |
+| `currentX` | `SharedValue<number>`                                                         |         | Current x position        |
+| `currentY` | `SharedValue<number>`                                                         |         | Current y position        |
 | `data`     | `Array<{ timestamp: number, open: number, high: number, low: number, close: number }>` |         | Data of the chart         |
 | `domain`   | `[number, number]`                                                                     |         | Y domain of the chart     |
 | `step`     | `number`                                                                               |         | Current index of the data |

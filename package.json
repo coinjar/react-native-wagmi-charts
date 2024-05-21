@@ -35,6 +35,13 @@
     "ios",
     "android"
   ],
+  "workspaces": [
+    "example"
+  ],
+  "packageManager": "yarn@3.8.2",
+  "engines": {
+    "node": ">= 18.0.0"
+  },
   "dependencies": {
     "d3-array": "^3.1.6",
     "d3-interpolate-path": "^2.2.3",
@@ -42,31 +49,29 @@
     "d3-shape": "^3.0.1",
     "fbjs": "^3.0.5",
     "react-keyed-flatten-children": "^1.3.0",
-    "react-native-redash": "^16.1.1"
+    "react-native-redash": "^18.1.3"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^12.0.4",
-    "@react-native-community/eslint-config": "^3.0.0",
     "@types/d3-array": "^3.0.5",
     "@types/d3-scale": "^4.0.3",
     "@types/fbjs": "^3.0.10",
     "@types/jest": "^26.0.24",
     "@types/react": "^18.2.45",
-    "@types/react-native": "^0.72.8",
-    "eslint": "^7.31.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint": "^9.2.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-react-hooks": "^4.6.2",
     "husky": "^7.0.1",
     "jest": "^27.0.6",
     "pod-install": "^0.1.24",
     "prettier": "^2.3.2",
     "react": "^18.2.0",
-    "react-native": "^0.72.8",
+    "react-native": "^0.74.1",
     "react-native-builder-bob": "^0.23.2",
-    "react-native-gesture-handler": "^2.1.0",
-    "react-native-reanimated": "~3.3.0",
-    "react-native-svg": "^12.1.1",
+    "react-native-gesture-handler": "~2.16.1",
+    "react-native-reanimated": "~3.10.1",
+    "react-native-svg": "15.2.0",
     "typescript": "^5.3.3"
   },
   "peerDependencies": {
@@ -74,6 +79,7 @@
     "react-native": "*",
     "react-native-gesture-handler": "*",
     "react-native-reanimated": "*",
+    "react-native-redash": "*",
     "react-native-svg": "*"
   },
   "jest": {
@@ -86,7 +92,7 @@
   "eslintConfig": {
     "root": true,
     "extends": [
-      "@react-native-community",
+      "@react-native",
       "prettier"
     ],
     "rules": {

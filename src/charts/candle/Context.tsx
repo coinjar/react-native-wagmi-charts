@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { useSharedValue } from 'react-native-reanimated';
+import { SharedValue, useSharedValue } from 'react-native-reanimated';
 
 import type { TContext, TData } from './types';
 import { getDomain } from './utils';
 
 export const CandlestickChartContext = React.createContext<TContext>({
-  currentX: { value: -1 },
-  currentY: { value: -1 },
+  currentX: { value: -1 } as SharedValue<number>,
+  currentY: { value: -1 } as SharedValue<number>,
   data: [],
   height: 0,
   width: 0,
@@ -32,7 +32,6 @@ export function CandlestickChartProvider({
   const [step, setStep] = React.useState(0);
   const currentX = useSharedValue(-1);
   const currentY = useSharedValue(-1);
-
   const domain = React.useMemo(() => getDomain(data), [data]);
 
   React.useEffect(() => {

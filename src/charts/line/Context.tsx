@@ -11,10 +11,10 @@ import type { TLineChartContext, YRangeProp } from './types';
 import { getDomain, lineChartDataPropToArray } from './utils';
 
 export const LineChartContext = React.createContext<TLineChartContext>({
-  currentX: { value: -1 },
-  currentIndex: { value: -1 },
+  currentX: { value: -1 } as TLineChartContext['currentX'],
+  currentIndex: { value: -1 } as TLineChartContext['currentIndex'],
   domain: [0, 0],
-  isActive: { value: false },
+  isActive: { value: false } as TLineChartContext['isActive'],
   yDomain: {
     min: 0,
     max: 0,

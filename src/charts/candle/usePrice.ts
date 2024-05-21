@@ -1,10 +1,11 @@
-import Animated, { useDerivedValue } from 'react-native-reanimated';
+import { useDerivedValue } from 'react-native-reanimated';
 
 import { formatPrice } from '../../utils';
 import { useCandlestickChart } from './useCandlestickChart';
 import { getPrice } from './utils';
 import type { TFormatterFn, TPriceType } from './types';
 import { useCandleData } from './useCandleData';
+import type { SharedValue } from 'react-native-reanimated';
 
 export function useCandlestickChartPrice({
   format,
@@ -15,8 +16,8 @@ export function useCandlestickChartPrice({
   precision?: number;
   type?: TPriceType;
 } = {}): {
-  value: Readonly<Animated.SharedValue<string>>;
-  formatted: Readonly<Animated.SharedValue<string>>;
+  value: Readonly<SharedValue<string>>;
+  formatted: Readonly<SharedValue<string>>;
 } {
   const { currentY, domain, height } = useCandlestickChart();
   const candle = useCandleData();

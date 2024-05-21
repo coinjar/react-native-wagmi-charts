@@ -1,4 +1,4 @@
-import type Animated from 'react-native-reanimated';
+import type { SharedValue } from 'react-native-reanimated';
 
 export type TLineChartPoint = {
   timestamp: number;
@@ -12,9 +12,9 @@ export type TLineChartDataProp =
 export type TLineChartData = Array<TLineChartPoint>;
 export type TLineChartDomain = [number, number];
 export type TLineChartContext = {
-  currentX: Animated.SharedValue<number>;
-  currentIndex: Animated.SharedValue<number>;
-  isActive: Animated.SharedValue<boolean>;
+  currentX: SharedValue<number>;
+  currentIndex: SharedValue<number>;
+  isActive: SharedValue<boolean>;
   domain: TLineChartDomain;
   yDomain: YDomain;
   xLength: number;
