@@ -25,9 +25,7 @@ export default function App() {
             paddingY="major-2"
             alignY="center"
           >
-            <Heading.H5 key={'heading'}>
-              React Native WAGMI Charts 💸
-            </Heading.H5>
+            <Heading.H5 key="heading">React Native WAGMI Charts 💸</Heading.H5>
             {selected ? (
               <Button
                 size="small"

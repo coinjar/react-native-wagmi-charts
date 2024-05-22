@@ -1,19 +1,13 @@
 import React from 'react';
+import { ColorValue } from 'react-native';
 import Animated, {
   withTiming,
   useAnimatedProps,
 } from 'react-native-reanimated';
-import {
-  Line,
-  LineProps,
-  NumberProp,
-  Rect,
-  RectProps,
-} from 'react-native-svg';
+import { Line, LineProps, NumberProp, Rect, RectProps } from 'react-native-svg';
 
 import type { TCandle, TDomain } from './types';
 import { getY, getHeight } from './utils';
-import { ColorValue } from 'react-native';
 
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
 const AnimatedLine = Animated.createAnimatedComponent(Line);

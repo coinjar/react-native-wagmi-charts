@@ -30,11 +30,9 @@ export default function App() {
         </CandlestickChart>
         <Heading.H6>Load Data</Heading.H6>
         <Box marginTop="major-2">
-          <Flex flexWrap={'wrap'}>
-            <Button onPress={() => setData(mockData)}>candlestick-data</Button>
-            <Button onPress={() => setData(mockData2)}>
-              candlestick-data2
-            </Button>
+          <Flex flexWrap="wrap">
+            <Button onPress={() => setData(mockData)}>Data 1</Button>
+            <Button onPress={() => setData(mockData2)}>Data 2</Button>
           </Flex>
         </Box>
         <Stack padding="major-2" spacing="major-1">

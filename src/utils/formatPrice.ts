@@ -31,7 +31,7 @@ export function formatPrice({
   let res = `${Number(value).toFixed(decimals)}`;
   const vals = res.split('.');
   if (vals.length > 0) {
-    res = vals[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    res = vals[0]!.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     if (vals.length === 2) {
       return res + '.' + vals[1];
     }

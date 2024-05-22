@@ -33,7 +33,7 @@ export function getArea({
     .range([height - gutter, gutter]);
   const area = shape
     .area()
-    .x((_: unknown, i: number) => scaleX(xDomain ? timestamps[i] : i))
+    .x((_: unknown, i: number) => scaleX(xDomain ? timestamps[i] ?? i : i))
     .y0((d: { value: unknown }) => scaleY(d.value as number))
     .y1(() => height)
     .curve(_shape)(data);

@@ -16,9 +16,14 @@ export function useLineChartDatetime({
   const { currentIndex, data } = useLineChart();
 
   const timestamp = useDerivedValue(() => {
-    if (typeof currentIndex.value === 'undefined' || currentIndex.value === -1)
+    if (
+      !data ||
+      typeof currentIndex.value === 'undefined' ||
+      currentIndex.value === -1
+    ) {
       return '';
-    return data[currentIndex.value].timestamp;
+    }
+    return data[currentIndex.value]?.timestamp ?? '';
   }, [currentIndex, data]);
 
   const timestampString = useDerivedValue(() => {
