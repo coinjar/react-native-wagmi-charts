@@ -26,13 +26,16 @@ export function useLineChartPrice({
 
     let price = 0;
     price = data[Math.min(index ?? currentIndex.value, data.length - 1)]!.value;
-    return price.toFixed(precision).toString();
+    return price.toString();
   }, [currentIndex, data, precision]);
+
+
   const formatted = useDerivedValue(() => {
     let value = float.value || '';
+    let index = currentIndex.value
     const formattedPrice = value ? formatPrice({ value }) : '';
     return format
-      ? format({ value, formatted: formattedPrice })
+      ? format({ value, index, formatted: formattedPrice })
       : formattedPrice;
   }, [float, format]);
 
