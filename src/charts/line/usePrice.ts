@@ -11,6 +11,8 @@ export function useLineChartPrice({
 }: { format?: TFormatterFn<string>; precision?: number; index?: number } = {}) {
   const { currentIndex, data } = useLineChart();
 
+  console.log("currentIndex",currentIndex)
+
   const float = useDerivedValue(() => {
     if (!data) {
       return '';

@@ -39,8 +39,9 @@ export function useLineChartDatetime({
           options,
         })
       : '';
+    let index = currentIndex.value 
     return format
-      ? format({ value: timestamp.value || -1, formatted: formattedDatetime })
+      ? format({ value: timestamp.value || -1, formatted: formattedDatetime, index })
       : formattedDatetime;
   }, [format, locale, options, timestamp]);
 

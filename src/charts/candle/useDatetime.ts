@@ -30,13 +30,14 @@ export function useCandlestickChartDatetime({
 
   const formatted = useDerivedValue(() => {
     if (timestamp.value === -1) return '';
+    let index = 0
     const formattedDatetime = formatDatetime({
       value: timestamp.value,
       locale,
       options,
     });
     return format
-      ? format({ value: timestamp.value, formatted: formattedDatetime })
+      ? format({ value: timestamp.value,index, formatted: formattedDatetime })
       : formattedDatetime;
   }, [timestamp, locale, options, format]);
 
