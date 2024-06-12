@@ -113,6 +113,7 @@ export function LineChartDot({
     const easing = Easing.out(Easing.sin);
     const animatedOpacity = withRepeat(
       withSequence(
+        withTiming(0),
         withTiming(0.8),
         withTiming(0, {
           duration: pulseDurationMs,
@@ -124,6 +125,7 @@ export function LineChartDot({
     );
     const scale = withRepeat(
       withSequence(
+        withTiming(0),
         withTiming(0),
         withTiming(outerSize, {
           duration: pulseDurationMs,
