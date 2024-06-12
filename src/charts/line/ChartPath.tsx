@@ -152,6 +152,8 @@ export function LineChartPathWrapper({
               width={strokeWidth}
               {...pathProps}
             />
+          </Svg>
+          <Svg style={StyleSheet.absoluteFill}>
             {backgroundChildren}
           </Svg>
         </View>
@@ -166,6 +168,8 @@ export function LineChartPathWrapper({
         <View style={StyleSheet.absoluteFill}>
           <AnimatedSVG animatedProps={svgProps} height={height}>
             <LineChartPath color={color} width={strokeWidth} {...pathProps} />
+          </AnimatedSVG>
+          <AnimatedSVG animatedProps={svgProps} height={height} style={StyleSheet.absoluteFill}>
             {foregroundChildren}
           </AnimatedSVG>
         </View>
