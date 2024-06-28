@@ -15,9 +15,11 @@ import { getXPositionForCurve } from './utils/getXPositionForCurve';
 import { getYForX } from 'react-native-redash';
 import { useLineChart } from './useLineChart';
 import { useMemo } from 'react';
+import type { TFormatterFn } from '../candle/types';
 
 export type LineChartTooltipProps = Animated.AnimateProps<ViewProps> & {
   children?: React.ReactNode;
+  format?: TFormatterFn<string>;
   xGutter?: number;
   yGutter?: number;
   cursorGutter?: number;
@@ -38,6 +40,7 @@ LineChartTooltip.displayName = 'LineChartTooltip';
 
 export function LineChartTooltip({
   children,
+  format,
   xGutter = 8,
   yGutter = 8,
   cursorGutter = 48,
@@ -171,7 +174,7 @@ export function LineChartTooltip({
       ]}
     >
       {children || (
-        <LineChartPriceText index={at} style={[textStyle]} {...textProps} />
+        <LineChartPriceText format={format} index={at} style={[textStyle]} {...textProps} />
       )}
     </Animated.View>
   );
