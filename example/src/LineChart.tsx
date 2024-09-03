@@ -30,6 +30,7 @@ export default function App() {
     (state) => !state,
     false
   );
+  const [at, setAt] = React.useState<number>();
 
   const [scaleRelativeToTime, setScaleRelativeToTime] = React.useState(false);
 
@@ -89,6 +90,7 @@ export default function App() {
         snapToPoint={toggleSnapToPoint}
         onActivated={invokeHaptic}
         onEnded={invokeHaptic}
+        at={at}
       >
         <LineChart.Tooltip position="top" />
         <LineChart.HoverTrap />
@@ -215,6 +217,7 @@ export default function App() {
             <Button onPress={() => setToggleSnapToPoint((val) => !val)}>
               Toggle Snap {toggleSnapToPoint ? 'Off' : 'On'}
             </Button>
+            <Button onPress={() => setAt(Math.floor(Math.random() * data.length))}>Set Cursor</Button>
           </Flex>
         </Box>
         {!multiData && (
