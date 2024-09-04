@@ -358,6 +358,17 @@ function Example() {
 }
 ```
 
+If you want to synchronize two graphs, or even initialize a new graph with a cursor position, you can use the `at` prop:
+
+```tsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path />
+    <LineChart.CursorLine at={Math.floor(data.length / 2)} />
+  </LineChart>
+</LineChart.Provider>
+```
+
 ### Colors
 
 By default, the charts come with default colors out-of-the-box... But you probably will want to change these to suit your brand.
@@ -847,6 +858,7 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 | `crosshairProps`        | `ViewProps`                    |           | Props of the crosshair dot                                            |
 | `crosshairOuterProps`   | `ViewProps`                    |           | Props of the crosshair outer dot                                      |
 | `snapToPoint`           | `boolean`                      | `false`   | **REACT NATIVE ONLY** Snap cursor to X position of nearest data point |
+| `at`                    | `number`                       |           | Index of followed `data` item.                                        |
 | `...props`              | `LongPressGestureHandlerProps` |           |                                                                       |
 
 ### LineChart.CursorLine
@@ -855,6 +867,7 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 | ----------- | ----------- | -------- | ---------------------------------------------------------------- |
 | `color`     | `string`    | `"gray"` | Color of the cursor line                                         |
 | `lineProps` | `LineProps` |          | Props of the cursor line. Takes React Native SVG's `Line` props. |
+| `at`        | `number`    |          | Index of followed `data` item.                                   |
 
 ### LineChart.Dot
 
