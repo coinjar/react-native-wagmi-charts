@@ -1,7 +1,8 @@
+import React from 'react';
 import type { TextProps as RNTextProps } from 'react-native';
 import type Animated from 'react-native-reanimated';
-import type { TFormatterFn, TPriceType } from './types';
 
+import type { TFormatterFn, TPriceType } from './types';
 import { useCandlestickChartPrice } from './usePrice';
 import { AnimatedText } from '../../components/AnimatedText';
 
