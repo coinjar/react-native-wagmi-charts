@@ -39,8 +39,9 @@ export function useCandlestickChartPrice({
   const formatted = useDerivedValue(() => {
     if (!float.value) return '';
     const formattedPrice = formatPrice({ value: float.value });
+    let index = 0
     return format
-      ? format({ value: float.value, formatted: formattedPrice })
+      ? format({ value: float.value, index, formatted: formattedPrice })
       : formattedPrice;
   }, [float, format]);
 
