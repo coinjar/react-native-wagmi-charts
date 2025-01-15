@@ -30,6 +30,7 @@ export type CandlestickChartCandleProps = {
     width,
     height,
     fill,
+    candle
   }: {
     x: NumberProp;
     y: NumberProp;
@@ -37,6 +38,7 @@ export type CandlestickChartCandleProps = {
     height: NumberProp;
     fill: ColorValue;
     useAnimations: boolean;
+    candle: TCandle;
   }) => React.ReactNode;
   renderLine?: ({
     x1,
@@ -45,6 +47,7 @@ export type CandlestickChartCandleProps = {
     y2,
     stroke,
     strokeWidth,
+    candle,
   }: {
     x1: NumberProp;
     y1: NumberProp;
@@ -53,6 +56,7 @@ export type CandlestickChartCandleProps = {
     stroke: ColorValue;
     strokeWidth: NumberProp;
     useAnimations: boolean;
+    candle: TCandle;
   }) => React.ReactNode;
 };
 
@@ -89,6 +93,7 @@ export const CandlestickChartCandle = ({
       y1: getY({ maxHeight, value: low, domain }),
       x2: x + width / 2,
       y2: getY({ maxHeight, value: high, domain }),
+      candle: candle,
       ...overrideLineProps,
     }),
     [
@@ -101,6 +106,7 @@ export const CandlestickChartCandle = ({
       overrideLineProps,
       width,
       x,
+      candle,
     ]
   );
   const animatedLineProps = useAnimatedProps(() => ({
@@ -118,6 +124,7 @@ export const CandlestickChartCandle = ({
       x: x + margin,
       y: getY({ maxHeight, value: max, domain }),
       height: getHeight({ maxHeight, value: max - min, domain }),
+      candle: candle,
       ...overrideRectProps,
     }),
     [
@@ -131,6 +138,7 @@ export const CandlestickChartCandle = ({
       overrideRectProps,
       width,
       x,
+      candle,
     ]
   );
   const animatedRectProps = useAnimatedProps(() => ({
