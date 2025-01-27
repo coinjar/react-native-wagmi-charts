@@ -914,14 +914,15 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 
 ### LineChart.Tooltip
 
-| Prop           | Type                  | Default | Description                                                                                                                    |
-| -------------- | --------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `xGutter`      | `number`              | `8`     | X axis gutter in which the tooltip will not pass.                                                                              |
-| `yGutter`      | `number`              | `8`     | Y axis gutter in which the tooltip will not pass.                                                                              |
-| `cursorGutter` | `number`              | `48`    | Gutter (spacing) between the cursor and the tooltip.                                                                           |
-| `position`     | `"top"` or `"bottom"` | `"top"` | Position of the tooltip relative to the cursor.                                                                                |
-| `textStyle`    | `{}`                  |         | Style of the tooltip text                                                                                                      |
-| `at`           | `number`              |         | Make the tooltip static at the given `data` index (which shows the tooltip always, unless there is interaction with the chart) |
+| Prop                     | Type                                           | Default | Description                                                                                                                    |
+| ------------------------ | ---------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `xGutter`                | `number`                                       | `8`     | X axis gutter in which the tooltip will not pass.                                                                              |
+| `yGutter`                | `number`                                       | `8`     | Y axis gutter in which the tooltip will not pass.                                                                              |
+| `cursorGutter`           | `number`                                       | `48`    | Gutter (spacing) between the cursor and the tooltip.                                                                           |
+| `position`               | `"top"` or `"bottom"` or `"left"` or `"right"` | `"top"` | Position of the tooltip relative to the cursor.                                                                                |
+| `withHorizontalFloating` | `boolean`                                      | `false` | If set to `true`, the position will changes between `left` and `right` on if tooltip reaches the X axis gutters.               |
+| `textStyle`              | `{}`                                           |         | Style of the tooltip text                                                                                                      |
+| `at`                     | `number`                                       |         | Make the tooltip static at the given `data` index (which shows the tooltip always, unless there is interaction with the chart) |
 
 ### LineChart.PriceText
 
@@ -1033,12 +1034,12 @@ const { currentX, currentY, currentIndex, data, domain, isActive } =
 
 | Variable       | Type                                          | Default | Description                     |
 | -------------- | --------------------------------------------- | ------- | ------------------------------- |
-| `currentX`     | `SharedValue<number>`                |         | Current x position              |
-| `currentY`     | `SharedValue<number>`                |         | Current y position              |
-| `currentIndex` | `SharedValue<number>`                |         | Current index of the data       |
+| `currentX`     | `SharedValue<number>`                         |         | Current x position              |
+| `currentY`     | `SharedValue<number>`                         |         | Current y position              |
+| `currentIndex` | `SharedValue<number>`                         |         | Current index of the data       |
 | `data`         | `Array<{ timestamp: number, value: number }>` |         | Data of the chart               |
 | `domain`       | `[number, number]`                            |         | Y domain of the chart           |
-| `isActive`     | `SharedValue<boolean>`               |         | Is the chart active by gesture? |
+| `isActive`     | `SharedValue<boolean>`                        |         | Is the chart active by gesture? |
 
 ### LineChart.useDatetime
 
@@ -1103,8 +1104,8 @@ const { currentX, currentY, data, domain, step } = CandlestickChart.useChart();
 
 | Variable   | Type                                                                                   | Default | Description               |
 | ---------- | -------------------------------------------------------------------------------------- | ------- | ------------------------- |
-| `currentX` | `SharedValue<number>`                                                         |         | Current x position        |
-| `currentY` | `SharedValue<number>`                                                         |         | Current y position        |
+| `currentX` | `SharedValue<number>`                                                                  |         | Current x position        |
+| `currentY` | `SharedValue<number>`                                                                  |         | Current y position        |
 | `data`     | `Array<{ timestamp: number, open: number, high: number, low: number, close: number }>` |         | Data of the chart         |
 | `domain`   | `[number, number]`                                                                     |         | Y domain of the chart     |
 | `step`     | `number`                                                                               |         | Current index of the data |
