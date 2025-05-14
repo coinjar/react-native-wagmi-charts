@@ -51,7 +51,6 @@ export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
       underlineColorAndroid="transparent"
       editable={false}
       ref={Platform.select({ web: inputRef })}
-      value={text.value}
       style={[styles.text, style]}
       animatedProps={animatedProps}
     />
