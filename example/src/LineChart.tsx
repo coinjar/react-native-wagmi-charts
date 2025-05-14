@@ -1,9 +1,18 @@
 import * as React from 'react';
 import * as haptics from 'expo-haptics';
 
-import { Box, Button, Flex, Heading, Stack, Text } from 'bumbag-native';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  RadioGroup,
+  Stack,
+  Text,
+} from 'bumbag-native';
 import {
   LineChart,
+  LineChartTooltipPosition,
   TLineChartDataProp,
   TLineChartPoint,
 } from 'react-native-wagmi-charts';
@@ -54,6 +63,10 @@ export default function App() {
   const [toggleSnapToPoint, setToggleSnapToPoint] = React.useState(false);
   const [toggleHighlight, setToggleHighlight] = React.useState(false);
 
+  const [floatingTooltip, setFloatingTooltip] = React.useState(false);
+  const [tooltipPosition, setTooltipPosition] =
+    React.useState<LineChartTooltipPosition>('top');
+
   let dataProp: TLineChartDataProp = data;
   const [min, max] = useMemo(() => {
     if (Array.isArray(dataProp)) {
@@ -92,7 +105,10 @@ export default function App() {
         onEnded={invokeHaptic}
         at={at}
       >
-        <LineChart.Tooltip position="top" />
+        <LineChart.Tooltip
+          position={tooltipPosition}
+          withHorizontalFloating={floatingTooltip}
+        />
         <LineChart.HoverTrap />
       </LineChart.CursorCrosshair>
     </LineChart>
@@ -112,7 +128,10 @@ export default function App() {
             onActivated={invokeHaptic}
             onEnded={invokeHaptic}
           >
-            <LineChart.Tooltip />
+            <LineChart.Tooltip
+              position={tooltipPosition}
+              withHorizontalFloating={floatingTooltip}
+            />
           </LineChart.CursorCrosshair>
         </LineChart>
         <LineChart id="two">
@@ -126,7 +145,10 @@ export default function App() {
             onActivated={invokeHaptic}
             onEnded={invokeHaptic}
           >
-            <LineChart.Tooltip />
+            <LineChart.Tooltip
+              position={tooltipPosition}
+              withHorizontalFloating={floatingTooltip}
+            />
           </LineChart.CursorCrosshair>
         </LineChart>
       </LineChart.Group>
@@ -160,7 +182,7 @@ export default function App() {
         {chart}
         <Box marginX="major-2" marginTop="major-2">
           <Heading.H6 marginBottom="major-2">Load Data</Heading.H6>
-          <Flex flexWrap="wrap">
+          <Flex flexWrap="wrap" marginBottom="major-2">
             <Button onPress={() => setData(mockData)}>Data 1</Button>
             <Button onPress={() => setData(mockData2)}>Data 2</Button>
             <Button onPress={() => setData(mockDataNonLinear)}>Data 3</Button>
@@ -217,8 +239,33 @@ export default function App() {
             <Button onPress={() => setToggleSnapToPoint((val) => !val)}>
               Toggle Snap {toggleSnapToPoint ? 'Off' : 'On'}
             </Button>
-            <Button onPress={() => setAt(Math.floor(Math.random() * data.length))}>Set Cursor</Button>
+            <Button
+              onPress={() => setAt(Math.floor(Math.random() * data.length))}
+            >
+              Set Cursor
+            </Button>
           </Flex>
+
+          <Text marginBottom="major-2">Tooltip position:</Text>
+          <RadioGroup
+            orientation="horizontal"
+            onChange={(value) =>
+              setTooltipPosition(value as LineChartTooltipPosition)
+            }
+            value={tooltipPosition}
+            options={[
+              { label: 'Top', value: 'top' },
+              { label: 'Bottom', value: 'bottom' },
+              { label: 'Left', value: 'left' },
+              { label: 'Right', value: 'right' },
+            ]}
+          />
+
+          {['left', 'right'].includes(tooltipPosition) && (
+            <Button onPress={() => setFloatingTooltip((val) => !val)}>
+              Toggle floating tooltip {floatingTooltip ? 'Off' : 'On'}
+            </Button>
+          )}
         </Box>
         {!multiData && (
           <Stack padding="major-2" spacing="major-1">
