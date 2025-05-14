@@ -974,8 +974,8 @@ Place it as the child of your cursor component to trap hover events on Web. If y
 | `negativeColor` | `string`                                                                                                       | `#ef4444` | Color of the negative candles                                      |
 | `rectProps`     | `RectProps`                                                                                                    |           | Props of the SVG Rectangle. Takes React Native's SVG `Rect` props. |
 | `lineProps`     | `LineProps`                                                                                                    |           | Props of the SVG Line. Takes React Native's SVG `Line` props.      |
-| `renderRect`    | `({ x: number, y: number, width: number, height: number, fill: string }) => React.ReactNode`                   |           | Renders a custom rect component                                    |
-| `renderLine`    | `({ x1: number, x2: number, y1: number, y2: number, stroke: string, strokeWidth: number }) => React.ReactNode` |           | Renders a custom line component                                    |
+| `renderRect`    | `({ x: number, y: number, width: number, height: number, fill: string, candle: TCandle }) => React.ReactNode`                   |           | Renders a custom rect component                                    |
+| `renderLine`    | `({ x1: number, x2: number, y1: number, y2: number, stroke: string, strokeWidth: number, candle: TCandle }) => React.ReactNode` |           | Renders a custom line component                                    |
 | `...props`      | `SvgProps`                                                                                                     |           | This component also inherits React Native SVG's `Svg` props.       |
 
 ### CandlestickChart.Crosshair
