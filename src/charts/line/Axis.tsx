@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { View, ViewProps, StyleSheet } from 'react-native';
+import { ViewProps, StyleSheet } from 'react-native';
 import { Line, Text, G, Svg } from 'react-native-svg';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { LineChartDimensionsContext } from './Chart';
+import { useLineChart } from './useLineChart';
 
 export type AxisPosition = 'left' | 'right' | 'top' | 'bottom';
 export type AxisOrientation = 'horizontal' | 'vertical';
@@ -14,19 +16,22 @@ export type AxisProps = ViewProps & {
   tickCount?: number;
   formatLabel?: (value: number) => string;
   domain?: [number, number];
+  hideOnInteraction?: boolean;
 };
 
 export const Axis = ({
   position,
   orientation,
   color = '#666',
-  strokeWidth = 1,
+  strokeWidth,
   tickCount = 5,
   formatLabel = (value) => value.toString(),
   domain = [0, 100],
+  hideOnInteraction = false,
   ...props
 }: AxisProps) => {
   const { width, height } = React.useContext(LineChartDimensionsContext);
+  const { isActive } = useLineChart();
 
   // Add padding for labels
   const padding = {
@@ -35,6 +40,12 @@ export const Axis = ({
     top: 60,
     bottom: 60,
   };
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: hideOnInteraction && isActive.value ? 0 : 1,
+    };
+  }, [hideOnInteraction, isActive]);
 
   const renderTicks = () => {
     const [min, max] = domain;
@@ -51,14 +62,14 @@ export const Axis = ({
         const x = position === 'left' ? padding.left : width - padding.right;
         ticks.push(
           <G key={i}>
-            <Line
+            {strokeWidth && <Line
               x1={x}
               y1={y}
               x2={position === 'left' ? x - tickLength : x + tickLength}
               y2={y}
               stroke={color}
               strokeWidth={strokeWidth}
-            />
+            />}
             <Text
               x={position === 'left' ? x - labelOffset : x + labelOffset}
               y={
@@ -85,23 +96,35 @@ export const Axis = ({
         );
       } else {
         const x = width * tickPosition;
-        const y = position === 'top' ? padding.top : height - padding.bottom;
+        const y = position === 'top' ? 15 : height - padding.bottom;
         ticks.push(
           <G key={i}>
-            <Line
+            {strokeWidth && <Line
               x1={x}
               y1={y}
               x2={x}
-              y2={position === 'top' ? y - tickLength : y + tickLength}
+              y2={position === 'top' ? y - tickLength : height - 15}
               stroke={color}
               strokeWidth={strokeWidth}
-            />
+            />}
             <Text
-              x={x}
-              y={position === 'top' ? y - labelOffset : y + labelOffset}
+              x={
+                i === 0
+                  ? x + labelOffset
+                  : i === tickCount
+                  ? x - labelOffset
+                  : x
+              }
+              y={position === 'top' ? y - labelOffset : height - 15}
               fill={color}
               fontSize={10}
-              textAnchor="middle"
+              textAnchor={
+                i === 0
+                  ? "start"
+                  : i === tickCount
+                  ? "end"
+                  : "middle"
+              }
               alignmentBaseline={position === 'top' ? 'baseline' : 'hanging'}
             >
               {formatLabel(value)}
@@ -118,56 +141,56 @@ export const Axis = ({
       case 'left':
         return (
           <>
-            <Line
+            {strokeWidth && <Line
               x1={padding.left}
               y1={0}
               x2={padding.left}
               y2={height}
               stroke={color}
               strokeWidth={strokeWidth}
-            />
+            />}
             {renderTicks()}
           </>
         );
       case 'right':
         return (
           <>
-            <Line
+            {strokeWidth && <Line
               x1={width - padding.right}
               y1={0}
               x2={width - padding.right}
               y2={height}
               stroke={color}
               strokeWidth={strokeWidth}
-            />
+            />}
             {renderTicks()}
           </>
         );
       case 'top':
         return (
           <>
-            <Line
+            {strokeWidth && <Line
               x1={0}
-              y1={padding.top}
+              y1={20}
               x2={width}
-              y2={padding.top}
+              y2={20}
               stroke={color}
               strokeWidth={strokeWidth}
-            />
+            />}
             {renderTicks()}
           </>
         );
       case 'bottom':
         return (
           <>
-            <Line
+            {strokeWidth && <Line
               x1={0}
-              y1={height - padding.bottom}
+              y1={height - 20}
               x2={width}
-              y2={height - padding.bottom}
+              y2={height - 20}
               stroke={color}
               strokeWidth={strokeWidth}
-            />
+            />}
             {renderTicks()}
           </>
         );
@@ -175,11 +198,11 @@ export const Axis = ({
   };
 
   return (
-    <View style={[styles.container, props.style]}>
+    <Animated.View style={[styles.container, props.style, animatedStyle]}>
       <Svg width={width} height={height} style={StyleSheet.absoluteFill}>
         {renderAxis()}
       </Svg>
-    </View>
+    </Animated.View>
   );
 };
 

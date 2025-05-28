@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
-import Svg, { Line as SVGLine, LineProps, Text as SVGText } from 'react-native-svg';
+import Svg, { Line as SVGLine, LineProps } from 'react-native-svg';
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartCursor, LineChartCursorProps } from './Cursor';
 import { useLineChart } from './useLineChart';
@@ -14,6 +14,7 @@ type LineChartCursorLineProps = {
   color?: string;
   lineProps?: Partial<LineProps>;
   text?: string;
+  format?: any;
   textStyle?: any;
 } & Omit<LineChartCursorProps, 'type' | 'children'>;
 
@@ -24,13 +25,14 @@ export function LineChartCursorLine({
   color = 'gray',
   lineProps,
   text,
+  format,
   textStyle,
   ...cursorProps
 }: LineChartCursorLineProps) {
   const { height, width } = React.useContext(LineChartDimensionsContext);
-  const { currentX, currentY, isActive, currentIndex } = useLineChart();
+  const { currentX, currentY, isActive } = useLineChart();
   const price = useLineChartPrice({ precision: 2 });
-  const datetime = useLineChartDatetime();
+  const datetime = useLineChartDatetime({ format: format});
   
   const animatedStyle = useAnimatedStyle(
     () => ({
@@ -54,8 +56,8 @@ export function LineChartCursorLine({
           <SVGLine
             x1={0}
             y1={0}
-            x2={isHorizontal ? width : 0}
-            y2={isHorizontal ? 0 : height}
+            x2={isHorizontal ? width - 50 : 0}
+            y2={isHorizontal ? 0 : height - 20}
             strokeWidth={2}
             stroke={color}
             strokeDasharray="3 3"
@@ -63,13 +65,13 @@ export function LineChartCursorLine({
           />
         </Svg>
         <AnimatedText
-          text={isHorizontal ? price.formatted : datetime.formatted}
+          text={isHorizontal ? price.formatted :  datetime.formatted}
           style={[
             {
               position: 'absolute',
-              left: isHorizontal ? width - 50 : 5,
-              top: isHorizontal ? 12 : height - 5,
-              color,
+              left: isHorizontal ? width - 60 : -25,
+              top: isHorizontal ? - 15 : height - 20,
+              color: '#1A1E27',
               fontSize: 12,
               textAlign: isHorizontal ? 'right' : 'left',
               width: isHorizontal ? 50 : 100,
