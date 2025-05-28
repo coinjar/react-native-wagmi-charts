@@ -32,8 +32,8 @@ export const Axis = ({
   const padding = {
     left: 50,
     right: 50,
-    top: 20,
-    bottom: 30,
+    top: 60,
+    bottom: 60,
   };
 
   const renderTicks = () => {
@@ -61,11 +61,23 @@ export const Axis = ({
             />
             <Text
               x={position === 'left' ? x - labelOffset : x + labelOffset}
-              y={y}
+              y={
+                i === 0
+                  ? y - 15
+                  : i === tickCount
+                  ? y + 15
+                  : y
+              }
               fill={color}
               fontSize={10}
               textAnchor={position === 'left' ? 'end' : 'start'}
-              alignmentBaseline="middle"
+              alignmentBaseline={
+                i === 0
+                  ? "baseline"
+                  : i === tickCount
+                  ? "hanging"
+                  : "middle"
+              }
             >
               {formatLabel(value)}
             </Text>

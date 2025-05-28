@@ -122,7 +122,6 @@ export default function App() {
           Math.min(...data.map((d) => d.value)),
           Math.max(...data.map((d) => d.value))
         ]}
-        formatLabel={(value) => `$${value.toFixed(2)}`}
       />
     </LineChart>
   );
