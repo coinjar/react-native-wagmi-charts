@@ -24,6 +24,7 @@ export type LineChartCursorProps = LongPressGestureHandlerProps & {
   // Does not work on web due to how the Cursor operates on web
   snapToPoint?: boolean;
   at?: number;
+  orientation?: 'horizontal' | 'vertical';
 };
 
 export const CursorContext = React.createContext({ type: '' });
