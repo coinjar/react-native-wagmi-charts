@@ -11,6 +11,7 @@ import {
   Text,
 } from 'bumbag-native';
 import {
+  Axis,
   LineChart,
   LineChartTooltipPosition,
   TLineChartDataProp,
@@ -111,6 +112,18 @@ export default function App() {
         />
         <LineChart.HoverTrap />
       </LineChart.CursorCrosshair>
+      <Axis
+        position="right"
+        orientation="vertical"
+        color="#666"
+        strokeWidth={1}
+        tickCount={5}
+        domain={[
+          Math.min(...data.map((d) => d.value)),
+          Math.max(...data.map((d) => d.value))
+        ]}
+        formatLabel={(value) => `$${value.toFixed(2)}`}
+      />
     </LineChart>
   );
 
