@@ -14,9 +14,9 @@ export type AxisProps = ViewProps & {
   color?: string;
   strokeWidth?: number;
   tickCount?: number;
-  formatLabel?: (value: number) => string;
   domain?: [number, number];
   hideOnInteraction?: boolean;
+  format?: (value: number | string) => string | number;
 };
 
 export const Axis = ({
@@ -25,9 +25,9 @@ export const Axis = ({
   color = '#666',
   strokeWidth,
   tickCount = 5,
-  formatLabel = (value) => value.toString(),
   domain = [0, 100],
   hideOnInteraction = false,
+  format = (value) => value,
   ...props
 }: AxisProps) => {
   const { width, height } = React.useContext(LineChartDimensionsContext);
@@ -90,7 +90,7 @@ export const Axis = ({
                   : "middle"
               }
             >
-              {formatLabel(value)}
+              {format(value)}
             </Text>
           </G>
         );
@@ -127,7 +127,7 @@ export const Axis = ({
               }
               alignmentBaseline={position === 'top' ? 'baseline' : 'hanging'}
             >
-              {formatLabel(value)}
+              {format(value)}
             </Text>
           </G>
         );

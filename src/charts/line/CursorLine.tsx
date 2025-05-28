@@ -8,13 +8,14 @@ import { useLineChart } from './useLineChart';
 import { useLineChartPrice } from './usePrice';
 import { useLineChartDatetime } from './useDatetime';
 import { AnimatedText } from '../../components/AnimatedText';
+import { TFormatterFn } from 'react-native-wagmi-charts';
 
 type LineChartCursorLineProps = {
   children?: React.ReactNode;
   color?: string;
   lineProps?: Partial<LineProps>;
   text?: string;
-  format?: any;
+  format?: TFormatterFn<string | number>;
   textStyle?: any;
 } & Omit<LineChartCursorProps, 'type' | 'children'>;
 
@@ -29,10 +30,16 @@ export function LineChartCursorLine({
   textStyle,
   ...cursorProps
 }: LineChartCursorLineProps) {
+  const isHorizontal = cursorProps?.orientation === 'horizontal';
   const { height, width } = React.useContext(LineChartDimensionsContext);
   const { currentX, currentY, isActive } = useLineChart();
-  const price = useLineChartPrice({ precision: 2 });
-  const datetime = useLineChartDatetime({ format: format});
+  const price = useLineChartPrice({
+    format: isHorizontal ? format as TFormatterFn<string> : undefined,
+    precision: 2
+  });
+  const datetime = useLineChartDatetime({
+    format: !isHorizontal ? format as TFormatterFn<number> : undefined
+  });
   
   const animatedStyle = useAnimatedStyle(
     () => ({
@@ -46,9 +53,6 @@ export function LineChartCursorLine({
     }),
     [currentX, currentY, isActive]
   );
-
-  const isHorizontal = cursorProps?.orientation === 'horizontal';
-
   return (
     <LineChartCursor {...cursorProps} type="line">
       <Animated.View style={animatedStyle}>
