@@ -1,6 +1,6 @@
 {
   "name": "react-native-wagmi-charts",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "description": "A sweet candlestick chart for React Native",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
