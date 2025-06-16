@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { ViewProps, StyleSheet } from 'react-native';
-import { Line, Text, G, Svg } from 'react-native-svg';
+import { ViewProps, StyleSheet, Text } from 'react-native';
+import { Line, Svg } from 'react-native-svg';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { LineChartDimensionsContext } from './Chart';
 import { useLineChart } from './useLineChart';
@@ -17,6 +17,7 @@ export type AxisProps = ViewProps & {
   domain?: [number, number];
   hideOnInteraction?: boolean;
   format?: (value: number | string) => string | number;
+  textStyle?: any;
 };
 
 export const Axis = ({
@@ -28,12 +29,12 @@ export const Axis = ({
   domain = [0, 100],
   hideOnInteraction = false,
   format = (value) => value,
+  textStyle,
   ...props
 }: AxisProps) => {
   const { width, height } = React.useContext(LineChartDimensionsContext);
   const { isActive } = useLineChart();
 
-  // Add padding for labels
   const padding = {
     left: 50,
     right: 50,
@@ -50,6 +51,7 @@ export const Axis = ({
   const renderTicks = () => {
     const [min, max] = domain;
     const ticks = [];
+    const labels = [];
     const tickLength = 5;
     const labelOffset = 8;
 
@@ -60,148 +62,188 @@ export const Axis = ({
       if (orientation === 'vertical') {
         const y = height * (1 - tickPosition);
         const x = position === 'left' ? padding.left : width - padding.right;
-        ticks.push(
-          <G key={i}>
-            {strokeWidth && <Line
+
+        if (strokeWidth) {
+          ticks.push(
+            <Line
+              key={`tick-${i}`}
               x1={x}
               y1={y}
               x2={position === 'left' ? x - tickLength : x + tickLength}
               y2={y}
               stroke={color}
               strokeWidth={strokeWidth}
-            />}
+            />
+          );
+        }
+
+        labels.push(
+          <Animated.View
+            key={`label-${i}`}
+            style={[
+              {
+                position: 'absolute',
+                left: position === 'left' ? Math.max(0, x - labelOffset - 40) : Math.min(width - 50, x + labelOffset),
+                top: Math.max(0, Math.min(height - 20, i === 0 ? y - 15 : i === tickCount ? y + 5 : y - 10)),
+                width: 40,
+                minHeight: 20,
+                zIndex: 1000,
+                overflow: 'hidden',
+                justifyContent: 'center',
+                alignItems: position === 'left' ? 'flex-end' : 'flex-start',
+              },
+            ]}
+          >
             <Text
-              x={position === 'left' ? x - labelOffset : x + labelOffset}
-              y={
-                i === 0
-                  ? y - 15
-                  : i === tickCount
-                  ? y + 15
-                  : y
-              }
-              fill={color}
-              fontSize={10}
-              textAnchor={position === 'left' ? 'end' : 'start'}
-              alignmentBaseline={
-                i === 0
-                  ? "baseline"
-                  : i === tickCount
-                  ? "hanging"
-                  : "middle"
-              }
+              numberOfLines={1}
+              ellipsizeMode="clip"
+              style={[
+                {
+                  color: color,
+                  fontSize: 10,
+                  textAlign: position === 'left' ? 'right' : 'left',
+                },
+                textStyle,
+              ]}
             >
-              {format(value)}
+              {String(format(value))}
             </Text>
-          </G>
+          </Animated.View>
         );
       } else {
         const x = width * tickPosition;
         const y = position === 'top' ? 15 : height - padding.bottom;
-        ticks.push(
-          <G key={i}>
-            {strokeWidth && <Line
+
+        if (strokeWidth) {
+          ticks.push(
+            <Line
+              key={`tick-${i}`}
               x1={x}
               y1={y}
               x2={x}
               y2={position === 'top' ? y - tickLength : height - 15}
               stroke={color}
               strokeWidth={strokeWidth}
-            />}
+            />
+          );
+        }
+
+        labels.push(
+          <Animated.View
+            key={`label-${i}`}
+            style={[
+              {
+                position: 'absolute',
+                left: Math.max(0, Math.min(width - 50, i === 0 ? x + labelOffset : i === tickCount ? x - 50 - labelOffset : x - 25)),
+                top: position === 'top' ? Math.max(0, y - labelOffset - 15) : Math.max(0, height - 35),
+                width: 50,
+                minHeight: 20,
+                zIndex: 1000,
+                overflow: 'hidden',
+                justifyContent: 'center',
+                alignItems: i === 0 ? 'flex-start' : i === tickCount ? 'flex-end' : 'center',
+              },
+            ]}
+          >
             <Text
-              x={
-                i === 0
-                  ? x + labelOffset
-                  : i === tickCount
-                  ? x - labelOffset
-                  : x
-              }
-              y={position === 'top' ? y - labelOffset : height - 15}
-              fill={color}
-              fontSize={10}
-              textAnchor={
-                i === 0
-                  ? "start"
-                  : i === tickCount
-                  ? "end"
-                  : "middle"
-              }
-              alignmentBaseline={position === 'top' ? 'baseline' : 'hanging'}
+              numberOfLines={1}
+              ellipsizeMode="clip"
+              style={[
+                {
+                  color: color,
+                  fontSize: 10,
+                  textAlign: i === 0 ? 'left' : i === tickCount ? 'right' : 'center',
+                },
+                textStyle,
+              ]}
             >
-              {format(value)}
+              {String(format(value))}
             </Text>
-          </G>
+          </Animated.View>
         );
       }
     }
-    return ticks;
+
+    return { ticks, labels };
   };
 
   const renderAxis = () => {
+    const { ticks, labels } = renderTicks();
+
+    let axisLine = null;
     switch (position) {
       case 'left':
-        return (
-          <>
-            {strokeWidth && <Line
+        if (strokeWidth) {
+          axisLine = (
+            <Line
               x1={padding.left}
               y1={0}
               x2={padding.left}
               y2={height}
               stroke={color}
               strokeWidth={strokeWidth}
-            />}
-            {renderTicks()}
-          </>
-        );
+            />
+          );
+        }
+        break;
       case 'right':
-        return (
-          <>
-            {strokeWidth && <Line
+        if (strokeWidth) {
+          axisLine = (
+            <Line
               x1={width - padding.right}
               y1={0}
               x2={width - padding.right}
               y2={height}
               stroke={color}
               strokeWidth={strokeWidth}
-            />}
-            {renderTicks()}
-          </>
-        );
+            />
+          );
+        }
+        break;
       case 'top':
-        return (
-          <>
-            {strokeWidth && <Line
+        if (strokeWidth) {
+          axisLine = (
+            <Line
               x1={0}
               y1={20}
               x2={width}
               y2={20}
               stroke={color}
               strokeWidth={strokeWidth}
-            />}
-            {renderTicks()}
-          </>
-        );
+            />
+          );
+        }
+        break;
       case 'bottom':
-        return (
-          <>
-            {strokeWidth && <Line
+        if (strokeWidth) {
+          axisLine = (
+            <Line
               x1={0}
               y1={height - 20}
               x2={width}
               y2={height - 20}
               stroke={color}
               strokeWidth={strokeWidth}
-            />}
-            {renderTicks()}
-          </>
-        );
+            />
+          );
+        }
+        break;
     }
+
+    return { axisLine, ticks, labels };
   };
+
+  const { axisLine, ticks, labels } = renderAxis();
 
   return (
     <Animated.View style={[styles.container, props.style, animatedStyle]}>
       <Svg width={width} height={height} style={StyleSheet.absoluteFill}>
-        {renderAxis()}
+        {axisLine}
+        {ticks}
       </Svg>
+      <Animated.View style={[StyleSheet.absoluteFill, { zIndex: 1000 }]}>
+        {labels}
+      </Animated.View>
     </Animated.View>
   );
 };

@@ -60,7 +60,7 @@ export function LineChartCursorLine({
           <SVGLine
             x1={0}
             y1={0}
-            x2={isHorizontal ? width - 50 : 0}
+            x2={isHorizontal ? width - 60 : 0}
             y2={isHorizontal ? 0 : height - 20}
             strokeWidth={2}
             stroke={color}
@@ -74,7 +74,7 @@ export function LineChartCursorLine({
             {
               position: 'absolute',
               left: isHorizontal ? width - 60 : -25,
-              top: isHorizontal ? - 15 : height - 20,
+              top: isHorizontal ? - 7 : height - 20,
               color: '#1A1E27',
               fontSize: 12,
               textAlign: isHorizontal ? 'right' : 'left',
