@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useDerivedValue } from 'react-native-reanimated';
 import Svg, { Line as SVGLine, LineProps } from 'react-native-svg';
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartCursor, LineChartCursorProps } from './Cursor';
@@ -33,13 +33,41 @@ export function LineChartCursorLine({
   const isHorizontal = cursorProps?.orientation === 'horizontal';
   const { height, width } = React.useContext(LineChartDimensionsContext);
   const { currentX, currentY, isActive } = useLineChart();
+  
   const price = useLineChartPrice({
     format: isHorizontal ? format as TFormatterFn<string> : undefined,
     precision: 2
   });
+
   const datetime = useLineChartDatetime({
     format: !isHorizontal ? format as TFormatterFn<number> : undefined
   });
+  
+  const textPosition = useDerivedValue(() => {
+    if (isHorizontal) {
+      return {
+        left: width - 60,
+        textAlign: 'right' as const,
+      };
+    } else {
+      const labelWidth = 100;
+      const padding = 10;
+      
+      let left = -labelWidth / 2; 
+      let textAlign: 'left' | 'center' | 'right' = 'center';
+      
+      if (currentX.value + left < padding) {
+        left = padding - currentX.value;
+        textAlign = 'left';
+      }
+      else if (currentX.value + left + labelWidth > width - padding) {
+        left = (width - padding - labelWidth) - currentX.value;
+        textAlign = 'right';
+      }
+      
+      return { left, textAlign };
+    }
+  }, [currentX, width, isHorizontal]);
   
   const animatedStyle = useAnimatedStyle(
     () => ({
@@ -53,6 +81,20 @@ export function LineChartCursorLine({
     }),
     [currentX, currentY, isActive]
   );
+
+  const textAnimatedStyle = useAnimatedStyle(
+    () => ({
+      position: 'absolute' as const,
+      left: isHorizontal ? width - 60 : textPosition.value.left,
+      top: isHorizontal ? -20 : height - 20,
+      color: '#1A1E27',
+      fontSize: 12,
+      textAlign: textPosition.value.textAlign,
+      width: isHorizontal ? 50 : 100,
+    }),
+    [textPosition, width, height, isHorizontal]
+  );
+
   return (
     <LineChartCursor {...cursorProps} type="line">
       <Animated.View style={animatedStyle}>
@@ -69,19 +111,8 @@ export function LineChartCursorLine({
           />
         </Svg>
         <AnimatedText
-          text={isHorizontal ? price.formatted :  datetime.formatted}
-          style={[
-            {
-              position: 'absolute',
-              left: isHorizontal ? width - 60 : -25,
-              top: isHorizontal ? - 7 : height - 20,
-              color: '#1A1E27',
-              fontSize: 12,
-              textAlign: isHorizontal ? 'right' : 'left',
-              width: isHorizontal ? 50 : 100,
-            },
-            textStyle,
-          ]}
+          text={isHorizontal ? price.formatted : datetime.formatted}
+          style={[textAnimatedStyle, textStyle]}
         />
       </Animated.View>
       {children}
