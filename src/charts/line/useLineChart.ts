@@ -10,7 +10,6 @@ export function useLineChart() {
   const dataContext = useLineChartData({
     id: maybeId,
   });
-
   const currentY = useCurrentY();
 
   return React.useMemo(
