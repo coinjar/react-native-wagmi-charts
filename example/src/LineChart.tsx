@@ -11,7 +11,6 @@ import {
   Text,
 } from 'bumbag-native';
 import {
-  Axis,
   LineChart,
   LineChartTooltipPosition,
   TLineChartDataProp,
@@ -30,22 +29,6 @@ function invokeHaptic() {
   }
 }
 
-// Define worklet functions outside the component
-const someFormatFunction = (value) => {
-  'worklet';
-  return `$${value}`;
-};
-
-const anotherFormatFunction = (value) => {
-  'worklet';
-  return `Custom: ${value}`;
-};
-
-const currencyFormatFunction = (value) => {
-  'worklet';
-  return `$${value} AUD`;
-};
-
 export default function App() {
   const [data, setData] = React.useState<TLineChartPoint[]>(mockData);
   const [multiData, toggleMultiData] = React.useReducer(
@@ -63,9 +46,6 @@ export default function App() {
   const [yRange, setYRange] = React.useState<undefined | 'low' | 'high'>(
     undefined
   );
-
-  // State to manage which formatter to use
-  const [currentFormatter, setCurrentFormatter] = React.useState('someFormat');
 
   const toggleYRange = () => {
     setYRange((domain) => {
@@ -101,25 +81,6 @@ export default function App() {
     return [0, 0];
   }, [dataProp]);
 
-  // Function to get the current formatter worklet
-  const getFormatterWorklet = () => {
-    switch (currentFormatter) {
-      case 'someFormat':
-        return someFormatFunction;
-      case 'anotherFormat':
-        return anotherFormatFunction;
-      case 'currencyFormat':
-        return currencyFormatFunction;
-      default:
-        return (value) => {
-          'worklet';
-          return value;
-        };
-    }
-  };
-
-  const selectedFormatter = getFormatterWorklet();
-
   let chart = (
     <LineChart>
       <LineChart.Path color="black">
@@ -144,32 +105,12 @@ export default function App() {
         onEnded={invokeHaptic}
         at={at}
       >
-        {/* <LineChart.Tooltip
+        <LineChart.Tooltip
           position={tooltipPosition}
           withHorizontalFloating={floatingTooltip}
-        /> */}
+        />
         <LineChart.HoverTrap />
       </LineChart.CursorCrosshair>
-      <Axis
-        position="right"
-        orientation="vertical"
-        color="#666"
-        strokeWidth={1}
-        tickCount={5}
-        textStyle={{
-          backgroundColor: 'yellow', // Temporary debug background
-          color: 'red',
-        }}
-        domain={[
-          Math.min(...data.map((d) => d.value)),
-          Math.max(...data.map((d) => d.value))
-        ]}
-      />
-      <LineChart.CursorLine />
-      <LineChart.CursorLine orientation='horizontal' format={(value) => {
-        'worklet';
-        return selectedFormatter(value.formatted);
-      }}/>
     </LineChart>
   );
 
@@ -304,19 +245,6 @@ export default function App() {
               Set Cursor
             </Button>
           </Flex>
-
-          <Text marginBottom="major-2">Format Function:</Text>
-          <RadioGroup
-            orientation="horizontal"
-            onChange={(value) => setCurrentFormatter(value)}
-            value={currentFormatter}
-            options={[
-              { label: 'Default', value: 'default' },
-              { label: 'Some Format', value: 'someFormat' },
-              { label: 'Another Format', value: 'anotherFormat' },
-              { label: 'Currency Format', value: 'currencyFormat' },
-            ]}
-          />
 
           <Text marginBottom="major-2">Tooltip position:</Text>
           <RadioGroup
