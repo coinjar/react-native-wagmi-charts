@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
@@ -100,7 +100,7 @@ export function LineChartCursorLine({
       left: isHorizontal
         ? width - dynamicTextWidth.value
         : -dynamicTextWidth.value / 2,
-      top: isHorizontal ? -20 : height - 20,
+      top: isHorizontal ? (Platform.OS === 'ios' ? -10 : -20) : height - 20,
       color: '#1A1E27',
       fontSize: 12,
       textAlign: isHorizontal ? 'right' : 'center',
