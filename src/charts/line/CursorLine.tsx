@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
-  useSharedValue,
 } from 'react-native-reanimated';
 import Svg, { type LineProps, Line as SVGLine } from 'react-native-svg';
 import type { TFormatterFn } from 'react-native-wagmi-charts';
@@ -21,6 +20,11 @@ type LineChartCursorLineProps = {
   text?: string;
   format?: TFormatterFn<string | number>;
   textStyle?: any;
+  // New props for customizing the dynamic sizing
+  baseCharWidth?: number;
+  minTextWidth?: number;
+  maxTextWidth?: number;
+  textPadding?: number;
 } & Omit<LineChartCursorProps, 'type' | 'children'>;
 
 LineChartCursorLine.displayName = 'LineChartCursorLine';
@@ -32,6 +36,10 @@ export function LineChartCursorLine({
   text,
   format,
   textStyle,
+  baseCharWidth = 8, // Approximate width per character
+  minTextWidth = 30,
+  maxTextWidth = 120,
+  textPadding = 10,
   ...cursorProps
 }: LineChartCursorLineProps) {
   const isHorizontal = cursorProps?.orientation === 'horizontal';
@@ -45,23 +53,33 @@ export function LineChartCursorLine({
     format: !isHorizontal ? (format as TFormatterFn<number>) : undefined,
   });
 
-  // Shared value to store text width
-  const textWidth = useSharedValue(50);
+  // Calculate dynamic text width based on character count
+  const dynamicTextWidth = useDerivedValue(() => {
+    const displayText = isHorizontal
+      ? price.formatted.value
+      : datetime.formatted.value;
+    const charCount = displayText?.length || 0;
+    const calculatedWidth = Math.max(
+      minTextWidth,
+      Math.min(maxTextWidth, charCount * baseCharWidth + textPadding),
+    );
+    return calculatedWidth;
+  }, [
+    price.formatted,
+    datetime.formatted,
+    baseCharWidth,
+    minTextWidth,
+    maxTextWidth,
+    textPadding,
+  ]);
 
-  // Function to estimate text width (approximate calculation)
-  const estimateTextWidth = (text: string, fontSize = 12) => {
-    // Rough approximation: each character is about 0.6 * fontSize wide
-    // You might want to adjust this multiplier based on your font
-    const avgCharWidth = fontSize * 0.6;
-    return Math.max(text.length * avgCharWidth + 16, 30); // +16 for padding, minimum 30
-  };
-
-  // Update text width when text changes
-  React.useEffect(() => {
-    const currentText = isHorizontal ? price.formatted || '' : '';
-    const newWidth = isHorizontal ? estimateTextWidth(currentText) : 50;
-    textWidth.value = newWidth;
-  }, [price.formatted, isHorizontal, textWidth]);
+  // Calculate shortened line length
+  const lineLength = useDerivedValue(() => {
+    if (isHorizontal) {
+      return width - dynamicTextWidth.value - 30;
+    }
+    return height - 30; // Keep vertical line length as is, or adjust as needed
+  }, [dynamicTextWidth, width, height]);
 
   const animatedStyle = useAnimatedStyle(
     () => ({
@@ -76,43 +94,20 @@ export function LineChartCursorLine({
     [currentX, currentY, isActive],
   );
 
-  const textPosition = useDerivedValue(() => {
-    if (isHorizontal) {
-      return {
-        left: width - textWidth.value - 10, // Position text at the right with padding
-        textAlign: 'right' as const,
-      };
-    }
-    const labelWidth = 100;
-    const padding = 10;
-
-    let left = -labelWidth / 2;
-    let textAlign: 'left' | 'center' | 'right' = 'center';
-
-    if (currentX.value + left < padding) {
-      left = padding - currentX.value;
-      textAlign = 'left';
-    } else if (currentX.value + left + labelWidth > width - padding) {
-      left = width - padding - labelWidth - currentX.value;
-      textAlign = 'right';
-    }
-
-    return { left, textAlign };
-  }, [currentX, width, isHorizontal, textWidth]);
-
-  const textAnimatedStyle = useAnimatedStyle(
+  const animatedTextStyle = useAnimatedStyle(
     () => ({
-      position: 'absolute' as const,
-      right: isHorizontal ? 10 : undefined, // Use right positioning for horizontal
-      left: isHorizontal ? undefined : textPosition.value.left,
+      position: 'absolute',
+      left: isHorizontal
+        ? width - dynamicTextWidth.value
+        : -dynamicTextWidth.value / 2,
       top: isHorizontal ? -20 : height - 20,
       color: '#1A1E27',
       fontSize: 12,
-      textAlign: isHorizontal ? 'right' : textPosition.value.textAlign,
-      width: isHorizontal ? textWidth.value : 100,
-      paddingHorizontal: isHorizontal ? 8 : 0,
+      textAlign: isHorizontal ? 'right' : 'center',
+      width: dynamicTextWidth.value,
+      ...textStyle,
     }),
-    [textPosition, height, isHorizontal, textWidth],
+    [dynamicTextWidth, width, height, textStyle],
   );
 
   return (
@@ -122,7 +117,7 @@ export function LineChartCursorLine({
           <SVGLine
             x1={0}
             y1={0}
-            x2={isHorizontal ? width - 80 : 0} // Fixed length that accounts for text
+            x2={isHorizontal ? lineLength.value : 0}
             y2={isHorizontal ? 0 : height - 20}
             strokeWidth={2}
             stroke={color}
@@ -132,7 +127,7 @@ export function LineChartCursorLine({
         </Svg>
         <AnimatedText
           text={isHorizontal ? price.formatted : datetime.formatted}
-          style={[textAnimatedStyle, textStyle]}
+          style={animatedTextStyle}
         />
       </Animated.View>
       {children}
