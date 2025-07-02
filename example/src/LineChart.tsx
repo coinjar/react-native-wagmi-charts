@@ -83,7 +83,7 @@ export default function App() {
   }, [dataProp]);
 
   let chart = (
-    <LineChart height={200}>
+    <LineChart height={200} key={`${data[0]?.timestamp}-${data.length}`}>
       <LineChart.Path color="black">
         {toggleMinMaxLabels && (
           <>
