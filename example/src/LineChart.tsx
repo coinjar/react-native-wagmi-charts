@@ -6,6 +6,8 @@ import {
   XStack,
   Button,
   H4,
+  H5,
+  H6,
   RadioGroup,
   Text,
 } from 'tamagui';
@@ -31,6 +33,9 @@ function invokeHaptic() {
 export default function App() {
   const [data, setData] = React.useState<TLineChartPoint[]>(mockData);
   
+  React.useEffect(() => {
+    console.log('Data state changed:', data.length, 'points, first value:', data[0]?.value);
+  }, [data]);
   const [multiData, toggleMultiData] = React.useReducer(
     (state) => !state,
     false
@@ -68,7 +73,6 @@ export default function App() {
     React.useState<LineChartTooltipPosition>('top');
 
   let dataProp: TLineChartDataProp = data;
-
   const [min, max] = useMemo(() => {
     if (Array.isArray(dataProp)) {
       const values = dataProp.map((d) => d.value);
@@ -83,7 +87,7 @@ export default function App() {
   }, [dataProp]);
 
   let chart = (
-    <LineChart height={200} key={`${data[0]?.timestamp}-${data.length}`}>
+    <LineChart>
       <LineChart.Path color="black">
         {toggleMinMaxLabels && (
           <>
@@ -122,7 +126,7 @@ export default function App() {
     };
     chart = (
       <LineChart.Group>
-        <LineChart id="one" height={200}>
+        <LineChart id="one">
           <LineChart.Path animateOnMount="foreground" color="blue" />
           <LineChart.CursorCrosshair
             snapToPoint={toggleSnapToPoint}
@@ -135,7 +139,7 @@ export default function App() {
             />
           </LineChart.CursorCrosshair>
         </LineChart>
-        <LineChart id="two" height={200}>
+        <LineChart id="two">
           <LineChart.Path color="red">
             <LineChart.Gradient color="black" />
             <LineChart.HorizontalLine at={{ index: 4 }} />
@@ -155,6 +159,8 @@ export default function App() {
       </LineChart.Group>
     );
   }
+
+  console.log('About to render with dataProp:', Array.isArray(dataProp) ? `Array[${dataProp.length}]` : `Object{${Object.keys(dataProp).join(',')}}`);
 
   return (
     <>
