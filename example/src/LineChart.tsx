@@ -2,15 +2,14 @@ import * as React from 'react';
 import * as haptics from 'expo-haptics';
 
 import {
-  YStack,
-  XStack,
+  Box,
   Button,
-  H4,
-  H5,
-  H6,
+  Flex,
+  Heading,
   RadioGroup,
+  Stack,
   Text,
-} from 'tamagui';
+} from 'bumbag-native';
 import {
   LineChart,
   LineChartTooltipPosition,
@@ -32,10 +31,6 @@ function invokeHaptic() {
 
 export default function App() {
   const [data, setData] = React.useState<TLineChartPoint[]>(mockData);
-  
-  React.useEffect(() => {
-    console.log('Data state changed:', data.length, 'points, first value:', data[0]?.value);
-  }, [data]);
   const [multiData, toggleMultiData] = React.useReducer(
     (state) => !state,
     false
@@ -121,7 +116,7 @@ export default function App() {
 
   if (multiData) {
     dataProp = {
-      one: data,
+      one: mockData,
       two: mockData2,
     };
     chart = (
@@ -160,13 +155,11 @@ export default function App() {
     );
   }
 
-  console.log('About to render with dataProp:', Array.isArray(dataProp) ? `Array[${dataProp.length}]` : `Object{${Object.keys(dataProp).join(',')}}`);
-
   return (
     <>
-      <H4 paddingHorizontal="$4" marginBottom="$4">
+      <Heading.H5 paddingX="major-2" marginBottom="major-2">
         Line Chart 📈
-      </H4>
+      </Heading.H5>
       <LineChart.Provider
         xDomain={
           scaleRelativeToTime
@@ -186,12 +179,10 @@ export default function App() {
         }}
         data={dataProp}
       >
-        <YStack padding="$4">
-          {chart}
-        </YStack>
-        <YStack marginHorizontal="$4" marginTop="$4">
-          <Text fontSize="$6" fontWeight="bold" marginBottom="$4">Load Data</Text>
-          <XStack flexWrap="wrap" marginBottom="$4" space="$2">
+        {chart}
+        <Box marginX="major-2" marginTop="major-2">
+          <Heading.H6 marginBottom="major-2">Load Data</Heading.H6>
+          <Flex flexWrap="wrap" marginBottom="major-2">
             <Button onPress={() => setData(mockData)}>Data 1</Button>
             <Button onPress={() => setData(mockData2)}>Data 2</Button>
             <Button onPress={() => setData(mockDataNonLinear)}>Data 3</Button>
@@ -253,9 +244,9 @@ export default function App() {
             >
               Set Cursor
             </Button>
-          </XStack>
+          </Flex>
 
-          <Text marginBottom="$4">Tooltip position:</Text>
+          <Text marginBottom="major-2">Tooltip position:</Text>
           <RadioGroup
             orientation="horizontal"
             onChange={(value) =>
@@ -275,19 +266,19 @@ export default function App() {
               Toggle floating tooltip {floatingTooltip ? 'Off' : 'On'}
             </Button>
           )}
-        </YStack>
+        </Box>
         {!multiData && (
-          <YStack padding="$4" space="$2">
-            <Text fontSize="$6" fontWeight="bold">PriceText</Text>
-            <XStack>
+          <Stack padding="major-2" spacing="major-1">
+            <Heading.H6>PriceText</Heading.H6>
+            <Flex>
               <Text fontWeight="500">Formatted: </Text>
               <LineChart.PriceText />
-            </XStack>
-            <XStack>
+            </Flex>
+            <Flex>
               <Text fontWeight="500">Value: </Text>
               <LineChart.PriceText variant="value" />
-            </XStack>
-            <XStack>
+            </Flex>
+            <Flex>
               <Text fontWeight="500">Custom format: </Text>
               <LineChart.PriceText
                 format={(d) => {
@@ -295,17 +286,17 @@ export default function App() {
                   return d.formatted ? `$${d.formatted} AUD` : '';
                 }}
               />
-            </XStack>
-            <Text fontSize="$6" fontWeight="bold">DatetimeText</Text>
-            <XStack>
+            </Flex>
+            <Heading.H6>DatetimeText</Heading.H6>
+            <Flex>
               <Text fontWeight="500">Formatted: </Text>
               <LineChart.DatetimeText />
-            </XStack>
-            <XStack>
+            </Flex>
+            <Flex>
               <Text fontWeight="500">Value: </Text>
               <LineChart.DatetimeText variant="value" />
-            </XStack>
-            <XStack>
+            </Flex>
+            <Flex>
               <Text fontWeight="500">Custom format: </Text>
               <LineChart.DatetimeText
                 locale="en-AU"
@@ -318,8 +309,8 @@ export default function App() {
                   second: 'numeric',
                 }}
               />
-            </XStack>
-          </YStack>
+            </Flex>
+          </Stack>
         )}
       </LineChart.Provider>
     </>
