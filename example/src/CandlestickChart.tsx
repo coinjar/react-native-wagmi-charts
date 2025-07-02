@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Platform } from 'react-native';
-import { Box, Button, Flex, Heading, Text, Stack } from 'bumbag-native';
+import { YStack, XStack, Button, H4, Text } from 'tamagui';
 import { CandlestickChart, TCandle } from 'react-native-wagmi-charts';
 import * as haptics from 'expo-haptics';
 
@@ -18,79 +18,81 @@ export default function App() {
 
   return (
     <>
-      <Heading.H5 paddingX="major-2" marginBottom="major-2">
+      <H4 paddingHorizontal="$4" marginBottom="$4">
         Candlestick Chart 🕯
-      </Heading.H5>
+      </H4>
       <CandlestickChart.Provider data={data}>
-        <CandlestickChart>
-          <CandlestickChart.Candles />
+        <YStack padding="$4">
+          <CandlestickChart height={200}>
+            <CandlestickChart.Candles />
           <CandlestickChart.Crosshair onCurrentXChange={invokeHaptic}>
             <CandlestickChart.Tooltip />
           </CandlestickChart.Crosshair>
-        </CandlestickChart>
-        <Heading.H6>Load Data</Heading.H6>
-        <Box marginTop="major-2">
-          <Flex flexWrap="wrap">
+          </CandlestickChart>
+        </YStack>
+        <YStack marginHorizontal="$4" marginTop="$4">
+          <Text fontSize="$6" fontWeight="bold" marginBottom="$4">Load Data</Text>
+          <XStack flexWrap="wrap" space="$2">
             <Button onPress={() => setData(mockData)}>Data 1</Button>
             <Button onPress={() => setData(mockData2)}>Data 2</Button>
-          </Flex>
-        </Box>
-        <Stack padding="major-2" spacing="major-1">
-          <Heading.H6>PriceText</Heading.H6>
-          <Box>
+          </XStack>
+        </YStack>
+        <YStack padding="$4" space="$2">
+          <Text fontSize="$6" fontWeight="bold">PriceText</Text>
+          <YStack>
             <Text fontWeight="500">Formatted: </Text>
-            <Flex>
-              <Box flex="1">
+            <XStack>
+              <YStack flex={1}>
                 <Text fontSize="100">Current</Text>
                 <CandlestickChart.PriceText />
-              </Box>
-              <Box flex="1">
+              </YStack>
+              <YStack flex={1}>
                 <Text fontSize="100">Open</Text>
                 <CandlestickChart.PriceText type="open" />
-              </Box>
-              <Box flex="1">
+              </YStack>
+              <YStack flex={1}>
                 <Text fontSize="100">High</Text>
                 <CandlestickChart.PriceText type="high" />
-              </Box>
-              <Box flex="1">
+              </YStack>
+              <YStack flex={1}>
                 <Text fontSize="100">Low</Text>
                 <CandlestickChart.PriceText type="low" />
-              </Box>
-              <Box flex="1">
+              </YStack>
+              <YStack flex={1}>
                 <Text fontSize="100">Close</Text>
                 <CandlestickChart.PriceText type="close" />
-              </Box>
-            </Flex>
-          </Box>
-          <Box>
+              </YStack>
+            </XStack>
+          </YStack>
+          <YStack>
             <Text fontWeight="500">Value: </Text>
-            <Flex>
-              <Box flex="1">
+            <XStack>
+              <YStack flex={1}>
                 <Text fontSize="100">Current</Text>
                 <CandlestickChart.PriceText variant="value" />
-              </Box>
-              <Box flex="1">
+              </YStack>
+              <YStack flex={1}>
                 <Text fontSize="100">Open</Text>
                 <CandlestickChart.PriceText type="open" variant="value" />
-              </Box>
-              <Box flex="1">
+              </YStack>
+              <YStack flex={1}>
                 <Text fontSize="100">High</Text>
                 <CandlestickChart.PriceText type="high" variant="value" />
-              </Box>
-              <Box flex="1">
+              </YStack>
+              <YStack flex={1}>
                 <Text fontSize="100">Low</Text>
                 <CandlestickChart.PriceText type="low" variant="value" />
-              </Box>
-              <Box flex="1">
+              </YStack>
+              <YStack flex={1}>
                 <Text fontSize="100">Close</Text>
                 <CandlestickChart.PriceText type="close" variant="value" />
-              </Box>
-            </Flex>
-          </Box>
-          <Box>
+              </YStack>
+            </XStack>
+          </YStack>
+          <YStack>
             <Text fontWeight="500">Custom format: </Text>
-            <Flex>
-              <Box flex="1">
+            <XStack>
+              <YStack flex={1}>
                 <Text fontSize="100">Current</Text>
                 <CandlestickChart.PriceText
                   format={(d) => {
@@ -98,8 +100,8 @@ export default function App() {
                     return `$${d.formatted} AUD`;
                   }}
                 />
-              </Box>
-              <Box flex="1">
+              </YStack>
+              <YStack flex={1}>
                 <Text fontSize="100">Open</Text>
                 <CandlestickChart.PriceText
                   type="open"
@@ -108,8 +110,8 @@ export default function App() {
                     return `$${d.formatted} AUD`;
                   }}
                 />
-              </Box>
-              <Box flex="1">
+              </YStack>
+              <YStack flex={1}>
                 <Text fontSize="100">Close</Text>
                 <CandlestickChart.PriceText
                   type="close"
@@ -118,21 +120,21 @@ export default function App() {
                     return `$${d.formatted} AUD`;
                   }}
                 />
-              </Box>
-            </Flex>
-          </Box>
-        </Stack>
-        <Stack padding="major-2" spacing="minor-1">
-          <Heading.H6>DatetimeText</Heading.H6>
-          <Flex>
+              </YStack>
+            </XStack>
+          </YStack>
+        </YStack>
+        <YStack padding="$4" space="$1">
+          <Text fontSize="$6" fontWeight="bold">DatetimeText</Text>
+          <XStack>
             <Text fontWeight="500">Formatted: </Text>
             <CandlestickChart.DatetimeText />
-          </Flex>
-          <Flex>
+          </XStack>
+          <XStack>
             <Text fontWeight="500">Float: </Text>
             <CandlestickChart.DatetimeText variant="value" />
-          </Flex>
-          <Flex>
+          </XStack>
+          <XStack>
             <Text fontWeight="500">Custom format: </Text>
             <CandlestickChart.DatetimeText
               locale="en-AU"
@@ -145,8 +147,8 @@ export default function App() {
                 second: 'numeric',
               }}
             />
-          </Flex>
-        </Stack>
+          </XStack>
+        </YStack>
       </CandlestickChart.Provider>
     </>
   );
