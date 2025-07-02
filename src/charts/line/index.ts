@@ -1,4 +1,4 @@
-import { Axis } from './Axis'
+import { LineChartAxis } from './Axis';
 import { LineChart as _LineChart } from './Chart';
 import { LineChartPathWrapper } from './ChartPath';
 import { LineChartHighlight } from './Highlight';
@@ -38,7 +38,7 @@ export * from './usePrice';
 export * from './types';
 
 export const LineChart = Object.assign(_LineChart, {
-  Axis: Axis,
+  Axis: LineChartAxis,
   Chart: _LineChart,
   Dot: LineChartDot,
   Path: LineChartPathWrapper,
