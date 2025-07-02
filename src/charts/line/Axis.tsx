@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ViewProps, StyleSheet, Text } from 'react-native';
+import { ViewProps, StyleSheet, Text, TextStyle } from 'react-native';
 import { Line, Svg } from 'react-native-svg';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { LineChartDimensionsContext } from './Chart';
@@ -17,7 +17,7 @@ export type LineChartAxisProps = ViewProps & {
   domain?: [number, number];
   hideOnInteraction?: boolean;
   format?: (value: number | string) => string | number;
-  textStyle?: any;
+  textStyle?: TextStyle;
 };
 
 export const LineChartAxis = ({

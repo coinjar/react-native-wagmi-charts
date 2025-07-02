@@ -1,6 +1,7 @@
 import React from 'react';
 import type { TextProps as RNTextProps } from 'react-native';
 import type Animated from 'react-native-reanimated';
+import { useDerivedValue } from 'react-native-reanimated';
 
 import { useLineChartDatetime } from './useDatetime';
 import type { TFormatterFn } from 'react-native-wagmi-charts';
@@ -24,5 +25,14 @@ export function LineChartDatetimeText({
   style,
 }: LineChartDatetimeProps) {
   const datetime = useLineChartDatetime({ format, locale, options });
-  return <AnimatedText text={datetime[variant]} style={style} />;
+  
+  const text = useDerivedValue(() => {
+    const value = datetime[variant];
+    if (typeof value === 'number') {
+      return value.toString();
+    }
+    return typeof value === 'object' && 'value' in value ? value.value : String(value);
+  }, [datetime, variant]);
+
+  return <AnimatedText text={text} style={style} />;
 }

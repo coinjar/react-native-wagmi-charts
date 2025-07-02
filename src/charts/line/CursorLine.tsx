@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, TextStyle } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
@@ -17,9 +17,8 @@ type LineChartCursorLineProps = {
   children?: React.ReactNode;
   color?: string;
   lineProps?: Partial<LineProps>;
-  text?: string;
   format?: TFormatterFn<string | number>;
-  textStyle?: any;
+  textStyle?: TextStyle;
   // New props for customizing the dynamic sizing
   baseCharWidth?: number;
   minTextWidth?: number;
@@ -33,7 +32,6 @@ export function LineChartCursorLine({
   children,
   color = 'gray',
   lineProps,
-  text,
   format,
   textStyle,
   baseCharWidth = 8, // Approximate width per character

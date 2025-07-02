@@ -2,10 +2,10 @@
 
 ## Getting Started
 
-First install project dependencies in this directory (`yarn` is recommended):
+First install project dependencies in this directory (`pnpm` is recommended):
 
 ```bash
-yarn install
+pnpm install
 ```
 
 After dependencies are installed, you can go ahead and run the project on either a simulator, or a real device using the following commands
@@ -13,19 +13,19 @@ After dependencies are installed, you can go ahead and run the project on either
 For iOS:
 
 ```bash
-yarn run ios
+pnpm run ios
 ```
 
 For Android:
 
 ```bash
-yarn run android
+pnpm run android
 ```
 
 For Web:
 
 ```bash
-yarn run web
+pnpm run web
 ```
 
 ## Example Charts

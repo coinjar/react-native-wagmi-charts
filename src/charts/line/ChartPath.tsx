@@ -65,7 +65,6 @@ export function LineChartPathWrapper({
 
   React.useEffect(() => {
     isMounted.value = true;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   ////////////////////////////////////////////////

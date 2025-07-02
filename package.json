@@ -13,9 +13,9 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "build": "bob build",
     "publishOnly": "bob build",
-    "example": "yarn --cwd example",
+    "example": "pnpm --filter react-native-wagmi-charts-example run start",
     "pods": "cd example && pod-install --quiet",
-    "bootstrap": "yarn example && yarn && yarn pods"
+    "bootstrap": "pnpm example && pnpm && pnpm pods"
   },
   "files": [
     "src",
@@ -54,15 +54,20 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^12.0.4",
+    "@eslint/js": "^9.30.1",
     "@types/d3-array": "^3.0.5",
     "@types/d3-scale": "^4.0.3",
     "@types/fbjs": "^3.0.10",
     "@types/jest": "^26.0.24",
     "@types/react": "^18.2.45",
+    "@typescript-eslint/eslint-plugin": "^8.35.1",
+    "@typescript-eslint/parser": "^8.35.1",
     "eslint": "^9.2.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-native": "^5.0.0",
     "husky": "^7.0.1",
     "jest": "^27.0.6",
     "pod-install": "^0.1.24",
@@ -73,7 +78,8 @@
     "react-native-gesture-handler": "~2.24.0",
     "react-native-reanimated": "3.18.0",
     "react-native-svg": "15.12.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.35.1"
   },
   "peerDependencies": {
     "react": "*",
