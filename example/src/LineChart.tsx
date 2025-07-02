@@ -30,6 +30,7 @@ function invokeHaptic() {
 
 export default function App() {
   const [data, setData] = React.useState<TLineChartPoint[]>(mockData);
+  
   const [multiData, toggleMultiData] = React.useReducer(
     (state) => !state,
     false
@@ -67,6 +68,7 @@ export default function App() {
     React.useState<LineChartTooltipPosition>('top');
 
   let dataProp: TLineChartDataProp = data;
+
   const [min, max] = useMemo(() => {
     if (Array.isArray(dataProp)) {
       const values = dataProp.map((d) => d.value);
@@ -115,7 +117,7 @@ export default function App() {
 
   if (multiData) {
     dataProp = {
-      one: mockData,
+      one: data,
       two: mockData2,
     };
     chart = (
