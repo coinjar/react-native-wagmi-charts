@@ -31,17 +31,11 @@ export function CandlestickChartProvider({
 }: CandlestickChartProviderProps) {
   const [width, setWidth] = React.useState(0);
   const [height, setHeight] = React.useState(0);
-  const [step, setStep] = React.useState(0);
   const currentX = useSharedValue(-1);
   const currentY = useSharedValue(-1);
   const domain = React.useMemo(() => valueRangeY ?? getDomain(data), [data, valueRangeY]);
 
-  React.useEffect(() => {
-    if (data.length) {
-      const newStep = width / data.length;
-      setStep(newStep);
-    }
-  }, [data.length, width]);
+  const step = React.useMemo(() => width / data.length, [data.length, width])
 
   const contextValue = React.useMemo(
     () => ({
@@ -54,7 +48,6 @@ export function CandlestickChartProvider({
       step,
       setWidth,
       setHeight,
-      setStep,
     }),
     [currentX, currentY, data, domain, height, step, width]
   );
