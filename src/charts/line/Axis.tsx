@@ -5,12 +5,12 @@ import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { LineChartDimensionsContext } from './Chart';
 import { useLineChart } from './useLineChart';
 
-export type AxisPosition = 'left' | 'right' | 'top' | 'bottom';
-export type AxisOrientation = 'horizontal' | 'vertical';
+export type LineChartAxisPosition = 'left' | 'right' | 'top' | 'bottom';
+export type LineChartAxisOrientation = 'horizontal' | 'vertical';
 
-export type AxisProps = ViewProps & {
-  position: AxisPosition;
-  orientation: AxisOrientation;
+export type LineChartAxisProps = ViewProps & {
+  position: LineChartAxisPosition;
+  orientation: LineChartAxisOrientation;
   color?: string;
   strokeWidth?: number;
   tickCount?: number;
@@ -20,7 +20,7 @@ export type AxisProps = ViewProps & {
   textStyle?: any;
 };
 
-export const Axis = ({
+export const LineChartAxis = ({
   position,
   orientation,
   color = '#666',
@@ -31,7 +31,7 @@ export const Axis = ({
   format = (value) => value,
   textStyle,
   ...props
-}: AxisProps) => {
+}: LineChartAxisProps) => {
   const { width, height } = React.useContext(LineChartDimensionsContext);
   const { isActive } = useLineChart();
 
@@ -171,63 +171,58 @@ export const Axis = ({
     const { ticks, labels } = renderTicks();
 
     let axisLine = null;
-    switch (position) {
-      case 'left':
-        if (strokeWidth) {
-          axisLine = (
-            <Line
-              x1={padding.left}
-              y1={0}
-              x2={padding.left}
-              y2={height}
-              stroke={color}
-              strokeWidth={strokeWidth}
-            />
-          );
-        }
-        break;
-      case 'right':
-        if (strokeWidth) {
-          axisLine = (
-            <Line
-              x1={width - padding.right}
-              y1={0}
-              x2={width - padding.right}
-              y2={height}
-              stroke={color}
-              strokeWidth={strokeWidth}
-            />
-          );
-        }
-        break;
-      case 'top':
-        if (strokeWidth) {
-          axisLine = (
-            <Line
-              x1={0}
-              y1={20}
-              x2={width}
-              y2={20}
-              stroke={color}
-              strokeWidth={strokeWidth}
-            />
-          );
-        }
-        break;
-      case 'bottom':
-        if (strokeWidth) {
-          axisLine = (
-            <Line
-              x1={0}
-              y1={height - 20}
-              x2={width}
-              y2={height - 20}
-              stroke={color}
-              strokeWidth={strokeWidth}
-            />
-          );
-        }
-        break;
+
+    if (strokeWidth) {
+      switch (position) {
+        case 'left':
+            axisLine = (
+              <Line
+                x1={padding.left}
+                y1={0}
+                x2={padding.left}
+                y2={height}
+                stroke={color}
+                strokeWidth={strokeWidth}
+              />
+            );
+          break;
+        case 'right':
+            axisLine = (
+              <Line
+                x1={width - padding.right}
+                y1={0}
+                x2={width - padding.right}
+                y2={height}
+                stroke={color}
+                strokeWidth={strokeWidth}
+              />
+            );
+          break;
+        case 'top':
+            axisLine = (
+              <Line
+                x1={0}
+                y1={20}
+                x2={width}
+                y2={20}
+                stroke={color}
+                strokeWidth={strokeWidth}
+              />
+            );
+          break;
+        case 'bottom':
+            axisLine = (
+              <Line
+                x1={0}
+                y1={height - 20}
+                x2={width}
+                y2={height - 20}
+                stroke={color}
+                strokeWidth={strokeWidth}
+              />
+            );
+          break;
+      }
     }
 
     return { axisLine, ticks, labels };
