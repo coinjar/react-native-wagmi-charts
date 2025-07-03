@@ -180,16 +180,31 @@ export default function App() {
         }}
         data={dataProp}
       >
-        <YStack padding="$4">
-          <LineChart height={200}>
-            <LineChart.Path color="black" width={3}>
-              <LineChart.Gradient color="black" />
-            </LineChart.Path>
-            <LineChart.CursorCrosshair color="hotpink">
-              <LineChart.Tooltip position={tooltipPosition} />
-            </LineChart.CursorCrosshair>
-          </LineChart>
-        </YStack>
+        {multiData ? (
+          <YStack padding="$4">
+            <LineChart.Group>
+              <LineChart id="one" height={200}>
+                <LineChart.Path color="blue" />
+              </LineChart>
+              <LineChart id="two" height={200}>
+                <LineChart.Path color="red">
+                  <LineChart.Gradient color="red" />
+                </LineChart.Path>
+              </LineChart>
+            </LineChart.Group>
+          </YStack>
+        ) : (
+          <YStack padding="$4">
+            <LineChart height={200}>
+              <LineChart.Path color="black" width={3}>
+                <LineChart.Gradient color="black" />
+              </LineChart.Path>
+              <LineChart.CursorCrosshair color="hotpink">
+                <LineChart.Tooltip position={tooltipPosition} />
+              </LineChart.CursorCrosshair>
+            </LineChart>
+          </YStack>
+        )}
         <YStack marginHorizontal="$4" marginTop="$4">
           <Text fontSize="$6" fontWeight="bold" marginBottom="$4">Load Data</Text>
           <XStack flexWrap="wrap" marginBottom="$4" space="$2">
