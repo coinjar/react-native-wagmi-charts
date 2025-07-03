@@ -1,8 +1,6 @@
 import * as React from 'react';
-import 'react-native-gesture-handler';
 import { TamaguiProvider, YStack, XStack, Button, Text, H3, H4, ScrollView } from 'tamagui';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import CandlestickChart from './CandlestickChart';
 import LineChart from './LineChart';
@@ -11,7 +9,6 @@ import config from '../tamagui.config';
 export default function App() {
   const [selected, setSelected] = React.useState('');
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
       <TamaguiProvider config={config}>
         <SafeAreaProvider>
           <SafeAreaView style={{ flex: 1 }}>
@@ -55,6 +52,5 @@ export default function App() {
           </SafeAreaView>
         </SafeAreaProvider>
       </TamaguiProvider>
-    </GestureHandlerRootView>
   );
 }

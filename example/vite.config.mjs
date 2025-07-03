@@ -35,7 +35,6 @@ export default defineConfig({
     extensions: extensions,
     alias: {
       'react-native': 'react-native-web',
-      'react-native-svg': 'react-native-svg-web',
       'react-native-wagmi-charts': path.resolve(root, 'src'),
     },
   },
@@ -62,7 +61,6 @@ export default defineConfig({
   optimizeDeps: {
     include: [
       'react-native-web',
-      'react-native-svg-web',
     ],
     esbuildOptions: {
       resolveExtensions: extensions,
