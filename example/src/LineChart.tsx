@@ -2,14 +2,11 @@ import * as React from 'react';
 import * as haptics from 'expo-haptics';
 
 import {
-  YStack,
-  XStack,
-  Button,
-  H4,
-  RadioGroup,
-  Label,
+  View,
+  TouchableOpacity,
   Text,
-} from 'tamagui';
+  StyleSheet,
+} from 'react-native';
 import {
   LineChart,
   LineChartTooltipPosition,
@@ -158,9 +155,9 @@ export default function App() {
 
   return (
     <>
-      <H4 paddingHorizontal="$4" marginBottom="$4">
+      <Text style={styles.title}>
         Line Chart 📈
-      </H4>
+      </Text>
       <LineChart.Provider
         xDomain={
           scaleRelativeToTime
@@ -181,7 +178,7 @@ export default function App() {
         data={dataProp}
       >
         {multiData ? (
-          <YStack padding="$4">
+          <View style={styles.chartContainer}>
             <LineChart.Group>
               <LineChart id="one" height={200}>
                 <LineChart.Path color="blue" />
@@ -192,9 +189,9 @@ export default function App() {
                 </LineChart.Path>
               </LineChart>
             </LineChart.Group>
-          </YStack>
+          </View>
         ) : (
-          <YStack padding="$4">
+          <View style={styles.chartContainer}>
             <LineChart height={200}>
               <LineChart.Path color="black" width={3}>
                 <LineChart.Gradient color="black" />
@@ -203,27 +200,30 @@ export default function App() {
                 <LineChart.Tooltip position={tooltipPosition} />
               </LineChart.CursorCrosshair>
             </LineChart>
-          </YStack>
+          </View>
         )}
-        <YStack marginHorizontal="$4" marginTop="$4">
-          <Text fontSize="$6" fontWeight="bold" marginBottom="$4">Load Data</Text>
-          <XStack flexWrap="wrap" marginBottom="$4" space="$2">
-            <Button onPress={() => setData([...mockData])}>Data 1</Button>
-            <Button onPress={() => setData([...mockData2])}>Data 2</Button>
-            <Button onPress={() => setData([...mockDataNonLinear])}>Data 3</Button>
-            <Button onPress={() => setData([...mockData, ...mockData2])}>
-              Data 1 + Data 2
-            </Button>
-            <Button onPress={() => setData([...mockData2, ...mockData])}>
-              Data 2 + Data 1
-            </Button>
-            <Button
-              onPress={() => setData([...mockData2, ...mockData, ...mockData2])}
-            >
-              Data 2 + Data 1 + Data 2
-            </Button>
-            <Button
-              onPress={() =>
+        <View style={styles.controlsContainer}>
+          <Text style={styles.sectionTitle}>Load Data</Text>
+          <View style={styles.buttonGrid}>
+            <TouchableOpacity style={styles.button} onPress={() => setData([...mockData])}>
+              <Text style={styles.buttonText}>Data 1</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => setData([...mockData2])}>
+              <Text style={styles.buttonText}>Data 2</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => setData([...mockDataNonLinear])}>
+              <Text style={styles.buttonText}>Data 3</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => setData([...mockData, ...mockData2])}>
+              <Text style={styles.buttonText}>Data 1 + Data 2</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => setData([...mockData2, ...mockData])}>
+              <Text style={styles.buttonText}>Data 2 + Data 1</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => setData([...mockData2, ...mockData, ...mockData2])}>
+              <Text style={styles.buttonText}>Data 2 + Data 1 + Data 2</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() =>
                 setData([
                   ...mockData2,
                   ...mockData,
@@ -238,111 +238,103 @@ export default function App() {
                   ...mockData,
                   ...mockData2,
                 ])
-              }
-            >
-              V large data
-            </Button>
-            <Button onPress={toggleYRange}>
-              {`${yRange || 'Set'} Y Domain`}
-            </Button>
-            <Button onPress={toggleMultiData}>Multi Data</Button>
-            <Button onPress={togglePartialDay}>Partial Day</Button>
-            <Button onPress={() => setToggleHighlight((val) => !val)}>
-              Toggle highlight
-            </Button>
-            <Button onPress={() => setToggleMinMaxLabels((p) => !p)}>
-              Toggle min/max labels
-            </Button>
-            <Button
-              onPress={() => {
+              }>
+              <Text style={styles.buttonText}>V large data</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={toggleYRange}>
+              <Text style={styles.buttonText}>{`${yRange || 'Set'} Y Domain`}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={toggleMultiData}>
+              <Text style={styles.buttonText}>Multi Data</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={togglePartialDay}>
+              <Text style={styles.buttonText}>Partial Day</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => setToggleHighlight((val) => !val)}>
+              <Text style={styles.buttonText}>Toggle highlight</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => setToggleMinMaxLabels((p) => !p)}>
+              <Text style={styles.buttonText}>Toggle min/max labels</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => {
                 // Use with data 3 for best demonstration
                 setScaleRelativeToTime((val) => !val);
-              }}
-            >
-              Toggle {scaleRelativeToTime ? 'off' : 'on'} XDomain
-            </Button>
-            <Button onPress={() => setToggleSnapToPoint((val) => !val)}>
-              Toggle Snap {toggleSnapToPoint ? 'Off' : 'On'}
-            </Button>
-            <Button
-              onPress={() => setAt(Math.floor(Math.random() * data.length))}
-            >
-              Set Cursor
-            </Button>
-          </XStack>
+              }}>
+              <Text style={styles.buttonText}>Toggle {scaleRelativeToTime ? 'off' : 'on'} XDomain</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => setToggleSnapToPoint((val) => !val)}>
+              <Text style={styles.buttonText}>Toggle Snap {toggleSnapToPoint ? 'Off' : 'On'}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => setAt(Math.floor(Math.random() * data.length))}>
+              <Text style={styles.buttonText}>Set Cursor</Text>
+            </TouchableOpacity>
+          </View>
 
-          <Text marginBottom="$4">Tooltip position:</Text>
-          <RadioGroup
-            value={tooltipPosition}
-            onValueChange={(value) =>
-              setTooltipPosition(value as LineChartTooltipPosition)
-            }
-          >
-            <XStack space="$3">
-              <XStack alignItems="center" space="$2">
-                <RadioGroup.Item value="top" id="top" size="$2">
-                  <RadioGroup.Indicator />
-                </RadioGroup.Item>
-                <Label htmlFor="top" size="$3">Top</Label>
-              </XStack>
-              <XStack alignItems="center" space="$2">
-                <RadioGroup.Item value="bottom" id="bottom" size="$2">
-                  <RadioGroup.Indicator />
-                </RadioGroup.Item>
-                <Label htmlFor="bottom" size="$3">Bottom</Label>
-              </XStack>
-              <XStack alignItems="center" space="$2">
-                <RadioGroup.Item value="left" id="left" size="$2">
-                  <RadioGroup.Indicator />
-                </RadioGroup.Item>
-                <Label htmlFor="left" size="$3">Left</Label>
-              </XStack>
-              <XStack alignItems="center" space="$2">
-                <RadioGroup.Item value="right" id="right" size="$2">
-                  <RadioGroup.Indicator />
-                </RadioGroup.Item>
-                <Label htmlFor="right" size="$3">Right</Label>
-              </XStack>
-            </XStack>
-          </RadioGroup>
+          <Text style={styles.label}>Tooltip position:</Text>
+          <View style={styles.radioGroup}>
+            <TouchableOpacity
+              style={[styles.radioButton, tooltipPosition === 'top' && styles.radioButtonSelected]}
+              onPress={() => setTooltipPosition('top')}
+            >
+              <Text style={[styles.radioText, tooltipPosition === 'top' && styles.radioTextSelected]}>Top</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.radioButton, tooltipPosition === 'bottom' && styles.radioButtonSelected]}
+              onPress={() => setTooltipPosition('bottom')}
+            >
+              <Text style={[styles.radioText, tooltipPosition === 'bottom' && styles.radioTextSelected]}>Bottom</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.radioButton, tooltipPosition === 'left' && styles.radioButtonSelected]}
+              onPress={() => setTooltipPosition('left')}
+            >
+              <Text style={[styles.radioText, tooltipPosition === 'left' && styles.radioTextSelected]}>Left</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.radioButton, tooltipPosition === 'right' && styles.radioButtonSelected]}
+              onPress={() => setTooltipPosition('right')}
+            >
+              <Text style={[styles.radioText, tooltipPosition === 'right' && styles.radioTextSelected]}>Right</Text>
+            </TouchableOpacity>
+          </View>
 
           {['left', 'right'].includes(tooltipPosition) && (
-            <Button onPress={() => setFloatingTooltip((val) => !val)}>
-              Toggle floating tooltip {floatingTooltip ? 'Off' : 'On'}
-            </Button>
+            <TouchableOpacity style={styles.button} onPress={() => setFloatingTooltip((val) => !val)}>
+              <Text style={styles.buttonText}>Toggle floating tooltip {floatingTooltip ? 'Off' : 'On'}</Text>
+            </TouchableOpacity>
           )}
-        </YStack>
+        </View>
         {!multiData && (
-          <YStack padding="$4" space="$2">
-            <Text fontSize="$6" fontWeight="bold">PriceText</Text>
-            <XStack>
-              <Text fontWeight="500">Formatted: </Text>
+          <View style={styles.priceTextContainer}>
+            <Text style={styles.sectionTitle}>PriceText</Text>
+            <View style={styles.row}>
+              <Text style={styles.label}>Formatted: </Text>
               <LineChart.PriceText />
-            </XStack>
-            <XStack>
-              <Text fontWeight="500">Value: </Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.label}>Value: </Text>
               <LineChart.PriceText variant="value" />
-            </XStack>
-            <XStack>
-              <Text fontWeight="500">Custom format: </Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.label}>Custom format: </Text>
               <LineChart.PriceText
                 format={(d) => {
                   'worklet';
                   return d.formatted ? `$${d.formatted} AUD` : '';
                 }}
               />
-            </XStack>
-            <Text fontSize="$6" fontWeight="bold">DatetimeText</Text>
-            <XStack>
-              <Text fontWeight="500">Formatted: </Text>
+            </View>
+            <Text style={styles.sectionTitle}>DatetimeText</Text>
+            <View style={styles.row}>
+              <Text style={styles.label}>Formatted: </Text>
               <LineChart.DatetimeText />
-            </XStack>
-            <XStack>
-              <Text fontWeight="500">Value: </Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.label}>Value: </Text>
               <LineChart.DatetimeText variant="value" />
-            </XStack>
-            <XStack>
-              <Text fontWeight="500">Custom format: </Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.label}>Custom format: </Text>
               <LineChart.DatetimeText
                 locale="en-AU"
                 options={{
@@ -354,10 +346,87 @@ export default function App() {
                   second: 'numeric',
                 }}
               />
-            </XStack>
-          </YStack>
+            </View>
+          </View>
         )}
       </LineChart.Provider>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 18,
+    fontWeight: '600',
+    paddingHorizontal: 16,
+    marginBottom: 16,
+  },
+  chartContainer: {
+    padding: 16,
+  },
+  controlsContainer: {
+    marginHorizontal: 16,
+    marginTop: 16,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  buttonGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginBottom: 16,
+  },
+  button: {
+    backgroundColor: '#007AFF',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 6,
+    marginRight: 8,
+    marginBottom: 8,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '500',
+    marginBottom: 8,
+  },
+  radioGroup: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 16,
+  },
+  radioButton: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 4,
+    backgroundColor: 'white',
+  },
+  radioButtonSelected: {
+    backgroundColor: '#007AFF',
+    borderColor: '#007AFF',
+  },
+  radioText: {
+    fontSize: 14,
+    color: '#333',
+  },
+  radioTextSelected: {
+    color: 'white',
+  },
+  priceTextContainer: {
+    padding: 16,
+    gap: 8,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+});
