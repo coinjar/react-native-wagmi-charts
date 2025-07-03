@@ -119,7 +119,7 @@ importers:
     dependencies:
       '@tamagui/config':
         specifier: ^1.129.12
-        version: 1.129.12(react-dom@19.0.0(react@19.0.0))(react-native-reanimated@3.17.5(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+        version: 1.129.12(react-dom@19.0.0(react@19.0.0))(react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
       '@tamagui/core':
         specifier: ^1.129.12
         version: 1.129.12(react-dom@19.0.0(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
@@ -148,11 +148,11 @@ importers:
         specifier: 0.79.3
         version: 0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0)
       react-native-reanimated:
-        specifier: ~3.17.4
-        version: 3.17.5(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+        specifier: 3.18.0
+        version: 3.18.0(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
       react-native-redash:
         specifier: ^18.1.3
-        version: 18.1.3(react-native-gesture-handler@2.24.0(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native-reanimated@3.17.5(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+        version: 18.1.3(react-native-gesture-handler@2.24.0(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
       react-native-safe-area-context:
         specifier: ^5.5.1
         version: 5.5.1(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
@@ -4871,13 +4871,6 @@ packages:
     resolution: {tarball: https://codeload.github.com/react-native-reanimated/plugin/tar.gz/f1ccc0a034589ab017358871868277f438025257}
     version: 0.0.0
 
-  react-native-reanimated@3.17.5:
-    resolution: {integrity: sha512-SxBK7wQfJ4UoWoJqQnmIC7ZjuNgVb9rcY5Xc67upXAFKftWg0rnkknTw6vgwnjRcvYThrjzUVti66XoZdDJGtw==}
-    peerDependencies:
-      '@babel/core': ^7.0.0-0
-      react: '*'
-      react-native: '*'
-
   react-native-reanimated@3.18.0:
     resolution: {integrity: sha512-eVcNcqeOkMW+BUWAHdtvN3FKgC8J8wiEJkX6bNGGQaLS7m7e4amTfjIcqf/Ta+lerZLurmDaQ0lICI1CKPrb1Q==}
     peerDependencies:
@@ -7894,11 +7887,11 @@ snapshots:
     transitivePeerDependencies:
       - react-native
 
-  '@tamagui/animations-moti@1.129.12(react-dom@19.0.0(react@19.0.0))(react-native-reanimated@3.17.5(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)':
+  '@tamagui/animations-moti@1.129.12(react-dom@19.0.0(react@19.0.0))(react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@tamagui/core': 1.129.12(react-dom@19.0.0(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
       '@tamagui/use-presence': 1.129.12(react-dom@19.0.0(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
-      moti: 0.30.0(react-dom@19.0.0(react@19.0.0))(react-native-reanimated@3.17.5(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react@19.0.0)
+      moti: 0.30.0(react-dom@19.0.0(react@19.0.0))(react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react@19.0.0)
       react: 19.0.0
     transitivePeerDependencies:
       - react-dom
@@ -8029,10 +8022,10 @@ snapshots:
     dependencies:
       react: 19.0.0
 
-  '@tamagui/config@1.129.12(react-dom@19.0.0(react@19.0.0))(react-native-reanimated@3.17.5(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)':
+  '@tamagui/config@1.129.12(react-dom@19.0.0(react@19.0.0))(react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@tamagui/animations-css': 1.129.12(react-dom@19.0.0(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
-      '@tamagui/animations-moti': 1.129.12(react-dom@19.0.0(react@19.0.0))(react-native-reanimated@3.17.5(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+      '@tamagui/animations-moti': 1.129.12(react-dom@19.0.0(react@19.0.0))(react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
       '@tamagui/animations-react-native': 1.129.12(react-dom@19.0.0(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
       '@tamagui/colors': 1.129.12
       '@tamagui/font-inter': 1.129.12(react-dom@19.0.0(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
@@ -11776,10 +11769,10 @@ snapshots:
 
   mkdirp@3.0.1: {}
 
-  moti@0.30.0(react-dom@19.0.0(react@19.0.0))(react-native-reanimated@3.17.5(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react@19.0.0):
+  moti@0.30.0(react-dom@19.0.0(react@19.0.0))(react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react@19.0.0):
     dependencies:
       framer-motion: 6.5.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      react-native-reanimated: 3.17.5(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+      react-native-reanimated: 3.18.0(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
     transitivePeerDependencies:
       - react
       - react-dom
@@ -12254,26 +12247,6 @@ snapshots:
 
   react-native-reanimated-monorepo@https://codeload.github.com/react-native-reanimated/plugin/tar.gz/f1ccc0a034589ab017358871868277f438025257: {}
 
-  react-native-reanimated@3.17.5(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0):
-    dependencies:
-      '@babel/core': 7.27.7
-      '@babel/plugin-transform-arrow-functions': 7.27.1(@babel/core@7.27.7)
-      '@babel/plugin-transform-class-properties': 7.27.1(@babel/core@7.27.7)
-      '@babel/plugin-transform-classes': 7.27.7(@babel/core@7.27.7)
-      '@babel/plugin-transform-nullish-coalescing-operator': 7.27.1(@babel/core@7.27.7)
-      '@babel/plugin-transform-optional-chaining': 7.27.1(@babel/core@7.27.7)
-      '@babel/plugin-transform-shorthand-properties': 7.27.1(@babel/core@7.27.7)
-      '@babel/plugin-transform-template-literals': 7.27.1(@babel/core@7.27.7)
-      '@babel/plugin-transform-unicode-regex': 7.27.1(@babel/core@7.27.7)
-      '@babel/preset-typescript': 7.27.1(@babel/core@7.27.7)
-      convert-source-map: 2.0.0
-      invariant: 2.2.4
-      react: 19.0.0
-      react-native: 0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0)
-      react-native-is-edge-to-edge: 1.1.7(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
-    transitivePeerDependencies:
-      - supports-color
-
   react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0):
     dependencies:
       '@babel/core': 7.27.7
@@ -12294,6 +12267,26 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0):
+    dependencies:
+      '@babel/core': 7.27.7
+      '@babel/plugin-transform-arrow-functions': 7.27.1(@babel/core@7.27.7)
+      '@babel/plugin-transform-class-properties': 7.27.1(@babel/core@7.27.7)
+      '@babel/plugin-transform-classes': 7.27.7(@babel/core@7.27.7)
+      '@babel/plugin-transform-nullish-coalescing-operator': 7.27.1(@babel/core@7.27.7)
+      '@babel/plugin-transform-optional-chaining': 7.27.1(@babel/core@7.27.7)
+      '@babel/plugin-transform-shorthand-properties': 7.27.1(@babel/core@7.27.7)
+      '@babel/plugin-transform-template-literals': 7.27.1(@babel/core@7.27.7)
+      '@babel/plugin-transform-unicode-regex': 7.27.1(@babel/core@7.27.7)
+      '@babel/preset-typescript': 7.27.1(@babel/core@7.27.7)
+      convert-source-map: 2.0.0
+      invariant: 2.2.4
+      react: 19.0.0
+      react-native: 0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0)
+      react-native-is-edge-to-edge: 1.1.7(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+    transitivePeerDependencies:
+      - supports-color
+
   react-native-redash@18.1.3(react-native-gesture-handler@2.24.0(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0))(react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0))(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0):
     dependencies:
       abs-svg-path: 0.1.1
@@ -12304,7 +12297,7 @@ snapshots:
       react-native-gesture-handler: 2.24.0(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0)
       react-native-reanimated: 3.18.0(@babel/core@7.27.7)(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0)
 
-  react-native-redash@18.1.3(react-native-gesture-handler@2.24.0(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native-reanimated@3.17.5(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0):
+  react-native-redash@18.1.3(react-native-gesture-handler@2.24.0(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0):
     dependencies:
       abs-svg-path: 0.1.1
       normalize-svg-path: 1.1.0
@@ -12312,7 +12305,7 @@ snapshots:
       react: 19.0.0
       react-native: 0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0)
       react-native-gesture-handler: 2.24.0(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
-      react-native-reanimated: 3.17.5(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+      react-native-reanimated: 3.18.0(@babel/core@7.27.7)(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
 
   react-native-safe-area-context@5.5.1(react-native@0.79.3(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0):
     dependencies:
