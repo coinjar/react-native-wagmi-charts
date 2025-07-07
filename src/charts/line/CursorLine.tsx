@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, StyleSheet, TextStyle } from 'react-native';
+import { Platform, StyleSheet, type TextStyle } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
@@ -34,10 +34,10 @@ export function LineChartCursorLine({
   lineProps,
   format,
   textStyle,
-  baseCharWidth = 7,
+  baseCharWidth = 8,
   minTextWidth = 25,
-  maxTextWidth = 120,
-  textPadding = 8,
+  maxTextWidth = 150,
+  textPadding = 12,
   ...cursorProps
 }: LineChartCursorLineProps) {
   const isHorizontal = cursorProps?.orientation === 'horizontal';
@@ -56,29 +56,18 @@ export function LineChartCursorLine({
     const displayText = isHorizontal
       ? price.formatted.value
       : datetime.formatted.value;
-    
+
     if (!displayText) {
       return minTextWidth;
     }
 
-    let calculatedWidth = 0;
-    for (let i = 0; i < displayText.length; i++) {
-      const char = displayText[i];
-      if (char === ',' || char === '.') {
-        calculatedWidth += baseCharWidth * 0.4;
-      } else if (char === ' ') {
-        calculatedWidth += baseCharWidth * 0.5;
-      } else {
-        calculatedWidth += baseCharWidth;
-      }
-    }
-    
-    calculatedWidth = calculatedWidth + textPadding;
+    // Simple character count calculation like Axis component
+    // Use 7px per character for 12px font (Axis uses 6px per char for 10px font)
+    const calculatedWidth = displayText.length * 7 + textPadding;
     return Math.max(minTextWidth, Math.min(maxTextWidth, calculatedWidth));
   }, [
     price.formatted,
     datetime.formatted,
-    baseCharWidth,
     minTextWidth,
     maxTextWidth,
     textPadding,

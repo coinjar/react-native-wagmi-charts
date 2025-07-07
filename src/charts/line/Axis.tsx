@@ -32,8 +32,8 @@ export const LineChartAxis = ({
   hideOnInteraction = false,
   format = (value) => value,
   textStyle,
-  labelPadding = 5,
-  labelWidth = 60, // Default width for labels
+  labelPadding = 3,
+  labelWidth = 55, // Default width for labels
   ...props
 }: LineChartAxisProps) => {
   const { width, height } = React.useContext(LineChartDimensionsContext);
@@ -58,6 +58,18 @@ export const LineChartAxis = ({
     const labels = [];
     const tickLength = 5;
     const labelOffset = 8;
+
+    // Calculate maximum label width needed
+    let maxLabelWidth = 0;
+    for (let i = 0; i <= tickCount; i++) {
+      const value = min + (max - min) * (i / tickCount);
+      const formattedValue = String(format(value));
+      // Estimate width: ~6px per character for 10px font
+      const estimatedWidth = formattedValue.length * 6;
+      maxLabelWidth = Math.max(maxLabelWidth, estimatedWidth);
+    }
+    // Add some padding and cap the width
+    const dynamicLabelWidth = Math.min(Math.max(maxLabelWidth + 8, 30), 80);
 
     for (let i = 0; i <= tickCount; i++) {
       const value = min + (max - min) * (i / tickCount);
@@ -93,12 +105,13 @@ export const LineChartAxis = ({
             style={[
               styles.verticalLabel,
               {
-                width: labelWidth, // Set width from prop
+                width: dynamicLabelWidth, // Use calculated width
                 left: position === 'left' 
-                  ? Math.max(0, x - labelOffset - labelWidth) // Use labelWidth prop
-                  : Math.min(width - labelWidth, x + labelOffset), // Prevent right overflow
+                  ? Math.max(0, x - labelOffset - dynamicLabelWidth) // Position relative to axis line but keep on screen
+                  : Math.min(width - dynamicLabelWidth, x + labelOffset), // Position to the right of axis line
                 top: y - 10, // Center the label vertically on the tick mark
                 alignItems: position === 'left' ? 'flex-end' : 'flex-start',
+                justifyContent: 'center',
               },
             ]}
           >
@@ -113,6 +126,8 @@ export const LineChartAxis = ({
                 },
                 textStyle,
               ]}
+              adjustsFontSizeToFit={true}
+              minimumFontScale={0.8}
             >
               {String(format(value))}
             </Text>
