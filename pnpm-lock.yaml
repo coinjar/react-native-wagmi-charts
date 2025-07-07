@@ -31,7 +31,7 @@ importers:
         version: 1.3.0(react@19.1.0)
       react-native-redash:
         specifier: ^18.1.3
-        version: 18.1.3(react-native-gesture-handler@2.24.0(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0))(react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0))(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0)
+        version: 18.1.3(react-native-gesture-handler@2.24.0(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0))(react-native-reanimated@3.17.4(@babel/core@7.27.7)(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0))(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0)
     devDependencies:
       '@commitlint/config-conventional':
         specifier: ^12.0.4
@@ -103,8 +103,8 @@ importers:
         specifier: ~2.24.0
         version: 2.24.0(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0)
       react-native-reanimated:
-        specifier: 3.18.0
-        version: 3.18.0(@babel/core@7.27.7)(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0)
+        specifier: 3.17.4
+        version: 3.17.4(@babel/core@7.27.7)(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0)
       react-native-svg:
         specifier: 15.12.0
         version: 15.12.0(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0)
@@ -142,11 +142,11 @@ importers:
         specifier: 0.79.5
         version: 0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0)
       react-native-reanimated:
-        specifier: 3.18.0
-        version: 3.18.0(@babel/core@7.27.7)(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+        specifier: 3.17.4
+        version: 3.17.4(@babel/core@7.27.7)(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
       react-native-redash:
         specifier: ^18.1.3
-        version: 18.1.3(react-native-gesture-handler@2.24.0(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+        version: 18.1.3(react-native-gesture-handler@2.24.0(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native-reanimated@3.17.4(@babel/core@7.27.7)(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
       react-native-safe-area-context:
         specifier: ^5.4.0
         version: 5.4.0(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
@@ -4303,8 +4303,8 @@ packages:
     resolution: {tarball: https://codeload.github.com/react-native-reanimated/plugin/tar.gz/f1ccc0a034589ab017358871868277f438025257}
     version: 0.0.0
 
-  react-native-reanimated@3.18.0:
-    resolution: {integrity: sha512-eVcNcqeOkMW+BUWAHdtvN3FKgC8J8wiEJkX6bNGGQaLS7m7e4amTfjIcqf/Ta+lerZLurmDaQ0lICI1CKPrb1Q==}
+  react-native-reanimated@3.17.4:
+    resolution: {integrity: sha512-vmkG/N5KZrexHr4v0rZB7ohPVseGVNaCXjGxoRo+NYKgC9+mIZAkg/QIfy9xxfJ73FfTrryO9iYUrxks3ZfKbA==}
     peerDependencies:
       '@babel/core': ^7.0.0-0
       react: '*'
@@ -10530,7 +10530,7 @@ snapshots:
 
   react-native-reanimated-monorepo@https://codeload.github.com/react-native-reanimated/plugin/tar.gz/f1ccc0a034589ab017358871868277f438025257: {}
 
-  react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0):
+  react-native-reanimated@3.17.4(@babel/core@7.27.7)(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0):
     dependencies:
       '@babel/core': 7.27.7
       '@babel/plugin-transform-arrow-functions': 7.27.1(@babel/core@7.27.7)
@@ -10550,7 +10550,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0):
+  react-native-reanimated@3.17.4(@babel/core@7.27.7)(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0):
     dependencies:
       '@babel/core': 7.27.7
       '@babel/plugin-transform-arrow-functions': 7.27.1(@babel/core@7.27.7)
@@ -10570,7 +10570,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  react-native-redash@18.1.3(react-native-gesture-handler@2.24.0(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0))(react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0))(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0):
+  react-native-redash@18.1.3(react-native-gesture-handler@2.24.0(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0))(react-native-reanimated@3.17.4(@babel/core@7.27.7)(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0))(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0):
     dependencies:
       abs-svg-path: 0.1.1
       normalize-svg-path: 1.1.0
@@ -10578,9 +10578,9 @@ snapshots:
       react: 19.1.0
       react-native: 0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0)
       react-native-gesture-handler: 2.24.0(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0)
-      react-native-reanimated: 3.18.0(@babel/core@7.27.7)(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0)
+      react-native-reanimated: 3.17.4(@babel/core@7.27.7)(react-native@0.79.2(@babel/core@7.27.7)(@types/react@18.3.23)(react@19.1.0))(react@19.1.0)
 
-  react-native-redash@18.1.3(react-native-gesture-handler@2.24.0(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native-reanimated@3.18.0(@babel/core@7.27.7)(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0):
+  react-native-redash@18.1.3(react-native-gesture-handler@2.24.0(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native-reanimated@3.17.4(@babel/core@7.27.7)(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0):
     dependencies:
       abs-svg-path: 0.1.1
       normalize-svg-path: 1.1.0
@@ -10588,7 +10588,7 @@ snapshots:
       react: 19.0.0
       react-native: 0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0)
       react-native-gesture-handler: 2.24.0(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
-      react-native-reanimated: 3.18.0(@babel/core@7.27.7)(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+      react-native-reanimated: 3.17.4(@babel/core@7.27.7)(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
 
   react-native-safe-area-context@5.4.0(react-native@0.79.5(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0):
     dependencies:
