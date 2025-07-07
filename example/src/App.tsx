@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { View, TouchableOpacity, Text, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import CandlestickChart from './CandlestickChart';
 import LineChart from './LineChart';
@@ -8,8 +9,9 @@ import LineChart from './LineChart';
 export default function App() {
   const [selected, setSelected] = React.useState('');
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
           <View style={styles.header}>
             <Text style={styles.title}>React Native WAGMI Charts 💸</Text>
@@ -48,8 +50,9 @@ export default function App() {
             </View>
           </ScrollView>
         </View>
-      </SafeAreaView>
-    </SafeAreaProvider>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 

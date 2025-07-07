@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, { createContext, useMemo } from 'react';
+
 import {
   runOnJS,
   useAnimatedReaction,
@@ -10,7 +11,7 @@ import { LineChartDataProvider } from './Data';
 import type { TLineChartContext, YRangeProp } from './types';
 import { getDomain, lineChartDataPropToArray } from './utils';
 
-export const LineChartContext = React.createContext<TLineChartContext>({
+export const LineChartContext = createContext<TLineChartContext>({
   currentX: { value: -1 } as TLineChartContext['currentX'],
   currentIndex: { value: -1 } as TLineChartContext['currentIndex'],
   domain: [0, 0],
@@ -44,14 +45,14 @@ export function LineChartProvider({
   const currentIndex = useSharedValue(-1);
   const isActive = useSharedValue(false);
 
-  const domain = React.useMemo(
+  const domain = useMemo(
     () => getDomain(
       Array.isArray(data) ? data : Object.values(data)[0] as TLineChartData
     ),
     [data]
   );
 
-  const contextValue = React.useMemo<TLineChartContext>(() => {
+  const contextValue = useMemo<TLineChartContext>(() => {
     const values = lineChartDataPropToArray(data).map(({ value }) => value);
     const domainRows =
       Array.isArray(data) ? data : Object.values(data)[0] as TLineChartData;
