@@ -34,10 +34,10 @@ export function LineChartCursorLine({
   lineProps,
   format,
   textStyle,
-  baseCharWidth = 8, // Approximate width per character
-  minTextWidth = 30,
+  baseCharWidth = 7, // Slightly reduced for better fit
+  minTextWidth = 25, // Reduced min width for small numbers
   maxTextWidth = 120,
-  textPadding = 10,
+  textPadding = 8, // Reduced padding
   ...cursorProps
 }: LineChartCursorLineProps) {
   const isHorizontal = cursorProps?.orientation === 'horizontal';
@@ -51,17 +51,34 @@ export function LineChartCursorLine({
     format: !isHorizontal ? (format as TFormatterFn<number>) : undefined,
   });
 
-  // Calculate dynamic text width based on character count
+  // Calculate dynamic text width based on character count and type
   const dynamicTextWidth = useDerivedValue(() => {
     const displayText = isHorizontal
       ? price.formatted.value
       : datetime.formatted.value;
-    const charCount = displayText?.length || 0;
-    const calculatedWidth = Math.max(
-      minTextWidth,
-      Math.min(maxTextWidth, charCount * baseCharWidth + textPadding),
-    );
-    return calculatedWidth;
+    
+    if (!displayText) {
+      return minTextWidth;
+    }
+
+    // More accurate width calculation based on character types
+    let calculatedWidth = 0;
+    for (let i = 0; i < displayText.length; i++) {
+      const char = displayText[i];
+      if (char === ',' || char === '.') {
+        // Narrower characters
+        calculatedWidth += baseCharWidth * 0.4;
+      } else if (char === ' ') {
+        calculatedWidth += baseCharWidth * 0.5;
+      } else {
+        // Regular digits and characters
+        calculatedWidth += baseCharWidth;
+      }
+    }
+    
+    // Add padding and enforce min/max constraints
+    calculatedWidth = calculatedWidth + textPadding;
+    return Math.max(minTextWidth, Math.min(maxTextWidth, calculatedWidth));
   }, [
     price.formatted,
     datetime.formatted,
@@ -74,7 +91,8 @@ export function LineChartCursorLine({
   // Calculate shortened line length
   const lineLength = useDerivedValue(() => {
     if (isHorizontal) {
-      return width - dynamicTextWidth.value - 30;
+      // Reduced gap from 30 to 15 for tighter spacing
+      return width - dynamicTextWidth.value - 15;
     }
     return height - 30; // Keep vertical line length as is, or adjust as needed
   }, [dynamicTextWidth, width, height]);

@@ -18,6 +18,7 @@ export type LineChartAxisProps = ViewProps & {
   hideOnInteraction?: boolean;
   format?: (value: number | string) => string | number;
   textStyle?: TextStyle;
+  labelPadding?: number; // Padding to prevent labels from going off-screen
 };
 
 export const LineChartAxis = ({
@@ -30,6 +31,7 @@ export const LineChartAxis = ({
   hideOnInteraction = false,
   format = (value) => value,
   textStyle,
+  labelPadding = 10,
   ...props
 }: LineChartAxisProps) => {
   const { width, height } = React.useContext(LineChartDimensionsContext);
@@ -60,7 +62,13 @@ export const LineChartAxis = ({
       const tickPosition = i / tickCount;
 
       if (orientation === 'vertical') {
-        const y = height * (1 - tickPosition);
+        // Add padding to prevent labels from going off-screen
+        const topPadding = labelPadding;
+        const bottomPadding = labelPadding;
+        
+        // Calculate y position with padding to keep labels on screen
+        const availableHeight = height - topPadding - bottomPadding;
+        const y = topPadding + availableHeight * (1 - tickPosition);
         const x = position === 'left' ? padding.left : width - padding.right;
 
         if (strokeWidth) {
@@ -84,7 +92,7 @@ export const LineChartAxis = ({
               styles.verticalLabel,
               {
                 left: position === 'left' ? Math.max(0, x - labelOffset - 40) : Math.min(width - 50, x + labelOffset),
-                top: Math.max(0, Math.min(height - 20, i === 0 ? y - 15 : i === tickCount ? y + 5 : y - 10)),
+                top: y - 10, // Center the label vertically on the tick mark
                 alignItems: position === 'left' ? 'flex-end' : 'flex-start',
               },
             ]}
