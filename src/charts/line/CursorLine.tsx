@@ -88,7 +88,7 @@ export function LineChartCursorLine({
   const lineLength = useDerivedValue(() => {
     if (isHorizontal) {
       // Small gap of 8px between line and label
-      return width - dynamicTextWidth.value - 8;
+      return width - dynamicTextWidth.value - 25;
     }
     return height - 30;
   }, [dynamicTextWidth, width, height]);

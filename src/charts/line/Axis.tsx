@@ -32,18 +32,18 @@ export const LineChartAxis = ({
   hideOnInteraction = false,
   format = (value) => value,
   textStyle,
-  labelPadding = 10,
-  labelWidth = 100, // Default width for labels
+  labelPadding = 5,
+  labelWidth = 60, // Default width for labels
   ...props
 }: LineChartAxisProps) => {
   const { width, height } = React.useContext(LineChartDimensionsContext);
   const { isActive } = useLineChart();
 
   const padding = {
-    left: 50,
-    right: 50,
-    top: 60,
-    bottom: 60,
+    left: 5,
+    right: 5,
+    top: 20,
+    bottom: 20,
   };
 
   const animatedStyle = useAnimatedStyle(() => {
