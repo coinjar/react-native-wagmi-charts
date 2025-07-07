@@ -5,9 +5,18 @@ import reactNative from 'eslint-plugin-react-native';
 
 /** @type {import('eslint').Linter.FlatConfig[]} */
 export default [
-  // Global ignores for config files
+  // Global ignores for config files and build artifacts
   {
-    ignores: ['**/.prettierrc.js', '**/eslint.config.js', '**/prettier.config.js']
+    ignores: [
+      '**/.prettierrc.js', 
+      '**/eslint.config.js', 
+      '**/prettier.config.js',
+      'lib/**/*',
+      '**/*.config.js',
+      '**/node_modules/**',
+      'example/index.js',
+      '**/babel.config.js'
+    ]
   },
   
   js.configs.recommended,

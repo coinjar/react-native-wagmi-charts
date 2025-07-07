@@ -52,8 +52,17 @@ export function LineChartProvider({
     [data]
   );
 
+  const values = useMemo(() => 
+    lineChartDataPropToArray(data).map(({ value }) => value), 
+    [data]
+  );
+
+  const yDomainValues = useMemo(() => ({
+    min: yRange?.min ?? Math.min(...values),
+    max: yRange?.max ?? Math.max(...values),
+  }), [values, yRange?.min, yRange?.max]);
+
   const contextValue = useMemo<TLineChartContext>(() => {
-    const values = lineChartDataPropToArray(data).map(({ value }) => value);
     const domainRows =
       Array.isArray(data) ? data : Object.values(data)[0] as TLineChartData;
 
@@ -62,10 +71,7 @@ export function LineChartProvider({
       currentIndex,
       isActive,
       domain,
-      yDomain: {
-        min: yRange?.min ?? Math.min(...values),
-        max: yRange?.max ?? Math.max(...values),
-      },
+      yDomain: yDomainValues,
       xDomain,
       xLength: xLength ?? domainRows.length,
     };
@@ -75,8 +81,7 @@ export function LineChartProvider({
     data,
     domain,
     isActive,
-    yRange?.max,
-    yRange?.min,
+    yDomainValues,
     xLength,
     xDomain,
   ]);
