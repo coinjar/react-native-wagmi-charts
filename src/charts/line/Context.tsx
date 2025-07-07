@@ -32,8 +32,6 @@ type LineChartProviderProps = {
   xDomain?: [number, number];
 };
 
-LineChartProvider.displayName = 'LineChartProvider';
-
 export function LineChartProvider({
   children,
   data = [],
@@ -100,3 +98,5 @@ export function LineChartProvider({
     </LineChartDataProvider>
   );
 }
+
+LineChartProvider.displayName = 'LineChartProvider';
