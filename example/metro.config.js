@@ -38,6 +38,16 @@ const config = {
       return acc;
     }, {}),
   },
+
+  transformer: {
+    ...defaultConfig.transformer,
+    getTransformOptions: async () => ({
+      transform: {
+        experimentalImportSupport: false,
+        inlineRequires: true,
+      },
+    }),
+  },
 };
 
 module.exports = config;
