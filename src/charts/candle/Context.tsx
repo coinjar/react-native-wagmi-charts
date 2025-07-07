@@ -58,3 +58,5 @@ export function CandlestickChartProvider({
     </CandlestickChartContext.Provider>
   );
 }
+
+CandlestickChartProvider.displayName = 'CandlestickChartProvider';
