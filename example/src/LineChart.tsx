@@ -79,78 +79,11 @@ export default function App() {
     return [0, 0];
   }, [dataProp]);
 
-  let chart = (
-    <LineChart height={200}>
-      <LineChart.Path color="black">
-        {toggleMinMaxLabels && (
-          <>
-            <LineChart.Gradient color="black" />
-            <LineChart.Tooltip position="top" at={max} />
-            <LineChart.Tooltip position="bottom" at={min} yGutter={-10} />
-          </>
-        )}
-        {toggleHighlight && (
-          <LineChart.Highlight
-            color="red"
-            from={Math.floor(data.length / 3)}
-            to={Math.floor(data.length * (2 / 3))}
-          />
-        )}
-      </LineChart.Path>
-      <LineChart.CursorCrosshair
-        snapToPoint={toggleSnapToPoint}
-        onActivated={invokeHaptic}
-        onEnded={invokeHaptic}
-        at={at}
-      >
-        <LineChart.Tooltip
-          position={tooltipPosition}
-          withHorizontalFloating={floatingTooltip}
-        />
-        <LineChart.HoverTrap />
-      </LineChart.CursorCrosshair>
-    </LineChart>
-  );
-
   if (multiData) {
     dataProp = {
       one: mockData,
       two: mockData2,
     };
-    chart = (
-      <LineChart.Group>
-        <LineChart id="one" height={200}>
-          <LineChart.Path color="blue" />
-          <LineChart.CursorCrosshair
-            snapToPoint={toggleSnapToPoint}
-            onActivated={invokeHaptic}
-            onEnded={invokeHaptic}
-          >
-            <LineChart.Tooltip
-              position={tooltipPosition}
-              withHorizontalFloating={floatingTooltip}
-            />
-          </LineChart.CursorCrosshair>
-        </LineChart>
-        <LineChart id="two" height={200}>
-          <LineChart.Path color="red">
-            <LineChart.Gradient color="black" />
-            <LineChart.HorizontalLine at={{ index: 4 }} />
-          </LineChart.Path>
-          <LineChart.CursorCrosshair
-            snapToPoint={toggleSnapToPoint}
-            color="hotpink"
-            onActivated={invokeHaptic}
-            onEnded={invokeHaptic}
-          >
-            <LineChart.Tooltip
-              position={tooltipPosition}
-              withHorizontalFloating={floatingTooltip}
-            />
-          </LineChart.CursorCrosshair>
-        </LineChart>
-      </LineChart.Group>
-    );
   }
 
   return (
@@ -159,6 +92,7 @@ export default function App() {
         Line Chart 📈
       </Text>
       <LineChart.Provider
+        key={JSON.stringify(dataProp)}
         xDomain={
           scaleRelativeToTime
             ? [data[0]!.timestamp, data[data.length - 1]!.timestamp]
@@ -182,11 +116,32 @@ export default function App() {
             <LineChart.Group>
               <LineChart id="one" height={200}>
                 <LineChart.Path color="blue" />
+                <LineChart.CursorCrosshair
+                  snapToPoint={toggleSnapToPoint}
+                  onActivated={invokeHaptic}
+                  onEnded={invokeHaptic}
+                >
+                  <LineChart.Tooltip
+                    position={tooltipPosition}
+                    withHorizontalFloating={floatingTooltip}
+                  />
+                </LineChart.CursorCrosshair>
               </LineChart>
               <LineChart id="two" height={200}>
                 <LineChart.Path color="red">
                   <LineChart.Gradient color="red" />
                 </LineChart.Path>
+                <LineChart.CursorCrosshair
+                  snapToPoint={toggleSnapToPoint}
+                  color="hotpink"
+                  onActivated={invokeHaptic}
+                  onEnded={invokeHaptic}
+                >
+                  <LineChart.Tooltip
+                    position={tooltipPosition}
+                    withHorizontalFloating={floatingTooltip}
+                  />
+                </LineChart.CursorCrosshair>
               </LineChart>
             </LineChart.Group>
           </View>
@@ -194,10 +149,33 @@ export default function App() {
           <View style={styles.chartContainer}>
             <LineChart height={200}>
               <LineChart.Path color="black" width={3}>
-                <LineChart.Gradient color="black" />
+                {toggleMinMaxLabels && (
+                  <>
+                    <LineChart.Gradient color="black" />
+                    <LineChart.Tooltip position="top" at={max} />
+                    <LineChart.Tooltip position="bottom" at={min} yGutter={-10} />
+                  </>
+                )}
+                {toggleHighlight && (
+                  <LineChart.Highlight
+                    color="red"
+                    from={Math.floor(data.length / 3)}
+                    to={Math.floor(data.length * (2 / 3))}
+                  />
+                )}
               </LineChart.Path>
-              <LineChart.CursorCrosshair color="hotpink">
-                <LineChart.Tooltip position={tooltipPosition} />
+              <LineChart.CursorCrosshair
+                snapToPoint={toggleSnapToPoint}
+                onActivated={invokeHaptic}
+                onEnded={invokeHaptic}
+                at={at}
+                color="hotpink"
+              >
+                <LineChart.Tooltip
+                  position={tooltipPosition}
+                  withHorizontalFloating={floatingTooltip}
+                />
+                <LineChart.HoverTrap />
               </LineChart.CursorCrosshair>
             </LineChart>
           </View>
