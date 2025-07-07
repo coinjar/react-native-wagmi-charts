@@ -19,6 +19,7 @@ export type LineChartAxisProps = ViewProps & {
   format?: (value: number | string) => string | number;
   textStyle?: TextStyle;
   labelPadding?: number; // Padding to prevent labels from going off-screen
+  labelWidth?: number; // Width allocated for labels
 };
 
 export const LineChartAxis = ({
@@ -32,6 +33,7 @@ export const LineChartAxis = ({
   format = (value) => value,
   textStyle,
   labelPadding = 10,
+  labelWidth = 100, // Default width for labels
   ...props
 }: LineChartAxisProps) => {
   const { width, height } = React.useContext(LineChartDimensionsContext);
@@ -91,7 +93,10 @@ export const LineChartAxis = ({
             style={[
               styles.verticalLabel,
               {
-                left: position === 'left' ? Math.max(0, x - labelOffset - 40) : Math.min(width - 50, x + labelOffset),
+                width: labelWidth, // Set width from prop
+                left: position === 'left' 
+                  ? Math.max(0, x - labelOffset - labelWidth) // Use labelWidth prop
+                  : Math.min(width - labelWidth, x + labelOffset), // Prevent right overflow
                 top: y - 10, // Center the label vertically on the tick mark
                 alignItems: position === 'left' ? 'flex-end' : 'flex-start',
               },
@@ -252,10 +257,9 @@ const styles = StyleSheet.create({
   },
   verticalLabel: {
     position: 'absolute',
-    width: 40,
     minHeight: 20,
     zIndex: 1000,
-    overflow: 'hidden',
+    overflow: 'visible',
     justifyContent: 'center',
   },
   horizontalLabel: {

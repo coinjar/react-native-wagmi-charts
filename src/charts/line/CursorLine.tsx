@@ -34,10 +34,10 @@ export function LineChartCursorLine({
   lineProps,
   format,
   textStyle,
-  baseCharWidth = 7, // Slightly reduced for better fit
-  minTextWidth = 25, // Reduced min width for small numbers
+  baseCharWidth = 7,
+  minTextWidth = 25,
   maxTextWidth = 120,
-  textPadding = 8, // Reduced padding
+  textPadding = 8,
   ...cursorProps
 }: LineChartCursorLineProps) {
   const isHorizontal = cursorProps?.orientation === 'horizontal';
@@ -61,22 +61,18 @@ export function LineChartCursorLine({
       return minTextWidth;
     }
 
-    // More accurate width calculation based on character types
     let calculatedWidth = 0;
     for (let i = 0; i < displayText.length; i++) {
       const char = displayText[i];
       if (char === ',' || char === '.') {
-        // Narrower characters
         calculatedWidth += baseCharWidth * 0.4;
       } else if (char === ' ') {
         calculatedWidth += baseCharWidth * 0.5;
       } else {
-        // Regular digits and characters
         calculatedWidth += baseCharWidth;
       }
     }
     
-    // Add padding and enforce min/max constraints
     calculatedWidth = calculatedWidth + textPadding;
     return Math.max(minTextWidth, Math.min(maxTextWidth, calculatedWidth));
   }, [
@@ -91,10 +87,10 @@ export function LineChartCursorLine({
   // Calculate shortened line length
   const lineLength = useDerivedValue(() => {
     if (isHorizontal) {
-      // Reduced gap from 30 to 15 for tighter spacing
-      return width - dynamicTextWidth.value - 15;
+      // Small gap of 8px between line and label
+      return width - dynamicTextWidth.value - 8;
     }
-    return height - 30; // Keep vertical line length as is, or adjust as needed
+    return height - 30;
   }, [dynamicTextWidth, width, height]);
 
   const animatedStyle = useAnimatedStyle(
@@ -114,13 +110,14 @@ export function LineChartCursorLine({
     () => ({
       position: 'absolute',
       left: isHorizontal
-        ? width - dynamicTextWidth.value
+        ? width - dynamicTextWidth.value - 8 // Added 8px padding from right edge
         : -dynamicTextWidth.value / 2,
       top: isHorizontal ? (Platform.OS === 'ios' ? -10 : -20) : height - 20,
       color: '#1A1E27',
       fontSize: 12,
       textAlign: isHorizontal ? 'right' : 'center',
       width: dynamicTextWidth.value,
+      paddingRight: isHorizontal ? 8 : 0, // Add internal padding for better spacing
       ...textStyle,
     }),
     [dynamicTextWidth, width, height, textStyle],
