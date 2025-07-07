@@ -9,9 +9,9 @@ import LineChart from './LineChart';
 export default function App() {
   const [selected, setSelected] = React.useState('');
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={styles.flex}>
       <SafeAreaProvider>
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={styles.flex}>
         <View style={styles.container}>
           <View style={styles.header}>
             <Text style={styles.title}>React Native WAGMI Charts 💸</Text>
@@ -57,6 +57,9 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   container: {
     flex: 1,
   },

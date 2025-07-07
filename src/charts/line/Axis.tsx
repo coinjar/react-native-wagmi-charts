@@ -81,15 +81,10 @@ export const LineChartAxis = ({
           <Animated.View
             key={`label-${i}`}
             style={[
+              styles.verticalLabel,
               {
-                position: 'absolute',
                 left: position === 'left' ? Math.max(0, x - labelOffset - 40) : Math.min(width - 50, x + labelOffset),
                 top: Math.max(0, Math.min(height - 20, i === 0 ? y - 15 : i === tickCount ? y + 5 : y - 10)),
-                width: 40,
-                minHeight: 20,
-                zIndex: 1000,
-                overflow: 'hidden',
-                justifyContent: 'center',
                 alignItems: position === 'left' ? 'flex-end' : 'flex-start',
               },
             ]}
@@ -98,9 +93,9 @@ export const LineChartAxis = ({
               numberOfLines={1}
               ellipsizeMode="clip"
               style={[
+                styles.labelText,
                 {
                   color: color,
-                  fontSize: 10,
                   textAlign: position === 'left' ? 'right' : 'left',
                 },
                 textStyle,
@@ -132,15 +127,10 @@ export const LineChartAxis = ({
           <Animated.View
             key={`label-${i}`}
             style={[
+              styles.horizontalLabel,
               {
-                position: 'absolute',
                 left: Math.max(0, Math.min(width - 50, i === 0 ? x + labelOffset : i === tickCount ? x - 50 - labelOffset : x - 25)),
                 top: position === 'top' ? Math.max(0, y - labelOffset - 15) : Math.max(0, height - 35),
-                width: 50,
-                minHeight: 20,
-                zIndex: 1000,
-                overflow: 'hidden',
-                justifyContent: 'center',
                 alignItems: i === 0 ? 'flex-start' : i === tickCount ? 'flex-end' : 'center',
               },
             ]}
@@ -149,9 +139,9 @@ export const LineChartAxis = ({
               numberOfLines={1}
               ellipsizeMode="clip"
               style={[
+                styles.labelText,
                 {
                   color: color,
-                  fontSize: 10,
                   textAlign: i === 0 ? 'left' : i === tickCount ? 'right' : 'center',
                 },
                 textStyle,
@@ -236,7 +226,7 @@ export const LineChartAxis = ({
         {axisLine}
         {ticks}
       </Svg>
-      <Animated.View style={[StyleSheet.absoluteFill, { zIndex: 1000 }]}>
+      <Animated.View style={[StyleSheet.absoluteFill, styles.labelsContainer]}>
         {labels}
       </Animated.View>
     </Animated.View>
@@ -251,5 +241,27 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     pointerEvents: 'none',
+  },
+  verticalLabel: {
+    position: 'absolute',
+    width: 40,
+    minHeight: 20,
+    zIndex: 1000,
+    overflow: 'hidden',
+    justifyContent: 'center',
+  },
+  horizontalLabel: {
+    position: 'absolute',
+    width: 50,
+    minHeight: 20,
+    zIndex: 1000,
+    overflow: 'hidden',
+    justifyContent: 'center',
+  },
+  labelText: {
+    fontSize: 10,
+  },
+  labelsContainer: {
+    zIndex: 1000,
   },
 });

@@ -28,6 +28,13 @@ For Web:
 pnpm run web
 ```
 
+Alternatively, you can use npm:
+
+```bash
+npm install
+npm run ios     # or android, web
+```
+
 ## Example Charts
 
 The following charts are included:

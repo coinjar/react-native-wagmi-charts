@@ -6,6 +6,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { StyleSheet } from 'react-native';
 import { LineChartPriceText, LineChartPriceTextProps } from './PriceText';
 
 import { CursorContext } from './Cursor';
@@ -196,11 +197,7 @@ export function LineChartTooltip({
       onLayout={handleLayout}
       {...props}
       style={[
-        {
-          position: 'absolute',
-          padding: 4,
-          alignSelf: 'flex-start',
-        },
+        styles.tooltip,
         animatedCursorStyle,
         props.style,
       ]}
@@ -216,3 +213,11 @@ export function LineChartTooltip({
     </Animated.View>
   );
 }
+
+const styles = StyleSheet.create({
+  tooltip: {
+    position: 'absolute',
+    padding: 4,
+    alignSelf: 'flex-start',
+  },
+});
