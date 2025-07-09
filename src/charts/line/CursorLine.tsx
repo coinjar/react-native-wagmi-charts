@@ -73,20 +73,15 @@ export function LineChartCursorLine({
     textStyle?.fontSize,
   ]);
 
-  // Calculate shortened line length
+  // Simple line length calculation
   const lineLength = useDerivedValue(() => {
     if (isHorizontal) {
-      // Leave space for text + gap + padding
-      const gap = 12;
-      const rightPadding = 8;
-      return width - dynamicTextWidth.value - gap - rightPadding;
+      // End the line closer to the text with a small gap
+      return width - dynamicTextWidth.value; // Leave small gap before text
     }
-    // For vertical lines, leave space for text container
-    const fontSize = textStyle?.fontSize || 12;
-    const lineHeight = fontSize * 1.2;
-    const gap = 8;
-    return height - lineHeight - gap;
-  }, [dynamicTextWidth, width, height, textStyle?.fontSize]);
+    // For vertical lines
+    return height - 40; // Leave 40px from the bottom for text
+  }, [width, height]);
 
   const animatedStyle = useAnimatedStyle(
     () => ({
@@ -111,7 +106,6 @@ export function LineChartCursorLine({
         // React Native Text has intrinsic padding above the baseline
         // We need to position the text container so the visual center aligns with y=0
         // Scale the offset based on actual font size for better centering with any text size
-        const baseOffset = 0.7; // Base offset ratio that works for default font sizes
         const fontSizeAdjustment = Math.max(0.6, Math.min(0.8, 0.7 + (fontSize - 12) * 0.01)); // Adjust based on font size
         const textCenterOffset = -(lineHeight * fontSizeAdjustment);
         
