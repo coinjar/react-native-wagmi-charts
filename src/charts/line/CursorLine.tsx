@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, StyleSheet, type TextStyle } from 'react-native';
+import { StyleSheet, type TextStyle } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
@@ -20,7 +20,6 @@ type LineChartCursorLineProps = {
   format?: TFormatterFn<string | number>;
   textStyle?: TextStyle;
   // New props for customizing the dynamic sizing
-  baseCharWidth?: number;
   minTextWidth?: number;
   maxTextWidth?: number;
   textPadding?: number;
@@ -34,7 +33,6 @@ export function LineChartCursorLine({
   lineProps,
   format,
   textStyle,
-  baseCharWidth = 8,
   minTextWidth = 25,
   maxTextWidth = 150,
   textPadding = 12,
@@ -61,9 +59,10 @@ export function LineChartCursorLine({
       return minTextWidth;
     }
 
-    // Simple character count calculation like Axis component
-    // Use 7px per character for 12px font (Axis uses 6px per char for 10px font)
-    const calculatedWidth = displayText.length * 7 + textPadding;
+    // Dynamic character width calculation based on font size (consistent with Axis component)
+    const fontSize = textStyle?.fontSize || 12;
+    const charWidth = fontSize * 0.6; // Same ratio as Axis component
+    const calculatedWidth = displayText.length * charWidth + textPadding;
     return Math.max(minTextWidth, Math.min(maxTextWidth, calculatedWidth));
   }, [
     price.formatted,
@@ -71,16 +70,23 @@ export function LineChartCursorLine({
     minTextWidth,
     maxTextWidth,
     textPadding,
+    textStyle?.fontSize,
   ]);
 
   // Calculate shortened line length
   const lineLength = useDerivedValue(() => {
     if (isHorizontal) {
-      // Small gap of 8px between line and label
-      return width - dynamicTextWidth.value - 25;
+      // Leave space for text + gap + padding
+      const gap = 12;
+      const rightPadding = 8;
+      return width - dynamicTextWidth.value - gap - rightPadding;
     }
-    return height - 30;
-  }, [dynamicTextWidth, width, height]);
+    // For vertical lines, leave space for text container
+    const fontSize = textStyle?.fontSize || 12;
+    const lineHeight = fontSize * 1.2;
+    const gap = 8;
+    return height - lineHeight - gap;
+  }, [dynamicTextWidth, width, height, textStyle?.fontSize]);
 
   const animatedStyle = useAnimatedStyle(
     () => ({
@@ -96,20 +102,53 @@ export function LineChartCursorLine({
   );
 
   const animatedTextStyle = useAnimatedStyle(
-    () => ({
-      position: 'absolute',
-      left: isHorizontal
-        ? width - dynamicTextWidth.value - 8 // Added 8px padding from right edge
-        : -dynamicTextWidth.value / 2,
-      top: isHorizontal ? (Platform.OS === 'ios' ? -10 : -20) : height - 20,
-      color: '#1A1E27',
-      fontSize: 12,
-      textAlign: isHorizontal ? 'right' : 'center',
-      width: dynamicTextWidth.value,
-      paddingRight: isHorizontal ? 8 : 0, // Add internal padding for better spacing
-      ...textStyle,
-    }),
-    [dynamicTextWidth, width, height, textStyle],
+    () => {
+      const fontSize = textStyle?.fontSize || 12;
+      const lineHeight = textStyle?.lineHeight || fontSize * 1.2;
+      
+      if (isHorizontal) {
+        // For horizontal lines: center the text on the line (line is at y=0)
+        // React Native Text has intrinsic padding above the baseline
+        // We need to position the text container so the visual center aligns with y=0
+        // This is approximately 30-35% from the top of the text container
+        const textCenterOffset = -(lineHeight * 0.35);
+        
+        return {
+          position: 'absolute',
+          left: width - dynamicTextWidth.value - 8,
+          top: textCenterOffset, // Position text so line runs through visual center
+          height: lineHeight,
+          color: '#1A1E27',
+          fontSize: 12,
+          textAlign: 'right',
+          width: dynamicTextWidth.value,
+          paddingRight: 8,
+          lineHeight: lineHeight,
+          // Add flex properties to help with text centering
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          ...textStyle,
+        };
+      } else {
+        // For vertical lines: position text at the bottom of the line
+        return {
+          position: 'absolute',
+          left: -dynamicTextWidth.value / 2, // Center horizontally on the vertical line
+          top: lineLength.value + 8, // Position below the line end
+          height: lineHeight,
+          color: '#1A1E27',
+          fontSize: 12,
+          textAlign: 'center',
+          width: dynamicTextWidth.value,
+          display: 'flex',
+          justifyContent: 'center', // Center text vertically within container
+          alignItems: 'center', // Center text horizontally
+          ...textStyle,
+        };
+      }
+    },
+    [dynamicTextWidth, width, height, textStyle, lineLength],
   );
 
   return (
@@ -120,7 +159,7 @@ export function LineChartCursorLine({
             x1={0}
             y1={0}
             x2={isHorizontal ? lineLength.value : 0}
-            y2={isHorizontal ? 0 : height - 20}
+            y2={isHorizontal ? 0 : lineLength.value}
             strokeWidth={2}
             stroke={color}
             strokeDasharray="3 3"
