@@ -110,8 +110,10 @@ export function LineChartCursorLine({
         // For horizontal lines: center the text on the line (line is at y=0)
         // React Native Text has intrinsic padding above the baseline
         // We need to position the text container so the visual center aligns with y=0
-        // This is approximately 30-35% from the top of the text container
-        const textCenterOffset = -(lineHeight * 0.35);
+        // Scale the offset based on actual font size for better centering with any text size
+        const baseOffset = 0.7; // Base offset ratio that works for default font sizes
+        const fontSizeAdjustment = Math.max(0.6, Math.min(0.8, 0.7 + (fontSize - 12) * 0.01)); // Adjust based on font size
+        const textCenterOffset = -(lineHeight * fontSizeAdjustment);
         
         return {
           position: 'absolute',
@@ -119,7 +121,7 @@ export function LineChartCursorLine({
           top: textCenterOffset, // Position text so line runs through visual center
           height: lineHeight,
           color: '#1A1E27',
-          fontSize: 12,
+          fontSize: fontSize, // Use actual font size from textStyle
           textAlign: 'right',
           width: dynamicTextWidth.value,
           paddingRight: 8,
@@ -138,7 +140,7 @@ export function LineChartCursorLine({
           top: lineLength.value + 8, // Position below the line end
           height: lineHeight,
           color: '#1A1E27',
-          fontSize: 12,
+          fontSize: fontSize, // Use actual font size from textStyle
           textAlign: 'center',
           width: dynamicTextWidth.value,
           display: 'flex',
