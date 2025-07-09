@@ -96,56 +96,55 @@ export function LineChartCursorLine({
     [currentX, currentY, isActive],
   );
 
-  const animatedTextStyle = useAnimatedStyle(
-    () => {
-      const fontSize = textStyle?.fontSize || 12;
-      const lineHeight = textStyle?.lineHeight || fontSize * 1.2;
-      
-      if (isHorizontal) {
-        // For horizontal lines: center the text on the line (line is at y=0)
-        // React Native Text has intrinsic padding above the baseline
-        // We need to position the text container so the visual center aligns with y=0
-        // Scale the offset based on actual font size for better centering with any text size
-        const fontSizeAdjustment = Math.max(0.6, Math.min(0.8, 0.7 + (fontSize - 12) * 0.01)); // Adjust based on font size
-        const textCenterOffset = -(lineHeight * fontSizeAdjustment);
-        
-        return {
-          position: 'absolute',
-          left: width - dynamicTextWidth.value - 8,
-          top: textCenterOffset, // Position text so line runs through visual center
-          height: lineHeight,
-          color: '#1A1E27',
-          fontSize: fontSize, // Use actual font size from textStyle
-          textAlign: 'right',
-          width: dynamicTextWidth.value,
-          paddingRight: 8,
-          lineHeight: lineHeight,
-          // Add flex properties to help with text centering
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          ...textStyle,
-        };
-      } else {
-        // For vertical lines: position text at the bottom of the line
-        return {
-          position: 'absolute',
-          left: -dynamicTextWidth.value / 2, // Center horizontally on the vertical line
-          top: lineLength.value + 8, // Position below the line end
-          height: lineHeight,
-          color: '#1A1E27',
-          fontSize: fontSize, // Use actual font size from textStyle
-          textAlign: 'center',
-          width: dynamicTextWidth.value,
-          display: 'flex',
-          justifyContent: 'center', // Center text vertically within container
-          alignItems: 'center', // Center text horizontally
-          ...textStyle,
-        };
-      }
-    },
-    [dynamicTextWidth, width, height, textStyle, lineLength],
-  );
+  const animatedTextStyle = useAnimatedStyle(() => {
+    const fontSize = textStyle?.fontSize || 12;
+    const lineHeight = textStyle?.lineHeight || fontSize * 1.2;
+
+    if (isHorizontal) {
+      // For horizontal lines: center the text on the line (line is at y=0)
+      // React Native Text has intrinsic padding above the baseline
+      // We need to position the text container so the visual center aligns with y=0
+      // Scale the offset based on actual font size for better centering with any text size
+      const fontSizeAdjustment = Math.max(
+        0.6,
+        Math.min(0.8, 0.7 + (fontSize - 12) * 0.01),
+      ); // Adjust based on font size
+      const textCenterOffset = -(lineHeight * fontSizeAdjustment);
+
+      return {
+        position: 'absolute',
+        left: width - dynamicTextWidth.value - 8,
+        top: textCenterOffset, // Position text so line runs through visual center
+        height: lineHeight,
+        color: '#1A1E27',
+        fontSize: fontSize, // Use actual font size from textStyle
+        textAlign: 'right',
+        width: dynamicTextWidth.value,
+        paddingRight: 8,
+        lineHeight: lineHeight,
+        // Add flex properties to help with text centering
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        ...textStyle,
+      };
+    }
+    // For vertical lines: position text at the bottom of the line
+    return {
+      position: 'absolute',
+      left: -dynamicTextWidth.value / 2, // Center horizontally on the vertical line
+      top: lineLength.value + 8, // Position below the line end
+      height: lineHeight,
+      color: '#1A1E27',
+      fontSize: fontSize, // Use actual font size from textStyle
+      textAlign: 'center',
+      width: dynamicTextWidth.value,
+      display: 'flex',
+      justifyContent: 'center', // Center text vertically within container
+      alignItems: 'center', // Center text horizontally
+      ...textStyle,
+    };
+  }, [dynamicTextWidth, width, height, textStyle, lineLength]);
 
   return (
     <LineChartCursor {...cursorProps} type="line">
@@ -154,7 +153,12 @@ export function LineChartCursorLine({
           <SVGLine
             x1={0}
             y1={0}
-            x2={isHorizontal ? lineLength.value : 0}
+            x2={
+              isHorizontal
+                ? lineLength.value -
+                  Math.max(8, dynamicTextWidth.value * 0.08 + 4)
+                : 0
+            }
             y2={isHorizontal ? 0 : lineLength.value}
             strokeWidth={2}
             stroke={color}
