@@ -59,17 +59,28 @@ export const LineChartAxis = ({
     const tickLength = 5;
     const labelOffset = 8;
 
-    // Calculate maximum label width needed
+    // Calculate maximum label width needed dynamically
     let maxLabelWidth = 0;
+    const fontSize = textStyle?.fontSize || 10;
+    const charWidth = fontSize * 0.6; // Dynamic character width based on font size
+    
     for (let i = 0; i <= tickCount; i++) {
       const value = min + (max - min) * (i / tickCount);
       const formattedValue = String(format(value));
-      // Estimate width: ~6px per character for 10px font
-      const estimatedWidth = formattedValue.length * 6;
+      // Dynamic width calculation based on actual font size
+      const estimatedWidth = formattedValue.length * charWidth;
       maxLabelWidth = Math.max(maxLabelWidth, estimatedWidth);
     }
-    // Add some padding and cap the width
-    const dynamicLabelWidth = Math.min(Math.max(maxLabelWidth + 8, 30), 80);
+    
+    // Dynamic width allocation - ensure we don't exceed available space
+    const maxAllowableWidth = position === 'left' || position === 'right' 
+      ? Math.max(width * 0.3, 60) // Allow up to 30% of chart width for y-axis labels, minimum 60px
+      : width * 0.9; // For horizontal labels, use most of the width
+    
+    const dynamicLabelWidth = Math.min(
+      Math.max(maxLabelWidth + 16, 40), // Minimum 40px, add 16px padding
+      maxAllowableWidth // Don't exceed the calculated max
+    );
 
     for (let i = 0; i <= tickCount; i++) {
       const value = min + (max - min) * (i / tickCount);
@@ -107,8 +118,8 @@ export const LineChartAxis = ({
               {
                 width: dynamicLabelWidth, // Use calculated width
                 left: position === 'left' 
-                  ? Math.max(0, x - labelOffset - dynamicLabelWidth) // Position relative to axis line but keep on screen
-                  : Math.min(width - dynamicLabelWidth, x + labelOffset), // Position to the right of axis line
+                  ? Math.max(0, x - labelOffset - dynamicLabelWidth) // Keep labels within left boundary
+                  : Math.min(width - dynamicLabelWidth - 5, x + labelOffset), // Keep labels within right boundary with 5px margin
                 top: y - 10, // Center the label vertically on the tick mark
                 alignItems: position === 'left' ? 'flex-end' : 'flex-start',
                 justifyContent: 'center',
@@ -117,7 +128,7 @@ export const LineChartAxis = ({
           >
             <Text
               numberOfLines={1}
-              ellipsizeMode="clip"
+              ellipsizeMode="tail"
               style={[
                 styles.labelText,
                 {
@@ -127,7 +138,7 @@ export const LineChartAxis = ({
                 textStyle,
               ]}
               adjustsFontSizeToFit={true}
-              minimumFontScale={0.8}
+              minimumFontScale={0.7}
             >
               {String(format(value))}
             </Text>
@@ -157,7 +168,8 @@ export const LineChartAxis = ({
             style={[
               styles.horizontalLabel,
               {
-                left: Math.max(0, Math.min(width - 50, i === 0 ? x + labelOffset : i === tickCount ? x - 50 - labelOffset : x - 25)),
+                width: dynamicLabelWidth, // Use dynamic width for horizontal labels too
+                left: Math.max(0, Math.min(width - dynamicLabelWidth, i === 0 ? x + labelOffset : i === tickCount ? x - dynamicLabelWidth - labelOffset : x - dynamicLabelWidth / 2)),
                 top: position === 'top' ? Math.max(0, y - labelOffset - 15) : Math.max(0, height - 35),
                 alignItems: i === 0 ? 'flex-start' : i === tickCount ? 'flex-end' : 'center',
               },
@@ -165,7 +177,7 @@ export const LineChartAxis = ({
           >
             <Text
               numberOfLines={1}
-              ellipsizeMode="clip"
+              ellipsizeMode="tail"
               style={[
                 styles.labelText,
                 {
@@ -174,6 +186,8 @@ export const LineChartAxis = ({
                 },
                 textStyle,
               ]}
+              adjustsFontSizeToFit={true}
+              minimumFontScale={0.7}
             >
               {String(format(value))}
             </Text>
@@ -279,7 +293,6 @@ const styles = StyleSheet.create({
   },
   horizontalLabel: {
     position: 'absolute',
-    width: 50,
     minHeight: 20,
     zIndex: 1000,
     overflow: 'hidden',
