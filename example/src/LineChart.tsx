@@ -1,11 +1,10 @@
-import * as React from 'react';
-import * as haptics from 'expo-haptics';
-
+import React, { useMemo } from 'react';
 import {
   View,
   TouchableOpacity,
   Text,
   StyleSheet,
+  Platform,
 } from 'react-native';
 import {
   LineChart,
@@ -13,12 +12,11 @@ import {
   TLineChartDataProp,
   TLineChartPoint,
 } from 'react-native-wagmi-charts';
+import * as haptics from 'expo-haptics';
 
-import { Platform } from 'react-native';
 import mockData from './data/line-data.json';
 import mockData2 from './data/line-data2.json';
 import mockDataNonLinear from './data/line-data-non-linear-domain.json';
-import { useMemo } from 'react';
 
 function invokeHaptic() {
   if (['ios', 'android'].includes(Platform.OS)) {

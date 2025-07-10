@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import Animated, {
   useAnimatedStyle,
@@ -16,7 +16,7 @@ import { getXPositionForCurve } from './utils/getXPositionForCurve';
 import { getYForX } from 'react-native-redash';
 import { useLineChart } from './useLineChart';
 import { useMemo } from 'react';
-import type { TFormatterFn } from '../candle/types';
+import type { TFormatterFn } from '../../types';
 
 export type LineChartTooltipPosition = 'top' | 'bottom' | 'left' | 'right';
 

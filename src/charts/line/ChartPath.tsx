@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Svg } from 'react-native-svg';
 import Animated, {

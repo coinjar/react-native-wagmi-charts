@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Platform, View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { CandlestickChart, TCandle } from 'react-native-wagmi-charts';
 import * as haptics from 'expo-haptics';

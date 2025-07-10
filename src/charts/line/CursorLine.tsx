@@ -7,7 +7,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import Svg, { type LineProps, Line as SVGLine } from 'react-native-svg';
 
-import type { TFormatterFn } from 'react-native-wagmi-charts';
+import type { TFormatterFn } from '../../types';
 import { AnimatedText } from '../../components/AnimatedText';
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartCursor, type LineChartCursorProps } from './Cursor';

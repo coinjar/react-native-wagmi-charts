@@ -4,7 +4,7 @@ import type Animated from 'react-native-reanimated';
 import { useDerivedValue } from 'react-native-reanimated';
 
 import { useLineChartDatetime } from './useDatetime';
-import type { TFormatterFn } from 'react-native-wagmi-charts';
+import type { TFormatterFn } from '../../types';
 import { AnimatedText } from '../../components/AnimatedText';
 
 type LineChartDatetimeProps = {

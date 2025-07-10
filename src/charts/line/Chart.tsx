@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 // @ts-ignore
 import * as d3Shape from 'd3-shape';
 

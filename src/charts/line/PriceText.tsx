@@ -3,7 +3,7 @@ import type { TextProps as RNTextProps } from 'react-native';
 import type Animated from 'react-native-reanimated';
 
 import { useLineChartPrice } from './usePrice';
-import type { TFormatterFn } from '../candle/types';
+import type { TFormatterFn } from '../../types';
 import { AnimatedText } from '../../components/AnimatedText';
 
 export type LineChartPriceTextProps = {

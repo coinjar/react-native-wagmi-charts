@@ -1,7 +1,7 @@
 import { useDerivedValue } from 'react-native-reanimated';
 
 import { formatDatetime } from '../../utils';
-import type { TFormatterFn } from '../candle/types';
+import type { TFormatterFn } from '../../types';
 import { useLineChart } from './useLineChart';
 
 export function useLineChartDatetime({

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Platform, View, ViewProps, StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,

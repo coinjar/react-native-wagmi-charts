@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { ViewProps, StyleSheet, Text, TextStyle } from 'react-native';
 import { Line, Svg } from 'react-native-svg';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';

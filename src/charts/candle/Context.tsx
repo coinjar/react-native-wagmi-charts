@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { SharedValue, useSharedValue } from 'react-native-reanimated';
 
 import type { TContext, TData, TDomain } from './types';
