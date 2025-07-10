@@ -3,8 +3,10 @@ import { StyleSheet, type TextStyle } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
+  useAnimatedProps,
 } from 'react-native-reanimated';
 import Svg, { type LineProps, Line as SVGLine } from 'react-native-svg';
+
 import type { TFormatterFn } from 'react-native-wagmi-charts';
 import { AnimatedText } from '../../components/AnimatedText';
 import { LineChartDimensionsContext } from './Chart';
@@ -19,13 +21,27 @@ type LineChartCursorLineProps = {
   lineProps?: Partial<LineProps>;
   format?: TFormatterFn<string | number>;
   textStyle?: TextStyle;
-  // New props for customizing the dynamic sizing
-  minTextWidth?: number;
-  maxTextWidth?: number;
-  textPadding?: number;
 } & Omit<LineChartCursorProps, 'type' | 'children'>;
 
 LineChartCursorLine.displayName = 'LineChartCursorLine';
+
+const TEXT_CONSTANTS = {
+  DEFAULT_COLOR: '#1A1E27',
+  DEFAULT_FONT_SIZE: 12,
+  CHAR_WIDTH_RATIO: 0.6,
+  MIN_WIDTH: 25,
+  MAX_WIDTH: 150,
+  INPUT_PADDING: 4,
+} as const;
+
+const SPACING = {
+  VERTICAL_TEXT_OFFSET: 40,
+  HORIZONTAL_TEXT_MARGIN: 8,
+  HORIZONTAL_RIGHT_MARGIN: 16,
+  BASE_LINE_GAP: 8,
+} as const;
+
+const AnimatedLine = Animated.createAnimatedComponent(SVGLine);
 
 export function LineChartCursorLine({
   children,
@@ -33,133 +49,115 @@ export function LineChartCursorLine({
   lineProps,
   format,
   textStyle,
-  minTextWidth = 25,
-  maxTextWidth = 150,
-  textPadding = 12,
   ...cursorProps
 }: LineChartCursorLineProps) {
   const isHorizontal = cursorProps?.orientation === 'horizontal';
   const { height, width } = React.useContext(LineChartDimensionsContext);
   const { currentX, currentY, isActive } = useLineChart();
+  
   const price = useLineChartPrice({
     format: isHorizontal ? (format as TFormatterFn<string>) : undefined,
     precision: 2,
   });
+  
   const datetime = useLineChartDatetime({
     format: !isHorizontal ? (format as TFormatterFn<number>) : undefined,
   });
 
-  // Calculate dynamic text width based on character count and type
-  const dynamicTextWidth = useDerivedValue(() => {
-    const displayText = isHorizontal
-      ? price.formatted.value
-      : datetime.formatted.value;
+  const displayText = isHorizontal ? price.formatted : datetime.formatted;
 
-    if (!displayText) {
-      return minTextWidth;
-    }
+  const calculateTextWidth = (text: string, fontSize: number) => {
+    'worklet';
+    const charWidth = fontSize * TEXT_CONSTANTS.CHAR_WIDTH_RATIO;
+    const calculatedWidth = text.length * charWidth;
+    return Math.max(
+      TEXT_CONSTANTS.MIN_WIDTH,
+      Math.min(TEXT_CONSTANTS.MAX_WIDTH, calculatedWidth)
+    );
+  };
 
-    // Dynamic character width calculation based on font size (consistent with Axis component)
-    const fontSize = textStyle?.fontSize || 12;
-    const charWidth = fontSize * 0.6; // Same ratio as Axis component
-    const calculatedWidth = displayText.length * charWidth + textPadding;
-    return Math.max(minTextWidth, Math.min(maxTextWidth, calculatedWidth));
-  }, [
-    price.formatted,
-    datetime.formatted,
-    minTextWidth,
-    maxTextWidth,
-    textPadding,
-    textStyle?.fontSize,
-  ]);
+  const textWidth = useDerivedValue(() => {
+    const text = displayText.value;
+    if (!text) return TEXT_CONSTANTS.MIN_WIDTH;
+    
+    const fontSize = textStyle?.fontSize || TEXT_CONSTANTS.DEFAULT_FONT_SIZE;
+    return calculateTextWidth(text, fontSize);
+  }, [displayText, textStyle?.fontSize]);
 
-  // Simple line length calculation
-  const lineLength = useDerivedValue(() => {
-    if (isHorizontal) {
-      // End the line closer to the text with a small gap
-      return width - dynamicTextWidth.value; // Leave small gap before text
-    }
-    // For vertical lines
-    return height - 40; // Leave 40px from the bottom for text
-  }, [width, height]);
-
-  const animatedStyle = useAnimatedStyle(
-    () => ({
-      opacity: isActive.value ? 1 : 0,
-      height: '100%',
-      transform: [
-        cursorProps?.orientation === 'horizontal'
-          ? { translateY: currentY.value }
-          : { translateX: currentX.value },
-      ],
-    }),
-    [currentX, currentY, isActive],
+  const lineEndX = useDerivedValue(() => {
+    if (!isHorizontal) return 0;
+    
+    const fontSize = textStyle?.fontSize || TEXT_CONSTANTS.DEFAULT_FONT_SIZE;
+    const gap = Math.max(SPACING.BASE_LINE_GAP, fontSize * 0.5);
+    
+    return width - textWidth.value - gap - TEXT_CONSTANTS.INPUT_PADDING - SPACING.HORIZONTAL_RIGHT_MARGIN;
+  });
+  
+  const lineEndY = useDerivedValue(() => 
+    isHorizontal ? 0 : height - SPACING.VERTICAL_TEXT_OFFSET
   );
 
-  const animatedTextStyle = useAnimatedStyle(() => {
-    const fontSize = textStyle?.fontSize || 12;
+  const containerStyle = useAnimatedStyle(() => ({
+    opacity: isActive.value ? 1 : 0,
+    height: '100%',
+    transform: isHorizontal 
+      ? [{ translateY: currentY.value }]
+      : [{ translateX: currentX.value }],
+  }));
+
+  const calculateFontSizeAdjustment = (fontSize: number) => {
+    'worklet';
+    return Math.max(0.6, Math.min(0.8, 0.7 + (fontSize - 12) * 0.01));
+  };
+
+  const textPositionStyle = useAnimatedStyle(() => {
+    const fontSize = textStyle?.fontSize || TEXT_CONSTANTS.DEFAULT_FONT_SIZE;
     const lineHeight = textStyle?.lineHeight || fontSize * 1.2;
-
-    if (isHorizontal) {
-      // For horizontal lines: center the text on the line (line is at y=0)
-      // React Native Text has intrinsic padding above the baseline
-      // We need to position the text container so the visual center aligns with y=0
-      // Scale the offset based on actual font size for better centering with any text size
-      const fontSizeAdjustment = Math.max(
-        0.6,
-        Math.min(0.8, 0.7 + (fontSize - 12) * 0.01),
-      ); // Adjust based on font size
-      const textCenterOffset = -(lineHeight * fontSizeAdjustment);
-
-      return {
-        position: 'absolute',
-        left: width - dynamicTextWidth.value - 8,
-        top: textCenterOffset, // Position text so line runs through visual center
-        height: lineHeight,
-        color: '#1A1E27',
-        fontSize: fontSize, // Use actual font size from textStyle
-        textAlign: 'right',
-        width: dynamicTextWidth.value,
-        paddingRight: 8,
-        lineHeight: lineHeight,
-        // Add flex properties to help with text centering
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        ...textStyle,
-      };
-    }
-    // For vertical lines: position text at the bottom of the line
-    return {
-      position: 'absolute',
-      left: -dynamicTextWidth.value / 2, // Center horizontally on the vertical line
-      top: lineLength.value + 8, // Position below the line end
-      height: lineHeight,
-      color: '#1A1E27',
-      fontSize: fontSize, // Use actual font size from textStyle
-      textAlign: 'center',
-      width: dynamicTextWidth.value,
-      display: 'flex',
-      justifyContent: 'center', // Center text vertically within container
-      alignItems: 'center', // Center text horizontally
+    
+    const baseStyle = {
+      position: 'absolute' as const,
+      width: textWidth.value,
+      fontSize,
+      lineHeight,
+      color: textStyle?.color || TEXT_CONSTANTS.DEFAULT_COLOR,
       ...textStyle,
     };
-  }, [dynamicTextWidth, width, height, textStyle, lineLength]);
+
+    if (isHorizontal) {
+      const fontSizeAdjustment = calculateFontSizeAdjustment(fontSize);
+      const textCenterOffset = -(lineHeight * fontSizeAdjustment);
+      
+      return {
+        ...baseStyle,
+        left: width - textWidth.value - SPACING.HORIZONTAL_RIGHT_MARGIN + TEXT_CONSTANTS.INPUT_PADDING,
+        top: textCenterOffset,
+        textAlign: 'right' as const,
+        paddingLeft: 0,
+        paddingRight: 0,
+      };
+    }
+
+    return {
+      ...baseStyle,
+      left: -textWidth.value / 2,
+      top: lineEndY.value + SPACING.HORIZONTAL_TEXT_MARGIN,
+      textAlign: 'center' as const,
+    };
+  });
+
+  const lineAnimatedProps = useAnimatedProps(() => ({
+    x1: 0,
+    y1: 0,
+    x2: lineEndX.value,
+    y2: lineEndY.value,
+  }), [lineEndX, lineEndY]);
 
   return (
     <LineChartCursor {...cursorProps} type="line">
-      <Animated.View style={animatedStyle}>
+      <Animated.View style={containerStyle}>
         <Svg style={styles.svg}>
-          <SVGLine
-            x1={0}
-            y1={0}
-            x2={
-              isHorizontal
-                ? lineLength.value -
-                  Math.max(8, dynamicTextWidth.value * 0.08 + 4)
-                : 0
-            }
-            y2={isHorizontal ? 0 : lineLength.value}
+          <AnimatedLine
+            animatedProps={lineAnimatedProps}
             strokeWidth={2}
             stroke={color}
             strokeDasharray="3 3"
@@ -167,8 +165,8 @@ export function LineChartCursorLine({
           />
         </Svg>
         <AnimatedText
-          text={isHorizontal ? price.formatted : datetime.formatted}
-          style={animatedTextStyle}
+          text={displayText}
+          style={textPositionStyle}
         />
       </Animated.View>
       {children}

@@ -33,7 +33,6 @@ export const LineChartAxis = ({
   format = (value) => value,
   textStyle,
   labelPadding = 3,
-  labelWidth = 55, // Default width for labels
   ...props
 }: LineChartAxisProps) => {
   const { width, height } = React.useContext(LineChartDimensionsContext);
