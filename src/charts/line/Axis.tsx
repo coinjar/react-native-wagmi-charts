@@ -1,5 +1,5 @@
 import React from 'react';
-import { ViewProps, StyleSheet, Text, TextStyle } from 'react-native';
+import { ViewProps, StyleSheet, Text, TextStyle, ViewStyle } from 'react-native';
 import { Line, Svg } from 'react-native-svg';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { LineChartDimensionsContext } from './Chart';
@@ -20,6 +20,7 @@ export type LineChartAxisProps = ViewProps & {
   textStyle?: TextStyle;
   labelPadding?: number; // Padding to prevent labels from going off-screen
   labelWidth?: number; // Width allocated for labels
+  containerStyle?: ViewStyle; // Custom container style
 };
 
 export const LineChartAxis = ({
@@ -33,6 +34,7 @@ export const LineChartAxis = ({
   format = (value) => value,
   textStyle,
   labelPadding = 3,
+  containerStyle,
   ...props
 }: LineChartAxisProps) => {
   const { width, height } = React.useContext(LineChartDimensionsContext);
@@ -262,7 +264,7 @@ export const LineChartAxis = ({
   const { axisLine, ticks, labels } = renderAxis();
 
   return (
-    <Animated.View style={[styles.container, props.style, animatedStyle]}>
+    <Animated.View style={[styles.container, containerStyle, props.style, animatedStyle]}>
       <Svg width={width} height={height} style={StyleSheet.absoluteFill}>
         {axisLine}
         {ticks}
