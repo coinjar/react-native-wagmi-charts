@@ -39,6 +39,7 @@ const SPACING = {
   HORIZONTAL_TEXT_MARGIN: 8,
   HORIZONTAL_RIGHT_MARGIN: 16,
   BASE_LINE_GAP: 8,
+  X_AXIS_LABEL_RESERVED_HEIGHT: 40, // Reserved space at bottom for x-axis labels
 } as const;
 
 const AnimatedLine = Animated.createAnimatedComponent(SVGLine);
@@ -93,9 +94,12 @@ export function LineChartCursorLine({
     return width - textWidth.value - gap - TEXT_CONSTANTS.INPUT_PADDING - SPACING.HORIZONTAL_RIGHT_MARGIN;
   });
   
-  const lineEndY = useDerivedValue(() => 
-    isHorizontal ? 0 : height - SPACING.VERTICAL_TEXT_OFFSET
-  );
+  const lineEndY = useDerivedValue(() => {
+    if (isHorizontal) return 0;
+    
+    // For vertical cursor, extend line to the chart area (excluding reserved label space)
+    return height - SPACING.X_AXIS_LABEL_RESERVED_HEIGHT;
+  });
 
   const containerStyle = useAnimatedStyle(() => ({
     opacity: isActive.value ? 1 : 0,
@@ -137,10 +141,33 @@ export function LineChartCursorLine({
       };
     }
 
+    // For vertical cursor (x-axis label)
+    const halfTextWidth = textWidth.value / 2;
+    
+    // Since the container is already translated by currentX, we need to calculate
+    // the label position relative to the container's position
+    const containerX = currentX.value;
+    
+    // Calculate where the label would be if centered
+    let labelLeft = -halfTextWidth;
+    
+    // Check if label would overflow on the left
+    if (containerX + labelLeft < 0) {
+      labelLeft = -containerX;
+    }
+    
+    // Check if label would overflow on the right
+    if (containerX + labelLeft + textWidth.value > width) {
+      labelLeft = width - containerX - textWidth.value;
+    }
+
+    // Position label in the reserved space at the bottom
+    const labelTop = height - SPACING.X_AXIS_LABEL_RESERVED_HEIGHT + SPACING.HORIZONTAL_TEXT_MARGIN;
+
     return {
       ...baseStyle,
-      left: -textWidth.value / 2,
-      top: lineEndY.value + SPACING.HORIZONTAL_TEXT_MARGIN,
+      left: labelLeft,
+      top: labelTop,
       textAlign: 'center' as const,
     };
   });
