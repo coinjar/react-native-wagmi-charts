@@ -39,6 +39,11 @@ export const LineChartAxis = ({
 }: LineChartAxisProps) => {
   const { width, height } = React.useContext(LineChartDimensionsContext);
   const { isActive } = useLineChart();
+  
+  // Reserve space at the bottom for x-axis cursor labels
+  const X_AXIS_LABEL_RESERVED_HEIGHT = 40;
+  // For vertical axes, don't extend into the reserved cursor label space
+  const effectiveHeight = orientation === 'vertical' ? height - X_AXIS_LABEL_RESERVED_HEIGHT : height;
 
   const padding = {
     left: 5,
@@ -93,7 +98,7 @@ export const LineChartAxis = ({
         const bottomPadding = labelPadding;
         
         // Calculate y position with padding to keep labels on screen
-        const availableHeight = height - topPadding - bottomPadding;
+        const availableHeight = effectiveHeight - topPadding - bottomPadding;
         const y = topPadding + availableHeight * (1 - tickPosition);
         const x = position === 'left' ? padding.left : width - padding.right;
 
@@ -213,7 +218,7 @@ export const LineChartAxis = ({
                 x1={padding.left}
                 y1={0}
                 x2={padding.left}
-                y2={height}
+                y2={effectiveHeight}
                 stroke={color}
                 strokeWidth={strokeWidth}
               />
@@ -225,7 +230,7 @@ export const LineChartAxis = ({
                 x1={width - padding.right}
                 y1={0}
                 x2={width - padding.right}
-                y2={height}
+                y2={effectiveHeight}
                 stroke={color}
                 strokeWidth={strokeWidth}
               />
