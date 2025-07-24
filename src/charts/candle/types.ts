@@ -22,6 +22,8 @@ export type TContext = {
   setHeight: React.Dispatch<React.SetStateAction<number>>;
   currentIndex?: number;
   setCurrentIndex?: (index: number) => void;
+  setCurrentX?: (value: number) => void;
+  setCurrentY?: (value: number) => void;
 };
 export type TPriceType = 'crosshair' | 'open' | 'close' | 'low' | 'high';
 export type TFormatterFn<T> = ({

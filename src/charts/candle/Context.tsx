@@ -16,6 +16,8 @@ export const CandlestickChartContext = React.createContext<TContext>({
   setHeight: () => undefined,
   currentIndex: -1,
   setCurrentIndex: () => {},
+  setCurrentX: () => {},
+  setCurrentY: () => {},
 });
 
 type CandlestickChartProviderProps = {
@@ -36,6 +38,11 @@ export function CandlestickChartProvider({
   const currentX = useSharedValue(-1);
   const currentY = useSharedValue(-1);
 
+  const domain = React.useMemo(
+    () => valueRangeY ?? getDomain(data),
+    [data, valueRangeY]
+  );
+
   // Custom crosshair
   const [currentIndex, setCurrentIndex] = React.useState<number>(-1);
   const setCurrentX = (value: number) => {
@@ -46,11 +53,6 @@ export function CandlestickChartProvider({
     'worklet';
     currentY.value = value;
   };
-
-  const domain = React.useMemo(
-    () => valueRangeY ?? getDomain(data),
-    [data, valueRangeY]
-  );
 
   const step = React.useMemo(() => width / data.length, [data.length, width]);
 
