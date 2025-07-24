@@ -6,19 +6,21 @@ export type CandlestickChartLineProps = Omit<LineProps, 'x' | 'y'> & {
   color?: string;
   x: number;
   y: number;
+  offsetY?: number;
 };
 
 export const CandlestickChartLine = ({
   color = 'gray',
   x,
   y,
+  offsetY = 0,
   ...props
 }: CandlestickChartLineProps) => {
   return (
     <Svg style={StyleSheet.absoluteFill}>
       <SVGLine
         x1={0}
-        y1={0}
+        y1={offsetY}
         x2={x}
         y2={y}
         strokeWidth={2}

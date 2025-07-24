@@ -23,7 +23,10 @@ import { CandlestickChartCrosshairTooltipContext } from './CrosshairTooltip';
 type MinDurationOverride = LongPressGestureHandlerProps['minDurationMs'];
 type MaxDistOverride = LongPressGestureHandlerProps['maxDist'];
 
-type LongPressGestureHandlerOverride = Omit<LongPressGestureHandler, 'minDuration' | 'maxDist'> & {
+type LongPressGestureHandlerOverride = Omit<
+  LongPressGestureHandler,
+  'minDuration' | 'maxDist'
+> & {
   /**
    * Minimum time, expressed in milliseconds, that a finger must remain
    * pressed on the corresponding view.
@@ -33,8 +36,8 @@ type LongPressGestureHandlerOverride = Omit<LongPressGestureHandler, 'minDuratio
   /**
    * Maximum distance, expressed in points, that defines how far the finger is
    * allowed to travel during a long press gesture. If the finger travels
-   * further than the defined distance and the handler hasn't yet activated, 
-   * it will fail to recognize the gesture. 
+   * further than the defined distance and the handler hasn't yet activated,
+   * it will fail to recognize the gesture.
    * @default 999999
    */
   maxDist?: MaxDistOverride;
@@ -47,6 +50,9 @@ type CandlestickChartCrosshairProps = LongPressGestureHandlerOverride & {
   horizontalCrosshairProps?: Animated.AnimateProps<ViewProps>;
   verticalCrosshairProps?: Animated.AnimateProps<ViewProps>;
   lineProps?: Partial<CandlestickChartLineProps>;
+  showXAxisCrosshair?: boolean;
+  offsetYOfLineChart?: number;
+  ArrowIconComponent?: React.ComponentType<{ color?: string }>;
 };
 
 export function CandlestickChartCrosshair({
@@ -56,10 +62,21 @@ export function CandlestickChartCrosshair({
   horizontalCrosshairProps = {},
   verticalCrosshairProps = {},
   lineProps = {},
+  showXAxisCrosshair = true,
+  offsetYOfLineChart = 0,
+  ArrowIconComponent,
   ...props
 }: CandlestickChartCrosshairProps) {
   const { width, height } = React.useContext(CandlestickChartDimensionsContext);
-  const { currentX, currentY, step } = useCandlestickChart();
+  const {
+    currentX,
+    currentY,
+    step,
+    currentIndex = -1,
+    data,
+  } = useCandlestickChart();
+
+  const candle = currentIndex === -1 ? null : data[currentIndex];
 
   const tooltipPosition = useSharedValue<'left' | 'right'>('left');
 
@@ -79,9 +96,9 @@ export function CandlestickChartCrosshair({
       currentX.value = boundedX - (boundedX % step) + step / 2;
     },
     onEnd: () => {
-      opacity.value = 0;
+      // opacity.value = 0;
       currentY.value = -1;
-      currentX.value = -1;
+      // currentX.value = -1;
     },
   });
   const horizontal = useAnimatedStyle(
@@ -100,14 +117,31 @@ export function CandlestickChartCrosshair({
   );
 
   useAnimatedReaction(
-    () => currentX.value,
-    (data, prevData) => {
-      if (data !== -1 && data !== prevData && onCurrentXChange) {
-        runOnJS(onCurrentXChange)(data);
-      }
+    () => currentIndex,
+    (index) => {
+      if (index === -1 || !data[index]) return;
+      const candleX = step * index + step / 2;
+
+      currentX.value = candleX;
+      opacity.value = 1;
     },
-    [currentX]
+    [currentIndex]
   );
+
+  useAnimatedReaction(
+    () => currentX.value,
+    (value, previousValue) => {
+      if (
+        value !== -1 &&
+        value !== previousValue &&
+        onCurrentXChange !== undefined
+      ) {
+        runOnJS(onCurrentXChange)(value);
+      }
+    }
+  );
+
+  if (currentIndex === -1 || !candle) return null;
 
   return (
     <LongPressGestureHandler
@@ -117,22 +151,46 @@ export function CandlestickChartCrosshair({
       {...props}
     >
       <Animated.View style={StyleSheet.absoluteFill}>
-        <Animated.View
-          style={[StyleSheet.absoluteFill, horizontal]}
-          {...horizontalCrosshairProps}
-        >
-          <CandlestickChartLine color={color} x={width} y={0} {...lineProps} />
-          <CandlestickChartCrosshairTooltipContext.Provider
-            value={{ position: tooltipPosition }}
+        {showXAxisCrosshair && (
+          <Animated.View
+            style={[StyleSheet.absoluteFill, horizontal]}
+            {...horizontalCrosshairProps}
           >
-            {children}
-          </CandlestickChartCrosshairTooltipContext.Provider>
-        </Animated.View>
+            <CandlestickChartLine
+              color={color}
+              x={width}
+              y={0}
+              {...lineProps}
+            />
+          </Animated.View>
+        )}
+        <CandlestickChartCrosshairTooltipContext.Provider
+          value={{ position: tooltipPosition }}
+        >
+          {children}
+        </CandlestickChartCrosshairTooltipContext.Provider>
         <Animated.View
           style={[StyleSheet.absoluteFill, vertical]}
           {...verticalCrosshairProps}
         >
-          <CandlestickChartLine color={color} x={0} y={height} {...lineProps} />
+          <Animated.View
+            style={{
+              position: 'absolute',
+              top: height + (offsetYOfLineChart ?? 0) - 14,
+              left: -5,
+            }}
+          >
+            {ArrowIconComponent ? (
+              <ArrowIconComponent color={color ?? '#EE3A35'} />
+            ) : null}
+          </Animated.View>
+          <CandlestickChartLine
+            color={color}
+            x={0}
+            y={height}
+            offsetY={offsetYOfLineChart}
+            {...lineProps}
+          />
         </Animated.View>
       </Animated.View>
     </LongPressGestureHandler>

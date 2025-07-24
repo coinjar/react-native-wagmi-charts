@@ -20,6 +20,8 @@ export type TContext = {
   step: number;
   setWidth: React.Dispatch<React.SetStateAction<number>>;
   setHeight: React.Dispatch<React.SetStateAction<number>>;
+  currentIndex?: number;
+  setCurrentIndex?: (index: number) => void;
 };
 export type TPriceType = 'crosshair' | 'open' | 'close' | 'low' | 'high';
 export type TFormatterFn<T> = ({

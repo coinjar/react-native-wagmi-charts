@@ -6230,6 +6230,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dayjs@npm:^1.11.13":
+  version: 1.11.13
+  resolution: "dayjs@npm:1.11.13"
+  checksum: f388db88a6aa93956c1f6121644e783391c7b738b73dbc54485578736565c8931bdfba4bb94e9b1535c6e509c97d5deb918bbe1ae6b34358d994de735055cca9
+  languageName: node
+  linkType: hard
+
 "dayjs@npm:^1.8.15":
   version: 1.11.11
   resolution: "dayjs@npm:1.11.11"
@@ -12933,6 +12940,7 @@ __metadata:
     d3-interpolate-path: ^2.2.3
     d3-scale: ^2
     d3-shape: ^3.0.1
+    dayjs: ^1.11.13
     eslint: ^9.2.0
     eslint-config-prettier: ^9.1.0
     eslint-plugin-prettier: ^5.1.3
