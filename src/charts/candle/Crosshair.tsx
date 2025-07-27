@@ -43,23 +43,34 @@ export function CandlestickChartCrosshair({
 
   const opacity = useSharedValue(0);
 
+  const updatePosition = (x: number, y: number) => {
+    'worklet';
+    const boundedX = x <= width - 1 ? x : width - 1;
+    if (boundedX < 100) {
+      tooltipPosition.value = 'right';
+    } else {
+      tooltipPosition.value = 'left';
+    }
+    currentY.value = clamp(y, 0, height);
+    currentX.value = boundedX - (boundedX % step) + step / 2;
+  };
+
   const longPressGesture = Gesture.LongPress()
     .minDuration(0)
     .maxDistance(999999)
     .onStart(
       (event: GestureStateChangeEvent<LongPressGestureHandlerEventPayload>) => {
         'worklet';
-        const boundedX = event.x <= width - 1 ? event.x : width - 1;
-        if (boundedX < 100) {
-          tooltipPosition.value = 'right';
-        } else {
-          tooltipPosition.value = 'left';
-        }
         opacity.value = 1;
-        currentY.value = clamp(event.y, 0, height);
-        currentX.value = boundedX - (boundedX % step) + step / 2;
+        updatePosition(event.x, event.y);
       }
     )
+    .onTouchesMove((event) => {
+      'worklet';
+      if (opacity.value === 1 && event.allTouches.length > 0) {
+        updatePosition(event.allTouches[0]!.x, event.allTouches[0]!.y);
+      }
+    })
     .onEnd(() => {
       'worklet';
       opacity.value = 0;

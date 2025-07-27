@@ -91,6 +91,28 @@ export function LineChartCursor({
     }
   }, [at, scaleX]);
 
+  const updatePosition = (xPosition: number) => {
+    'worklet';
+    if (parsedPath) {
+      // on Web, we could drag the cursor to be negative, breaking it
+      // so we clamp the index at 0 to fix it
+      // https://github.com/coinjar/react-native-wagmi-charts/issues/24
+      const minIndex = 0;
+      const boundedIndex = Math.max(
+        minIndex,
+        Math.round(xPosition / width / (1 / (data ? data.length - 1 : 1)))
+      );
+
+      if (snapToPoint) {
+        // We have to run this on the JS thread unfortunately as the scaleLinear functions won't work on UI thread
+        runOnJS(linearScalePositionAndIndex)({ xPosition });
+      } else if (!snapToPoint) {
+        currentX.value = xPosition;
+        currentIndex.value = boundedIndex;
+      }
+    }
+  };
+
   const longPressGesture = Gesture.LongPress()
     .minDuration(0)
     .maxDistance(999999)
@@ -101,23 +123,7 @@ export function LineChartCursor({
         if (parsedPath) {
           const xPosition = Math.max(0, event.x <= width ? event.x : width);
           isActive.value = true;
-
-          // on Web, we could drag the cursor to be negative, breaking it
-          // so we clamp the index at 0 to fix it
-          // https://github.com/coinjar/react-native-wagmi-charts/issues/24
-          const minIndex = 0;
-          const boundedIndex = Math.max(
-            minIndex,
-            Math.round(xPosition / width / (1 / (data ? data.length - 1 : 1)))
-          );
-
-          if (snapToPoint) {
-            // We have to run this on the JS thread unfortunately as the scaleLinear functions won't work on UI thread
-            runOnJS(linearScalePositionAndIndex)({ xPosition });
-          } else if (!snapToPoint) {
-            currentX.value = xPosition;
-            currentIndex.value = boundedIndex;
-          }
+          updatePosition(xPosition);
 
           if (onActivated) {
             runOnJS(onActivated)();
@@ -125,6 +131,13 @@ export function LineChartCursor({
         }
       }
     )
+    .onTouchesMove((event) => {
+      'worklet';
+      if (parsedPath && isActive.value && event.allTouches.length > 0) {
+        const xPosition = Math.max(0, event.allTouches[0]!.x <= width ? event.allTouches[0]!.x : width);
+        updatePosition(xPosition);
+      }
+    })
     .onEnd(() => {
       'worklet';
       isActive.value = false;
