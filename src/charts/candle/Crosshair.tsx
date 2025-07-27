@@ -19,19 +19,17 @@ import { CandlestickChartLine, CandlestickChartLineProps } from './Line';
 import { useCandlestickChart } from './useCandlestickChart';
 import { CandlestickChartCrosshairTooltipContext } from './CrosshairTooltip';
 
-type CandlestickChartCrosshairProps = {
-  color?: string;
-  children?: React.ReactNode;
-  onCurrentXChange?: (value: number) => unknown;
-  horizontalCrosshairProps?: Animated.AnimateProps<ViewProps>;
-  verticalCrosshairProps?: Animated.AnimateProps<ViewProps>;
-  lineProps?: Partial<CandlestickChartLineProps>;
+// Extract types from the new Gesture API to maintain type safety
+type MinDurationOverride = Parameters<ReturnType<typeof Gesture.LongPress>['minDuration']>[0];
+type MaxDistOverride = Parameters<ReturnType<typeof Gesture.LongPress>['maxDistance']>[0];
+
+type LongPressGestureHandlerOverride = {
   /**
    * Minimum time, expressed in milliseconds, that a finger must remain
    * pressed on the corresponding view.
    * @default 0
    */
-  minDuration?: number;
+  minDuration?: MinDurationOverride;
   /**
    * Maximum distance, expressed in points, that defines how far the finger is
    * allowed to travel during a long press gesture. If the finger travels
@@ -39,7 +37,16 @@ type CandlestickChartCrosshairProps = {
    * it will fail to recognize the gesture. 
    * @default 999999
    */
-  maxDist?: number;
+  maxDist?: MaxDistOverride;
+};
+
+type CandlestickChartCrosshairProps = LongPressGestureHandlerOverride & {
+  color?: string;
+  children?: React.ReactNode;
+  onCurrentXChange?: (value: number) => unknown;
+  horizontalCrosshairProps?: Animated.AnimateProps<ViewProps>;
+  verticalCrosshairProps?: Animated.AnimateProps<ViewProps>;
+  lineProps?: Partial<CandlestickChartLineProps>;
 };
 
 export function CandlestickChartCrosshair({

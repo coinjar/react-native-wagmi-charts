@@ -17,15 +17,19 @@ import { scaleLinear } from 'd3-scale';
 import { useLineChart } from './useLineChart';
 import { useEffect } from "react";
 
-export type LineChartCursorProps = {
+// Extract relevant props from the new Gesture API to maintain compatibility
+type GestureHandlerProps = {
+  shouldCancelWhenOutside?: Parameters<ReturnType<typeof Gesture.LongPress>['shouldCancelWhenOutside']>[0];
+  onActivated?: () => void;
+  onEnded?: () => void;
+};
+
+export type LineChartCursorProps = GestureHandlerProps & {
   children: React.ReactNode;
   type: 'line' | 'crosshair';
   // Does not work on web due to how the Cursor operates on web
   snapToPoint?: boolean;
   at?: number;
-  shouldCancelWhenOutside?: boolean;
-  onActivated?: () => void;
-  onEnded?: () => void;
 };
 
 export const CursorContext = React.createContext({ type: '' });
