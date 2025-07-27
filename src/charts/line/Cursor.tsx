@@ -1,8 +1,6 @@
 import * as React from 'react';
 
-import Animated, {
-  runOnJS,
-} from 'react-native-reanimated';
+import Animated, { runOnJS } from 'react-native-reanimated';
 import {
   Gesture,
   GestureDetector,
@@ -15,21 +13,17 @@ import { StyleSheet } from 'react-native';
 import { bisectCenter } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
 import { useLineChart } from './useLineChart';
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-// Extract relevant props from the new Gesture API to maintain compatibility
-type GestureHandlerProps = {
-  shouldCancelWhenOutside?: Parameters<ReturnType<typeof Gesture.LongPress>['shouldCancelWhenOutside']>[0];
-  onActivated?: () => void;
-  onEnded?: () => void;
-};
-
-export type LineChartCursorProps = GestureHandlerProps & {
+export type LineChartCursorProps = {
   children: React.ReactNode;
   type: 'line' | 'crosshair';
   // Does not work on web due to how the Cursor operates on web
   snapToPoint?: boolean;
   at?: number;
+  shouldCancelWhenOutside?: boolean;
+  onActivated?: () => void;
+  onEnded?: () => void;
 };
 
 export const CursorContext = React.createContext({ type: '' });
@@ -97,54 +91,45 @@ export function LineChartCursor({
     }
   }, [at, scaleX]);
 
-  const updateCursorPosition = (x: number) => {
-    'worklet';
-    if (parsedPath) {
-      const xPosition = Math.max(0, x <= width ? x : width);
-      isActive.value = true;
-
-      // on Web, we could drag the cursor to be negative, breaking it
-      // so we clamp the index at 0 to fix it
-      // https://github.com/coinjar/react-native-wagmi-charts/issues/24
-      const minIndex = 0;
-      const boundedIndex = Math.max(
-        minIndex,
-        Math.round(xPosition / width / (1 / (data ? data.length - 1 : 1)))
-      );
-
-      if (snapToPoint) {
-        // We have to run this on the JS thread unfortunately as the scaleLinear functions won't work on UI thread
-        runOnJS(linearScalePositionAndIndex)({ xPosition });
-      } else if (!snapToPoint) {
-        currentX.value = xPosition;
-        currentIndex.value = boundedIndex;
-      }
-    }
-  };
-
   const longPressGesture = Gesture.LongPress()
     .minDuration(0)
     .maxDistance(999999)
     .shouldCancelWhenOutside(shouldCancelWhenOutside)
-    .onStart((event: GestureStateChangeEvent<LongPressGestureHandlerEventPayload>) => {
-      'worklet';
-      updateCursorPosition(event.x);
-      
-      if (onActivated) {
-        runOnJS(onActivated)();
+    .onStart(
+      (event: GestureStateChangeEvent<LongPressGestureHandlerEventPayload>) => {
+        'worklet';
+        if (parsedPath) {
+          const xPosition = Math.max(0, event.x <= width ? event.x : width);
+          isActive.value = true;
+
+          // on Web, we could drag the cursor to be negative, breaking it
+          // so we clamp the index at 0 to fix it
+          // https://github.com/coinjar/react-native-wagmi-charts/issues/24
+          const minIndex = 0;
+          const boundedIndex = Math.max(
+            minIndex,
+            Math.round(xPosition / width / (1 / (data ? data.length - 1 : 1)))
+          );
+
+          if (snapToPoint) {
+            // We have to run this on the JS thread unfortunately as the scaleLinear functions won't work on UI thread
+            runOnJS(linearScalePositionAndIndex)({ xPosition });
+          } else if (!snapToPoint) {
+            currentX.value = xPosition;
+            currentIndex.value = boundedIndex;
+          }
+
+          if (onActivated) {
+            runOnJS(onActivated)();
+          }
+        }
       }
-    })
-    .onTouchesMove((event) => {
-      'worklet';
-      if (event.changedTouches[0]) {
-        updateCursorPosition(event.changedTouches[0].x);
-      }
-    })
+    )
     .onEnd(() => {
       'worklet';
       isActive.value = false;
       currentIndex.value = -1;
-      
+
       if (onEnded) {
         runOnJS(onEnded)();
       }

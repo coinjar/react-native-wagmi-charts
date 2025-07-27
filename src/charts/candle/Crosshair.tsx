@@ -19,28 +19,7 @@ import { CandlestickChartLine, CandlestickChartLineProps } from './Line';
 import { useCandlestickChart } from './useCandlestickChart';
 import { CandlestickChartCrosshairTooltipContext } from './CrosshairTooltip';
 
-// Extract types from the new Gesture API to maintain type safety
-type MinDurationOverride = Parameters<ReturnType<typeof Gesture.LongPress>['minDuration']>[0];
-type MaxDistOverride = Parameters<ReturnType<typeof Gesture.LongPress>['maxDistance']>[0];
-
-type LongPressGestureHandlerOverride = {
-  /**
-   * Minimum time, expressed in milliseconds, that a finger must remain
-   * pressed on the corresponding view.
-   * @default 0
-   */
-  minDuration?: MinDurationOverride;
-  /**
-   * Maximum distance, expressed in points, that defines how far the finger is
-   * allowed to travel during a long press gesture. If the finger travels
-   * further than the defined distance and the handler hasn't yet activated, 
-   * it will fail to recognize the gesture. 
-   * @default 999999
-   */
-  maxDist?: MaxDistOverride;
-};
-
-type CandlestickChartCrosshairProps = LongPressGestureHandlerOverride & {
+type CandlestickChartCrosshairProps = {
   color?: string;
   children?: React.ReactNode;
   onCurrentXChange?: (value: number) => unknown;
@@ -56,8 +35,6 @@ export function CandlestickChartCrosshair({
   horizontalCrosshairProps = {},
   verticalCrosshairProps = {},
   lineProps = {},
-  minDuration = 0,
-  maxDist = 999999,
 }: CandlestickChartCrosshairProps) {
   const { width, height } = React.useContext(CandlestickChartDimensionsContext);
   const { currentX, currentY, step } = useCandlestickChart();
@@ -65,33 +42,24 @@ export function CandlestickChartCrosshair({
   const tooltipPosition = useSharedValue<'left' | 'right'>('left');
 
   const opacity = useSharedValue(0);
-  
-  const updateCrosshairPosition = (x: number, y: number) => {
-    'worklet';
-    const boundedX = x <= width - 1 ? x : width - 1;
-    if (boundedX < 100) {
-      tooltipPosition.value = 'right';
-    } else {
-      tooltipPosition.value = 'left';
-    }
-    opacity.value = 1;
-    currentY.value = clamp(y, 0, height);
-    currentX.value = boundedX - (boundedX % step) + step / 2;
-  };
-  
+
   const longPressGesture = Gesture.LongPress()
-    .minDuration(minDuration)
-    .maxDistance(maxDist)
-    .onStart((event: GestureStateChangeEvent<LongPressGestureHandlerEventPayload>) => {
-      'worklet';
-      updateCrosshairPosition(event.x, event.y);
-    })
-    .onTouchesMove((event) => {
-      'worklet';
-      if (event.changedTouches[0]) {
-        updateCrosshairPosition(event.changedTouches[0].x, event.changedTouches[0].y);
+    .minDuration(0)
+    .maxDistance(999999)
+    .onStart(
+      (event: GestureStateChangeEvent<LongPressGestureHandlerEventPayload>) => {
+        'worklet';
+        const boundedX = event.x <= width - 1 ? event.x : width - 1;
+        if (boundedX < 100) {
+          tooltipPosition.value = 'right';
+        } else {
+          tooltipPosition.value = 'left';
+        }
+        opacity.value = 1;
+        currentY.value = clamp(event.y, 0, height);
+        currentX.value = boundedX - (boundedX % step) + step / 2;
       }
-    })
+    )
     .onEnd(() => {
       'worklet';
       opacity.value = 0;
