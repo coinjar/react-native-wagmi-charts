@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { StyleSheet, ViewProps } from 'react-native';
 import {
-  GestureEvent,
-  LongPressGestureHandler,
+  Gesture,
+  GestureDetector,
+  GestureStateChangeEvent,
   LongPressGestureHandlerEventPayload,
-  LongPressGestureHandlerProps,
 } from 'react-native-gesture-handler';
 import Animated, {
-  useAnimatedGestureHandler,
   useSharedValue,
   useAnimatedStyle,
   useAnimatedReaction,
@@ -20,16 +19,19 @@ import { CandlestickChartLine, CandlestickChartLineProps } from './Line';
 import { useCandlestickChart } from './useCandlestickChart';
 import { CandlestickChartCrosshairTooltipContext } from './CrosshairTooltip';
 
-type MinDurationOverride = LongPressGestureHandlerProps['minDurationMs'];
-type MaxDistOverride = LongPressGestureHandlerProps['maxDist'];
-
-type LongPressGestureHandlerOverride = Omit<LongPressGestureHandler, 'minDuration' | 'maxDist'> & {
+type CandlestickChartCrosshairProps = {
+  color?: string;
+  children?: React.ReactNode;
+  onCurrentXChange?: (value: number) => unknown;
+  horizontalCrosshairProps?: Animated.AnimateProps<ViewProps>;
+  verticalCrosshairProps?: Animated.AnimateProps<ViewProps>;
+  lineProps?: Partial<CandlestickChartLineProps>;
   /**
    * Minimum time, expressed in milliseconds, that a finger must remain
    * pressed on the corresponding view.
    * @default 0
    */
-  minDuration?: MinDurationOverride;
+  minDuration?: number;
   /**
    * Maximum distance, expressed in points, that defines how far the finger is
    * allowed to travel during a long press gesture. If the finger travels
@@ -37,16 +39,7 @@ type LongPressGestureHandlerOverride = Omit<LongPressGestureHandler, 'minDuratio
    * it will fail to recognize the gesture. 
    * @default 999999
    */
-  maxDist?: MaxDistOverride;
-};
-
-type CandlestickChartCrosshairProps = LongPressGestureHandlerOverride & {
-  color?: string;
-  children?: React.ReactNode;
-  onCurrentXChange?: (value: number) => unknown;
-  horizontalCrosshairProps?: Animated.AnimateProps<ViewProps>;
-  verticalCrosshairProps?: Animated.AnimateProps<ViewProps>;
-  lineProps?: Partial<CandlestickChartLineProps>;
+  maxDist?: number;
 };
 
 export function CandlestickChartCrosshair({
@@ -56,7 +49,8 @@ export function CandlestickChartCrosshair({
   horizontalCrosshairProps = {},
   verticalCrosshairProps = {},
   lineProps = {},
-  ...props
+  minDuration = 0,
+  maxDist = 999999,
 }: CandlestickChartCrosshairProps) {
   const { width, height } = React.useContext(CandlestickChartDimensionsContext);
   const { currentX, currentY, step } = useCandlestickChart();
@@ -64,26 +58,39 @@ export function CandlestickChartCrosshair({
   const tooltipPosition = useSharedValue<'left' | 'right'>('left');
 
   const opacity = useSharedValue(0);
-  const onGestureEvent = useAnimatedGestureHandler<
-    GestureEvent<LongPressGestureHandlerEventPayload>
-  >({
-    onActive: ({ x, y }) => {
-      const boundedX = x <= width - 1 ? x : width - 1;
-      if (boundedX < 100) {
-        tooltipPosition.value = 'right';
-      } else {
-        tooltipPosition.value = 'left';
+  
+  const updateCrosshairPosition = (x: number, y: number) => {
+    'worklet';
+    const boundedX = x <= width - 1 ? x : width - 1;
+    if (boundedX < 100) {
+      tooltipPosition.value = 'right';
+    } else {
+      tooltipPosition.value = 'left';
+    }
+    opacity.value = 1;
+    currentY.value = clamp(y, 0, height);
+    currentX.value = boundedX - (boundedX % step) + step / 2;
+  };
+  
+  const longPressGesture = Gesture.LongPress()
+    .minDuration(minDuration)
+    .maxDistance(maxDist)
+    .onStart((event: GestureStateChangeEvent<LongPressGestureHandlerEventPayload>) => {
+      'worklet';
+      updateCrosshairPosition(event.x, event.y);
+    })
+    .onTouchesMove((event) => {
+      'worklet';
+      if (event.changedTouches[0]) {
+        updateCrosshairPosition(event.changedTouches[0].x, event.changedTouches[0].y);
       }
-      opacity.value = 1;
-      currentY.value = clamp(y, 0, height);
-      currentX.value = boundedX - (boundedX % step) + step / 2;
-    },
-    onEnd: () => {
+    })
+    .onEnd(() => {
+      'worklet';
       opacity.value = 0;
       currentY.value = -1;
       currentX.value = -1;
-    },
-  });
+    });
   const horizontal = useAnimatedStyle(
     () => ({
       opacity: opacity.value,
@@ -110,12 +117,7 @@ export function CandlestickChartCrosshair({
   );
 
   return (
-    <LongPressGestureHandler
-      minDurationMs={0}
-      maxDist={999999}
-      onGestureEvent={onGestureEvent}
-      {...props}
-    >
+    <GestureDetector gesture={longPressGesture}>
       <Animated.View style={StyleSheet.absoluteFill}>
         <Animated.View
           style={[StyleSheet.absoluteFill, horizontal]}
@@ -135,6 +137,6 @@ export function CandlestickChartCrosshair({
           <CandlestickChartLine color={color} x={0} y={height} {...lineProps} />
         </Animated.View>
       </Animated.View>
-    </LongPressGestureHandler>
+    </GestureDetector>
   );
 }

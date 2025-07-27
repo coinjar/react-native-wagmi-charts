@@ -2,13 +2,12 @@ import * as React from 'react';
 
 import Animated, {
   runOnJS,
-  useAnimatedGestureHandler,
 } from 'react-native-reanimated';
 import {
-  GestureEvent,
-  LongPressGestureHandler,
+  Gesture,
+  GestureDetector,
+  GestureStateChangeEvent,
   LongPressGestureHandlerEventPayload,
-  LongPressGestureHandlerProps,
 } from 'react-native-gesture-handler';
 
 import { LineChartDimensionsContext } from './Chart';
@@ -18,12 +17,15 @@ import { scaleLinear } from 'd3-scale';
 import { useLineChart } from './useLineChart';
 import { useEffect } from "react";
 
-export type LineChartCursorProps = LongPressGestureHandlerProps & {
+export type LineChartCursorProps = {
   children: React.ReactNode;
   type: 'line' | 'crosshair';
   // Does not work on web due to how the Cursor operates on web
   snapToPoint?: boolean;
   at?: number;
+  shouldCancelWhenOutside?: boolean;
+  onActivated?: () => void;
+  onEnded?: () => void;
 };
 
 export const CursorContext = React.createContext({ type: '' });
@@ -35,7 +37,9 @@ export function LineChartCursor({
   snapToPoint,
   type,
   at,
-  ...props
+  shouldCancelWhenOutside = false,
+  onActivated,
+  onEnded,
 }: LineChartCursorProps) {
   const { pathWidth: width, parsedPath } = React.useContext(
     LineChartDimensionsContext
@@ -89,49 +93,66 @@ export function LineChartCursor({
     }
   }, [at, scaleX]);
 
-  const onGestureEvent = useAnimatedGestureHandler<GestureEvent<LongPressGestureHandlerEventPayload>>({
-    onActive: ({ x }) => {
-      if (parsedPath) {
-        const xPosition = Math.max(0, x <= width ? x : width);
-        isActive.value = true;
+  const updateCursorPosition = (x: number) => {
+    'worklet';
+    if (parsedPath) {
+      const xPosition = Math.max(0, x <= width ? x : width);
+      isActive.value = true;
 
-        // on Web, we could drag the cursor to be negative, breaking it
-        // so we clamp the index at 0 to fix it
-        // https://github.com/coinjar/react-native-wagmi-charts/issues/24
-        const minIndex = 0;
-        const boundedIndex = Math.max(
-          minIndex,
-          Math.round(xPosition / width / (1 / (data ? data.length - 1 : 1)))
-        );
+      // on Web, we could drag the cursor to be negative, breaking it
+      // so we clamp the index at 0 to fix it
+      // https://github.com/coinjar/react-native-wagmi-charts/issues/24
+      const minIndex = 0;
+      const boundedIndex = Math.max(
+        minIndex,
+        Math.round(xPosition / width / (1 / (data ? data.length - 1 : 1)))
+      );
 
-        if (snapToPoint) {
-          // We have to run this on the JS thread unfortunately as the scaleLinear functions won't work on UI thread
-          runOnJS(linearScalePositionAndIndex)({ xPosition });
-        } else if (!snapToPoint) {
-          currentX.value = xPosition;
-          currentIndex.value = boundedIndex;
-        }
+      if (snapToPoint) {
+        // We have to run this on the JS thread unfortunately as the scaleLinear functions won't work on UI thread
+        runOnJS(linearScalePositionAndIndex)({ xPosition });
+      } else if (!snapToPoint) {
+        currentX.value = xPosition;
+        currentIndex.value = boundedIndex;
       }
-    },
-    onEnd: () => {
+    }
+  };
+
+  const longPressGesture = Gesture.LongPress()
+    .minDuration(0)
+    .maxDistance(999999)
+    .shouldCancelWhenOutside(shouldCancelWhenOutside)
+    .onStart((event: GestureStateChangeEvent<LongPressGestureHandlerEventPayload>) => {
+      'worklet';
+      updateCursorPosition(event.x);
+      
+      if (onActivated) {
+        runOnJS(onActivated)();
+      }
+    })
+    .onTouchesMove((event) => {
+      'worklet';
+      if (event.changedTouches[0]) {
+        updateCursorPosition(event.changedTouches[0].x);
+      }
+    })
+    .onEnd(() => {
+      'worklet';
       isActive.value = false;
       currentIndex.value = -1;
-    },
-  });
+      
+      if (onEnded) {
+        runOnJS(onEnded)();
+      }
+    });
 
   return (
     <CursorContext.Provider value={{ type }}>
-      <LongPressGestureHandler
-        minDurationMs={0}
-        maxDist={999999}
-        onGestureEvent={onGestureEvent}
-        shouldCancelWhenOutside={false}
-        {...props}
-      >
+      <GestureDetector gesture={longPressGesture}>
         <Animated.View style={StyleSheet.absoluteFill}>
           {children}
         </Animated.View>
-      </LongPressGestureHandler>
+      </GestureDetector>
     </CursorContext.Provider>
   );
 }
