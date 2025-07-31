@@ -55,6 +55,7 @@ type CandlestickChartCrosshairProps = LongPressGestureHandlerOverride & {
   ArrowIconComponent?: React.ComponentType<{ color?: string }>;
   onOpacityOnEnd?: boolean;
   onCurrentXOnEnd?: boolean;
+  allowUserGesture?: boolean;
 };
 
 export function CandlestickChartCrosshair({
@@ -69,6 +70,7 @@ export function CandlestickChartCrosshair({
   ArrowIconComponent,
   onOpacityOnEnd = true,
   onCurrentXOnEnd = true,
+  allowUserGesture = true,
   ...props
 }: CandlestickChartCrosshairProps) {
   const { width, height } = React.useContext(CandlestickChartDimensionsContext);
@@ -89,6 +91,8 @@ export function CandlestickChartCrosshair({
     GestureEvent<LongPressGestureHandlerEventPayload>
   >({
     onActive: ({ x, y }) => {
+      if (!allowUserGesture) return;
+
       const boundedX = x <= width - 1 ? x : width - 1;
       if (boundedX < 100) {
         tooltipPosition.value = 'right';
