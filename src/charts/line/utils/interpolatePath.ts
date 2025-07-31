@@ -611,8 +611,8 @@ export function interpolatePathCommands(
 export function interpolatePath(a, b, excludeSegment) {
   'worklet';
 
-  let aCommands = pathCommandsFromString(a);
-  let bCommands = pathCommandsFromString(b);
+  const aCommands = pathCommandsFromString(a);
+  const bCommands = pathCommandsFromString(b);
 
   if (!aCommands.length && !bCommands.length) {
     return function nullInterpolator() {

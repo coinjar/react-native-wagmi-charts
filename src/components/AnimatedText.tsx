@@ -26,7 +26,6 @@ export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
     // We are going to break the rules of hooks here so it doesn't invoke `useAnimatedReaction`
     // for platforms outside of the web.
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     useAnimatedReaction(
       () => {
         return text.value;
