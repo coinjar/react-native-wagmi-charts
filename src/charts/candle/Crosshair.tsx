@@ -53,6 +53,8 @@ type CandlestickChartCrosshairProps = LongPressGestureHandlerOverride & {
   showXAxisCrosshair?: boolean;
   offsetYOfLineChart?: number;
   ArrowIconComponent?: React.ComponentType<{ color?: string }>;
+  onOpacityOnEnd?: boolean;
+  onCurrentXOnEnd?: boolean;
 };
 
 export function CandlestickChartCrosshair({
@@ -65,6 +67,8 @@ export function CandlestickChartCrosshair({
   showXAxisCrosshair = true,
   offsetYOfLineChart = 0,
   ArrowIconComponent,
+  onOpacityOnEnd = true,
+  onCurrentXOnEnd = true,
   ...props
 }: CandlestickChartCrosshairProps) {
   const { width, height } = React.useContext(CandlestickChartDimensionsContext);
@@ -96,9 +100,15 @@ export function CandlestickChartCrosshair({
       currentX.value = boundedX - (boundedX % step) + step / 2;
     },
     onEnd: () => {
+      if (onOpacityOnEnd) {
+        opacity.value = 0;
+      }
+      if (onCurrentXOnEnd) {
+        currentX.value = -1;
+      }
       // opacity.value = 0;
-      currentY.value = -1;
       // currentX.value = -1;
+      currentY.value = -1;
     },
   });
   const horizontal = useAnimatedStyle(
