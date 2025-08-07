@@ -59,6 +59,7 @@
     "@types/d3-scale": "^4.0.3",
     "@types/fbjs": "^3.0.10",
     "@types/jest": "^26.0.24",
+    "@types/minimatch": "^6.0.0",
     "@types/react": "^18.2.45",
     "eslint": "^9.2.0",
     "eslint-config-prettier": "^9.1.0",
