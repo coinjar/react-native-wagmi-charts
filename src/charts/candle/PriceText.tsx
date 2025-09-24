@@ -1,6 +1,6 @@
 import React from 'react';
 import type { TextProps as RNTextProps } from 'react-native';
-import type Animated from 'react-native-reanimated';
+import type { AnimatedProps } from 'react-native-reanimated';
 
 import type { TFormatterFn, TPriceType } from './types';
 import { useCandlestickChartPrice } from './usePrice';
@@ -11,7 +11,7 @@ export type CandlestickChartPriceTextProps = {
   precision?: number;
   variant?: 'formatted' | 'value';
   type?: TPriceType;
-  style?: Animated.AnimateProps<RNTextProps>['style'];
+  style?: AnimatedProps<RNTextProps>['style'];
 };
 
 export function CandlestickChartPriceText({

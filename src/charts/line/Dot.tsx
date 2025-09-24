@@ -7,6 +7,7 @@ import Animated, {
   withRepeat,
   withSequence,
   withTiming,
+  AnimatedProps,
 } from 'react-native-reanimated';
 import { Circle, CircleProps } from 'react-native-svg';
 
@@ -19,8 +20,8 @@ import { useLineChart } from './useLineChart';
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export type LineChartDotProps = {
-  dotProps?: Animated.AnimateProps<CircleProps>;
-  outerDotProps?: Animated.AnimateProps<CircleProps>;
+  dotProps?: AnimatedProps<CircleProps>;
+  outerDotProps?: AnimatedProps<CircleProps>;
   color?: string;
   inactiveColor?: string;
   showInactiveColor?: boolean;

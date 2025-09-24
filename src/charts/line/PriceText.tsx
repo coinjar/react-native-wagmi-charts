@@ -1,6 +1,6 @@
 import React from 'react';
 import type { TextProps as RNTextProps } from 'react-native';
-import type Animated from 'react-native-reanimated';
+import type { AnimatedProps } from 'react-native-reanimated';
 
 import { useLineChartPrice } from './usePrice';
 import type { TFormatterFn } from '../candle/types';
@@ -10,7 +10,7 @@ export type LineChartPriceTextProps = {
   format?: TFormatterFn<string>;
   precision?: number;
   variant?: 'formatted' | 'value';
-  style?: Animated.AnimateProps<RNTextProps>['style'];
+  style?: AnimatedProps<RNTextProps>['style'];
   /**
    * By default, it will use the current active index from the chart.
    * If this is set it will use the index provided.
