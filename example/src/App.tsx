@@ -1,62 +1,107 @@
 import * as React from 'react';
-import 'react-native-gesture-handler';
-import {
-  Box,
-  Button,
-  Text,
-  Heading,
-  Level,
-  Provider as BumbagNativeProvider,
-} from 'bumbag-native';
+import { View, TouchableOpacity, Text, ScrollView, StyleSheet } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import CandlestickChart from './CandlestickChart';
 import LineChart from './LineChart';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function App() {
   const [selected, setSelected] = React.useState('');
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <BumbagNativeProvider>
-        <Box.Safe flex="1">
-          <Level
-            verticalBelow=""
-            paddingX="major-2"
-            paddingY="major-2"
-            alignY="center"
-          >
-            <Heading.H5 key="heading">React Native WAGMI Charts 💸</Heading.H5>
+    <GestureHandlerRootView style={styles.flex}>
+      <SafeAreaProvider>
+        <SafeAreaView style={styles.flex}>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.title}>React Native WAGMI Charts 💸</Text>
             {selected ? (
-              <Button
-                size="small"
-                key="back-button"
+              <TouchableOpacity
+                style={styles.button}
                 onPress={() => setSelected('')}
               >
-                Back
-              </Button>
+                <Text style={styles.buttonText}>Back</Text>
+              </TouchableOpacity>
             ) : null}
-          </Level>
-          <Box.Scroll>
+          </View>
+          <ScrollView>
             {!selected && (
-              <Box paddingX="major-2" marginTop="major-6">
-                <Heading.H6 marginBottom="major-2">
+              <View style={styles.buttonContainer}>
+                <Text style={styles.subtitle}>
                   Click a chart below to get started
-                </Heading.H6>
-                <Button onPress={() => setSelected('candlestick')}>
-                  <Text>Candlestick</Text>
-                </Button>
-                <Button onPress={() => setSelected('line')}>
-                  <Text>Line</Text>
-                </Button>
-              </Box>
+                </Text>
+                <TouchableOpacity
+                  style={styles.chartButton}
+                  onPress={() => setSelected('candlestick')}
+                >
+                  <Text style={styles.buttonText}>Candlestick</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.chartButton}
+                  onPress={() => setSelected('line')}
+                >
+                  <Text style={styles.buttonText}>Line</Text>
+                </TouchableOpacity>
+              </View>
             )}
-            <Box marginTop="major-2">
+            <View style={styles.chartContainer}>
               {selected === 'candlestick' && <CandlestickChart />}
               {selected === 'line' && <LineChart />}
-            </Box>
-          </Box.Scroll>
-        </Box.Safe>
-      </BumbagNativeProvider>
+            </View>
+          </ScrollView>
+        </View>
+        </SafeAreaView>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  button: {
+    backgroundColor: '#007AFF',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  chartButton: {
+    backgroundColor: '#007AFF',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 8,
+    marginVertical: 4,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: '500',
+  },
+  buttonContainer: {
+    paddingHorizontal: 16,
+    marginTop: 24,
+    gap: 16,
+  },
+  chartContainer: {
+    marginTop: 16,
+  },
+});

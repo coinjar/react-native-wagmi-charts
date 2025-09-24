@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { StyleSheet, ViewProps } from 'react-native';
 import {
   Gesture,

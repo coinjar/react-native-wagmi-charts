@@ -11,10 +11,11 @@
     "test": "jest",
     "typescript": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepare": "bob build",
-    "example": "yarn --cwd example",
+    "build": "bob build",
+    "publishOnly": "bob build",
+    "example": "pnpm --filter react-native-wagmi-charts-example run start",
     "pods": "cd example && pod-install --quiet",
-    "bootstrap": "yarn example && yarn && yarn pods"
+    "bootstrap": "pnpm example && pnpm && pnpm pods"
   },
   "files": [
     "src",
@@ -38,7 +39,6 @@
   "workspaces": [
     "example"
   ],
-  "packageManager": "yarn@3.8.2",
   "engines": {
     "node": ">= 18.0.0"
   },
@@ -53,26 +53,32 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^12.0.4",
+    "@eslint/js": "^9.30.1",
     "@types/d3-array": "^3.0.5",
     "@types/d3-scale": "^4.0.3",
     "@types/fbjs": "^3.0.10",
     "@types/jest": "^26.0.24",
     "@types/react": "^18.2.45",
+    "@typescript-eslint/eslint-plugin": "^8.35.1",
+    "@typescript-eslint/parser": "^8.35.1",
     "eslint": "^9.2.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-native": "^5.0.0",
     "husky": "^7.0.1",
     "jest": "^27.0.6",
     "pod-install": "^0.1.24",
     "prettier": "^2.3.2",
-    "react": "^18.2.0",
-    "react-native": "^0.74.1",
+    "react": "19.0.0",
+    "react-native": "0.79.5",
     "react-native-builder-bob": "^0.23.2",
-    "react-native-gesture-handler": "~2.16.1",
-    "react-native-reanimated": "~3.10.1",
-    "react-native-svg": "15.2.0",
-    "typescript": "^5.3.3"
+    "react-native-gesture-handler": "~2.24.0",
+    "react-native-reanimated": "3.17.4",
+    "react-native-svg": "15.11.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.35.1"
   },
   "peerDependencies": {
     "react": "*",
@@ -89,37 +95,6 @@
       "<rootDir>/lib/"
     ]
   },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@react-native",
-      "prettier"
-    ],
-    "rules": {
-      "prettier/prettier": [
-        "error",
-        {
-          "quoteProps": "consistent",
-          "singleQuote": true,
-          "tabWidth": 2,
-          "trailingComma": "es5",
-          "useTabs": false
-        }
-      ],
-      "@typescript-eslint/no-explicit-any": "error",
-      "no-shadow": "off",
-      "react-hooks/exhaustive-deps": [
-        "error",
-        {
-          "additionalHooks": "(useAnimatedStyle|useDerivedValue|useAnimatedProps)"
-        }
-      ]
-    }
-  },
-  "eslintIgnore": [
-    "node_modules/",
-    "lib/"
-  ],
   "react-native-builder-bob": {
     "source": "src",
     "output": "lib",

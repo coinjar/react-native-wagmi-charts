@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import Animated, {
   Easing,
@@ -92,7 +92,7 @@ export function LineChartDot({
   );
 
   const animatedOuterDotProps = useAnimatedProps(() => {
-    let defaultProps = {
+    const defaultProps = {
       cx: x.value,
       cy: y.value,
       opacity: 0.1,

@@ -22,10 +22,4 @@ export type TContext = {
   setHeight: React.Dispatch<React.SetStateAction<number>>;
 };
 export type TPriceType = 'crosshair' | 'open' | 'close' | 'low' | 'high';
-export type TFormatterFn<T> = ({
-  value,
-  formatted,
-}: {
-  value: T;
-  formatted: string;
-}) => string;
+export type { TFormatterFn } from '../../types';

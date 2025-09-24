@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { LineChartContext } from './Context';
 import { useLineChartData, useLineChartId } from './Data';

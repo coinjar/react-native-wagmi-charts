@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, { createContext, useMemo } from 'react';
+
 import {
   runOnJS,
   useAnimatedReaction,
@@ -10,7 +11,7 @@ import { LineChartDataProvider } from './Data';
 import type { TLineChartContext, YRangeProp } from './types';
 import { getDomain, lineChartDataPropToArray } from './utils';
 
-export const LineChartContext = React.createContext<TLineChartContext>({
+export const LineChartContext = createContext<TLineChartContext>({
   currentX: { value: -1 } as TLineChartContext['currentX'],
   currentIndex: { value: -1 } as TLineChartContext['currentIndex'],
   domain: [0, 0],
@@ -32,8 +33,6 @@ type LineChartProviderProps = {
   xDomain?: [number, number];
 };
 
-LineChartProvider.displayName = 'LineChartProvider';
-
 export function LineChartProvider({
   children,
   data = [],
@@ -46,15 +45,24 @@ export function LineChartProvider({
   const currentIndex = useSharedValue(-1);
   const isActive = useSharedValue(false);
 
-  const domain = React.useMemo(
+  const domain = useMemo(
     () => getDomain(
       Array.isArray(data) ? data : Object.values(data)[0] as TLineChartData
     ),
     [data]
   );
 
-  const contextValue = React.useMemo<TLineChartContext>(() => {
-    const values = lineChartDataPropToArray(data).map(({ value }) => value);
+  const values = useMemo(() => 
+    lineChartDataPropToArray(data).map(({ value }) => value), 
+    [data]
+  );
+
+  const yDomainValues = useMemo(() => ({
+    min: yRange?.min ?? Math.min(...values),
+    max: yRange?.max ?? Math.max(...values),
+  }), [values, yRange?.min, yRange?.max]);
+
+  const contextValue = useMemo<TLineChartContext>(() => {
     const domainRows =
       Array.isArray(data) ? data : Object.values(data)[0] as TLineChartData;
 
@@ -63,10 +71,7 @@ export function LineChartProvider({
       currentIndex,
       isActive,
       domain,
-      yDomain: {
-        min: yRange?.min ?? Math.min(...values),
-        max: yRange?.max ?? Math.max(...values),
-      },
+      yDomain: yDomainValues,
       xDomain,
       xLength: xLength ?? domainRows.length,
     };
@@ -76,8 +81,7 @@ export function LineChartProvider({
     data,
     domain,
     isActive,
-    yRange?.max,
-    yRange?.min,
+    yDomainValues,
     xLength,
     xDomain,
   ]);
@@ -100,3 +104,5 @@ export function LineChartProvider({
     </LineChartDataProvider>
   );
 }
+
+LineChartProvider.displayName = 'LineChartProvider';
