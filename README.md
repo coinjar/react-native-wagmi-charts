@@ -304,7 +304,8 @@ Note that the tooltip will disappear when there is interaction with a cursor on 
 
 By making use of the chart event handlers, you are able to integrate haptic feedback into your charts.
 
-We can utilise the `onActivated` and `onEnded` events to create haptic feedback on our line chart.
+We can utilise the `onActivated` and `onEnded` events to create haptic feedback
+on our line chart. This will cause a vibration on touch down/up.
 
 ```jsx
 import * as haptics from 'expo-haptics';
@@ -329,7 +330,9 @@ function Example() {
 }
 ```
 
-We can also use the `onCurrentIndexChange` callback, passed to `LineChart.Provider`:
+We can also use the `onCurrentIndexChange` callback, passed to
+`LineChart.Provider`. This differs to the above method as it will cause a
+vibration on touch down/up and also when the selected value changes.
 
 ```tsx
 import * as haptics from 'expo-haptics';
@@ -341,15 +344,11 @@ function invokeHaptic() {
 }
 
 function Example() {
-  const onCurrentIndexChange = useCallback((index: number) => {
-    // ...
-  }, [])
-
   return (
-    <LineChart.Provider data={data} onCurrentIndexChange={onCurrentIndexChange}>
+    <LineChart.Provider data={data} onCurrentIndexChange={invokeHaptic}>
       <LineChart>
         <LineChart.Path />
-        <LineChart.CursorCrosshair onActivated={invokeHaptic} onEnded={invokeHaptic}>
+        <LineChart.CursorCrosshair>
           <LineChart.Tooltip />
         </LineChart.CursorCrosshair>
       </LineChart>
