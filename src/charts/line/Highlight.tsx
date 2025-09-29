@@ -44,13 +44,18 @@ export function LineChartHighlight({
 
   ////////////////////////////////////////////////
 
+  const clipId = React.useMemo(
+    () => `clip-${Math.random().toString(36).substring(2, 11)}`,
+    []
+  );
+
   const clipStart = getXPositionForCurve(parsedPath, from);
   const clipEnd = getXPositionForCurve(parsedPath, to);
 
   return (
     <G>
       <Defs>
-        <ClipPath id="clip">
+        <ClipPath id={clipId}>
           <Rect
             x={clipStart}
             y="0"
@@ -61,7 +66,7 @@ export function LineChartHighlight({
         </ClipPath>
       </Defs>
       <AnimatedPath
-        clipPath="url(#clip)"
+        clipPath={`url(#${clipId})`}
         animatedProps={animatedProps}
         fill="transparent"
         stroke={isInactive ? inactiveColor || color : color}
