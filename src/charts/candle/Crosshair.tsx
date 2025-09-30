@@ -40,7 +40,7 @@ export function CandlestickChartCrosshair({
   minDurationMs = 0,
 }: CandlestickChartCrosshairProps) {
   const { width, height } = React.useContext(CandlestickChartDimensionsContext);
-  const { currentX, currentY, step } = useCandlestickChart();
+  const { currentX, currentY, currentIndex, step } = useCandlestickChart();
 
   const tooltipPosition = useSharedValue<'left' | 'right'>('left');
 
@@ -56,6 +56,7 @@ export function CandlestickChartCrosshair({
     }
     currentY.value = clamp(y, 0, height);
     currentX.value = boundedX - (boundedX % step) + step / 2;
+    currentIndex.value = Math.floor(boundedX / step);
   };
 
   const longPressGesture = Gesture.LongPress()
@@ -79,6 +80,7 @@ export function CandlestickChartCrosshair({
       opacity.value = 0;
       currentY.value = -1;
       currentX.value = -1;
+      currentIndex.value = -1;
     });
   const horizontal = useAnimatedStyle(
     () => ({

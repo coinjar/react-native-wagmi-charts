@@ -13,6 +13,7 @@ export type TDomain = [min: number, max: number];
 export type TContext = {
   currentX: SharedValue<number>;
   currentY: SharedValue<number>;
+  currentIndex: SharedValue<number>;
   data: TData;
   width: number;
   height: number;
