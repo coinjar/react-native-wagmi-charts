@@ -25,6 +25,12 @@ const FOREGROUND_COMPONENTS = ['LineChartHighlight', 'LineChartDot'];
 
 const AnimatedSVG = Animated.createAnimatedComponent(Svg);
 
+type ReactElementWithDisplayName = React.ReactElement & {
+  type?: {
+    displayName?: string;
+  };
+};
+
 type LineChartPathWrapperProps = {
   animationDuration?: number;
   animationProps?: Omit<Partial<WithTimingConfig>, 'duration'>;
@@ -65,6 +71,9 @@ export function LineChartPathWrapper({
 
   React.useEffect(() => {
     isMounted.value = true;
+    return () => {
+      isMounted.value = false;
+    };
   }, []);
 
   ////////////////////////////////////////////////
@@ -123,12 +132,14 @@ export function LineChartPathWrapper({
   if (children) {
     const iterableChildren = flattenChildren(children);
     backgroundChildren = iterableChildren.filter((child) =>
-      // @ts-ignore
-      BACKGROUND_COMPONENTS.includes(child?.type?.displayName)
+      BACKGROUND_COMPONENTS.includes(
+        (child as ReactElementWithDisplayName)?.type?.displayName || ''
+      )
     );
     foregroundChildren = iterableChildren.filter((child) =>
-      // @ts-ignore
-      FOREGROUND_COMPONENTS.includes(child?.type?.displayName)
+      FOREGROUND_COMPONENTS.includes(
+        (child as ReactElementWithDisplayName)?.type?.displayName || ''
+      )
     );
   }
 
@@ -152,9 +163,7 @@ export function LineChartPathWrapper({
               {...pathProps}
             />
           </Svg>
-          <Svg style={StyleSheet.absoluteFill}>
-            {backgroundChildren}
-          </Svg>
+          <Svg style={StyleSheet.absoluteFill}>{backgroundChildren}</Svg>
         </View>
       </LineChartPathContext.Provider>
       <LineChartPathContext.Provider
@@ -168,7 +177,11 @@ export function LineChartPathWrapper({
           <AnimatedSVG animatedProps={svgProps} height={height}>
             <LineChartPath color={color} width={strokeWidth} {...pathProps} />
           </AnimatedSVG>
-          <AnimatedSVG animatedProps={svgProps} height={height} style={StyleSheet.absoluteFill}>
+          <AnimatedSVG
+            animatedProps={svgProps}
+            height={height}
+            style={StyleSheet.absoluteFill}
+          >
             {foregroundChildren}
           </AnimatedSVG>
         </View>

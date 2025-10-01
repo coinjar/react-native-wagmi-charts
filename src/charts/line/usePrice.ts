@@ -24,10 +24,12 @@ export function useLineChartPrice({
       return '';
     }
 
-    let price = 0;
-    price = data[Math.min(index ?? currentIndex.value, data.length - 1)]!.value;
+    const dataPoint =
+      data[Math.min(index ?? currentIndex.value, data.length - 1)];
+    const price = dataPoint?.value ?? 0;
     return price.toFixed(precision).toString();
   }, [currentIndex, data, precision]);
+
   const formatted = useDerivedValue(() => {
     const value = float.value || '';
     const formattedPrice = value ? formatPrice({ value }) : '';
