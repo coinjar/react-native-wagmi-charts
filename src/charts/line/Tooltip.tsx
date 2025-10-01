@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import Animated, {
   useAnimatedStyle,
@@ -7,6 +7,7 @@ import Animated, {
   withTiming,
   AnimatedProps,
 } from 'react-native-reanimated';
+import { StyleSheet } from 'react-native';
 import { LineChartPriceText, LineChartPriceTextProps } from './PriceText';
 
 import { CursorContext } from './Cursor';
@@ -16,7 +17,7 @@ import { getXPositionForCurve } from './utils/getXPositionForCurve';
 import { getYForX } from 'react-native-redash';
 import { useLineChart } from './useLineChart';
 import { useMemo } from 'react';
-import type { TFormatterFn } from '../candle/types';
+import type { TFormatterFn } from '../../types';
 
 export type LineChartTooltipPosition = 'top' | 'bottom' | 'left' | 'right';
 
@@ -197,11 +198,7 @@ export function LineChartTooltip({
       onLayout={handleLayout}
       {...props}
       style={[
-        {
-          position: 'absolute',
-          padding: 4,
-          alignSelf: 'flex-start',
-        },
+        styles.tooltip,
         animatedCursorStyle,
         props.style,
       ]}
@@ -217,3 +214,11 @@ export function LineChartTooltip({
     </Animated.View>
   );
 }
+
+const styles = StyleSheet.create({
+  tooltip: {
+    position: 'absolute',
+    padding: 4,
+    alignSelf: 'flex-start',
+  },
+});

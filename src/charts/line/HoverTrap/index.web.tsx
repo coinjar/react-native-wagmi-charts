@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import { LineChartDimensionsContext } from '../Chart';
@@ -88,10 +88,10 @@ export const LineChartHoverTrap = () => {
       style={StyleSheet.absoluteFill}
       // @ts-expect-error mouse move event
       onMouseMove={React.useCallback(
-        // eslint-disable-next-line no-undef
+         
         (e: React.MouseEvent<HTMLElement>) => {
-          let rect = e.currentTarget.getBoundingClientRect();
-          let x = e.clientX - rect.left; // x position within the element.
+          const rect = e.currentTarget.getBoundingClientRect();
+          const x = e.clientX - rect.left; // x position within the element.
 
           onMouseMove({ x });
         },

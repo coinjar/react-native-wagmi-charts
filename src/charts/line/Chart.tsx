@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 // @ts-ignore
 import * as d3Shape from 'd3-shape';
 
@@ -53,6 +53,10 @@ export function LineChart({
     id,
   });
 
+  // Reserve space at the bottom for x-axis cursor labels
+  const X_AXIS_LABEL_RESERVED_HEIGHT = 40;
+  const chartDrawingHeight = height - X_AXIS_LABEL_RESERVED_HEIGHT;
+
   const pathWidth = React.useMemo(() => {
     let allowedWidth = width;
     if (data && xLength > data.length) {
@@ -66,7 +70,7 @@ export function LineChart({
       return getPath({
         data,
         width: pathWidth,
-        height,
+        height: chartDrawingHeight,
         gutter: yGutter,
         shape,
         yDomain,
@@ -74,14 +78,14 @@ export function LineChart({
       });
     }
     return '';
-  }, [data, pathWidth, height, yGutter, shape, yDomain, xDomain]);
+  }, [data, pathWidth, chartDrawingHeight, yGutter, shape, yDomain, xDomain]);
 
   const area = React.useMemo(() => {
     if (data && data.length > 0) {
       return getArea({
         data,
         width: pathWidth,
-        height,
+        height: chartDrawingHeight,
         gutter: yGutter,
         shape,
         yDomain,
@@ -89,7 +93,7 @@ export function LineChart({
       });
     }
     return '';
-  }, [data, pathWidth, height, yGutter, shape, yDomain, xDomain]);
+  }, [data, pathWidth, chartDrawingHeight, yGutter, shape, yDomain, xDomain]);
 
   const parsedPath = React.useMemo(() => parse(path), [path]);
   const pointWidth = React.useMemo(

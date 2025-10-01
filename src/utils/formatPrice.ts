@@ -17,12 +17,12 @@ export function formatPrice({
     defaultPrice = (defaultPrice as number).toString();
   }
 
-  let value = _value || defaultPrice?.replace?.(',', '');
+  const value = _value || defaultPrice?.replace?.(',', '');
   if (!value) {
     return `0.00`;
   }
 
-  let decimals =
+  const decimals =
     precision ??
     (Number(value) < 1
       ? Math.min(8, value.toString().slice(2).search(/[^0]/g) + 3)

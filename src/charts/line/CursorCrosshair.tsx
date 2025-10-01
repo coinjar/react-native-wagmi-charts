@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { Platform, View, ViewProps } from 'react-native';
+import React from 'react';
+import { Platform, View, ViewProps, StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -68,11 +68,10 @@ export function LineChartCursorCrosshair({
       <Animated.View
         {...crosshairWrapperProps}
         style={[
+          styles.crosshairWrapper,
           {
             width: outerSize,
             height: outerSize,
-            alignItems: 'center',
-            justifyContent: 'center',
           },
           animatedCursorStyle,
           crosshairWrapperProps.style,
@@ -81,13 +80,12 @@ export function LineChartCursorCrosshair({
         <View
           {...crosshairOuterProps}
           style={[
+            styles.crosshairOuter,
             {
               backgroundColor: color,
               width: outerSize,
               height: outerSize,
               borderRadius: outerSize,
-              opacity: 0.1,
-              position: 'absolute',
             },
             crosshairOuterProps.style,
           ]}
@@ -109,3 +107,14 @@ export function LineChartCursorCrosshair({
     </LineChartCursor>
   );
 }
+
+const styles = StyleSheet.create({
+  crosshairWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  crosshairOuter: {
+    opacity: 0.1,
+    position: 'absolute',
+  },
+});

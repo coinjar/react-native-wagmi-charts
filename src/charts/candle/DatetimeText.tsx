@@ -3,7 +3,7 @@ import type { TextProps as RNTextProps } from 'react-native';
 import type { AnimatedProps } from 'react-native-reanimated';
 
 import { useCandlestickChartDatetime } from './useDatetime';
-import type { TFormatterFn } from 'react-native-wagmi-charts';
+import type { TFormatterFn } from '../../types';
 import { AnimatedText } from '../../components/AnimatedText';
 
 type CandlestickChartPriceTextProps = {

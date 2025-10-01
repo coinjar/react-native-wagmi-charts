@@ -1,7 +1,7 @@
 import { useDerivedValue } from 'react-native-reanimated';
 
 import { formatDatetime } from '../../utils';
-import type { TFormatterFn } from '../candle/types';
+import type { TFormatterFn } from '../../types';
 import { useLineChart } from './useLineChart';
 
 export function useLineChartDatetime({
@@ -26,23 +26,21 @@ export function useLineChartDatetime({
     return data[currentIndex.value]?.timestamp ?? '';
   }, [currentIndex, data]);
 
-  const timestampString = useDerivedValue(() => {
-    if (timestamp.value === '') return '';
-    return timestamp.value.toString();
-  }, [timestamp]);
-
   const formatted = useDerivedValue(() => {
-    const formattedDatetime = timestamp.value
+    const formattedDatetime = new Date(timestamp.value).getTime()
       ? formatDatetime({
-          value: timestamp.value,
+          value: new Date(timestamp.value).getTime(),
           locale,
           options,
         })
       : '';
     return format
-      ? format({ value: timestamp.value || -1, formatted: formattedDatetime })
+      ? format({
+          value: new Date(timestamp.value).getTime() || -1,
+          formatted: formattedDatetime,
+        })
       : formattedDatetime;
   }, [format, locale, options, timestamp]);
 
-  return { value: timestampString, formatted };
+  return { value: new Date(timestamp.value).getTime(), formatted };
 }

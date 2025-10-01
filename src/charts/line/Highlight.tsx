@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Animated, { AnimatedProps } from 'react-native-reanimated';
 import { ClipPath, Defs, G, Path, PathProps, Rect } from 'react-native-svg';
-
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartPathContext } from './LineChartPathContext';
 import useAnimatedPath from './useAnimatedPath';

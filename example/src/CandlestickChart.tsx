@@ -1,6 +1,5 @@
-import * as React from 'react';
-import { Platform } from 'react-native';
-import { Box, Button, Flex, Heading, Text, Stack } from 'bumbag-native';
+import React from 'react';
+import { Platform, View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { CandlestickChart, TCandle } from 'react-native-wagmi-charts';
 import * as haptics from 'expo-haptics';
 
@@ -18,89 +17,95 @@ export default function App() {
 
   return (
     <>
-      <Heading.H5 paddingX="major-2" marginBottom="major-2">
+      <Text style={styles.title}>
         Candlestick Chart 🕯
-      </Heading.H5>
+      </Text>
       <CandlestickChart.Provider data={data}>
-        <CandlestickChart>
-          <CandlestickChart.Candles />
+        <View style={styles.chartContainer}>
+          <CandlestickChart height={200}>
+            <CandlestickChart.Candles />
           <CandlestickChart.Crosshair onCurrentXChange={invokeHaptic}>
             <CandlestickChart.Tooltip />
           </CandlestickChart.Crosshair>
-        </CandlestickChart>
-        <Heading.H6>Load Data</Heading.H6>
-        <Box marginTop="major-2">
-          <Flex flexWrap="wrap">
-            <Button onPress={() => setData(mockData)}>Data 1</Button>
-            <Button onPress={() => setData(mockData2)}>Data 2</Button>
-          </Flex>
-        </Box>
-        <Stack padding="major-2" spacing="major-1">
-          <Heading.H6>PriceText</Heading.H6>
-          <Box>
-            <Text fontWeight="500">Formatted: </Text>
-            <Flex>
-              <Box flex="1">
-                <Text fontSize="100">Current</Text>
+          </CandlestickChart>
+        </View>
+        <View style={styles.controlsContainer}>
+          <Text style={styles.sectionTitle}>Load Data</Text>
+          <View style={styles.buttonRow}>
+            <TouchableOpacity style={styles.button} onPress={() => setData(mockData)}>
+              <Text style={styles.buttonText}>Data 1</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => setData(mockData2)}>
+              <Text style={styles.buttonText}>Data 2</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.priceTextContainer}>
+          <Text style={styles.sectionTitle}>PriceText</Text>
+          <View>
+            <Text style={styles.label}>Formatted: </Text>
+            <View style={styles.priceRow}>
+              <View style={styles.priceColumn}>
+                <Text style={styles.priceLabel}>Current</Text>
                 <CandlestickChart.PriceText />
-              </Box>
-              <Box flex="1">
-                <Text fontSize="100">Open</Text>
+              </View>
+              <View style={styles.priceColumn}>
+                <Text style={styles.priceLabel}>Open</Text>
                 <CandlestickChart.PriceText type="open" />
-              </Box>
-              <Box flex="1">
-                <Text fontSize="100">High</Text>
+              </View>
+              <View style={styles.priceColumn}>
+                <Text style={styles.priceLabel}>High</Text>
                 <CandlestickChart.PriceText type="high" />
-              </Box>
-              <Box flex="1">
-                <Text fontSize="100">Low</Text>
+              </View>
+              <View style={styles.priceColumn}>
+                <Text style={styles.priceLabel}>Low</Text>
                 <CandlestickChart.PriceText type="low" />
-              </Box>
-              <Box flex="1">
-                <Text fontSize="100">Close</Text>
+              </View>
+              <View style={styles.priceColumn}>
+                <Text style={styles.priceLabel}>Close</Text>
                 <CandlestickChart.PriceText type="close" />
-              </Box>
-            </Flex>
-          </Box>
-          <Box>
-            <Text fontWeight="500">Value: </Text>
-            <Flex>
-              <Box flex="1">
-                <Text fontSize="100">Current</Text>
+              </View>
+            </View>
+          </View>
+          <View>
+            <Text style={styles.label}>Value: </Text>
+            <View style={styles.priceRow}>
+              <View style={styles.priceColumn}>
+                <Text style={styles.priceLabel}>Current</Text>
                 <CandlestickChart.PriceText variant="value" />
-              </Box>
-              <Box flex="1">
-                <Text fontSize="100">Open</Text>
+              </View>
+              <View style={styles.priceColumn}>
+                <Text style={styles.priceLabel}>Open</Text>
                 <CandlestickChart.PriceText type="open" variant="value" />
-              </Box>
-              <Box flex="1">
-                <Text fontSize="100">High</Text>
+              </View>
+              <View style={styles.priceColumn}>
+                <Text style={styles.priceLabel}>High</Text>
                 <CandlestickChart.PriceText type="high" variant="value" />
-              </Box>
-              <Box flex="1">
-                <Text fontSize="100">Low</Text>
+              </View>
+              <View style={styles.priceColumn}>
+                <Text style={styles.priceLabel}>Low</Text>
                 <CandlestickChart.PriceText type="low" variant="value" />
-              </Box>
-              <Box flex="1">
-                <Text fontSize="100">Close</Text>
+              </View>
+              <View style={styles.priceColumn}>
+                <Text style={styles.priceLabel}>Close</Text>
                 <CandlestickChart.PriceText type="close" variant="value" />
-              </Box>
-            </Flex>
-          </Box>
-          <Box>
-            <Text fontWeight="500">Custom format: </Text>
-            <Flex>
-              <Box flex="1">
-                <Text fontSize="100">Current</Text>
+              </View>
+            </View>
+          </View>
+          <View>
+            <Text style={styles.label}>Custom format: </Text>
+            <View style={styles.priceRow}>
+              <View style={styles.priceColumn}>
+                <Text style={styles.priceLabel}>Current</Text>
                 <CandlestickChart.PriceText
                   format={(d) => {
                     'worklet';
                     return `$${d.formatted} AUD`;
                   }}
                 />
-              </Box>
-              <Box flex="1">
-                <Text fontSize="100">Open</Text>
+              </View>
+              <View style={styles.priceColumn}>
+                <Text style={styles.priceLabel}>Open</Text>
                 <CandlestickChart.PriceText
                   type="open"
                   format={(d) => {
@@ -108,9 +113,9 @@ export default function App() {
                     return `$${d.formatted} AUD`;
                   }}
                 />
-              </Box>
-              <Box flex="1">
-                <Text fontSize="100">Close</Text>
+              </View>
+              <View style={styles.priceColumn}>
+                <Text style={styles.priceLabel}>Close</Text>
                 <CandlestickChart.PriceText
                   type="close"
                   format={(d) => {
@@ -118,22 +123,22 @@ export default function App() {
                     return `$${d.formatted} AUD`;
                   }}
                 />
-              </Box>
-            </Flex>
-          </Box>
-        </Stack>
-        <Stack padding="major-2" spacing="minor-1">
-          <Heading.H6>DatetimeText</Heading.H6>
-          <Flex>
-            <Text fontWeight="500">Formatted: </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+        <View style={styles.dateTimeContainer}>
+          <Text style={styles.sectionTitle}>DatetimeText</Text>
+          <View style={styles.row}>
+            <Text style={styles.label}>Formatted: </Text>
             <CandlestickChart.DatetimeText />
-          </Flex>
-          <Flex>
-            <Text fontWeight="500">Float: </Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Float: </Text>
             <CandlestickChart.DatetimeText variant="value" />
-          </Flex>
-          <Flex>
-            <Text fontWeight="500">Custom format: </Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Custom format: </Text>
             <CandlestickChart.DatetimeText
               locale="en-AU"
               options={{
@@ -145,9 +150,74 @@ export default function App() {
                 second: 'numeric',
               }}
             />
-          </Flex>
-        </Stack>
+          </View>
+        </View>
       </CandlestickChart.Provider>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 18,
+    fontWeight: '600',
+    paddingHorizontal: 16,
+    marginBottom: 16,
+  },
+  chartContainer: {
+    padding: 16,
+  },
+  controlsContainer: {
+    marginHorizontal: 16,
+    marginTop: 16,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  button: {
+    backgroundColor: '#007AFF',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 6,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '500',
+    marginBottom: 8,
+  },
+  priceTextContainer: {
+    padding: 16,
+    gap: 16,
+  },
+  priceRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  priceColumn: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  priceLabel: {
+    fontSize: 10,
+    marginBottom: 4,
+  },
+  dateTimeContainer: {
+    padding: 16,
+    gap: 4,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+});

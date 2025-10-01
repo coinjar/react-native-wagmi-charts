@@ -44,6 +44,7 @@ A sweet & simple chart library for React Native that will make us feel like **W*
   - [Customizing size](#customizing-size)
   - [Customizing labels](#customizing-labels)
   - [Customizing tooltips](#customizing-tooltips)
+  - [Axis](#axis)
 - [Candlestick Chart Guides](#candlestick-chart-guides)
   - [Interactive cursors](#interactive-cursors-1)
   - [Interactive labels](#interactive-labels-1)
@@ -636,6 +637,19 @@ You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutt
 
 <img src="https://user-images.githubusercontent.com/7336481/133054393-28d542c1-c9fc-4ba6-b4a0-86cf096ebcda.gif" width="200px" />
 
+### Axis
+
+You can render an axis on your line chart with `LineChart.Axis`.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path />
+    <LineChart.Axis position="left" orientation="vertical" />
+  </LineChart>
+</LineChart.Provider>
+```
+
 ## Candlestick Chart Guides
 
 ### Interactive cursors
@@ -952,6 +966,20 @@ Place it as the child of your cursor component to trap hover events on Web. If y
 <LineChart.HoverTrap />
 ```
 
+### LineChart.Axis
+
+| Prop                | Type                                            | Default    | Description                                                      |
+| :------------------ | :---------------------------------------------- | :--------- | :--------------------------------------------------------------- |
+| `position`          | `string`                                        |            | Position of the axis. Can be `left`, `right`, `top` or `bottom`. |
+| `orientation`       | `string`                                        |            | Orientation of the axis. Can be `vertical` or `horizontal`.      |
+| `color`             | `string`                                        | `#666`     | Color of the axis line and ticks.                                |
+| `strokeWidth`       | `number`                                        |            | Width of the axis line and ticks.                                |
+| `tickCount`         | `number`                                        | `5`        | Number of ticks to display on the axis.                          |
+| `domain`            | `[number, number]`                              | `[0, 100]` | Domain of the axis.                                              |
+| `hideOnInteraction` | `boolean`                                       | `false`    | Whether to hide the axis when the user interacts with the chart. |
+| `format`            | `(value: number or string) => string or number` |            | Function to format the tick labels.                              |
+| `textStyle`         | `StyleProp<TextStyle>`                          |            | Style of the tick labels.                                        |
+
 ### CandlestickChart.Provider
 
 | Prop   | Type                                                                                   | Default | Description                                                             |
@@ -968,15 +996,15 @@ Place it as the child of your cursor component to trap hover events on Web. If y
 
 ### CandlestickChart.Candles
 
-| Prop            | Type                                                                                                           | Default   | Description                                                        |
-| --------------- | -------------------------------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------ |
-| `positiveColor` | `string`                                                                                                       | `#10b981` | Color of the positive candles                                      |
-| `negativeColor` | `string`                                                                                                       | `#ef4444` | Color of the negative candles                                      |
-| `rectProps`     | `RectProps`                                                                                                    |           | Props of the SVG Rectangle. Takes React Native's SVG `Rect` props. |
-| `lineProps`     | `LineProps`                                                                                                    |           | Props of the SVG Line. Takes React Native's SVG `Line` props.      |
+| Prop            | Type                                                                                                                            | Default   | Description                                                        |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------ |
+| `positiveColor` | `string`                                                                                                                        | `#10b981` | Color of the positive candles                                      |
+| `negativeColor` | `string`                                                                                                                        | `#ef4444` | Color of the negative candles                                      |
+| `rectProps`     | `RectProps`                                                                                                                     |           | Props of the SVG Rectangle. Takes React Native's SVG `Rect` props. |
+| `lineProps`     | `LineProps`                                                                                                                     |           | Props of the SVG Line. Takes React Native's SVG `Line` props.      |
 | `renderRect`    | `({ x: number, y: number, width: number, height: number, fill: string, candle: TCandle }) => React.ReactNode`                   |           | Renders a custom rect component                                    |
 | `renderLine`    | `({ x1: number, x2: number, y1: number, y2: number, stroke: string, strokeWidth: number, candle: TCandle }) => React.ReactNode` |           | Renders a custom line component                                    |
-| `...props`      | `SvgProps`                                                                                                     |           | This component also inherits React Native SVG's `Svg` props.       |
+| `...props`      | `SvgProps`                                                                                                                      |           | This component also inherits React Native SVG's `Svg` props.       |
 
 ### CandlestickChart.Crosshair
 

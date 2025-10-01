@@ -1,3 +1,4 @@
+import { LineChartAxis } from './Axis';
 import { LineChart as _LineChart } from './Chart';
 import { LineChartPathWrapper } from './ChartPath';
 import { LineChartHighlight } from './Highlight';
@@ -17,6 +18,7 @@ import { useLineChartPrice } from './usePrice';
 import { useLineChart } from './useLineChart';
 import { LineChartHoverTrap } from '../line/HoverTrap';
 
+export * from './Axis';
 export * from './Chart';
 export * from './ChartPath';
 export * from './Highlight';
@@ -36,6 +38,7 @@ export * from './usePrice';
 export * from './types';
 
 export const LineChart = Object.assign(_LineChart, {
+  Axis: LineChartAxis,
   Chart: _LineChart,
   Dot: LineChartDot,
   Path: LineChartPathWrapper,

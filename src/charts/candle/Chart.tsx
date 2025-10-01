@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Dimensions, View, ViewProps } from 'react-native';
 
 import { useCandlestickChart } from './useCandlestickChart';
