@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { Text, TextStyle } from 'react-native';
 import type { TextProps as RNTextProps, StyleProp } from 'react-native';
 import type { AnimatedProps } from 'react-native-reanimated';
-import { useDerivedValue, useAnimatedReaction, runOnJS } from 'react-native-reanimated';
+import {
+  useDerivedValue,
+  useAnimatedReaction,
+  runOnJS,
+} from 'react-native-reanimated';
 import { useLineChartPrice } from './usePrice';
 import { useLineChart } from './useLineChart';
 import type { TFormatterFn } from '../../types';
@@ -39,7 +43,6 @@ export function LineChartPriceText({
   useOptimizedRendering = false,
   getTextColor,
 }: LineChartPriceTextProps) {
-
   const price = useLineChartPrice({ format, precision, index });
 
   // If we have a custom format function and optimized rendering is enabled,
@@ -69,7 +72,8 @@ export function LineChartPriceText({
         return '';
       }
       let price = 0;
-      price = data[Math.min(index ?? currentIndex.value, data.length - 1)]!.value;
+      price =
+        data[Math.min(index ?? currentIndex.value, data.length - 1)]!.value;
       const valueString = price.toFixed(precision).toString();
 
       // Call format function directly in worklet
@@ -88,12 +92,7 @@ export function LineChartPriceText({
     );
 
     // Merge the text color with the provided style
-    // Note: We need to flatten the AnimatedProps style to a regular TextStyle
-    const flattenedStyle = Array.isArray(style) ? style : [style];
-    const dynamicStyle: StyleProp<TextStyle> = [
-      ...flattenedStyle,
-      { color: textColor }
-    ];
+    const dynamicStyle = [style, { color: textColor }] as StyleProp<TextStyle>;
 
     return <Text style={dynamicStyle}>{displayText}</Text>;
   }
