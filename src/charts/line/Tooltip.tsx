@@ -98,74 +98,136 @@ export function LineChartTooltip({
     [cursorGutter, position]
   );
 
+  /**
+   * Helper function to calculate the X translation offset based on position
+   * and boundary constraints
+   */
+  const calculateXTranslateOffset = React.useCallback(
+    (params: {
+      position: LineChartTooltipPosition;
+      x: number;
+      elementWidth: number;
+      width: number;
+      xGutter: number;
+      cursorGutter: number;
+      withHorizontalFloating: boolean;
+    }) => {
+      'worklet';
+      const {
+        position,
+        x,
+        elementWidth,
+        width,
+        xGutter,
+        cursorGutter,
+        withHorizontalFloating,
+      } = params;
+
+      let translateXOffset = getInitialTranslateXOffset(elementWidth);
+      const elementFullWidth = elementWidth + xGutter + cursorGutter;
+
+      if (position === 'right') {
+        if (x < elementFullWidth) {
+          translateXOffset = withHorizontalFloating
+            ? -cursorGutter
+            : translateXOffset - elementFullWidth + x;
+        }
+      } else if (position === 'left') {
+        if (x > width - elementFullWidth) {
+          translateXOffset = withHorizontalFloating
+            ? elementWidth + cursorGutter
+            : translateXOffset + (x - (width - elementFullWidth));
+        }
+      } else {
+        // Center position
+        if (x < elementWidth / 2 + xGutter) {
+          translateXOffset -= elementWidth / 2 + xGutter - x;
+        }
+        if (x > width - elementWidth / 2 - xGutter) {
+          translateXOffset += x - (width - elementWidth / 2 - xGutter);
+        }
+      }
+
+      return translateXOffset;
+    },
+    [getInitialTranslateXOffset]
+  );
+
+  /**
+   * Helper function to calculate the Y translation offset based on position and
+   * boundary constraints
+   */
+  const calculateYTranslateOffset = React.useCallback(
+    (params: {
+      position: LineChartTooltipPosition;
+      y: number;
+      elementHeight: number;
+      height: number;
+      yGutter: number;
+      cursorGutter: number;
+    }) => {
+      'worklet';
+      const { position, y, elementHeight, height, yGutter, cursorGutter } =
+        params;
+      let translateYOffset = 0;
+
+      if (position === 'top') {
+        translateYOffset = elementHeight / 2 + cursorGutter;
+        if (y - translateYOffset < yGutter) {
+          translateYOffset = y - yGutter;
+        }
+      } else if (position === 'bottom') {
+        translateYOffset = -(elementHeight / 2) - cursorGutter / 2;
+        if (y - translateYOffset + elementHeight > height - yGutter) {
+          translateYOffset = y - (height - yGutter) + elementHeight;
+        }
+      } else if (position === 'right' || position === 'left') {
+        translateYOffset = elementHeight / 2;
+      }
+
+      return translateYOffset;
+    },
+    []
+  );
+
   const animatedCursorStyle = useAnimatedStyle(() => {
     // the tooltip is considered static when the user specified an `at` prop
     const isStatic = atYPosition.value != null;
 
     // Calculate X position:
-    let translateXOffset = getInitialTranslateXOffset(elementWidth.value);
     const x = atXPosition ?? currentX.value;
-    const elementFullWidth = elementWidth.value + xGutter + cursorGutter;
-
-    if (position === 'right') {
-      if (x < elementFullWidth) {
-        if (withHorizontalFloating) {
-          translateXOffset = -cursorGutter;
-        } else {
-          translateXOffset = translateXOffset - elementFullWidth + x;
-        }
-      }
-    } else if (position === 'left') {
-      if (x > width - elementFullWidth) {
-        if (withHorizontalFloating) {
-          translateXOffset = elementWidth.value + cursorGutter;
-        } else {
-          const xOffset = x - (width - elementFullWidth);
-          translateXOffset = translateXOffset + xOffset;
-        }
-      }
-    } else {
-      if (x < elementWidth.value / 2 + xGutter) {
-        const xOffset = elementWidth.value / 2 + xGutter - x;
-        translateXOffset = translateXOffset - xOffset;
-      }
-      if (x > width - elementWidth.value / 2 - xGutter) {
-        const xOffset = x - (width - elementWidth.value / 2 - xGutter);
-        translateXOffset = translateXOffset + xOffset;
-      }
-    }
-
+    const translateXOffset = calculateXTranslateOffset({
+      position,
+      x,
+      elementWidth: elementWidth.value,
+      width,
+      xGutter,
+      cursorGutter,
+      withHorizontalFloating,
+    });
     const translateX = x - translateXOffset;
 
     // Calculate Y position:
-    let translateYOffset = 0;
     const y = atYPosition.value ?? currentY.value;
-    if (position === 'top') {
-      translateYOffset = elementHeight.value / 2 + cursorGutter;
-      if (y - translateYOffset < yGutter) {
-        translateYOffset = y - yGutter;
-      }
-    } else if (position === 'bottom') {
-      translateYOffset = -(elementHeight.value / 2) - cursorGutter / 2;
-      if (y - translateYOffset + elementHeight.value > height - yGutter) {
-        translateYOffset = y - (height - yGutter) + elementHeight.value;
-      }
-    } else if (position === 'right' || position === 'left') {
-      translateYOffset = elementHeight.value / 2;
-    }
+    const translateYOffset = calculateYTranslateOffset({
+      position,
+      y,
+      elementHeight: elementHeight.value,
+      height,
+      yGutter,
+      cursorGutter,
+    });
 
-    // determine final translateY value
-    let translateY: number | undefined;
+    // Determine final translateY value
+    let translateY: number;
     if (type === 'crosshair' || isStatic) {
       translateY = y - translateYOffset;
     } else {
-      if (position === 'top') {
-        translateY = yGutter;
-      } else {
-        translateY = height - elementHeight.value - yGutter;
-      }
+      translateY =
+        position === 'top' ? yGutter : height - elementHeight.value - yGutter;
     }
 
+    // Calculate opacity
     let opacity = isActive.value ? 1 : 0;
     if (isStatic) {
       // Only show static when there is no active cursor
@@ -179,6 +241,8 @@ export function LineChartTooltip({
   }, [
     atXPosition,
     atYPosition.value,
+    calculateXTranslateOffset,
+    calculateYTranslateOffset,
     currentX.value,
     currentY.value,
     cursorGutter,
@@ -189,6 +253,7 @@ export function LineChartTooltip({
     position,
     type,
     width,
+    withHorizontalFloating,
     xGutter,
     yGutter,
   ]);
@@ -197,11 +262,7 @@ export function LineChartTooltip({
     <Animated.View
       onLayout={handleLayout}
       {...props}
-      style={[
-        styles.tooltip,
-        animatedCursorStyle,
-        props.style,
-      ]}
+      style={[styles.tooltip, animatedCursorStyle, props.style]}
     >
       {children || (
         <LineChartPriceText
