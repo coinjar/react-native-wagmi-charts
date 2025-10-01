@@ -1,14 +1,13 @@
-import React from 'react';
-import Animated from 'react-native-reanimated';
+import * as React from 'react';
+import Animated, { AnimatedProps } from 'react-native-reanimated';
 import { Defs, LinearGradient, Stop, Path, PathProps } from 'react-native-svg';
-
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartPathContext } from './LineChartPathContext';
 import useAnimatedPath from './useAnimatedPath';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-export type LineChartGradientProps = Animated.AnimateProps<PathProps> & {
+export type LineChartGradientProps = AnimatedProps<PathProps> & {
   color?: string;
   children?: React.ReactNode;
 };
@@ -25,7 +24,6 @@ export function LineChartGradient({
   const { area } = React.useContext(LineChartDimensionsContext);
   const { color: contextColor, isTransitionEnabled } =
     React.useContext(LineChartPathContext);
-
   const color = overrideColor || contextColor;
 
   ////////////////////////////////////////////////

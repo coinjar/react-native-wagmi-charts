@@ -1,14 +1,13 @@
-import React from 'react';
-import Animated from 'react-native-reanimated';
+import * as React from 'react';
+import Animated, { AnimatedProps } from 'react-native-reanimated';
 import { Path, PathProps } from 'react-native-svg';
-
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartPathContext } from './LineChartPathContext';
 import useAnimatedPath from './useAnimatedPath';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-export type LineChartPathProps = Animated.AnimateProps<PathProps> & {
+export type LineChartPathProps = AnimatedProps<PathProps> & {
   color?: string;
   inactiveColor?: string;
   width?: number;
@@ -20,7 +19,7 @@ export type LineChartPathProps = Animated.AnimateProps<PathProps> & {
    *
    * While this use case is rare, it may be useful on web, where animations might not work as well.
    *
-   * **Example**
+   ***Example**
    *
    * ```tsx
    * <LineChart.Path

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Text } from 'react-native';
 import type { TextProps as RNTextProps } from 'react-native';
-import type Animated from 'react-native-reanimated';
+import type { AnimatedProps } from 'react-native-reanimated';
 import { useDerivedValue, useAnimatedReaction, runOnJS } from 'react-native-reanimated';
-
 import { useLineChartPrice } from './usePrice';
 import { useLineChart } from './useLineChart';
 import type { TFormatterFn } from '../../types';
@@ -13,7 +12,7 @@ export type LineChartPriceTextProps = {
   format?: TFormatterFn<string>;
   precision?: number;
   variant?: 'formatted' | 'value';
-  style?: Animated.AnimateProps<RNTextProps>['style'];
+  style?: AnimatedProps<RNTextProps>['style'];
   /**
    * By default, it will use the current active index from the chart.
    * If this is set it will use the index provided.
@@ -62,7 +61,6 @@ export function LineChartPriceText({
       if (!data) {
         return '';
       }
-
       if (
         (typeof currentIndex.value === 'undefined' ||
           currentIndex.value === -1) &&
@@ -70,7 +68,6 @@ export function LineChartPriceText({
       ) {
         return '';
       }
-
       let price = 0;
       price = data[Math.min(index ?? currentIndex.value, data.length - 1)]!.value;
       const valueString = price.toFixed(precision).toString();

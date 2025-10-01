@@ -1,8 +1,7 @@
 import React from 'react';
 import type { TextProps as RNTextProps } from 'react-native';
-import type Animated from 'react-native-reanimated';
+import type { AnimatedProps } from 'react-native-reanimated';
 import { useDerivedValue } from 'react-native-reanimated';
-
 import { useLineChartDatetime } from './useDatetime';
 import type { TFormatterFn } from '../../types';
 import { AnimatedText } from '../../components/AnimatedText';
@@ -12,7 +11,7 @@ type LineChartDatetimeProps = {
   options?: Intl.DateTimeFormatOptions;
   format?: TFormatterFn<number>;
   variant?: 'formatted' | 'value';
-  style?: Animated.AnimateProps<RNTextProps>['style'];
+  style?: AnimatedProps<RNTextProps>['style'];
 };
 
 LineChartDatetimeText.displayName = 'LineChartDatetimeText';
@@ -33,6 +32,6 @@ export function LineChartDatetimeText({
     }
     return typeof value === 'object' && 'value' in value ? value.value : String(value);
   }, [datetime, variant]);
-
+  
   return <AnimatedText text={text} style={style} />;
 }

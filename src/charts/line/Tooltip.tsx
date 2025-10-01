@@ -5,6 +5,7 @@ import Animated, {
   useDerivedValue,
   useSharedValue,
   withTiming,
+  AnimatedProps,
 } from 'react-native-reanimated';
 import { StyleSheet } from 'react-native';
 import { LineChartPriceText, LineChartPriceTextProps } from './PriceText';
@@ -20,7 +21,7 @@ import type { TFormatterFn } from '../../types';
 
 export type LineChartTooltipPosition = 'top' | 'bottom' | 'left' | 'right';
 
-export type LineChartTooltipProps = Animated.AnimateProps<ViewProps> & {
+export type LineChartTooltipProps = AnimatedProps<ViewProps> & {
   children?: React.ReactNode;
   format?: TFormatterFn<string>;
   xGutter?: number;
