@@ -26,7 +26,7 @@ function invokeHaptic() {
 
 export default function App() {
   const [data, setData] = React.useState<TLineChartPoint[]>(mockData);
-  
+
   const [multiData, toggleMultiData] = React.useReducer(
     (state) => !state,
     false
@@ -42,6 +42,8 @@ export default function App() {
   const [yRange, setYRange] = React.useState<undefined | 'low' | 'high'>(
     undefined
   );
+
+  const [controlsCollapsed, setControlsCollapsed] = React.useState(false);
 
   const toggleYRange = () => {
     setYRange((domain) => {
@@ -86,11 +88,8 @@ export default function App() {
 
   return (
     <>
-      <Text style={styles.title}>
-        Line Chart 📈
-      </Text>
+      <Text style={styles.title}>Line Chart 📈</Text>
       <LineChart.Provider
-        key={JSON.stringify(dataProp)}
         xDomain={
           scaleRelativeToTime
             ? [data[0]!.timestamp, data[data.length - 1]!.timestamp]
@@ -112,7 +111,7 @@ export default function App() {
         {multiData ? (
           <View style={styles.chartContainer}>
             <LineChart.Group>
-              <LineChart id="one" height={200}>
+              <LineChart id="one">
                 <LineChart.Path color="blue" />
                 <LineChart.CursorCrosshair
                   snapToPoint={toggleSnapToPoint}
@@ -125,7 +124,7 @@ export default function App() {
                   />
                 </LineChart.CursorCrosshair>
               </LineChart>
-              <LineChart id="two" height={200}>
+              <LineChart id="two">
                 <LineChart.Path color="red">
                   <LineChart.Gradient color="red" />
                 </LineChart.Path>
@@ -145,13 +144,17 @@ export default function App() {
           </View>
         ) : (
           <View style={styles.chartContainer}>
-            <LineChart height={200}>
+            <LineChart>
               <LineChart.Path color="black" width={3}>
                 {toggleMinMaxLabels && (
                   <>
                     <LineChart.Gradient color="black" />
                     <LineChart.Tooltip position="top" at={max} />
-                    <LineChart.Tooltip position="bottom" at={min} yGutter={-10} />
+                    <LineChart.Tooltip
+                      position="bottom"
+                      at={min}
+                      yGutter={-10}
+                    />
                   </>
                 )}
                 {toggleHighlight && (
@@ -167,7 +170,7 @@ export default function App() {
                 onActivated={invokeHaptic}
                 onEnded={invokeHaptic}
                 at={at}
-                color="hotpink"
+                color="black"
               >
                 <LineChart.Tooltip
                   position={tooltipPosition}
@@ -179,139 +182,257 @@ export default function App() {
           </View>
         )}
         <View style={styles.controlsContainer}>
-          <Text style={styles.sectionTitle}>Load Data</Text>
-          <View style={styles.buttonGrid}>
-            <TouchableOpacity style={styles.button} onPress={() => setData([...mockData])}>
-              <Text style={styles.buttonText}>Data 1</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => setData([...mockData2])}>
-              <Text style={styles.buttonText}>Data 2</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => setData([...mockDataNonLinear])}>
-              <Text style={styles.buttonText}>Data 3</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => setData([...mockData, ...mockData2])}>
-              <Text style={styles.buttonText}>Data 1 + Data 2</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => setData([...mockData2, ...mockData])}>
-              <Text style={styles.buttonText}>Data 2 + Data 1</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => setData([...mockData2, ...mockData, ...mockData2])}>
-              <Text style={styles.buttonText}>Data 2 + Data 1 + Data 2</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() =>
-                setData([
-                  ...mockData2,
-                  ...mockData,
-                  ...mockData2,
-                  ...mockData,
-                  ...mockData,
-                  ...mockData2,
-                  ...mockData2,
-                  ...mockData,
-                  ...mockData2,
-                  ...mockData,
-                  ...mockData,
-                  ...mockData2,
-                ])
-              }>
-              <Text style={styles.buttonText}>V large data</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={toggleYRange}>
-              <Text style={styles.buttonText}>{`${yRange || 'Set'} Y Domain`}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={toggleMultiData}>
-              <Text style={styles.buttonText}>Multi Data</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={togglePartialDay}>
-              <Text style={styles.buttonText}>Partial Day</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => setToggleHighlight((val) => !val)}>
-              <Text style={styles.buttonText}>Toggle highlight</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => setToggleMinMaxLabels((p) => !p)}>
-              <Text style={styles.buttonText}>Toggle min/max labels</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => {
-                // Use with data 3 for best demonstration
-                setScaleRelativeToTime((val) => !val);
-              }}>
-              <Text style={styles.buttonText}>Toggle {scaleRelativeToTime ? 'off' : 'on'} XDomain</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => setToggleSnapToPoint((val) => !val)}>
-              <Text style={styles.buttonText}>Toggle Snap {toggleSnapToPoint ? 'Off' : 'On'}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => setAt(Math.floor(Math.random() * data.length))}>
-              <Text style={styles.buttonText}>Set Cursor</Text>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Load Data</Text>
+            <TouchableOpacity
+              onPress={() => setControlsCollapsed((val) => !val)}
+            >
+              <Text style={styles.collapseButtonText}>
+                {controlsCollapsed ? 'Expand' : 'Collapse'}
+              </Text>
             </TouchableOpacity>
           </View>
+          {!controlsCollapsed && (
+            <>
+              <View style={styles.buttonGrid}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => setData([...mockData])}
+                >
+                  <Text style={styles.buttonText}>Data 1</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => setData([...mockData2])}
+                >
+                  <Text style={styles.buttonText}>Data 2</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => setData([...mockDataNonLinear])}
+                >
+                  <Text style={styles.buttonText}>Data 3</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => setData([...mockData, ...mockData2])}
+                >
+                  <Text style={styles.buttonText}>Data 1 + Data 2</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => setData([...mockData2, ...mockData])}
+                >
+                  <Text style={styles.buttonText}>Data 2 + Data 1</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() =>
+                    setData([...mockData2, ...mockData, ...mockData2])
+                  }
+                >
+                  <Text style={styles.buttonText}>
+                    Data 2 + Data 1 + Data 2
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() =>
+                    setData([
+                      ...mockData2,
+                      ...mockData,
+                      ...mockData2,
+                      ...mockData,
+                      ...mockData,
+                      ...mockData2,
+                      ...mockData2,
+                      ...mockData,
+                      ...mockData2,
+                      ...mockData,
+                      ...mockData,
+                      ...mockData2,
+                    ])
+                  }
+                >
+                  <Text style={styles.buttonText}>V large data</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={toggleYRange}>
+                  <Text style={styles.buttonText}>{`${
+                    yRange || 'Set'
+                  } Y Domain`}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={toggleMultiData}
+                >
+                  <Text style={styles.buttonText}>Multi Data</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={togglePartialDay}
+                >
+                  <Text style={styles.buttonText}>Partial Day</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => setToggleHighlight((val) => !val)}
+                >
+                  <Text style={styles.buttonText}>Toggle highlight</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => setToggleMinMaxLabels((p) => !p)}
+                >
+                  <Text style={styles.buttonText}>Toggle min/max labels</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => {
+                    // Use with data 3 for best demonstration
+                    setScaleRelativeToTime((val) => !val);
+                  }}
+                >
+                  <Text style={styles.buttonText}>
+                    Toggle {scaleRelativeToTime ? 'off' : 'on'} XDomain
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => setToggleSnapToPoint((val) => !val)}
+                >
+                  <Text style={styles.buttonText}>
+                    Toggle Snap {toggleSnapToPoint ? 'Off' : 'On'}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => setAt(Math.floor(Math.random() * data.length))}
+                >
+                  <Text style={styles.buttonText}>Set Cursor</Text>
+                </TouchableOpacity>
+              </View>
 
-          <Text style={styles.label}>Tooltip position:</Text>
-          <View style={styles.radioGroup}>
-            <TouchableOpacity
-              style={[styles.radioButton, tooltipPosition === 'top' && styles.radioButtonSelected]}
-              onPress={() => setTooltipPosition('top')}
-            >
-              <Text style={[styles.radioText, tooltipPosition === 'top' && styles.radioTextSelected]}>Top</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.radioButton, tooltipPosition === 'bottom' && styles.radioButtonSelected]}
-              onPress={() => setTooltipPosition('bottom')}
-            >
-              <Text style={[styles.radioText, tooltipPosition === 'bottom' && styles.radioTextSelected]}>Bottom</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.radioButton, tooltipPosition === 'left' && styles.radioButtonSelected]}
-              onPress={() => setTooltipPosition('left')}
-            >
-              <Text style={[styles.radioText, tooltipPosition === 'left' && styles.radioTextSelected]}>Left</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.radioButton, tooltipPosition === 'right' && styles.radioButtonSelected]}
-              onPress={() => setTooltipPosition('right')}
-            >
-              <Text style={[styles.radioText, tooltipPosition === 'right' && styles.radioTextSelected]}>Right</Text>
-            </TouchableOpacity>
-          </View>
+              <Text style={styles.label}>Tooltip position:</Text>
+              <View style={styles.radioGroup}>
+                <TouchableOpacity
+                  style={[
+                    styles.radioButton,
+                    tooltipPosition === 'top' && styles.radioButtonSelected,
+                  ]}
+                  onPress={() => setTooltipPosition('top')}
+                >
+                  <Text
+                    style={[
+                      styles.radioText,
+                      tooltipPosition === 'top' && styles.radioTextSelected,
+                    ]}
+                  >
+                    Top
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.radioButton,
+                    tooltipPosition === 'bottom' && styles.radioButtonSelected,
+                  ]}
+                  onPress={() => setTooltipPosition('bottom')}
+                >
+                  <Text
+                    style={[
+                      styles.radioText,
+                      tooltipPosition === 'bottom' && styles.radioTextSelected,
+                    ]}
+                  >
+                    Bottom
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.radioButton,
+                    tooltipPosition === 'left' && styles.radioButtonSelected,
+                  ]}
+                  onPress={() => setTooltipPosition('left')}
+                >
+                  <Text
+                    style={[
+                      styles.radioText,
+                      tooltipPosition === 'left' && styles.radioTextSelected,
+                    ]}
+                  >
+                    Left
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.radioButton,
+                    tooltipPosition === 'right' && styles.radioButtonSelected,
+                  ]}
+                  onPress={() => setTooltipPosition('right')}
+                >
+                  <Text
+                    style={[
+                      styles.radioText,
+                      tooltipPosition === 'right' && styles.radioTextSelected,
+                    ]}
+                  >
+                    Right
+                  </Text>
+                </TouchableOpacity>
+              </View>
 
-          {['left', 'right'].includes(tooltipPosition) && (
-            <TouchableOpacity style={styles.button} onPress={() => setFloatingTooltip((val) => !val)}>
-              <Text style={styles.buttonText}>Toggle floating tooltip {floatingTooltip ? 'Off' : 'On'}</Text>
-            </TouchableOpacity>
+              {['left', 'right'].includes(tooltipPosition) && (
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => setFloatingTooltip((val) => !val)}
+                >
+                  <Text style={styles.buttonText}>
+                    Toggle floating tooltip {floatingTooltip ? 'Off' : 'On'}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </>
           )}
         </View>
         {!multiData && (
           <View style={styles.priceTextContainer}>
-            <Text style={styles.sectionTitle}>PriceText</Text>
+            <Text style={styles.priceSectionTitle}>PriceText</Text>
             <View style={styles.row}>
               <Text style={styles.label}>Formatted: </Text>
-              <LineChart.PriceText />
+              <LineChart.PriceText style={styles.chartValueText} />
             </View>
             <View style={styles.row}>
               <Text style={styles.label}>Value: </Text>
-              <LineChart.PriceText variant="value" />
+              <LineChart.PriceText
+                variant="value"
+                style={styles.chartValueText}
+              />
             </View>
             <View style={styles.row}>
               <Text style={styles.label}>Custom format: </Text>
               <LineChart.PriceText
+                style={styles.chartValueText}
                 format={(d) => {
                   'worklet';
                   return d.formatted ? `$${d.formatted} AUD` : '';
                 }}
               />
             </View>
-            <Text style={styles.sectionTitle}>DatetimeText</Text>
+            <Text style={styles.datetimeSectionTitle}>DatetimeText</Text>
             <View style={styles.row}>
               <Text style={styles.label}>Formatted: </Text>
-              <LineChart.DatetimeText />
+              <LineChart.DatetimeText style={styles.chartValueText} />
             </View>
             <View style={styles.row}>
               <Text style={styles.label}>Value: </Text>
-              <LineChart.DatetimeText variant="value" />
+              <LineChart.DatetimeText
+                variant="value"
+                style={styles.chartValueText}
+              />
             </View>
             <View style={styles.row}>
               <Text style={styles.label}>Custom format: </Text>
               <LineChart.DatetimeText
+                style={styles.chartValueText}
                 locale="en-AU"
                 options={{
                   year: 'numeric',
@@ -338,21 +459,31 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   chartContainer: {
-    padding: 16,
+    paddingVertical: 16,
   },
   controlsContainer: {
     marginHorizontal: 16,
     marginTop: 16,
   },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 16,
+  },
+  collapseButtonText: {
+    fontSize: 14,
+    color: '#007AFF',
+    fontWeight: '500',
   },
   buttonGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 2,
     marginBottom: 16,
   },
   button: {
@@ -399,10 +530,24 @@ const styles = StyleSheet.create({
   },
   priceTextContainer: {
     padding: 16,
-    gap: 8,
+    gap: 2,
   },
   row: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'baseline',
+  },
+  chartValueText: {
+    lineHeight: Platform.OS === 'android' ? 1 : undefined,
+  },
+  priceSectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  datetimeSectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 24,
+    marginBottom: 12,
   },
 });
