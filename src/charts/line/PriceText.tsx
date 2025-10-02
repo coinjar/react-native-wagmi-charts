@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Text } from 'react-native';
-import type { TextProps as RNTextProps } from 'react-native';
+import { Text, TextStyle } from 'react-native';
+import type { TextProps as RNTextProps, StyleProp } from 'react-native';
 import type { AnimatedProps } from 'react-native-reanimated';
 import { useDerivedValue, useAnimatedReaction, runOnJS } from 'react-native-reanimated';
 import { useLineChartPrice } from './usePrice';
@@ -39,16 +39,16 @@ export function LineChartPriceText({
   useOptimizedRendering = false,
   getTextColor,
 }: LineChartPriceTextProps) {
-  
+
   const price = useLineChartPrice({ format, precision, index });
-  
-  // If we have a custom format function and optimized rendering is enabled, 
+
+  // If we have a custom format function and optimized rendering is enabled,
   // use regular React state instead of AnimatedText
   if (format && useOptimizedRendering) {
     const { currentIndex, data } = useLineChart();
     const [displayText, setDisplayText] = useState('');
     const [textColor, setTextColor] = useState('#000000');
-    
+
     const updateText = (newText: string) => {
       setDisplayText(newText);
       // Update color if getTextColor function is provided
@@ -56,7 +56,7 @@ export function LineChartPriceText({
         setTextColor(getTextColor(newText));
       }
     };
-    
+
     const textValue = useDerivedValue(() => {
       if (!data) {
         return '';
@@ -71,11 +71,11 @@ export function LineChartPriceText({
       let price = 0;
       price = data[Math.min(index ?? currentIndex.value, data.length - 1)]!.value;
       const valueString = price.toFixed(precision).toString();
-      
+
       // Call format function directly in worklet
       return format({ value: valueString, formatted: valueString });
     }, [currentIndex, data, precision]);
-    
+
     // Use useAnimatedReaction to update React state with runOnJS
     useAnimatedReaction(
       () => textValue.value,
@@ -86,16 +86,18 @@ export function LineChartPriceText({
       },
       [textValue]
     );
-    
+
     // Merge the text color with the provided style
-    const dynamicStyle = [
-      style,
+    // Note: We need to flatten the AnimatedProps style to a regular TextStyle
+    const flattenedStyle = Array.isArray(style) ? style : [style];
+    const dynamicStyle: StyleProp<TextStyle> = [
+      ...flattenedStyle,
       { color: textColor }
     ];
-    
-    return <Text style={dynamicStyle as any}>{displayText}</Text>;
+
+    return <Text style={dynamicStyle}>{displayText}</Text>;
   }
-  
+
   // For non-custom format, use the original approach
   return <AnimatedText text={price[variant]} style={style} />;
 }

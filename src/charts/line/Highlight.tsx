@@ -3,7 +3,7 @@ import Animated, { AnimatedProps } from 'react-native-reanimated';
 import { ClipPath, Defs, G, Path, PathProps, Rect } from 'react-native-svg';
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartPathContext } from './LineChartPathContext';
-import useAnimatedPath from './useAnimatedPath';
+import { useAnimatedPath } from './useAnimatedPath';
 import { getXPositionForCurve } from './utils/getXPositionForCurve';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);

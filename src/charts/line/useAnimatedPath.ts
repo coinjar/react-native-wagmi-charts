@@ -8,7 +8,7 @@ import {
 import { interpolatePath } from './utils';
 import { usePrevious } from '../../utils';
 
-export default function useAnimatedPath({
+export function useAnimatedPath({
   enabled = true,
   path,
 }: {
@@ -16,7 +16,6 @@ export default function useAnimatedPath({
   path: string;
 }) {
   const transition = useSharedValue(0);
-
   const previousPath = usePrevious(path);
 
   useAnimatedReaction(
