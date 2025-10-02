@@ -26,21 +26,26 @@ export function useLineChartDatetime({
     return data[currentIndex.value]?.timestamp ?? '';
   }, [currentIndex, data]);
 
+  const value = useDerivedValue(
+    () => new Date(timestamp.value).getTime(),
+    [timestamp]
+  );
+
   const formatted = useDerivedValue(() => {
-    const formattedDatetime = new Date(timestamp.value).getTime()
+    const formattedDatetime = value.value
       ? formatDatetime({
-          value: new Date(timestamp.value).getTime(),
+          value: value.value,
           locale,
           options,
         })
       : '';
     return format
       ? format({
-          value: new Date(timestamp.value).getTime() || -1,
+          value: value.value || -1,
           formatted: formattedDatetime,
         })
       : formattedDatetime;
-  }, [format, locale, options, timestamp]);
+  }, [format, locale, options, value]);
 
-  return { value: new Date(timestamp.value).getTime(), formatted };
+  return { value, formatted };
 }
