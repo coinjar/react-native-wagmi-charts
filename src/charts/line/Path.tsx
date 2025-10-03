@@ -3,7 +3,7 @@ import Animated, { AnimatedProps } from 'react-native-reanimated';
 import { Path, PathProps } from 'react-native-svg';
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartPathContext } from './LineChartPathContext';
-import useAnimatedPath from './useAnimatedPath';
+import { useAnimatedPath } from './useAnimatedPath';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -42,25 +42,19 @@ export function LineChartPath({
   const { isTransitionEnabled, isInactive } =
     React.useContext(LineChartPathContext);
 
-  ////////////////////////////////////////////////
-
   const { animatedProps } = useAnimatedPath({
     enabled: isTransitionEnabled,
     path,
   });
 
-  ////////////////////////////////////////////////
-
   return (
-    <>
-      <AnimatedPath
-        animatedProps={animatedProps}
-        fill="transparent"
-        stroke={isInactive ? inactiveColor || color : color}
-        strokeOpacity={isInactive && !inactiveColor ? 0.2 : 1}
-        strokeWidth={strokeWidth}
-        {...props}
-      />
-    </>
+    <AnimatedPath
+      animatedProps={animatedProps}
+      fill="transparent"
+      stroke={isInactive ? inactiveColor || color : color}
+      strokeOpacity={isInactive && !inactiveColor ? 0.2 : 1}
+      strokeWidth={strokeWidth}
+      {...props}
+    />
   );
 }

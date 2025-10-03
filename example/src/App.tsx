@@ -1,5 +1,13 @@
 import * as React from 'react';
-import { View, TouchableOpacity, Text, ScrollView, StyleSheet } from 'react-native';
+import {
+  Platform,
+  View,
+  TouchableOpacity,
+  Text,
+  ScrollView,
+  StyleSheet,
+  StatusBar,
+} from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -11,45 +19,43 @@ export default function App() {
   return (
     <GestureHandlerRootView style={styles.flex}>
       <SafeAreaProvider>
+        <StatusBar backgroundColor="white" barStyle="dark-content" />
         <SafeAreaView style={styles.flex}>
-        <View style={styles.container}>
-          <View style={styles.header}>
-            <Text style={styles.title}>React Native WAGMI Charts 💸</Text>
-            {selected ? (
+          <View style={styles.container}>
+            <View style={styles.header}>
+              <Text style={styles.title}>React Native WAGMI Charts 💸</Text>
               <TouchableOpacity
-                style={styles.button}
+                style={[styles.button, !selected && styles.hiddenButton]}
                 onPress={() => setSelected('')}
+                disabled={!selected}
               >
                 <Text style={styles.buttonText}>Back</Text>
               </TouchableOpacity>
-            ) : null}
-          </View>
-          <ScrollView>
-            {!selected && (
-              <View style={styles.buttonContainer}>
-                <Text style={styles.subtitle}>
-                  Click a chart below to get started
-                </Text>
-                <TouchableOpacity
-                  style={styles.chartButton}
-                  onPress={() => setSelected('candlestick')}
-                >
-                  <Text style={styles.buttonText}>Candlestick</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.chartButton}
-                  onPress={() => setSelected('line')}
-                >
-                  <Text style={styles.buttonText}>Line</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            <View style={styles.chartContainer}>
+            </View>
+            <ScrollView>
+              {!selected && (
+                <View style={styles.buttonContainer}>
+                  <Text style={styles.subtitle}>
+                    Click a chart below to get started
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.chartButton}
+                    onPress={() => setSelected('candlestick')}
+                  >
+                    <Text style={styles.buttonText}>Candlestick</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.chartButton}
+                    onPress={() => setSelected('line')}
+                  >
+                    <Text style={styles.buttonText}>Line</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
               {selected === 'candlestick' && <CandlestickChart />}
               {selected === 'line' && <LineChart />}
-            </View>
-          </ScrollView>
-        </View>
+            </ScrollView>
+          </View>
         </SafeAreaView>
       </SafeAreaProvider>
     </GestureHandlerRootView>
@@ -71,7 +77,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    fontSize: 24,
+    fontSize: Platform.OS === 'web' ? 24 : 20,
     fontWeight: 'bold',
   },
   subtitle: {
@@ -96,12 +102,12 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '500',
   },
+  hiddenButton: {
+    opacity: 0,
+  },
   buttonContainer: {
     paddingHorizontal: 16,
     marginTop: 24,
     gap: 16,
-  },
-  chartContainer: {
-    marginTop: 16,
   },
 });

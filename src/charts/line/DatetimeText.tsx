@@ -24,14 +24,14 @@ export function LineChartDatetimeText({
   style,
 }: LineChartDatetimeProps) {
   const datetime = useLineChartDatetime({ format, locale, options });
-  
+
   const text = useDerivedValue(() => {
-    const value = datetime[variant];
+    const value = datetime[variant].value;
     if (typeof value === 'number') {
-      return value.toString();
+      return value === 0 || isNaN(value) ? '' : value.toString();
     }
-    return typeof value === 'object' && 'value' in value ? value.value : String(value);
+    return value || '';
   }, [datetime, variant]);
-  
+
   return <AnimatedText text={text} style={style} />;
 }

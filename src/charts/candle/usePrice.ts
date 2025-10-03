@@ -3,7 +3,8 @@ import { useDerivedValue } from 'react-native-reanimated';
 import { formatPrice } from '../../utils';
 import { useCandlestickChart } from './useCandlestickChart';
 import { getPrice } from './utils';
-import type { TFormatterFn, TPriceType } from './types';
+import type { TFormatterFn } from '../../types';
+import type { TPriceType } from './types';
 import { useCandleData } from './useCandleData';
 import type { SharedValue } from 'react-native-reanimated';
 
@@ -24,6 +25,7 @@ export function useCandlestickChartPrice({
 
   const float = useDerivedValue(() => {
     let price = 0;
+
     if (type === 'crosshair') {
       price = getPrice({
         y: currentY.value,
@@ -33,9 +35,11 @@ export function useCandlestickChartPrice({
     } else {
       price = candle.value[type];
     }
+
     if (price === -1) return '';
     return price.toFixed(precision).toString();
   }, [currentY, domain, height, candle, type, precision]);
+
   const formatted = useDerivedValue(() => {
     if (!float.value) return '';
     const formattedPrice = formatPrice({ value: float.value });

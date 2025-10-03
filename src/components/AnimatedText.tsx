@@ -18,33 +18,27 @@ interface AnimatedTextProps {
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
 export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
-  const inputRef = React.useRef<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const inputRef = React.useRef<TextInput>(null);
 
-  if (Platform.OS === 'web') {
-    // For some reason, the worklet reaction evaluates upfront regardless of any
-    // conditionals within it, causing Android to crash upon the invokation of `setNativeProps`.
-    // We are going to break the rules of hooks here so it doesn't invoke `useAnimatedReaction`
-    // for platforms outside of the web.
+  useAnimatedReaction(
+    () => text.value,
+    (data, prevData) => {
+      // Only execute for web platform
+      if (Platform.OS === 'web' && data !== prevData && inputRef.current) {
+        // @ts-expect-error - web TextInput has value property
+        inputRef.current.value = data;
+      }
+    },
+    [text]
+  );
 
-    useAnimatedReaction(
-      () => {
-        return text.value;
-      },
-      (data, prevData) => {
-        if (data !== prevData && inputRef.current) {
-          inputRef.current.value = data;
-        }
-      },
-      [text]
-    );
-  }
   const animatedProps = useAnimatedProps(() => {
     return {
       text: text.value,
-      // Here we use any because the text prop is not available in the type
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any;
   });
+
   return (
     <AnimatedTextInput
       underlineColorAndroid="transparent"

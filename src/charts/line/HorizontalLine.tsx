@@ -23,15 +23,11 @@ type HorizontalLineProps = {
    * This may be useful to customize the line's position based on the thickness of your cursor or chart path.
    *
    * ```tsx
-   * <LineChart.HorizontalLine
-   *   at={{ index: 3 }}
-   * />
+   * <LineChart.HorizontalLine at={{ index: 3 }} />
    *
    * // or
    *
-   * <LineChart.HorizontalLine
-   *   at={{ value: 320.32}}
-   * />
+   * <LineChart.HorizontalLine at={{ value: 320.32 }} />
    * ```
    */
   at?:
@@ -78,9 +74,7 @@ export function LineChartHorizontalLine({
 
     const offsetTop = yDomain.max - at.value;
     const percentageOffsetTop = offsetTop / (yDomain.max - yDomain.min);
-
     const heightBetweenGutters = height - gutter * 2;
-
     const offsetTopPixels = gutter + percentageOffsetTop * heightBetweenGutters;
 
     return withTiming(offsetTopPixels + offsetY);

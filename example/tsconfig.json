@@ -1,8 +1,5 @@
 {
   "extends": "../tsconfig",
   "compilerOptions": {},
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-  ]
+  "include": ["**/*.ts", "**/*.tsx"]
 }

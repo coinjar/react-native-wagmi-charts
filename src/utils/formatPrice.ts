@@ -7,14 +7,14 @@ export function formatPrice({
   precision,
 }: {
   value: string;
-  defaultPrice?: string;
+  defaultPrice?: string | number;
   precision?: number;
 }) {
   'worklet';
 
   let defaultPrice = _defaultPrice;
   if (typeof defaultPrice === 'number') {
-    defaultPrice = (defaultPrice as number).toString();
+    defaultPrice = defaultPrice.toString();
   }
 
   const value = _value || defaultPrice?.replace?.(',', '');
@@ -30,9 +30,9 @@ export function formatPrice({
 
   let res = `${Number(value).toFixed(decimals)}`;
   const vals = res.split('.');
-  if (vals.length > 0) {
-    res = vals[0]!.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    if (vals.length === 2) {
+  if (vals.length > 0 && vals[0]) {
+    res = vals[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    if (vals.length === 2 && vals[1]) {
       return res + '.' + vals[1];
     }
   }

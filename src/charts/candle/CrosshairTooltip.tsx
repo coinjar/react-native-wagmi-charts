@@ -83,6 +83,7 @@ export function CandlestickChartCrosshairTooltip({
     }),
     []
   );
+
   const leftTooltip = useAnimatedStyle(
     () => ({
       left: xGutter,
@@ -91,6 +92,7 @@ export function CandlestickChartCrosshairTooltip({
     }),
     [elementHeight, position, topOffset, xGutter]
   );
+
   const rightTooltip = useAnimatedStyle(
     () => ({
       left: width - elementWidth.value - xGutter,

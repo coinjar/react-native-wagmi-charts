@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-pnpm lint --fix && git add -A && pnpm typescript
+pnpm lint --fix && pnpm format && git add -A && pnpm typescript

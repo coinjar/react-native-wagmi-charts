@@ -9,6 +9,13 @@ import Animated, {
 import { LineChartCursor, LineChartCursorProps } from './Cursor';
 import { useLineChart } from './useLineChart';
 
+/**
+ * Delay in milliseconds before enabling spring animations on Android. This
+ * prevents crashes that can occur when spring animations are enabled on initial
+ * render.
+ */
+const ANDROID_SPRING_ANIMATION_DELAY_MS = 100;
+
 type LineChartCursorCrosshairProps = Omit<
   LineChartCursorProps,
   'children' | 'type'
@@ -41,9 +48,10 @@ export function LineChartCursorCrosshair({
     Platform.OS === 'ios'
   );
   React.useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setEnableSpringAnimation(true);
-    }, 100);
+    }, ANDROID_SPRING_ANIMATION_DELAY_MS);
+    return () => clearTimeout(timer);
   }, []);
 
   const animatedCursorStyle = useAnimatedStyle(

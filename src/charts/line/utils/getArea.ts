@@ -1,10 +1,7 @@
-// @ts-ignore
 import * as shape from 'd3-shape';
-
-import type { TLineChartData, YDomain } from '../types';
-
-// @ts-ignore
 import { scaleLinear } from 'd3-scale';
+
+import type { TLineChartData, TLineChartPoint, YDomain } from '../types';
 
 export function getArea({
   data,
@@ -28,14 +25,19 @@ export function getArea({
   const scaleX = scaleLinear()
     .domain(xDomain ?? [Math.min(...timestamps), Math.max(...timestamps)])
     .range([0, width]);
+
   const scaleY = scaleLinear()
     .domain([yDomain.min, yDomain.max])
     .range([height - gutter, gutter]);
+
   const area = shape
-    .area()
-    .x((_: unknown, i: number) => scaleX(xDomain ? timestamps[i] ?? i : i))
-    .y0((d: { value: unknown }) => scaleY(d.value as number))
+    .area<TLineChartPoint>()
+    .x((_: TLineChartPoint, i: number) =>
+      scaleX(xDomain ? timestamps[i] ?? i : i)
+    )
+    .y0((d: TLineChartPoint) => scaleY(d.value))
     .y1(() => height)
-    .curve(_shape)(data);
-  return area;
+    .curve(_shape as shape.CurveFactory)(data);
+
+  return area || '';
 }

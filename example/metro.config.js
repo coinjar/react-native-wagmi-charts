@@ -25,8 +25,7 @@ config.resolver.disableHierarchicalLookup = true;
 // So we block them at the root, and alias them to the versions in example's node_modules
 config.resolver.blacklistRE = exclusionList(
   modules.map(
-    (m) =>
-      new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`)
+    (m) => new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`)
   )
 );
 

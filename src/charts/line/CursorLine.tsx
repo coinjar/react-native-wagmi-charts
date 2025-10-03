@@ -55,12 +55,12 @@ export function LineChartCursorLine({
   const isHorizontal = cursorProps?.orientation === 'horizontal';
   const { height, width } = React.useContext(LineChartDimensionsContext);
   const { currentX, currentY, isActive } = useLineChart();
-  
+
   const price = useLineChartPrice({
     format: isHorizontal ? (format as TFormatterFn<string>) : undefined,
     precision: 2,
   });
-  
+
   const datetime = useLineChartDatetime({
     format: !isHorizontal ? (format as TFormatterFn<number>) : undefined,
   });
@@ -80,23 +80,29 @@ export function LineChartCursorLine({
   const textWidth = useDerivedValue(() => {
     const text = displayText.value;
     if (!text) return TEXT_CONSTANTS.MIN_WIDTH;
-    
+
     const fontSize = textStyle?.fontSize || TEXT_CONSTANTS.DEFAULT_FONT_SIZE;
     return calculateTextWidth(text, fontSize);
   }, [displayText, textStyle?.fontSize]);
 
   const lineEndX = useDerivedValue(() => {
     if (!isHorizontal) return 0;
-    
+
     const fontSize = textStyle?.fontSize || TEXT_CONSTANTS.DEFAULT_FONT_SIZE;
     const gap = Math.max(SPACING.BASE_LINE_GAP, fontSize * 0.5);
-    
-    return width - textWidth.value - gap - TEXT_CONSTANTS.INPUT_PADDING - SPACING.HORIZONTAL_RIGHT_MARGIN;
+
+    return (
+      width -
+      textWidth.value -
+      gap -
+      TEXT_CONSTANTS.INPUT_PADDING -
+      SPACING.HORIZONTAL_RIGHT_MARGIN
+    );
   });
-  
+
   const lineEndY = useDerivedValue(() => {
     if (isHorizontal) return 0;
-    
+
     // For vertical cursor, extend line to the chart area (excluding reserved label space)
     return height - SPACING.X_AXIS_LABEL_RESERVED_HEIGHT;
   });
@@ -104,7 +110,7 @@ export function LineChartCursorLine({
   const containerStyle = useAnimatedStyle(() => ({
     opacity: isActive.value ? 1 : 0,
     height: '100%',
-    transform: isHorizontal 
+    transform: isHorizontal
       ? [{ translateY: currentY.value }]
       : [{ translateX: currentX.value }],
   }));
@@ -117,7 +123,7 @@ export function LineChartCursorLine({
   const textPositionStyle = useAnimatedStyle(() => {
     const fontSize = textStyle?.fontSize || TEXT_CONSTANTS.DEFAULT_FONT_SIZE;
     const lineHeight = textStyle?.lineHeight || fontSize * 1.2;
-    
+
     const baseStyle = {
       position: 'absolute' as const,
       width: textWidth.value,
@@ -130,10 +136,14 @@ export function LineChartCursorLine({
     if (isHorizontal) {
       const fontSizeAdjustment = calculateFontSizeAdjustment(fontSize);
       const textCenterOffset = -(lineHeight * fontSizeAdjustment);
-      
+
       return {
         ...baseStyle,
-        left: width - textWidth.value - SPACING.HORIZONTAL_RIGHT_MARGIN + TEXT_CONSTANTS.INPUT_PADDING,
+        left:
+          width -
+          textWidth.value -
+          SPACING.HORIZONTAL_RIGHT_MARGIN +
+          TEXT_CONSTANTS.INPUT_PADDING,
         top: textCenterOffset,
         textAlign: 'right' as const,
         paddingLeft: 0,
@@ -143,26 +153,29 @@ export function LineChartCursorLine({
 
     // For vertical cursor (x-axis label)
     const halfTextWidth = textWidth.value / 2;
-    
+
     // Since the container is already translated by currentX, we need to calculate
     // the label position relative to the container's position
     const containerX = currentX.value;
-    
+
     // Calculate where the label would be if centered
     let labelLeft = -halfTextWidth;
-    
+
     // Check if label would overflow on the left
     if (containerX + labelLeft < 0) {
       labelLeft = -containerX;
     }
-    
+
     // Check if label would overflow on the right
     if (containerX + labelLeft + textWidth.value > width) {
       labelLeft = width - containerX - textWidth.value;
     }
 
     // Position label in the reserved space at the bottom
-    const labelTop = height - SPACING.X_AXIS_LABEL_RESERVED_HEIGHT + SPACING.HORIZONTAL_TEXT_MARGIN;
+    const labelTop =
+      height -
+      SPACING.X_AXIS_LABEL_RESERVED_HEIGHT +
+      SPACING.HORIZONTAL_TEXT_MARGIN;
 
     return {
       ...baseStyle,
@@ -172,12 +185,15 @@ export function LineChartCursorLine({
     };
   });
 
-  const lineAnimatedProps = useAnimatedProps(() => ({
-    x1: 0,
-    y1: 0,
-    x2: lineEndX.value,
-    y2: lineEndY.value,
-  }), [lineEndX, lineEndY]);
+  const lineAnimatedProps = useAnimatedProps(
+    () => ({
+      x1: 0,
+      y1: 0,
+      x2: lineEndX.value,
+      y2: lineEndY.value,
+    }),
+    [lineEndX, lineEndY]
+  );
 
   return (
     <LineChartCursor {...cursorProps} type="line">
@@ -191,10 +207,7 @@ export function LineChartCursorLine({
             {...lineProps}
           />
         </Svg>
-        <AnimatedText
-          text={displayText}
-          style={textPositionStyle}
-        />
+        <AnimatedText text={displayText} style={textPositionStyle} />
       </Animated.View>
       {children}
     </LineChartCursor>

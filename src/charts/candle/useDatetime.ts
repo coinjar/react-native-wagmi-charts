@@ -1,7 +1,7 @@
 import { useDerivedValue } from 'react-native-reanimated';
 
 import { formatDatetime } from '../../utils';
-import type { TFormatterFn } from './types';
+import type { TFormatterFn } from '../../types';
 import { useCandleData } from './useCandleData';
 import type { SharedValue } from 'react-native-reanimated';
 
@@ -30,11 +30,13 @@ export function useCandlestickChartDatetime({
 
   const formatted = useDerivedValue(() => {
     if (timestamp.value === -1) return '';
+
     const formattedDatetime = formatDatetime({
       value: timestamp.value,
       locale,
       options,
     });
+
     return format
       ? format({ value: timestamp.value, formatted: formattedDatetime })
       : formattedDatetime;

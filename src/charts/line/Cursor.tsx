@@ -25,6 +25,7 @@ export type LineChartCursorProps = {
   minDurationMs?: number;
   onActivated?: () => void;
   onEnded?: () => void;
+  orientation?: 'horizontal' | 'vertical';
 };
 
 export const CursorContext = React.createContext({ type: '' });
@@ -75,11 +76,11 @@ export function LineChartCursor({
       0
     );
 
-    const newXPosition = (
-      closestIndex > 0
-        ? parsedPath.curves[closestPathCurve]!.to
-        : parsedPath.move
-    ).x;
+    const curveSegment =
+      closestIndex > 0 && parsedPath.curves[closestPathCurve]
+        ? parsedPath.curves[closestPathCurve]
+        : null;
+    const newXPosition = (curveSegment ? curveSegment.to : parsedPath.move).x;
     // Update values
     currentIndex.value = closestIndex;
     currentX.value = newXPosition;
@@ -135,11 +136,14 @@ export function LineChartCursor({
     )
     .onTouchesMove((event) => {
       'worklet';
-      if (parsedPath && isActive.value && event.allTouches.length > 0) {
-        const xPosition = Math.max(
-          0,
-          event.allTouches[0]!.x <= width ? event.allTouches[0]!.x : width
-        );
+      if (
+        parsedPath &&
+        isActive.value &&
+        event.allTouches.length > 0 &&
+        event.allTouches[0]
+      ) {
+        const touchX = event.allTouches[0].x;
+        const xPosition = Math.max(0, touchX <= width ? touchX : width);
         updatePosition(xPosition);
       }
     })

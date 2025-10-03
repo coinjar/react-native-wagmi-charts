@@ -25,9 +25,7 @@ export default defineConfig({
   plugins: [
     react({
       babel: {
-        plugins: [
-          'react-native-reanimated/plugin',
-        ],
+        plugins: ['react-native-reanimated/plugin'],
       },
     }),
   ],
@@ -35,14 +33,13 @@ export default defineConfig({
     extensions: extensions,
     alias: {
       'react-native': 'react-native-web',
-      'react-native-svg': 'react-native-svg-web',
       'react-native-wagmi-charts': path.resolve(root, 'src'),
     },
   },
   define: {
-    __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
+    '__DEV__': JSON.stringify(process.env.NODE_ENV !== 'production'),
     'process.env': JSON.stringify(process.env),
-    global: 'globalThis',
+    'global': 'globalThis',
   },
   server: {
     port: 3000,
@@ -50,16 +47,13 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    commonjsOptions: { 
+    commonjsOptions: {
       transformMixedEsModules: true,
       ignoreDynamicRequires: true,
     },
   },
   optimizeDeps: {
-    include: [
-      'react-native-web',
-      'react-native-svg-web',
-    ],
+    include: ['react-native-web'],
     esbuildOptions: {
       resolveExtensions: extensions,
       jsx: 'automatic',

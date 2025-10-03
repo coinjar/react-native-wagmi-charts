@@ -24,14 +24,7 @@ export type CandlestickChartCandleProps = {
   rectProps?: RectProps;
   lineProps?: LineProps;
   useAnimations?: boolean;
-  renderRect?: ({
-    x,
-    y,
-    width,
-    height,
-    fill,
-    candle
-  }: {
+  renderRect?: (renderRectOptions: {
     x: NumberProp;
     y: NumberProp;
     width: NumberProp;
@@ -40,15 +33,7 @@ export type CandlestickChartCandleProps = {
     useAnimations: boolean;
     candle: TCandle;
   }) => React.ReactNode;
-  renderLine?: ({
-    x1,
-    y1,
-    x2,
-    y2,
-    stroke,
-    strokeWidth,
-    candle,
-  }: {
+  renderLine?: (renderLineOptions: {
     x1: NumberProp;
     y1: NumberProp;
     x2: NumberProp;

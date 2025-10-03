@@ -10,12 +10,11 @@ export type TLineChartDataProp =
       [key: string]: TLineChartData;
     };
 export type TLineChartData = Array<TLineChartPoint>;
-export type TLineChartDomain = [number, number];
 export type TLineChartContext = {
   currentX: SharedValue<number>;
   currentIndex: SharedValue<number>;
   isActive: SharedValue<boolean>;
-  domain: TLineChartDomain;
+  domain: [number, number];
   yDomain: YDomain;
   xLength: number;
   xDomain?: [number, number] | undefined;
