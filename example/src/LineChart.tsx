@@ -65,6 +65,8 @@ export default function App() {
   const [tooltipPosition, setTooltipPosition] =
     React.useState<LineChartTooltipPosition>('top');
 
+  const [showAxis, setShowAxis] = React.useState(false);
+
   let dataProp: TLineChartDataProp = data;
   const [min, max] = useMemo(() => {
     if (Array.isArray(dataProp)) {
@@ -178,6 +180,22 @@ export default function App() {
                 />
                 <LineChart.HoverTrap />
               </LineChart.CursorCrosshair>
+              {showAxis && (
+                <LineChart.Axis
+                  domain={[
+                    yRange === 'low'
+                      ? Math.min(...data.map((d) => d.value)) / 1.1
+                      : Math.min(...data.map((d) => d.value)),
+                    yRange === 'high'
+                      ? Math.max(...data.map((d) => d.value)) * 1.1
+                      : Math.max(...data.map((d) => d.value)),
+                  ]}
+                  hideOnInteraction
+                  labelPadding={0}
+                  position="right"
+                  orientation="vertical"
+                />
+              )}
             </LineChart>
           </View>
         )}
@@ -309,6 +327,12 @@ export default function App() {
                   onPress={() => setAt(Math.floor(Math.random() * data.length))}
                 >
                   <Text style={styles.buttonText}>Set Cursor</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => setShowAxis((val) => !val)}
+                >
+                  <Text style={styles.buttonText}>Toggle Axis</Text>
                 </TouchableOpacity>
               </View>
 
