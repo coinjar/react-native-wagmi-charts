@@ -55,6 +55,8 @@ export function LineChartCursorCrosshair({
           scale: enableSpringAnimation
             ? withSpring(isActive.value ? 1 : 0, {
                 damping: 10,
+                stiffness: 100,
+                mass: 0.3,
               })
             : 0,
         },
