@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Svg } from 'react-native-svg';
+import { StyleSheet, View, Platform } from 'react-native';
+import { Svg, Defs, ClipPath, Rect, G } from 'react-native-svg';
 import Animated, {
   useAnimatedProps,
   useSharedValue,
@@ -24,6 +24,13 @@ const BACKGROUND_COMPONENTS = [
 const FOREGROUND_COMPONENTS = ['LineChartHighlight', 'LineChartDot'];
 
 const AnimatedSVG = Animated.createAnimatedComponent(Svg);
+const AnimatedRect = Animated.createAnimatedComponent(Rect);
+
+type ReactElementWithDisplayName = React.ReactElement & {
+  type?: {
+    displayName?: string;
+  };
+};
 
 type LineChartPathWrapperProps = {
   animationDuration?: number;
@@ -65,11 +72,19 @@ export function LineChartPathWrapper({
 
   React.useEffect(() => {
     isMounted.value = true;
+    return () => {
+      isMounted.value = false;
+    };
   }, []);
 
   ////////////////////////////////////////////////
 
-  const svgProps = useAnimatedProps(() => {
+  const clipId = React.useMemo(
+    () => `clip-foreground-${Math.random().toString(36).substring(2, 11)}`,
+    []
+  );
+
+  const clipProps = useAnimatedProps(() => {
     const shouldAnimateOnMount = animateOnMount === 'foreground';
     const inactiveWidth =
       !isMounted.value && shouldAnimateOnMount ? 0 : pathWidth;
@@ -123,12 +138,14 @@ export function LineChartPathWrapper({
   if (children) {
     const iterableChildren = flattenChildren(children);
     backgroundChildren = iterableChildren.filter((child) =>
-      // @ts-ignore
-      BACKGROUND_COMPONENTS.includes(child?.type?.displayName)
+      BACKGROUND_COMPONENTS.includes(
+        (child as ReactElementWithDisplayName)?.type?.displayName || ''
+      )
     );
     foregroundChildren = iterableChildren.filter((child) =>
-      // @ts-ignore
-      FOREGROUND_COMPONENTS.includes(child?.type?.displayName)
+      FOREGROUND_COMPONENTS.includes(
+        (child as ReactElementWithDisplayName)?.type?.displayName || ''
+      )
     );
   }
 
@@ -152,9 +169,7 @@ export function LineChartPathWrapper({
               {...pathProps}
             />
           </Svg>
-          <Svg style={StyleSheet.absoluteFill}>
-            {backgroundChildren}
-          </Svg>
+          <Svg style={StyleSheet.absoluteFill}>{backgroundChildren}</Svg>
         </View>
       </LineChartPathContext.Provider>
       <LineChartPathContext.Provider
@@ -165,12 +180,57 @@ export function LineChartPathWrapper({
         }}
       >
         <View style={StyleSheet.absoluteFill}>
-          <AnimatedSVG animatedProps={svgProps} height={height}>
-            <LineChartPath color={color} width={strokeWidth} {...pathProps} />
-          </AnimatedSVG>
-          <AnimatedSVG animatedProps={svgProps} height={height} style={StyleSheet.absoluteFill}>
-            {foregroundChildren}
-          </AnimatedSVG>
+          {/* On web, animated SVG width doesn't work without
+            react-native-svg-web, but that library breaks chart data
+            transitions. Use ClipPath instead. On native, AnimatedSVG with
+            animated width works correctly. */}
+          {Platform.OS === 'web' ? (
+            <>
+              <Svg width={width} height={height}>
+                <Defs>
+                  <ClipPath id={clipId}>
+                    <AnimatedRect
+                      x={0}
+                      y={0}
+                      animatedProps={clipProps}
+                      height={height}
+                    />
+                  </ClipPath>
+                </Defs>
+                <G clipPath={`url(#${clipId})`}>
+                  <LineChartPath
+                    color={color}
+                    width={strokeWidth}
+                    {...pathProps}
+                  />
+                </G>
+              </Svg>
+              <Svg
+                width={width}
+                height={height}
+                style={StyleSheet.absoluteFill}
+              >
+                <G clipPath={`url(#${clipId})`}>{foregroundChildren}</G>
+              </Svg>
+            </>
+          ) : (
+            <>
+              <AnimatedSVG animatedProps={clipProps} height={height}>
+                <LineChartPath
+                  color={color}
+                  width={strokeWidth}
+                  {...pathProps}
+                />
+              </AnimatedSVG>
+              <AnimatedSVG
+                animatedProps={clipProps}
+                height={height}
+                style={StyleSheet.absoluteFill}
+              >
+                {foregroundChildren}
+              </AnimatedSVG>
+            </>
+          )}
         </View>
       </LineChartPathContext.Provider>
     </>

@@ -8,17 +8,17 @@ export default [
   // Global ignores for config files and build artifacts
   {
     ignores: [
-      '**/.prettierrc.js', 
-      '**/eslint.config.js', 
+      '**/.prettierrc.js',
+      '**/eslint.config.js',
       '**/prettier.config.js',
       'lib/**/*',
       '**/*.config.js',
       '**/node_modules/**',
       'example/index.js',
-      '**/babel.config.js'
-    ]
+      '**/babel.config.js',
+    ],
   },
-  
+
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -45,5 +45,5 @@ export default [
       'react/prop-types': 'off', // Using TypeScript for props
       'react-native/no-inline-styles': 'warn',
     },
-  }
+  },
 ];

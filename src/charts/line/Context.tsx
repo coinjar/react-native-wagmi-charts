@@ -46,25 +46,30 @@ export function LineChartProvider({
   const isActive = useSharedValue(false);
 
   const domain = useMemo(
-    () => getDomain(
-      Array.isArray(data) ? data : Object.values(data)[0] as TLineChartData
-    ),
+    () =>
+      getDomain(
+        Array.isArray(data) ? data : (Object.values(data)[0] as TLineChartData)
+      ),
     [data]
   );
 
-  const values = useMemo(() => 
-    lineChartDataPropToArray(data).map(({ value }) => value), 
+  const values = useMemo(
+    () => lineChartDataPropToArray(data).map(({ value }) => value),
     [data]
   );
 
-  const yDomainValues = useMemo(() => ({
-    min: yRange?.min ?? Math.min(...values),
-    max: yRange?.max ?? Math.max(...values),
-  }), [values, yRange?.min, yRange?.max]);
+  const yDomainValues = useMemo(
+    () => ({
+      min: yRange?.min ?? Math.min(...values),
+      max: yRange?.max ?? Math.max(...values),
+    }),
+    [values, yRange?.min, yRange?.max]
+  );
 
   const contextValue = useMemo<TLineChartContext>(() => {
-    const domainRows =
-      Array.isArray(data) ? data : Object.values(data)[0] as TLineChartData;
+    const domainRows = Array.isArray(data)
+      ? data
+      : (Object.values(data)[0] as TLineChartData);
 
     return {
       currentX,

@@ -76,8 +76,9 @@ function validateLineChartId(dataContext: LineChartDataContext, id?: string) {
     const joinedIds = otherIds.join(', ');
 
     const suggestion = otherIds.length
-      ? `Did you mean to use ${singular ? 'this ID' : 'one of these IDs'
-      }: ${joinedIds}`
+      ? `Did you mean to use ${
+          singular ? 'this ID' : 'one of these IDs'
+        }: ${joinedIds}`
       : `You didn't pass any IDs to your <LineChart.Provider />'s data prop. Did you mean to pass an array instead?`;
 
     console.warn(
@@ -91,8 +92,9 @@ ${suggestion}`
 
     const joinedIds = otherIds.join(', ');
     const suggestion = otherIds.length
-      ? `Did you mean to use ${singular ? 'this ID' : 'one of these IDs'
-      }: ${joinedIds}`
+      ? `Did you mean to use ${
+          singular ? 'this ID' : 'one of these IDs'
+        }: ${joinedIds}`
       : `You didn't pass any IDs to your <LineChart.Provider />'s data prop. Did you mean to pass an array instead?`;
 
     console.error(`[react-native-wagmi-charts] Missing data "id" prop on LineChart. You must pass an id prop to <LineChart /> when using a dictionary for your data.

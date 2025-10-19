@@ -34,8 +34,6 @@ export function CandlestickChartCandles({
   const { width, height } = React.useContext(CandlestickChartDimensionsContext);
   const { data, domain, step } = useCandlestickChart();
 
-  ////////////////////////////////////////////////
-
   return (
     <Svg width={width} height={height} {...props}>
       {step > 0 &&

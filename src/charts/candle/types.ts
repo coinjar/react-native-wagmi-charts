@@ -13,6 +13,7 @@ export type TDomain = [min: number, max: number];
 export type TContext = {
   currentX: SharedValue<number>;
   currentY: SharedValue<number>;
+  currentIndex: SharedValue<number>;
   data: TData;
   width: number;
   height: number;
@@ -22,4 +23,3 @@ export type TContext = {
   setHeight: React.Dispatch<React.SetStateAction<number>>;
 };
 export type TPriceType = 'crosshair' | 'open' | 'close' | 'low' | 'high';
-export type { TFormatterFn } from '../../types';

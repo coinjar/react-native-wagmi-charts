@@ -11,7 +11,7 @@ export function getXPositionForCurve(path: Path, index: number) {
   if (point === undefined) {
     throw new Error(
       `Index out of bounds: ${index}. ` +
-      `Expected an integer in the range [0, ${path.curves.length}]`
+        `Expected an integer in the range [0, ${path.curves.length}]`
     );
   }
 

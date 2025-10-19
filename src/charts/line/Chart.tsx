@@ -1,5 +1,4 @@
 import React from 'react';
-// @ts-ignore
 import * as d3Shape from 'd3-shape';
 
 import { Dimensions, StyleSheet, View, ViewProps } from 'react-native';
@@ -111,7 +110,7 @@ export function LineChart({
       width,
       height,
       pathWidth,
-      shape,
+      shape: shape as d3Shape.CurveFactory,
     }),
     [
       yGutter,

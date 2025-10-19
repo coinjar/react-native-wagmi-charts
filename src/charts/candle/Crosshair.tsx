@@ -20,6 +20,12 @@ import { CandlestickChartLine, CandlestickChartLineProps } from './Line';
 import { useCandlestickChart } from './useCandlestickChart';
 import { CandlestickChartCrosshairTooltipContext } from './CrosshairTooltip';
 
+/**
+ * Threshold in pixels from the left edge of the chart. When the cursor is
+ * within this distance, the tooltip will be positioned on the right side.
+ */
+const TOOLTIP_POSITION_THRESHOLD = 100;
+
 type CandlestickChartCrosshairProps = {
   color?: string;
   children?: React.ReactNode;
@@ -40,26 +46,25 @@ export function CandlestickChartCrosshair({
   minDurationMs = 0,
 }: CandlestickChartCrosshairProps) {
   const { width, height } = React.useContext(CandlestickChartDimensionsContext);
-  const { currentX, currentY, step } = useCandlestickChart();
-
+  const { currentX, currentY, currentIndex, step } = useCandlestickChart();
   const tooltipPosition = useSharedValue<'left' | 'right'>('left');
-
   const opacity = useSharedValue(0);
 
   const updatePosition = (x: number, y: number) => {
     'worklet';
     const boundedX = x <= width - 1 ? x : width - 1;
-    if (boundedX < 100) {
+    if (boundedX < TOOLTIP_POSITION_THRESHOLD) {
       tooltipPosition.value = 'right';
     } else {
       tooltipPosition.value = 'left';
     }
     currentY.value = clamp(y, 0, height);
     currentX.value = boundedX - (boundedX % step) + step / 2;
+    currentIndex.value = Math.floor(boundedX / step);
   };
 
   const longPressGesture = Gesture.LongPress()
-    .minDuration(minDurationMs ?? 0)
+    .minDuration(minDurationMs)
     .maxDistance(999999)
     .onStart(
       (event: GestureStateChangeEvent<LongPressGestureHandlerEventPayload>) => {
@@ -70,8 +75,12 @@ export function CandlestickChartCrosshair({
     )
     .onTouchesMove((event) => {
       'worklet';
-      if (opacity.value === 1 && event.allTouches.length > 0) {
-        updatePosition(event.allTouches[0]!.x, event.allTouches[0]!.y);
+      if (
+        opacity.value === 1 &&
+        event.allTouches.length > 0 &&
+        event.allTouches[0]
+      ) {
+        updatePosition(event.allTouches[0].x, event.allTouches[0].y);
       }
     })
     .onEnd(() => {
@@ -79,7 +88,9 @@ export function CandlestickChartCrosshair({
       opacity.value = 0;
       currentY.value = -1;
       currentX.value = -1;
+      currentIndex.value = -1;
     });
+
   const horizontal = useAnimatedStyle(
     () => ({
       opacity: opacity.value,
@@ -87,6 +98,7 @@ export function CandlestickChartCrosshair({
     }),
     [opacity, currentY]
   );
+
   const vertical = useAnimatedStyle(
     () => ({
       opacity: opacity.value,
