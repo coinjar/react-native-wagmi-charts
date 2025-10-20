@@ -20,12 +20,12 @@ export const LineChartDimensionsContext = React.createContext({
   pathWidth: 0,
 });
 
-type LineChartProps = ViewProps & {
+export type LineChartProps = ViewProps & {
   children: React.ReactNode;
   yGutter?: number;
   width?: number;
   height?: number;
-  shape?: unknown;
+  shape?: d3Shape.CurveFactory;
   /**
    * If your `LineChart.Provider` uses a dictionary with multiple IDs for multiple paths, then this field is required.
    */
@@ -110,7 +110,7 @@ export function LineChart({
       width,
       height,
       pathWidth,
-      shape: shape as d3Shape.CurveFactory,
+      shape
     }),
     [
       yGutter,
