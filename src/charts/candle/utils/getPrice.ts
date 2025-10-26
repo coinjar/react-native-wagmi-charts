@@ -1,4 +1,4 @@
-import { interpolate, Extrapolate } from 'react-native-reanimated';
+import { interpolate, Extrapolation } from 'react-native-reanimated';
 
 import type { TDomain } from '../types';
 
@@ -13,5 +13,5 @@ export function getPrice({
 }) {
   'worklet';
   if (y === -1) return -1;
-  return interpolate(y, [0, maxHeight], domain.reverse(), Extrapolate.CLAMP);
+  return interpolate(y, [0, maxHeight], domain.reverse(), Extrapolation.CLAMP);
 }

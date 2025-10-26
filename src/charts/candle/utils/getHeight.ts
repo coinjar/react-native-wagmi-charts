@@ -1,4 +1,4 @@
-import { interpolate, Extrapolate } from 'react-native-reanimated';
+import { interpolate, Extrapolation } from 'react-native-reanimated';
 
 import type { TDomain } from '../types';
 
@@ -16,6 +16,6 @@ export function getHeight({
     value,
     [0, Math.max(...domain) - Math.min(...domain)],
     [0, maxHeight],
-    Extrapolate.CLAMP
+    Extrapolation.CLAMP
   );
 }
