@@ -59,6 +59,7 @@ export default function App() {
 
   const [toggleMinMaxLabels, setToggleMinMaxLabels] = React.useState(false);
   const [toggleSnapToPoint, setToggleSnapToPoint] = React.useState(false);
+  const [togglePersistOnEnd, setTogglePersistOnEnd] = React.useState(false);
   const [toggleHighlight, setToggleHighlight] = React.useState(false);
 
   const [floatingTooltip, setFloatingTooltip] = React.useState(false);
@@ -169,6 +170,7 @@ export default function App() {
               </LineChart.Path>
               <LineChart.CursorCrosshair
                 snapToPoint={toggleSnapToPoint}
+                persistOnEnd={togglePersistOnEnd}
                 onActivated={invokeHaptic}
                 onEnded={invokeHaptic}
                 at={at}
@@ -320,6 +322,14 @@ export default function App() {
                 >
                   <Text style={styles.buttonText}>
                     Toggle Snap {toggleSnapToPoint ? 'Off' : 'On'}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => setTogglePersistOnEnd((val) => !val)}
+                >
+                  <Text style={styles.buttonText}>
+                    Toggle Persist On End {togglePersistOnEnd ? 'Off' : 'On'}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity

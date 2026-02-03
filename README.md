@@ -871,6 +871,7 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 | `crosshairProps`        | `ViewProps`                    |           | Props of the crosshair dot                                            |
 | `crosshairOuterProps`   | `ViewProps`                    |           | Props of the crosshair outer dot                                      |
 | `snapToPoint`           | `boolean`                      | `false`   | **REACT NATIVE ONLY** Snap cursor to X position of nearest data point |
+| `persistOnEnd`             | `boolean`                      | `false`   | Keep the cursor pinned at its last position after the gesture ends    |
 | `at`                    | `number`                       |           | Index of followed `data` item.                                        |
 | `...props`              | `LongPressGestureHandlerProps` |           |                                                                       |
 
@@ -880,6 +881,7 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 | ----------- | ----------- | -------- | ---------------------------------------------------------------- |
 | `color`     | `string`    | `"gray"` | Color of the cursor line                                         |
 | `lineProps` | `LineProps` |          | Props of the cursor line. Takes React Native SVG's `Line` props. |
+| `persistOnEnd` | `boolean`   | `false`  | Keep the cursor pinned at its last position after the gesture ends |
 | `at`        | `number`    |          | Index of followed `data` item.                                   |
 
 ### LineChart.Dot
