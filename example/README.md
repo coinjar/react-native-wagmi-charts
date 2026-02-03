@@ -8,23 +8,17 @@ First install project dependencies in this directory (`pnpm` is recommended):
 pnpm install
 ```
 
-After dependencies are installed, you can go ahead and run the project on either a simulator, or a real device using the following commands
-
-For iOS:
+Then go ahead and run the project on either a simulator, or a real device using
+one of the following commands.
 
 ```bash
+# For iOS
 pnpm run ios
-```
 
-For Android:
-
-```bash
+# For Android
 pnpm run android
-```
 
-For Web:
-
-```bash
+# For Web
 pnpm run web
 ```
 
@@ -44,4 +38,5 @@ The following charts are included:
 
 ### Sample Data
 
-The charts in this example use hardcoded data, which is stored in the `src/data` directory
+The charts in this example use hardcoded data, which is stored in the `src/data`
+directory

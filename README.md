@@ -1,6 +1,7 @@
 # react-native-wagmi-charts 💸
 
-A sweet & simple chart library for React Native that will make us feel like **W**e're **A**ll **G**onna **M**ake **I**t
+A sweet & simple chart library for React Native that will make us feel like
+**W**e're **A**ll **G**onna **M**ake **I**t
 
 <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
   <img src="https://user-images.githubusercontent.com/7336481/133024970-07321941-4f26-44d2-867f-dac19d110941.gif" width="300px" />
@@ -86,29 +87,37 @@ A sweet & simple chart library for React Native that will make us feel like **W*
 
 ## Install
 
-To get started with using WAGMI charts in your React Native project, install the `react-native-wagmi-charts` package.
+To get started with using WAGMI charts in your React Native project, install the
+`react-native-wagmi-charts` package.
 
-```
+```bash
 npm install react-native-wagmi-charts
 ```
 
-WAGMI charts also depends on a few libraries, you will also need to install these packages if you don't already have them:
+WAGMI charts also depends on a few libraries, you will also need to install
+these packages if you don't already have them:
 
-```
+```bash
 npm install react-native-reanimated react-native-gesture-handler react-native-haptic-feedback
 ```
 
 ## Basic Usage
 
-The library currently comes with 2 types of charts: Line & Candlestick. Below are the most basic usages of them.
+The library currently comes with 2 types of charts: Line & Candlestick. Below
+are the most basic usages of them.
 
 ### Line chart
 
-To render a simple line chart, you will need to use the `LineChart.Provider`, `LineChart` & `LineChart.Path` components.
+To render a simple line chart, you will need to use the `LineChart.Provider`,
+`LineChart` & `LineChart.Path` components.
 
-The `LineChart.Provider` component sets up the context of your chart, `LineChart` composes the chart elements, and the `LineChart.Path` component renders your data in the form of a line path.
+The `LineChart.Provider` component sets up the context of your chart,
+`LineChart` composes the chart elements, and the `LineChart.Path` component
+renders your data in the form of a line path.
 
-> Note: This chart does not include an interactive cursor like in the animated example above. If you want one, [check out the "Interactive Cursors" guide](#interactive-cursors)
+> Note: This chart does not include an interactive cursor like in the animated
+> example above. If you want one,
+> [check out the "Interactive Cursors" guide](#interactive-cursors)
 
 ```jsx
 import { LineChart } from 'react-native-wagmi-charts';
@@ -145,11 +154,17 @@ function Example() {
 
 ### Candlestick chart
 
-To render a simple candlestick chart, you will need to use the `CandlestickChart` & `CandlestickChart.Candles` components.
+To render a simple candlestick chart, you will need to use the
+`CandlestickChart` & `CandlestickChart.Candles` components.
 
-The `CandlestickChart.Provider` component sets up the context of your chart, `CandlestickChart` composes the chart elements, and the `CandlestickChart.Candles` component renders your data in the form of a line path.
+The `CandlestickChart.Provider` component sets up the context of your chart,
+`CandlestickChart` composes the chart elements, and the
+`CandlestickChart.Candles` component renders your data in the form of a line
+path.
 
-> Note: This chart does not include an interactive cursor like in the animated example above. If you want one, [check out the "Interactive Cursors" guide](#interactive-cursors)
+> Note: This chart does not include an interactive cursor like in the animated
+> example above. If you want one,
+> [check out the "Interactive Cursors" guide](#interactive-cursors)
 
 ```jsx
 import { CandlestickChart } from 'react-native-wagmi-charts';
@@ -198,11 +213,13 @@ function Example() {
 
 ## Line Chart Guides
 
-Below are some line chart guides to help you make your charts suit your brand. Hopefully a combination of the below will enable you to make a great chart! :-)
+Below are some line chart guides to help you make your charts suit your brand.
+Hopefully a combination of the below will enable you to make a great chart! :-)
 
 ### Interactive cursors
 
-To render an interactive cursor on your line chart, you can include either the `LineChart.CursorCrosshair` or `LineChart.CursorLine` components:
+To render an interactive cursor on your line chart, you can include either the
+`LineChart.CursorCrosshair` or `LineChart.CursorLine` components:
 
 ##### `LineChart.CursorCrosshair`
 
@@ -232,7 +249,8 @@ To render an interactive cursor on your line chart, you can include either the `
 
 ### Interactive labels
 
-To render an interactive label on your line chart as your cursor moves along the graph, you can use the `PriceText` or `DatetimeText` components:
+To render an interactive label on your line chart as your cursor moves along
+the graph, you can use the `PriceText` or `DatetimeText` components:
 
 > Note: These components **must** be within the `LineChart.Provider` component.
 
@@ -251,7 +269,8 @@ To render an interactive label on your line chart as your cursor moves along the
 
 ### Interactive tooltips
 
-To render an interactive tooltip that follows your cursor, you can use the `Tooltip` component.
+To render an interactive tooltip that follows your cursor, you can use the
+`Tooltip` component.
 
 ```jsx
 <LineChart.Provider data={data}>
@@ -286,8 +305,10 @@ You can even add another tooltip to show something like date/time:
 
 ### Tooltips / Labels
 
-You can also use the `Tooltip` component to render a "static" tooltip at a given index, by specifying the `at` prop (similar to [Dots](#dots)).
-Note that the tooltip will disappear when there is interaction with a cursor on the chart.
+You can also use the `Tooltip` component to render a "static" tooltip at a
+given index, by specifying the `at` prop (similar to [Dots](#dots)). Note that
+the tooltip will disappear when there is interaction with a cursor on the
+chart.
 
 ```jsx
 <LineChart.Provider data={data}>
@@ -303,7 +324,8 @@ Note that the tooltip will disappear when there is interaction with a cursor on 
 
 ### Haptic feedback
 
-By making use of the chart event handlers, you are able to integrate haptic feedback into your charts.
+By making use of the chart event handlers, you are able to integrate haptic
+feedback into your charts.
 
 We can utilise the `onActivated` and `onEnded` events to create haptic feedback
 on our line chart. This will cause a vibration on touch down/up.
@@ -358,7 +380,8 @@ function Example() {
 }
 ```
 
-If you want to synchronize two graphs, or even initialize a new graph with a cursor position, you can use the `at` prop:
+If you want to synchronize two graphs, or even initialize a new graph with a
+cursor position, you can use the `at` prop:
 
 ```tsx
 <LineChart.Provider data={data}>
@@ -371,11 +394,14 @@ If you want to synchronize two graphs, or even initialize a new graph with a cur
 
 ### Colors
 
-By default, the charts come with default colors out-of-the-box... But you probably will want to change these to suit your brand.
+By default, the charts come with default colors out-of-the-box... But you
+probably will want to change these to suit your brand.
 
 #### Coloring the path
 
-To customise the color of the line chart path, supply a `color` prop to `LineChart.Path`. This can be any valid React Native `StyleSheet` compatible color.
+To customise the color of the line chart path, supply a `color` prop to
+`LineChart.Path`. This can be any valid React Native `StyleSheet` compatible
+color.
 
 ```jsx
 <LineChart.Provider data={data}>
@@ -389,7 +415,9 @@ To customise the color of the line chart path, supply a `color` prop to `LineCha
 
 #### Coloring the cursor
 
-To customise the color of the line chart cursor, supply a `color` prop to `LineChart.CursorCrosshair`. This can be any valid React Native `StyleSheet` compatible color.
+To customise the color of the line chart cursor, supply a `color` prop to
+`LineChart.CursorCrosshair`. This can be any valid React Native `StyleSheet`
+compatible color.
 
 > Note: This also works for `LineChart.CursorLine`
 
@@ -408,9 +436,9 @@ To customise the color of the line chart cursor, supply a `color` prop to `LineC
 
 By default, the cursor is triggered whenever you press the chart.
 
-If your app runs on Web, you may want to trigger the cursor when a user hovers, too.
-
-To achieve this, simply add `<LineChart.HoverTrap />` as the child of your cursor.
+If your app runs on Web, you may want to trigger the cursor when a user hovers,
+too. To achieve this, simply add `<LineChart.HoverTrap />` as the child of your
+cursor.
 
 ```jsx
 <LineChart.Provider data={data}>
@@ -425,7 +453,8 @@ To achieve this, simply add `<LineChart.HoverTrap />` as the child of your curso
 
 ### Gradients
 
-By using the `LineChart.Gradient` component, you can apply a gradient to the area underneath your path.
+By using the `LineChart.Gradient` component, you can apply a gradient to the
+area underneath your path.
 
 ```jsx
 <LineChart.Provider data={data}>
@@ -439,7 +468,8 @@ By using the `LineChart.Gradient` component, you can apply a gradient to the are
 
 <img width="346" alt="Screen Shot 2021-10-25 at 8 32 07 pm" src="https://user-images.githubusercontent.com/7336481/138672128-c691036e-404f-4148-8a3b-00ea2f7df27f.png">
 
-The gradient will inherit your path's color by default, however, you can provide a color prop to `LineChart.Gradient`:
+The gradient will inherit your path's color by default, however, you can
+provide a color prop to `LineChart.Gradient`.
 
 ```jsx
 <LineChart.Provider data={data}>
@@ -501,7 +531,9 @@ You can highlight a section of your path with `LineChart.Highlight`.
 
 ### Horizontal lines
 
-You can render a static horizontal line on your line chart which moves whenever your data change. It's located on height of point which is on `at` position of provided data.
+You can render a static horizontal line on your line chart which moves whenever
+your data change. In this example, the y value of the line is equal to the y
+value of the point at index `0`.
 
 ```jsx
 <LineChart.Provider data={data}>
@@ -515,7 +547,8 @@ You can render a static horizontal line on your line chart which moves whenever 
 
 <img width="345" alt="Screen Shot 2021-11-23 at 11 51 45 am" src="https://user-images.githubusercontent.com/7336481/143009672-54dac2c7-7de1-4299-a96f-7cc380e82b46.png">
 
-You can also pass a (y) value to `HorizontalLine` with the `value` attribute:
+You can also directly specify the y value of the `HorizontalLine` with the
+`value` attribute:
 
 ```jsx
 <LineChart.Provider data={data}>
@@ -529,7 +562,9 @@ You can also pass a (y) value to `HorizontalLine` with the `value` attribute:
 
 ### Customizing size
 
-You can modify the width & height of the charts by providing `width` and `height` props to `LineChart` or `CandlestickChart`. Your chart should adapt to it's size.
+You can modify the width & height of the charts by providing `width` and
+`height` props to `LineChart` or `CandlestickChart`. Your chart should adapt
+to it's size.
 
 ```jsx
 <LineChart.Provider data={data}>
@@ -545,7 +580,9 @@ You can modify the width & height of the charts by providing `width` and `height
 
 ##### Precision
 
-By default, the price labels have a precision of `2`, meaning that the prices will always be to 2 decimal places. However, you can customize this with the `precision` prop:
+By default, the price labels have a precision of `2`, meaning that the prices
+will always be to 2 decimal places. However, you can customize this with the
+`precision` prop:
 
 ```jsx
 <LineChart.PriceText precision={4} />
@@ -553,9 +590,13 @@ By default, the price labels have a precision of `2`, meaning that the prices wi
 
 ##### Custom formatting
 
-To customize the formatting of the price text, you can supply a `format` function in the form of a [reanimated worklet](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets):
+To customize the formatting of the price text, you can supply a `format`
+function in the form of a
+[reanimated worklet](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets):
 
-> Note: due to the nature of reanimated worklets, you cannot define functions that run on the React Native JS thread. [Read more here](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets)
+> Note: due to the nature of reanimated worklets, you cannot define functions
+> that run on the React Native JS thread.
+> [Read more here](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets)
 
 ```jsx
 <LineChart.PriceText
@@ -571,7 +612,9 @@ To customize the formatting of the price text, you can supply a `format` functio
 
 ##### Date/time options
 
-Internally, WAGMI charts uses [`Date.prototype.toLocaleString()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) to generate the date/time label. You can customise it's options like so:
+Internally, WAGMI charts uses
+[`Date.prototype.toLocaleString()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString)
+to generate the date/time label. You can customise it's options like so:
 
 ```jsx
 <LineChart.DatetimeText
@@ -589,9 +632,13 @@ Internally, WAGMI charts uses [`Date.prototype.toLocaleString()`](https://develo
 
 ##### Custom formatting
 
-To customize the formatting of the date/time text, you can supply a `format` function in the form of a [reanimated worklet](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets):
+To customize the formatting of the date/time text, you can supply a `format`
+function in the form of a
+[reanimated worklet](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets):
 
-> Note: due to the nature of reanimated worklets, you cannot define functions that run on the React Native JS thread. [Read more here](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets)
+> Note: due to the nature of reanimated worklets, you cannot define functions
+> that run on the React Native JS thread.
+> [Read more here](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets)
 
 ```jsx
 <LineChart.DatetimeText
@@ -625,11 +672,13 @@ You can customize the style of the tooltip by providing the `textStyle` prop:
 
 #### Gutter
 
-You can customize the gutters of the tooltip by providing `cursorGutter`, `xGutter` or `yGutter`.
+You can customize the gutters of the tooltip by providing `cursorGutter`,
+`xGutter` or `yGutter`.
 
 `cursorGutter` is the gutter between the cursor and the tooltip.
 
-`xGutter` and `yGutter` is the gutter on the x & y axis of the chart (the tooltip can't pass the gutter).
+`xGutter` and `yGutter` is the gutter on the x & y axis of the chart (the
+tooltip can't pass the gutter).
 
 ```jsx
 <LineChart.Tooltip cursorGutter={60} xGutter={16} yGutter={16} />
@@ -654,7 +703,8 @@ You can render an axis on your line chart with `LineChart.Axis`.
 
 ### Interactive cursors
 
-To render an interactive cursor on your candlestick chart, you can include the `CandlestickChart.Crosshair` component:
+To render an interactive cursor on your candlestick chart, you can include the
+`CandlestickChart.Crosshair` component:
 
 ```jsx
 <CandlestickChart.Provider data={data}>
@@ -669,9 +719,11 @@ To render an interactive cursor on your candlestick chart, you can include the `
 
 ### Interactive labels
 
-To render an interactive label on your candlestick chart, you can use the `PriceText` or `DatetimeText` components:
+To render an interactive label on your candlestick chart, you can use the
+`PriceText` or `DatetimeText` components:
 
-> Note: These components **must** be within the `CandlestickChart.Provider` component.
+> Note: These components **must** be within the `CandlestickChart.Provider`
+> component.
 
 ```jsx
 <CandlestickChart.Provider data={data}>
@@ -691,7 +743,8 @@ To render an interactive label on your candlestick chart, you can use the `Price
 
 ### Interactive tooltips
 
-To render an interactive tooltip that follows your crosshair, you can use the `Tooltip` component.
+To render an interactive tooltip that follows your crosshair, you can use the
+`Tooltip` component.
 
 ```jsx
 <CandlestickChart.Provider data={data}>
@@ -708,9 +761,11 @@ To render an interactive tooltip that follows your crosshair, you can use the `T
 
 ### Haptic feedback
 
-By making use of the chart event handlers, you are able to integrate haptic feedback into your charts.
+By making use of the chart event handlers, you are able to integrate haptic
+feedback into your charts.
 
-We can utilise the `onCurrentXChange` event to create haptic feedback on our candlestick chart.
+We can utilise the `onCurrentXChange` event to create haptic feedback on our
+candlestick chart.
 
 ```jsx
 import * as haptics from 'expo-haptics';
@@ -737,11 +792,14 @@ function Example() {
 
 ### Colors
 
-By default, the charts come with default colors out-of-the-box... But you probably will want to change these to suit your brand.
+By default, the charts come with default colors out-of-the-box... But you
+probably will want to change these to suit your brand.
 
 #### Coloring the candles
 
-To customise the color of the candlestick chart candles, supply a `negativeColor` and a `positiveColor` to `CandlestickChart.Candles`. This can be any valid React Native `StyleSheet` compatible color.
+To customise the color of the candlestick chart candles, supply a
+`negativeColor` and a `positiveColor` to `CandlestickChart.Candles`. This can
+be any valid React Native `StyleSheet` compatible color.
 
 ```jsx
 <CandlestickChart.Provider data={data}>
@@ -755,7 +813,9 @@ To customise the color of the candlestick chart candles, supply a `negativeColor
 
 #### Coloring the crosshair
 
-To customise the color of the line chart cursor, supply a `color` prop to `CandlestickChart.Crosshair`. This can be any valid React Native `StyleSheet` compatible color.
+To customise the color of the line chart cursor, supply a `color` prop to
+`CandlestickChart.Crosshair`. This can be any valid React Native `StyleSheet`
+compatible color.
 
 ```jsx
 <CandlestickChart.Provider data={data}>
@@ -774,7 +834,9 @@ To customise the color of the line chart cursor, supply a `color` prop to `Candl
 
 ##### Precision
 
-By default, the price labels have a precision of `2`, meaning that the prices will always be to 2 decimal places. However, you can customize this with the `precision` prop:
+By default, the price labels have a precision of `2`, meaning that the prices
+will always be to 2 decimal places. However, you can customize this with the
+`precision` prop:
 
 ```jsx
 <CandlestickChart.PriceText precision={4} />
@@ -782,9 +844,13 @@ By default, the price labels have a precision of `2`, meaning that the prices wi
 
 ##### Custom formatting
 
-To customize the formatting of the price text, you can supply a `format` function in the form of a [reanimated worklet](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets):
+To customize the formatting of the price text, you can supply a `format`
+function in the form of a
+[reanimated worklet](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets):
 
-> Note: due to the nature of reanimated worklets, you cannot define functions that run on the React Native JS thread. [Read more here](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets)
+> Note: due to the nature of reanimated worklets, you cannot define functions
+> that run on the React Native JS thread.
+> [Read more here](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets)
 
 ```jsx
 <CandlestickChart.PriceText
@@ -800,7 +866,9 @@ To customize the formatting of the price text, you can supply a `format` functio
 
 ##### Date/time options
 
-Internally, WAGMI charts uses [`Date.prototype.toLocaleString()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) to generate the date/time label. You can customise it's options like so:
+Internally, WAGMI charts uses
+[`Date.prototype.toLocaleString()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString)
+to generate the date/time label. You can customise it's options like so:
 
 ```jsx
 <CandlestickChart.DatetimeText
@@ -818,9 +886,13 @@ Internally, WAGMI charts uses [`Date.prototype.toLocaleString()`](https://develo
 
 ##### Custom formatting
 
-To customize the formatting of the date/time text, you can supply a `format` function in the form of a [reanimated worklet](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets):
+To customize the formatting of the date/time text, you can supply a `format`
+function in the form of a
+[reanimated worklet](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets):
 
-> Note: due to the nature of reanimated worklets, you cannot define functions that run on the React Native JS thread. [Read more here](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets)
+> Note: due to the nature of reanimated worklets, you cannot define functions
+> that run on the React Native JS thread.
+> [Read more here](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/worklets)
 
 ```jsx
 <CandlestickChart.DatetimeText
@@ -871,18 +943,18 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 | `crosshairProps`        | `ViewProps`                    |           | Props of the crosshair dot                                            |
 | `crosshairOuterProps`   | `ViewProps`                    |           | Props of the crosshair outer dot                                      |
 | `snapToPoint`           | `boolean`                      | `false`   | **REACT NATIVE ONLY** Snap cursor to X position of nearest data point |
-| `persistOnEnd`             | `boolean`                      | `false`   | Keep the cursor pinned at its last position after the gesture ends    |
+| `persistOnEnd`          | `boolean`                      | `false`   | Keep the cursor pinned at its last position after the gesture ends    |
 | `at`                    | `number`                       |           | Index of followed `data` item.                                        |
 | `...props`              | `LongPressGestureHandlerProps` |           |                                                                       |
 
 ### LineChart.CursorLine
 
-| Prop        | Type        | Default  | Description                                                      |
-| ----------- | ----------- | -------- | ---------------------------------------------------------------- |
-| `color`     | `string`    | `"gray"` | Color of the cursor line                                         |
-| `lineProps` | `LineProps` |          | Props of the cursor line. Takes React Native SVG's `Line` props. |
+| Prop           | Type        | Default  | Description                                                        |
+| -------------- | ----------- | -------- | ------------------------------------------------------------------ |
+| `color`        | `string`    | `"gray"` | Color of the cursor line                                           |
+| `lineProps`    | `LineProps` |          | Props of the cursor line. Takes React Native SVG's `Line` props.   |
 | `persistOnEnd` | `boolean`   | `false`  | Keep the cursor pinned at its last position after the gesture ends |
-| `at`        | `number`    |          | Index of followed `data` item.                                   |
+| `at`           | `number`    |          | Index of followed `data` item.                                     |
 
 ### LineChart.Dot
 
@@ -960,9 +1032,9 @@ To customize the formatting of the date/time text, you can supply a `format` fun
 
 ### LineChart.HoverTrap
 
-This component doesn't take any props.
-
-Place it as the child of your cursor component to trap hover events on Web. If you're using mutliple cursors, place this as the child of your lowest-rendered cursor.
+This component doesn't take any props. Place it as the child of your cursor
+component to trap hover events on Web. If you're using mutliple cursors, place
+this as the child of your lowest-rendered cursor.
 
 ```tsx
 <LineChart.HoverTrap />
@@ -1046,7 +1118,8 @@ Place it as the child of your cursor component to trap hover events on Web. If y
 
 ## Hooks
 
-The following hooks are only accessible inside the `LineChart.Provider` or `CandlestickChart.Provider`.
+The following hooks are only accessible inside the `LineChart.Provider` or
+`CandlestickChart.Provider`.
 
 ### LineChart.useChart
 
@@ -1213,7 +1286,8 @@ const { value, formatted } = CandlestickChart.usePrice({
 
 Web support is currently experimental.
 
-Currently, transitions for a line chart's path flicker a little. You can disable them on Web with the `isTransitionEnabled` prop.
+Currently, transitions for a line chart's path flicker a little. You can
+disable them on Web with the `isTransitionEnabled` prop.
 
 ### Disable Transitions
 
@@ -1231,7 +1305,9 @@ const isWeb = Platform.OS === 'web'
 
 ### Reanimated Version
 
-In order to support SVG animations on Web, you'll need at least Reanimated version `2.3.0-beta.2`. Or, you can use the patch from [Issue #8](https://github.com/coinjar/react-native-wagmi-charts/issues/8#issuecomment-938097099).
+In order to support SVG animations on Web, you'll need at least Reanimated
+version `2.3.0-beta.2`. Or, you can use the patch from
+[Issue #8](https://github.com/coinjar/react-native-wagmi-charts/issues/8#issuecomment-938097099).
 
 ## Credits
 
