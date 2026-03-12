@@ -954,6 +954,7 @@ function in the form of a
 | `color`        | `string`    | `"gray"` | Color of the cursor line                                           |
 | `lineProps`    | `LineProps` |          | Props of the cursor line. Takes React Native SVG's `Line` props.   |
 | `persistOnEnd` | `boolean`   | `false`  | Keep the cursor pinned at its last position after the gesture ends |
+| `showLabel`    | `boolean`   | `true`   | Show the bottom label for timestamp                                |
 | `at`           | `number`    |          | Index of followed `data` item.                                     |
 
 ### LineChart.Dot

@@ -18,6 +18,7 @@ import { useLineChartPrice } from './usePrice';
 type LineChartCursorLineProps = {
   children?: React.ReactNode;
   color?: string;
+  showLabel?: boolean;
   lineProps?: Partial<LineProps>;
   format?: TFormatterFn<string | number>;
   textStyle?: TextStyle;
@@ -48,6 +49,7 @@ const AnimatedLine = Animated.createAnimatedComponent(SVGLine);
 export function LineChartCursorLine({
   children,
   color = 'gray',
+  showLabel = true,
   lineProps,
   format,
   textStyle,
@@ -105,7 +107,7 @@ export function LineChartCursorLine({
     if (isHorizontal) return 0;
 
     // For vertical cursor, extend line to the chart area (excluding reserved label space)
-    return height - SPACING.X_AXIS_LABEL_RESERVED_HEIGHT;
+    return showLabel ? height - SPACING.X_AXIS_LABEL_RESERVED_HEIGHT : height;
   });
 
   const containerStyle = useAnimatedStyle(() => ({
@@ -208,7 +210,9 @@ export function LineChartCursorLine({
             {...lineProps}
           />
         </Svg>
-        <AnimatedText text={displayText} style={textPositionStyle} />
+        {showLabel && (
+          <AnimatedText text={displayText} style={textPositionStyle} />
+        )}
       </Animated.View>
       {children}
     </LineChartCursor>
