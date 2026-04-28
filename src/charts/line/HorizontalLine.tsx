@@ -55,6 +55,9 @@ export function LineChartHorizontalLine({
   );
   const { yDomain } = useLineChart();
 
+  // Reserve space at the bottom for x-axis cursor labels
+  const X_AXIS_LABEL_RESERVED_HEIGHT = 40;
+
   const y = useDerivedValue(() => {
     if (typeof at === 'number' || at.index != null) {
       const index = typeof at === 'number' ? at : at.index;
@@ -74,7 +77,8 @@ export function LineChartHorizontalLine({
 
     const offsetTop = yDomain.max - at.value;
     const percentageOffsetTop = offsetTop / (yDomain.max - yDomain.min);
-    const heightBetweenGutters = height - gutter * 2;
+    const chartDrawingHeight = height - X_AXIS_LABEL_RESERVED_HEIGHT;
+    const heightBetweenGutters = chartDrawingHeight - gutter * 2;
     const offsetTopPixels = gutter + percentageOffsetTop * heightBetweenGutters;
 
     return withTiming(offsetTopPixels + offsetY);
