@@ -61,6 +61,8 @@ export default function App() {
   const [toggleSnapToPoint, setToggleSnapToPoint] = React.useState(false);
   const [togglePersistOnEnd, setTogglePersistOnEnd] = React.useState(false);
   const [toggleHighlight, setToggleHighlight] = React.useState(false);
+  const [toggleShowLabelOnCursorLine, setToggleShowLabelOnCursorLine] =
+    React.useState(true);
 
   const [floatingTooltip, setFloatingTooltip] = React.useState(false);
   const [tooltipPosition, setTooltipPosition] =
@@ -168,6 +170,7 @@ export default function App() {
                   />
                 )}
               </LineChart.Path>
+              <LineChart.CursorLine showLabel={toggleShowLabelOnCursorLine} />
               <LineChart.CursorCrosshair
                 snapToPoint={toggleSnapToPoint}
                 persistOnEnd={togglePersistOnEnd}
@@ -330,6 +333,15 @@ export default function App() {
                 >
                   <Text style={styles.buttonText}>
                     Toggle Persist On End {togglePersistOnEnd ? 'Off' : 'On'}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => setToggleShowLabelOnCursorLine((val) => !val)}
+                >
+                  <Text style={styles.buttonText}>
+                    Toggle Show Label On CusorLine{' '}
+                    {toggleShowLabelOnCursorLine ? 'On' : 'Off'}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
