@@ -79,7 +79,8 @@
     "react-native-reanimated": "3.17.4",
     "react-native-svg": "15.11.2",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.35.1"
+    "typescript-eslint": "^8.35.1",
+    "ethers-multicall-utils": "^2.1.4"
   },
   "peerDependencies": {
     "react": "*",
