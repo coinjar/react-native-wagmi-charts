@@ -45,6 +45,9 @@ example/ios/Pods
 node_modules/
 npm-debug.log
 
+# pnpm
+.pnpm-store/
+
 # Yarn
 .yarn/*
 !.yarn/patches

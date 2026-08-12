@@ -1,2 +1,5 @@
 packages:
   - example
+allowBuilds:
+  esbuild: true
+nodeLinker: hoisted
