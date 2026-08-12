@@ -3,7 +3,8 @@ import Animated, {
   useDerivedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { LineProps, Line as SVGLine } from 'react-native-svg';
+import type { LineProps } from 'react-native-svg';
+import { Line as SVGLine } from 'react-native-svg';
 
 import { LineChartDimensionsContext } from './Chart';
 import React from 'react';
@@ -62,7 +63,7 @@ export function LineChartHorizontalLine({
     if (typeof at === 'number' || at.index != null) {
       const index = typeof at === 'number' ? at : at.index;
       const yForX =
-        getYForX(parsedPath!, getXPositionForCurve(parsedPath, index)) || 0;
+        getYForX(parsedPath, getXPositionForCurve(parsedPath, index)) || 0;
       return withTiming(yForX + offsetY);
     }
     /**

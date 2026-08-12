@@ -44,7 +44,7 @@ export function getPath({
         : true
     )
     .x((_: TLineChartPoint, i: number) =>
-      scaleX(xDomain ? timestamps[i] ?? i : i)
+      scaleX(xDomain ? (timestamps[i] ?? i) : i)
     )
     .y((d: TLineChartPoint) => scaleY(d.value))
     .curve(_shape as shape.CurveFactory)(data);

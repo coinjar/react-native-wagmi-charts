@@ -14,10 +14,8 @@ import Animated, {
 import type { SharedValue, AnimatedStyle } from 'react-native-reanimated';
 import { CandlestickChartDimensionsContext } from './Chart';
 import { useCandlestickChart } from './useCandlestickChart';
-import {
-  CandlestickChartPriceText,
-  CandlestickChartPriceTextProps,
-} from './PriceText';
+import type { CandlestickChartPriceTextProps } from './PriceText';
+import { CandlestickChartPriceText } from './PriceText';
 
 export type CandlestickChartCrosshairTooltipProps = ViewProps & {
   children?: React.ReactNode;

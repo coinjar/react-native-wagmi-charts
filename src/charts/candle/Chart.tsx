@@ -1,5 +1,6 @@
 import React from 'react';
-import { Dimensions, View, ViewProps } from 'react-native';
+import type { ViewProps } from 'react-native';
+import { Dimensions, View } from 'react-native';
 
 import { useCandlestickChart } from './useCandlestickChart';
 

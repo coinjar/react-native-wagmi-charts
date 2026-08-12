@@ -1,5 +1,11 @@
 // @ts-nocheck
 
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,
+                  @typescript-eslint/no-unsafe-assignment,
+                  @typescript-eslint/no-unsafe-call,
+                  @typescript-eslint/no-unsafe-return,
+                  @typescript-eslint/no-unsafe-argument */
+
 /**
  * Reanimated compatible fork of https://github.com/pbeshai/d3-interpolate-path
  */
@@ -608,7 +614,7 @@ export function interpolatePathCommands(
  *   end command object and returns true if the segment should be excluded from splitting.
  * @returns {Function} Interpolation function that maps t ([0, 1]) to a path `d` string.
  */
-export function interpolatePath(a, b, excludeSegment) {
+export function interpolatePath(a, b, excludeSegment): (t: number) => string {
   'worklet';
 
   const aCommands = pathCommandsFromString(a);

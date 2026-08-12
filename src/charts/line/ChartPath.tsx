@@ -1,17 +1,18 @@
 import React from 'react';
 import { StyleSheet, View, Platform } from 'react-native';
 import { Svg, Defs, ClipPath, Rect, G } from 'react-native-svg';
+import type { WithTimingConfig } from 'react-native-reanimated';
 import Animated, {
   useAnimatedProps,
   useSharedValue,
   withTiming,
-  WithTimingConfig,
 } from 'react-native-reanimated';
 import { flattenChildren } from './utils/flattenChildren';
 
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartPathContext } from './LineChartPathContext';
-import { LineChartPath, LineChartPathProps } from './Path';
+import type { LineChartPathProps } from './Path';
+import { LineChartPath } from './Path';
 import { useLineChart } from './useLineChart';
 
 const BACKGROUND_COMPONENTS = [
@@ -75,7 +76,7 @@ export function LineChartPathWrapper({
     return () => {
       isMounted.value = false;
     };
-  }, []);
+  }, [isMounted]);
 
   ////////////////////////////////////////////////
 

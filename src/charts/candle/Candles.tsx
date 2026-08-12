@@ -1,8 +1,10 @@
 import React from 'react';
-import { Svg, SvgProps } from 'react-native-svg';
+import type { SvgProps } from 'react-native-svg';
+import { Svg } from 'react-native-svg';
 
 import { CandlestickChartDimensionsContext } from './Chart';
-import { CandlestickChartCandle, CandlestickChartCandleProps } from './Candle';
+import type { CandlestickChartCandleProps } from './Candle';
+import { CandlestickChartCandle } from './Candle';
 import { useCandlestickChart } from './useCandlestickChart';
 
 type CandlestickChartCandlesProps = SvgProps & {

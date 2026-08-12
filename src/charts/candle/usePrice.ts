@@ -24,7 +24,7 @@ export function useCandlestickChartPrice({
   const candle = useCandleData();
 
   const float = useDerivedValue(() => {
-    let price = 0;
+    let price: number;
 
     if (type === 'crosshair') {
       price = getPrice({

@@ -1,12 +1,14 @@
 import React from 'react';
-import { Platform, View, ViewProps, StyleSheet } from 'react-native';
+import type { ViewProps } from 'react-native';
+import { Platform, View, StyleSheet } from 'react-native';
+import type { AnimatedProps } from 'react-native-reanimated';
 import Animated, {
   useAnimatedStyle,
   withSpring,
-  AnimatedProps,
 } from 'react-native-reanimated';
 
-import { LineChartCursor, LineChartCursorProps } from './Cursor';
+import type { LineChartCursorProps } from './Cursor';
+import { LineChartCursor } from './Cursor';
 import { useLineChart } from './useLineChart';
 
 /**

@@ -1,14 +1,15 @@
 import React from 'react';
 
+import type { AnimatedProps } from 'react-native-reanimated';
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
   withTiming,
-  AnimatedProps,
 } from 'react-native-reanimated';
 import { StyleSheet } from 'react-native';
-import { LineChartPriceText, LineChartPriceTextProps } from './PriceText';
+import type { LineChartPriceTextProps } from './PriceText';
+import { LineChartPriceText } from './PriceText';
 
 import { CursorContext } from './Cursor';
 import { LineChartDimensionsContext } from './Chart';
@@ -85,7 +86,7 @@ export function LineChartTooltip({
   const atYPosition = useDerivedValue(() => {
     return atXPosition == null
       ? undefined
-      : getYForX(parsedPath, atXPosition) ?? 0;
+      : (getYForX(parsedPath, atXPosition) ?? 0);
   }, [atXPosition]);
 
   const getInitialTranslateXOffset = React.useCallback(
