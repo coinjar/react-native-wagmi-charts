@@ -94,12 +94,27 @@ To get started with using WAGMI charts in your React Native project, install the
 npm install react-native-wagmi-charts
 ```
 
-WAGMI charts also depends on a few libraries, you will also need to install
-these packages if you don't already have them:
+WAGMI charts also depends on a few peer libraries. Install these packages if
+you don't already have them:
 
 ```bash
-npm install react-native-reanimated react-native-gesture-handler react-native-haptic-feedback
+npm install react-native-reanimated react-native-gesture-handler react-native-svg
 ```
+
+If you use Reanimated 4, also install a
+[compatible version of `react-native-worklets`](https://docs.swmansion.com/react-native-reanimated/docs/guides/compatibility/)
+and follow the
+[Reanimated installation instructions](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/).
+For React Native Community CLI projects, this includes adding
+`react-native-worklets/plugin` last in your Babel plugins list and running
+`pod install` for iOS.
+
+Reanimated 3 users should not install `react-native-worklets` separately.
+Follow the Reanimated 3 setup instructions, including
+`react-native-reanimated/plugin`, instead.
+
+Haptic feedback is optional. The examples below use `expo-haptics`, but you can
+use any haptics library through the chart event handlers.
 
 ## Basic Usage
 
@@ -1014,12 +1029,40 @@ function in the form of a
 
 ### LineChart.PriceText
 
-| Prop        | Type                               | Default       | Description                                |
-| ----------- | ---------------------------------- | ------------- | ------------------------------------------ |
-| `format`    | `({ value, formatted }) => string` |               | Custom format function of the price.       |
-| `precision` | `number`                           | `2`           | Default precision of the price.            |
-| `variant`   | `"formatted"` or `"value"`         | `"formatted"` | Default representation of the price value. |
-| `...props`  | `TextProps`                        |               | Inherits React Native's `Text` props       |
+| Prop                    | Type                                 | Default       | Description                                                                                      |
+| ----------------------- | ------------------------------------ | ------------- | ------------------------------------------------------------------------------------------------ |
+| `format`                | `({ value, formatted }) => string`   |               | Custom format function of the price.                                                             |
+| `precision`             | `number`                             | `2`           | Default precision of the price.                                                                  |
+| `variant`               | `"formatted"` or `"value"`           | `"formatted"` | Default representation of the price value.                                                       |
+| `index`                 | `number`                             |               | Show the price at this `data` index instead of the currently active one.                         |
+| `useOptimizedRendering` | `boolean`                            | `false`       | Render through React state rather than `AnimatedText`. Requires `format`. See below.             |
+| `getTextColor`          | `(formattedValue: string) => string` |               | Derive the text color from the formatted value. Only applies when `useOptimizedRendering` is on. |
+| `...props`              | `TextProps`                          |               | Inherits React Native's `Text` props                                                             |
+
+#### Optimized price text rendering
+
+`AnimatedText` updates the label on the UI thread, which is the right default.
+For labels that also need to drive React state off the formatted value — for
+example recoloring the text as the price moves — set `useOptimizedRendering`
+alongside a `format` worklet. The formatted value is then mirrored back onto the
+JS thread and rendered from React state, and `getTextColor` is called with each
+new value:
+
+```jsx
+<LineChart.PriceText
+  useOptimizedRendering
+  format={({ value }) => {
+    'worklet';
+    return `$${value}`;
+  }}
+  getTextColor={(formattedValue) =>
+    parseFloat(formattedValue.slice(1)) >= 100 ? 'green' : 'red'
+  }
+/>
+```
+
+> Note: this crosses the UI/JS thread boundary on every change, so prefer the
+> default `AnimatedText` path unless you need the formatted value in React.
 
 ### LineChart.DatetimeText
 
