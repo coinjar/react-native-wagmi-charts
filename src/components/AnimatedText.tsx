@@ -1,7 +1,8 @@
 // forked from https://github.com/wcandillon/react-native-redash/blob/master/src/ReText.tsx
 
 import React from 'react';
-import { Platform, StyleSheet, TextProps as RNTextProps } from 'react-native';
+import type { TextProps as RNTextProps } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native';
 import Animated, {
   useAnimatedProps,
@@ -17,8 +18,19 @@ interface AnimatedTextProps {
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
+// Android measures an empty TextInput differently from one containing text.
+// A zero-width glyph keeps its baseline stable without displaying fallback text.
+const ANDROID_EMPTY_TEXT_PLACEHOLDER = '\u200B';
+
 export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
   const inputRef = React.useRef<TextInput>(null);
+  const isAndroid = Platform.OS === 'android';
+  const initialValue = React.useMemo(() => {
+    if (isAndroid && text.value === '') {
+      return ANDROID_EMPTY_TEXT_PLACEHOLDER;
+    }
+    return text.value;
+  }, [isAndroid, text]);
 
   useAnimatedReaction(
     () => text.value,
@@ -33,19 +45,28 @@ export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
   );
 
   const animatedProps = useAnimatedProps(() => {
+    const value =
+      isAndroid && text.value === ''
+        ? ANDROID_EMPTY_TEXT_PLACEHOLDER
+        : text.value;
+
     return {
-      text: text.value,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any;
+      text: value,
+    };
   });
 
   return (
     <AnimatedTextInput
       underlineColorAndroid="transparent"
       editable={false}
+      defaultValue={initialValue}
       ref={Platform.select({ web: inputRef })}
       style={[styles.text, style]}
-      animatedProps={animatedProps}
+      animatedProps={
+        animatedProps as React.ComponentProps<
+          typeof AnimatedTextInput
+        >['animatedProps']
+      }
     />
   );
 };
