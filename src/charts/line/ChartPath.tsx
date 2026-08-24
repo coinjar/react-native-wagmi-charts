@@ -7,7 +7,7 @@ import Animated, {
   withTiming,
   WithTimingConfig,
 } from 'react-native-reanimated';
-import flattenChildren from 'react-keyed-flatten-children';
+import { flattenChildren } from './utils/flattenChildren';
 
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartPathContext } from './LineChartPathContext';
