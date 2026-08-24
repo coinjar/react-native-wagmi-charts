@@ -43,7 +43,7 @@ const LINE_COLORS = {
 type ColorName = keyof typeof LINE_COLORS;
 const COLOR_NAMES = Object.keys(LINE_COLORS) as ColorName[];
 
-const BACKGROUNDS = ['none', 'gradient'] as const;
+const BACKGROUNDS = ['none', 'gradient', 'dots'] as const;
 const Y_DOMAINS = ['auto', 'low', 'high'] as const;
 const CURSOR_LINES = ['none', 'vertical', 'horizontal', 'both'] as const;
 const TOOLTIPS = [
@@ -184,6 +184,7 @@ export default function LineChartScreen() {
           >
             <LineChart.Path color={color}>
               {background === 'gradient' && <LineChart.Gradient />}
+              {background === 'dots' && <LineChart.DotGrid />}
               {on('Min/Max Labels') && (
                 <>
                   <LineChart.Tooltip

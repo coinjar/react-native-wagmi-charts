@@ -40,6 +40,7 @@ A sweet & simple chart library for React Native that will make us feel like
   - [Haptic feedback](#haptic-feedback)
   - [Colors](#colors)
   - [Gradients](#gradients)
+  - [Dot grid](#dot-grid)
   - [Dots](#dots)
   - [Horizontal lines](#horizontal-lines)
   - [Customizing size](#customizing-size)
@@ -63,6 +64,7 @@ A sweet & simple chart library for React Native that will make us feel like
   - [LineChart.Highlight](#linechartdot)
   - [LineChart.HorizontalLine](#linecharthorizontalline)
   - [LineChart.Gradient](#linechartgradient)
+  - [LineChart.DotGrid](#linechartdotgrid)
   - [LineChart.Tooltip](#linecharttooltip)
   - [LineChart.PriceText](#linechartpricetext)
   - [LineChart.DatetimeText](#linechartdatetimetext)
@@ -497,6 +499,46 @@ provide a color prop to `LineChart.Gradient`.
 ```
 
 <img width="345" alt="Screen Shot 2021-10-25 at 8 32 26 pm" src="https://user-images.githubusercontent.com/7336481/138672153-9ba11b02-b750-4ab0-a2e2-c18a9af4635f.png">
+
+### Dot grid
+
+If you'd rather fill the area underneath your path with a halftone-style dot
+grid than a solid gradient, swap `LineChart.Gradient` for `LineChart.DotGrid`.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path color="green">
+      <LineChart.DotGrid />
+    </LineChart.Path>
+  </LineChart>
+</LineChart.Provider>
+```
+
+The dots sit on a fixed square grid, `spacing` apart both down a column and
+across to the next column. The grid is static and the chart path simply uncovers
+the part of it that falls underneath the line, like a stencil cut out of the
+background.
+
+Like the gradient, the dot grid inherits your path's color by default and fades
+out towards the bottom of the chart.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path color="green">
+      <LineChart.DotGrid color="black" spacing={8} radius={1.5} />
+    </LineChart.Path>
+  </LineChart>
+</LineChart.Provider>
+```
+
+For an evenly dense field with no fade, set `fadeTo` to the same value as
+`fadeFrom`.
+
+```jsx
+<LineChart.DotGrid fadeFrom={0.4} fadeTo={0.4} />
+```
 
 ### Dots
 
@@ -1014,6 +1056,17 @@ function in the form of a
 | ---------- | ----------- | ------- | --------------------- |
 | `color`    | `string`    |         | Color of the gradient |
 | `...props` | `PathProps` |         |                       |
+
+### LineChart.DotGrid
+
+| Prop       | Type        | Default | Description                                                                         |
+| ---------- | ----------- | ------- | ----------------------------------------------------------------------------------- |
+| `color`    | `string`    |         | Color of the dots. Defaults to the path's color.                                    |
+| `spacing`  | `number`    | `6`     | Distance in pixels between dot centers, both down a column and across columns.      |
+| `radius`   | `number`    | `1.5`   | Radius in pixels of each dot.                                                       |
+| `fadeFrom` | `number`    | `1`     | Opacity of the dots at the top of the chart.                                        |
+| `fadeTo`   | `number`    | `0`     | Opacity of the dots at the bottom of the chart. Match `fadeFrom` for an even field. |
+| `...props` | `PathProps` |         |                                                                                     |
 
 ### LineChart.Tooltip
 
