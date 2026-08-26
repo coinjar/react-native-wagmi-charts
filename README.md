@@ -540,6 +540,8 @@ For an evenly dense field with no fade, set `fadeTo` to the same value as
 <LineChart.DotGrid fadeFrom={0.4} fadeTo={0.4} />
 ```
 
+<img width="345" alt="Screenshot 2026-08-26 at 15.36.30" src="https://github.com/user-attachments/assets/dc6a8f48-1f51-49a1-a65b-6809537a9425">
+
 ### Dots
 
 You can render dots on your line chart with `LineChart.Dot`.
