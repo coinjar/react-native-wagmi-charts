@@ -39,23 +39,14 @@ export default [
         'error',
         { prefer: 'type-imports', fixStyle: 'separate-type-imports' },
       ],
-      // The two rules enabled here are listed explicitly rather than spread
-      // from a preset: as of eslint-plugin-react-hooks v7, both `recommended`
-      // and `recommended-latest` also turn on 14 React Compiler rules
-      // (immutability, purity, refs, …). Those flag Reanimated's shared-value
-      // mutation pattern throughout this library, so adopting them is its own
-      // piece of work rather than a side effect of an ESLint bump.
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
       'no-restricted-syntax': [
         'warn',
         {
-          // Replaces react-native/no-inline-styles, which calls ESLint APIs
-          // removed in v10. Child selector, so only a bare style={{ ... }} is
-          // flagged. Objects composed into a style array —
-          // style={[styles.base, { top: y }]} — are deliberately allowed:
-          // that idiom carries computed layout values, which StyleSheet.create
-          // cannot hold. The old plugin skipped them for the same reason.
+          // Bare style={{ ... }} is flagged, but objects composed into a style
+          // array — style={[styles.base, { top: y }]} — are deliberately
+          // allowed
           selector:
             "JSXAttribute[name.name='style'] > JSXExpressionContainer > ObjectExpression",
           message: 'Inline style: move it into a StyleSheet.create block.',

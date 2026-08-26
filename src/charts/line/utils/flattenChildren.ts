@@ -8,16 +8,8 @@ import {
 } from 'react';
 
 /**
- * `Children.toArray`, with fragments flattened into the result and keys kept
- * unique across nesting levels.
- *
- * This replaces `react-keyed-flatten-children`, which recognises fragments
- * through `react-is@16`. React 19 renamed the symbol it tags elements with
- * (`react.element` to `react.transitional.element`), so every check in that
- * version returns `false`, fragments come back unflattened, and any consumer
- * sorting children by display name silently drops their contents. Comparing
- * `type` against the `Fragment` we imported sidesteps the whole problem: it is
- * whatever the React actually rendering the tree uses.
+ * `Children.toArray`, with fragments flattened and keys kept unique across
+ * nesting levels.
  */
 export function flattenChildren(
   children: ReactNode,
