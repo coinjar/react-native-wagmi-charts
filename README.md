@@ -4,8 +4,8 @@ A sweet & simple chart library for React Native that will make us feel like
 **W**e're **A**ll **G**onna **M**ake **I**t
 
 <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
-  <img src="https://user-images.githubusercontent.com/7336481/133024970-07321941-4f26-44d2-867f-dac19d110941.gif" width="300px" />
-  <img src="https://user-images.githubusercontent.com/7336481/133024976-3dc9056c-d936-439a-af41-57cbf9277a01.gif" width="300px" />
+  <img width="300" alt="linechart-example" src="https://github.com/user-attachments/assets/64c421ad-8f24-4f4d-a87d-dfff9de70537" />
+  <img width="300" alt="candlestick-example" src="https://github.com/user-attachments/assets/3fca462b-69e5-4a20-a665-bc052b1c3507" />
 </div>
 
 ## Features
