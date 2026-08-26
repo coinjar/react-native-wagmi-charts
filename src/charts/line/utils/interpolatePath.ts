@@ -10,6 +10,23 @@
  * Reanimated compatible fork of https://github.com/pbeshai/d3-interpolate-path
  */
 
+type PathCommand = {
+  type: string;
+  [key: string]: number | string;
+};
+
+type ExcludeSegment = (
+  commandStart: PathCommand,
+  commandEnd: PathCommand
+) => boolean;
+
+export type PreparedPathInterpolation = {
+  types: string[];
+  from: number[];
+  to: number[];
+  toPath: string;
+};
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -557,7 +574,11 @@ function alignCommands(aCommandsInput, bCommandsInput, excludeSegment) {
  *   end command object and returns true if the segment should be excluded from splitting.
  * @return {Object} A plain, serializable descriptor of the interpolation.
  */
-export function prepareInterpolatedPath(a, b, excludeSegment) {
+export function prepareInterpolatedPath(
+  a: string,
+  b: string,
+  excludeSegment: ExcludeSegment | null
+): PreparedPathInterpolation {
   'worklet';
 
   const { aCommands, bCommands } = alignCommands(
@@ -594,7 +615,10 @@ export function prepareInterpolatedPath(a, b, excludeSegment) {
  * @param {Number} t Where to sample the interpolation (value between [0, 1])
  * @return {String} The string for the `d` attribute
  */
-export function interpolatePreparedPath(prepared, t) {
+export function interpolatePreparedPath(
+  prepared: PreparedPathInterpolation,
+  t: number
+): string {
   'worklet';
 
   const { types, from, to } = prepared;

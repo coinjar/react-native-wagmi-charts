@@ -18,7 +18,7 @@ A sweet & simple chart library for React Native that will make us feel like
 
 🛠 Highly customizable APIs
 
-✨ Uses React Native Reanimated 2 under-the-hood
+✨ Uses React Native Reanimated under the hood
 
 🧈 Slick data transition animations
 
@@ -1061,14 +1061,14 @@ function in the form of a
 
 ### LineChart.DotGrid
 
-| Prop       | Type        | Default | Description                                                                         |
-| ---------- | ----------- | ------- | ----------------------------------------------------------------------------------- |
-| `color`    | `string`    |         | Color of the dots. Defaults to the path's color.                                    |
-| `spacing`  | `number`    | `6`     | Distance in pixels between dot centers, both down a column and across columns.      |
-| `radius`   | `number`    | `1.5`   | Radius in pixels of each dot.                                                       |
-| `fadeFrom` | `number`    | `1`     | Opacity of the dots at the top of the chart.                                        |
-| `fadeTo`   | `number`    | `0`     | Opacity of the dots at the bottom of the chart. Match `fadeFrom` for an even field. |
-| `...props` | `PathProps` |         |                                                                                     |
+| Prop       | Type        | Default | Description                                                                                               |
+| ---------- | ----------- | ------- | --------------------------------------------------------------------------------------------------------- |
+| `color`    | `string`    |         | Color of the dots. Defaults to the path's color.                                                          |
+| `spacing`  | `number`    | `6`     | Distance in pixels between dot centers, both down a column and across columns. Must be greater than zero. |
+| `radius`   | `number`    | `1.5`   | Radius in pixels of each dot.                                                                             |
+| `fadeFrom` | `number`    | `1`     | Opacity of the dots at the top of the chart.                                                              |
+| `fadeTo`   | `number`    | `0`     | Opacity of the dots at the bottom of the chart. Match `fadeFrom` for an even field.                       |
+| `...props` | `PathProps` |         |                                                                                                           |
 
 ### LineChart.Tooltip
 

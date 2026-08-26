@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import Animated, { AnimatedProps } from 'react-native-reanimated';
-import { Circle, Defs, Path, PathProps, Pattern, Svg } from 'react-native-svg';
+import Animated from 'react-native-reanimated';
+import type { AnimatedProps } from 'react-native-reanimated';
+import { Circle, Defs, Path, Pattern, Svg } from 'react-native-svg';
+import type { PathProps } from 'react-native-svg';
 
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartPathContext } from './LineChartPathContext';
@@ -56,10 +58,16 @@ export function LineChartDotGrid({
   const { color: contextColor, isTransitionEnabled } =
     React.useContext(LineChartPathContext);
   const color = overrideColor || contextColor;
+  const hasValidDimensions =
+    Number.isFinite(spacing) && spacing > 0 && chartDrawingHeight > 0;
 
   // One tile of the lattice: a single column of dots, as tall as the drawing
   // area
   const dots = React.useMemo(() => {
+    if (!hasValidDimensions) {
+      return null;
+    }
+
     const rows = Math.floor(chartDrawingHeight / spacing);
     if (rows < 1) {
       return null;
@@ -84,7 +92,15 @@ export function LineChartDotGrid({
       );
     }
     return result;
-  }, [chartDrawingHeight, color, fadeFrom, fadeTo, radius, spacing]);
+  }, [
+    chartDrawingHeight,
+    color,
+    fadeFrom,
+    fadeTo,
+    hasValidDimensions,
+    radius,
+    spacing,
+  ]);
 
   // The grid is static; animating the same area path `LineChart.Gradient` fills
   // makes it read as a hole cut out by the line, frame by frame.  Filling
@@ -101,6 +117,10 @@ export function LineChartDotGrid({
 
   const localId = React.useRef(++id);
   const patternId = `wagmi-dot-grid-${localId.current}`;
+
+  if (!hasValidDimensions) {
+    return null;
+  }
 
   return (
     <View pointerEvents="none" style={StyleSheet.absoluteFill}>
