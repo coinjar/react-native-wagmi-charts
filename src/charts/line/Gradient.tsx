@@ -14,8 +14,6 @@ export type LineChartGradientProps = AnimatedProps<PathProps> & {
   children?: React.ReactNode;
 };
 
-let id = 0;
-
 LineChartGradient.displayName = 'LineChartGradient';
 
 export function LineChartGradient({
@@ -37,7 +35,7 @@ export function LineChartGradient({
 
   ////////////////////////////////////////////////
 
-  const localId = React.useRef(++id);
+  const gradientId = `wagmi-gradient-${React.useId().replace(/[^a-zA-Z0-9]/g, '')}`;
 
   ////////////////////////////////////////////////
 
@@ -45,25 +43,13 @@ export function LineChartGradient({
     <>
       {children ? (
         <Defs>
-          <LinearGradient
-            id={`${localId.current}`}
-            x1="0"
-            x2="0"
-            y1="0"
-            y2="100%"
-          >
+          <LinearGradient id={gradientId} x1="0" x2="0" y1="0" y2="100%">
             {children as React.ReactElement[]}
           </LinearGradient>
         </Defs>
       ) : (
         <Defs>
-          <LinearGradient
-            id={`${localId.current}`}
-            x1="0"
-            x2="0"
-            y1="0"
-            y2="100%"
-          >
+          <LinearGradient id={gradientId} x1="0" x2="0" y1="0" y2="100%">
             <Stop offset="20%" stopColor={color} stopOpacity={0.15} />
             <Stop offset="40%" stopColor={color} stopOpacity={0.05} />
             <Stop offset="100%" stopColor={color} stopOpacity={0} />
@@ -72,7 +58,7 @@ export function LineChartGradient({
       )}
       <AnimatedPath
         animatedProps={animatedProps}
-        fill={`url(#${localId.current})`}
+        fill={`url(#${gradientId})`}
         {...props}
       />
     </>

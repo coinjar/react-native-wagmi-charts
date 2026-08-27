@@ -35,7 +35,7 @@ export type LineChartDotGridProps = AnimatedProps<PathProps> & {
   children?: React.ReactNode;
 };
 
-let id = 0;
+const MIN_SPACING = 1;
 
 LineChartDotGrid.displayName = 'LineChartDotGrid';
 
@@ -53,11 +53,19 @@ export function LineChartDotGrid({
     React.useContext(LineChartPathContext);
   const color = overrideColor || contextColor;
   const hasValidDimensions =
-    Number.isFinite(spacing) && spacing > 0 && chartDrawingHeight > 0;
+    Number.isFinite(spacing) &&
+    spacing > 0 &&
+    Number.isFinite(width) &&
+    width > 0 &&
+    Number.isFinite(chartDrawingHeight) &&
+    chartDrawingHeight > 0;
 
-  const localId = React.useRef(++id);
-  const patternId = `wagmi-dot-grid-${localId.current}`;
-  const gradientId = `wagmi-dot-grid-gradient-${localId.current}`;
+  const pitch = Math.max(spacing, MIN_SPACING);
+  const columnPitch = Math.min(pitch, width);
+
+  const uid = React.useId().replace(/[^a-zA-Z0-9]/g, '');
+  const patternId = `wagmi-dot-grid-${uid}`;
+  const gradientId = `wagmi-dot-grid-gradient-${uid}`;
 
   // One tile of the lattice: a single column of dots, as tall as the drawing
   // area. The gradient does the painting, so this is pure geometry.
@@ -66,27 +74,30 @@ export function LineChartDotGrid({
       return null;
     }
 
-    const rows = Math.floor(chartDrawingHeight / spacing);
-    if (rows < 1) {
-      return null;
-    }
-
-    const originY = (chartDrawingHeight - (rows - 1) * spacing) / 2;
+    const rows = Math.max(1, Math.floor(chartDrawingHeight / pitch));
+    const originY = (chartDrawingHeight - (rows - 1) * pitch) / 2;
 
     const result: React.ReactElement[] = [];
     for (let i = 0; i < rows; i++) {
       result.push(
         <Circle
           key={i}
-          cx={spacing / 2}
-          cy={originY + i * spacing}
+          cx={columnPitch / 2}
+          cy={originY + i * pitch}
           r={radius}
           fill={`url(#${gradientId})`}
         />
       );
     }
     return result;
-  }, [chartDrawingHeight, gradientId, hasValidDimensions, radius, spacing]);
+  }, [
+    chartDrawingHeight,
+    columnPitch,
+    gradientId,
+    hasValidDimensions,
+    pitch,
+    radius,
+  ]);
 
   // The grid is static; animating the same area path `LineChart.Gradient` fills
   // makes it read as a hole cut out by the line, frame by frame.  Filling
@@ -143,7 +154,7 @@ export function LineChartDotGrid({
             patternUnits="userSpaceOnUse"
             x={0}
             y={0}
-            width={spacing}
+            width={columnPitch}
             height={chartDrawingHeight}
           >
             {dots}

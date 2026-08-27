@@ -40,14 +40,10 @@ export type PreparedPathInterpolation = {
  *   right is the segment from t..1.
  */
 function decasteljau(points, t) {
-  'worklet';
-
   const left = [];
   const right = [];
 
   function decasteljauRecurse(points, t) {
-    'worklet';
-
     if (points.length === 1) {
       left.push(points[0]);
       right.push(points[0]);
@@ -87,8 +83,6 @@ function decasteljau(points, t) {
  * @return {Object} A command object representing the segment.
  */
 function pointsToCommand(points) {
-  'worklet';
-
   const command = {};
 
   if (points.length === 4) {
@@ -125,8 +119,6 @@ function pointsToCommand(points) {
  * @return {Number[][][]} Array of segments
  */
 function splitCurveAsPoints(points, segmentCount) {
-  'worklet';
-
   segmentCount = segmentCount || 2;
 
   const segments = [];
@@ -172,8 +164,6 @@ function splitCurveAsPoints(points, segmentCount) {
  * @return {Object[]} An array of commands representing the segments in sequence
  */
 function splitCurve(commandStart, commandEnd, segmentCount) {
-  'worklet';
-
   const points = [[commandStart.x, commandStart.y]];
   if (commandEnd.x1 != null) {
     points.push([commandEnd.x1, commandEnd.y1]);
@@ -208,8 +198,6 @@ Object.keys(typeMap).forEach((key) => {
 });
 
 function arrayOfLength(length, value) {
-  'worklet';
-
   const array = Array(length);
   for (let i = 0; i < length; i++) {
     array[i] = value;
@@ -239,8 +227,6 @@ function arrayOfLength(length, value) {
  * @return {Object} aCommand converted to type of bCommand
  */
 function convertToSameType(aCommand, bCommand) {
-  'worklet';
-
   const conversionMap = {
     x1: 'x',
     y1: 'y',
@@ -299,8 +285,6 @@ function convertToSameType(aCommand, bCommand) {
  *   commandEnd. (Can be segmentCount+1 objects if commandStart is type M).
  */
 function splitSegment(commandStart, commandEnd, segmentCount) {
-  'worklet';
-
   let segments = [];
 
   // line, quadratic bezier, or cubic bezier
@@ -342,8 +326,6 @@ function splitSegment(commandStart, commandEnd, segmentCount) {
  * @return {Object[]} The extended commandsToExtend array
  */
 function extend(commandsToExtend, referenceCommands, excludeSegment) {
-  'worklet';
-
   // compute insertion points:
   // number of segments in the path to extend
   const numSegmentsToExtend = commandsToExtend.length - 1;
@@ -448,8 +430,6 @@ function extend(commandsToExtend, referenceCommands, excludeSegment) {
  * @param {String|null} d A path `d` string
  */
 function pathCommandsFromString(d) {
-  'worklet';
-
   // split into valid tokens
   const tokens = (d || '').match(/[MLCSTQAHVZmlcstqahv]|-?[\d.e+-]+/g) || [];
   const commands = [];
@@ -496,8 +476,6 @@ function pathCommandsFromString(d) {
  * @return {Object} `{ aCommands, bCommands }`, both the same length.
  */
 function alignCommands(aCommandsInput, bCommandsInput, excludeSegment) {
-  'worklet';
-
   // make a copy so we don't mess with the input arrays
   let aCommands = aCommandsInput == null ? [] : aCommandsInput.slice();
   let bCommands = bCommandsInput == null ? [] : bCommandsInput.slice();
@@ -579,8 +557,6 @@ export function prepareInterpolatedPath(
   b: string,
   excludeSegment: ExcludeSegment | null
 ): PreparedPathInterpolation {
-  'worklet';
-
   const { aCommands, bCommands } = alignCommands(
     pathCommandsFromString(a),
     pathCommandsFromString(b),
