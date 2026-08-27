@@ -500,6 +500,22 @@ provide a color prop to `LineChart.Gradient`.
 
 <img width="345" alt="Screen Shot 2021-10-25 at 8 32 26 pm" src="https://user-images.githubusercontent.com/7336481/138672153-9ba11b02-b750-4ab0-a2e2-c18a9af4635f.png">
 
+You can also set your own gradient by providing the `Stop`s as children
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path color="red">
+      <LineChart.Gradient>
+        <Stop offset="0%" stopColor="red" stopOpacity={0.3} />
+        <Stop offset="70%" stopColor="blue" stopOpacity={0.2} />
+        <Stop offset="100%" stopColor="green" stopOpacity={0.05} />
+      </LineChart.Gradient>
+    </LineChart.Path>
+  </LineChart>
+</LineChart.Provider>
+```
+
 ### Dot grid
 
 If you'd rather fill the area underneath your path with a halftone-style dot
@@ -520,8 +536,8 @@ across to the next column. The grid is static and the chart path simply uncovers
 the part of it that falls underneath the line, like a stencil cut out of the
 background.
 
-Like the gradient, the dot grid inherits your path's color by default and fades
-out towards the bottom of the chart.
+Like the gradient, the dot grid inherits your path's color by default and
+supports a custom color prop or `<Stop>` children.
 
 ```jsx
 <LineChart.Provider data={data}>
@@ -531,13 +547,6 @@ out towards the bottom of the chart.
     </LineChart.Path>
   </LineChart>
 </LineChart.Provider>
-```
-
-For an evenly dense field with no fade, set `fadeTo` to the same value as
-`fadeFrom`.
-
-```jsx
-<LineChart.DotGrid fadeFrom={0.4} fadeTo={0.4} />
 ```
 
 <img width="345" alt="Screenshot 2026-08-26 at 15.36.30" src="https://github.com/user-attachments/assets/dc6a8f48-1f51-49a1-a65b-6809537a9425">
@@ -1054,10 +1063,11 @@ function in the form of a
 
 ### LineChart.Gradient
 
-| Prop       | Type        | Default | Description           |
-| ---------- | ----------- | ------- | --------------------- |
-| `color`    | `string`    |         | Color of the gradient |
-| `...props` | `PathProps` |         |                       |
+| Prop       | Type        | Default | Description                                                           |
+| ---------- | ----------- | ------- | --------------------------------------------------------------------- |
+| `color`    | `string`    |         | Color of the gradient. Defaults to the path's color.                  |
+| `children` | `Stop[]`    |         | `<Stop>` elements, top (`offset="0%"`) to baseline (`offset="100%"`). |
+| `...props` | `PathProps` |         |                                                                       |
 
 ### LineChart.DotGrid
 
@@ -1066,8 +1076,7 @@ function in the form of a
 | `color`    | `string`    |         | Color of the dots. Defaults to the path's color.                                                          |
 | `spacing`  | `number`    | `6`     | Distance in pixels between dot centers, both down a column and across columns. Must be greater than zero. |
 | `radius`   | `number`    | `1.5`   | Radius in pixels of each dot.                                                                             |
-| `fadeFrom` | `number`    | `1`     | Opacity of the dots at the top of the chart.                                                              |
-| `fadeTo`   | `number`    | `0`     | Opacity of the dots at the bottom of the chart. Match `fadeFrom` for an even field.                       |
+| `children` | `Stop[]`    |         | `<Stop>` elements, top (`offset="0%"`) to baseline (`offset="100%"`). See [Dot grid](#dot-grid).          |
 | `...props` | `PathProps` |         |                                                                                                           |
 
 ### LineChart.Tooltip

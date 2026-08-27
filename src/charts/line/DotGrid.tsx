@@ -2,7 +2,15 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import type { AnimatedProps } from 'react-native-reanimated';
-import { Circle, Defs, Path, Pattern, Svg } from 'react-native-svg';
+import {
+  Circle,
+  Defs,
+  LinearGradient,
+  Path,
+  Pattern,
+  Stop,
+  Svg,
+} from 'react-native-svg';
 import type { PathProps } from 'react-native-svg';
 
 import { LineChartDimensionsContext } from './Chart';
@@ -15,29 +23,16 @@ export type LineChartDotGridProps = AnimatedProps<PathProps> & {
   color?: string;
   /**
    * Distance in pixels between the centers of two neighbouring dots, both down
-   * a column and across to the next column.
-   *
-   * Default: `6`
+   * a column and across to the next column
    */
   spacing?: number;
-  /**
-   * Radius in pixels of each dot.
-   *
-   * Default: `1.5`
-   */
+  /** Radius in pixels of each dot */
   radius?: number;
   /**
-   * Opacity of the dots at the top of the chart.
-   *
-   * Default: `1`
+   * `<Stop>` elements describing how the dots are painted from top to bottom.
+   * Works exactly the same as in `LineChart.Gradient`.
    */
-  fadeFrom?: number;
-  /**
-   * Opacity of the dots at the bottom of the chart.
-   *
-   * Default: `0`
-   */
-  fadeTo?: number;
+  children?: React.ReactNode;
 };
 
 let id = 0;
@@ -46,10 +41,9 @@ LineChartDotGrid.displayName = 'LineChartDotGrid';
 
 export function LineChartDotGrid({
   color: overrideColor = undefined,
-  spacing = 6,
+  spacing = 5,
   radius = 1.5,
-  fadeFrom = 1,
-  fadeTo = 0,
+  children,
   ...props
 }: LineChartDotGridProps) {
   const { area, width, height, chartDrawingHeight } = React.useContext(
@@ -61,8 +55,12 @@ export function LineChartDotGrid({
   const hasValidDimensions =
     Number.isFinite(spacing) && spacing > 0 && chartDrawingHeight > 0;
 
+  const localId = React.useRef(++id);
+  const patternId = `wagmi-dot-grid-${localId.current}`;
+  const gradientId = `wagmi-dot-grid-gradient-${localId.current}`;
+
   // One tile of the lattice: a single column of dots, as tall as the drawing
-  // area
+  // area. The gradient does the painting, so this is pure geometry.
   const dots = React.useMemo(() => {
     if (!hasValidDimensions) {
       return null;
@@ -77,30 +75,18 @@ export function LineChartDotGrid({
 
     const result: React.ReactElement[] = [];
     for (let i = 0; i < rows; i++) {
-      const cy = originY + i * spacing;
       result.push(
         <Circle
           key={i}
           cx={spacing / 2}
-          cy={cy}
+          cy={originY + i * spacing}
           r={radius}
-          fill={color}
-          fillOpacity={
-            fadeFrom + (fadeTo - fadeFrom) * (cy / chartDrawingHeight)
-          }
+          fill={`url(#${gradientId})`}
         />
       );
     }
     return result;
-  }, [
-    chartDrawingHeight,
-    color,
-    fadeFrom,
-    fadeTo,
-    hasValidDimensions,
-    radius,
-    spacing,
-  ]);
+  }, [chartDrawingHeight, gradientId, hasValidDimensions, radius, spacing]);
 
   // The grid is static; animating the same area path `LineChart.Gradient` fills
   // makes it read as a hole cut out by the line, frame by frame.  Filling
@@ -115,9 +101,6 @@ export function LineChartDotGrid({
     path: area,
   });
 
-  const localId = React.useRef(++id);
-  const patternId = `wagmi-dot-grid-${localId.current}`;
-
   if (!hasValidDimensions) {
     return null;
   }
@@ -126,6 +109,35 @@ export function LineChartDotGrid({
     <View pointerEvents="none" style={StyleSheet.absoluteFill}>
       <Svg width={width} height={height}>
         <Defs>
+          {/*
+            `userSpaceOnUse` is what makes the ramp span the chart. Left to the
+            default the gradient would map onto each dot's own bounding box.
+          */}
+          <LinearGradient
+            id={gradientId}
+            gradientUnits="userSpaceOnUse"
+            x1={0}
+            y1={0}
+            x2={0}
+            y2={chartDrawingHeight}
+          >
+            {children
+              ? (children as React.ReactElement[])
+              : [
+                  <Stop
+                    key="from"
+                    offset="0%"
+                    stopColor={color}
+                    stopOpacity={1}
+                  />,
+                  <Stop
+                    key="to"
+                    offset="100%"
+                    stopColor={color}
+                    stopOpacity={0}
+                  />,
+                ]}
+          </LinearGradient>
           <Pattern
             id={patternId}
             patternUnits="userSpaceOnUse"
