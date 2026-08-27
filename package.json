@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "build": "bob build",
     "prepack": "bob build",
     "example:native": "pnpm --filter react-native-wagmi-charts-example run native",
@@ -28,10 +29,13 @@
     "ios",
     "android"
   ],
+  "workspaces": [
+    "example"
+  ],
   "engines": {
     "node": ">= 20.19.4"
   },
-  "packageManager": "pnpm@11.21.0",
+  "packageManager": "pnpm@10.34.5",
   "dependencies": {
     "d3-array": "^3.2.4",
     "d3-scale": "^2",

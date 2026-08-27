@@ -7,6 +7,7 @@ import { TextInput } from 'react-native';
 import Animated, {
   useAnimatedProps,
   useAnimatedReaction,
+  useDerivedValue,
 } from 'react-native-reanimated';
 import type { SharedValue, AnimatedProps } from 'react-native-reanimated';
 Animated.addWhitelistedNativeProps({ text: true });
@@ -22,15 +23,14 @@ const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 // A zero-width glyph keeps its baseline stable without displaying fallback text.
 const ANDROID_EMPTY_TEXT_PLACEHOLDER = '\u200B';
 
+const isAndroid = Platform.OS === 'android';
+
 export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
   const inputRef = React.useRef<TextInput>(null);
-  const isAndroid = Platform.OS === 'android';
-  const initialValue = React.useMemo(() => {
-    if (isAndroid && text.value === '') {
-      return ANDROID_EMPTY_TEXT_PLACEHOLDER;
-    }
-    return text.value;
-  }, [isAndroid, text]);
+
+  const displayText = useDerivedValue<string | undefined>(() =>
+    isAndroid && text.value === '' ? ANDROID_EMPTY_TEXT_PLACEHOLDER : text.value
+  );
 
   useAnimatedReaction(
     () => text.value,
@@ -45,13 +45,8 @@ export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
   );
 
   const animatedProps = useAnimatedProps(() => {
-    const value =
-      isAndroid && text.value === ''
-        ? ANDROID_EMPTY_TEXT_PLACEHOLDER
-        : text.value;
-
     return {
-      text: value,
+      text: displayText.value,
     };
   });
 
@@ -59,7 +54,7 @@ export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
     <AnimatedTextInput
       underlineColorAndroid="transparent"
       editable={false}
-      defaultValue={initialValue}
+      defaultValue={displayText}
       ref={Platform.select({ web: inputRef })}
       style={[styles.text, style]}
       animatedProps={
