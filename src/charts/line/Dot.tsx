@@ -1,5 +1,6 @@
 import React from 'react';
 
+import type { AnimatedProps } from 'react-native-reanimated';
 import Animated, {
   Easing,
   useAnimatedProps,
@@ -7,9 +8,9 @@ import Animated, {
   withRepeat,
   withSequence,
   withTiming,
-  AnimatedProps,
 } from 'react-native-reanimated';
-import { Circle, CircleProps } from 'react-native-svg';
+import type { CircleProps } from 'react-native-svg';
+import { Circle } from 'react-native-svg';
 
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartPathContext } from './LineChartPathContext';
@@ -78,7 +79,7 @@ export function LineChartDot({
   }, [at, parsedPath]);
 
   const y = useDerivedValue(
-    () => withTiming(getYForX(parsedPath!, x.value) || 0),
+    () => withTiming(getYForX(parsedPath, x.value) || 0),
     [parsedPath, x]
   );
 

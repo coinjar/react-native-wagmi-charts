@@ -1,8 +1,11 @@
-import React, { ReactNode, Children, cloneElement } from 'react';
-import { ViewProps, View } from 'react-native';
-import flattenChildren from 'react-keyed-flatten-children';
+import type { ReactNode } from 'react';
+import React, { Children, cloneElement } from 'react';
+import type { ViewProps } from 'react-native';
+import { View } from 'react-native';
+import { flattenChildren } from './utils/flattenChildren';
 
-import { LineChart, LineChartProps } from './Chart';
+import type { LineChartProps } from './Chart';
+import { LineChart } from './Chart';
 
 type Props = {
   children: ReactNode;

@@ -60,12 +60,12 @@ export function LineChartCursorLine({
   const { currentX, currentY, isActive } = useLineChart();
 
   const price = useLineChartPrice({
-    format: isHorizontal ? (format as TFormatterFn<string>) : undefined,
+    format: isHorizontal ? format : undefined,
     precision: 2,
   });
 
   const datetime = useLineChartDatetime({
-    format: !isHorizontal ? (format as TFormatterFn<number>) : undefined,
+    format: !isHorizontal ? format : undefined,
   });
 
   const displayText = isHorizontal ? price.formatted : datetime.formatted;
@@ -221,7 +221,11 @@ export function LineChartCursorLine({
 
 const styles = StyleSheet.create({
   svg: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
     height: '100%',
   },
 });

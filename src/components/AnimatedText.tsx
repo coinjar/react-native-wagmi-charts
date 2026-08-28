@@ -1,11 +1,13 @@
 // forked from https://github.com/wcandillon/react-native-redash/blob/master/src/ReText.tsx
 
 import React from 'react';
-import { Platform, StyleSheet, TextProps as RNTextProps } from 'react-native';
+import type { TextProps as RNTextProps } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native';
 import Animated, {
   useAnimatedProps,
   useAnimatedReaction,
+  useDerivedValue,
 } from 'react-native-reanimated';
 import type { SharedValue, AnimatedProps } from 'react-native-reanimated';
 Animated.addWhitelistedNativeProps({ text: true });
@@ -17,8 +19,18 @@ interface AnimatedTextProps {
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
+// Android measures an empty TextInput differently from one containing text.
+// A zero-width glyph keeps its baseline stable without displaying fallback text.
+const ANDROID_EMPTY_TEXT_PLACEHOLDER = '\u200B';
+
+const isAndroid = Platform.OS === 'android';
+
 export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
   const inputRef = React.useRef<TextInput>(null);
+
+  const displayText = useDerivedValue<string | undefined>(() =>
+    isAndroid && text.value === '' ? ANDROID_EMPTY_TEXT_PLACEHOLDER : text.value
+  );
 
   useAnimatedReaction(
     () => text.value,
@@ -34,18 +46,22 @@ export const AnimatedText = ({ text, style }: AnimatedTextProps) => {
 
   const animatedProps = useAnimatedProps(() => {
     return {
-      text: text.value,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any;
+      text: displayText.value,
+    };
   });
 
   return (
     <AnimatedTextInput
       underlineColorAndroid="transparent"
       editable={false}
+      defaultValue={displayText}
       ref={Platform.select({ web: inputRef })}
       style={[styles.text, style]}
-      animatedProps={animatedProps}
+      animatedProps={
+        animatedProps as React.ComponentProps<
+          typeof AnimatedTextInput
+        >['animatedProps']
+      }
     />
   );
 };

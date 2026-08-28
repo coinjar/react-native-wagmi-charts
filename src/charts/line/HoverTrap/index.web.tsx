@@ -4,7 +4,15 @@ import { View, StyleSheet } from 'react-native';
 import { LineChartDimensionsContext } from '../Chart';
 import { useLineChart } from '../useLineChart';
 
-import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
+/**
+ * Whether a real DOM is available. This file only loads on web, but it still
+ * runs under server-side rendering, where `document` is undefined.
+ */
+const canUseDOM = !!(
+  typeof window !== 'undefined' &&
+  window.document &&
+  window.document.createElement
+);
 
 /**
  * Minimum time in milliseconds that must pass between touch events before a

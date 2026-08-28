@@ -1,12 +1,11 @@
 import React from 'react';
 
 import Animated, { runOnJS } from 'react-native-reanimated';
-import {
-  Gesture,
-  GestureDetector,
+import type {
   GestureStateChangeEvent,
   LongPressGestureHandlerEventPayload,
 } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 import { LineChartDimensionsContext } from './Chart';
 import { StyleSheet } from 'react-native';
@@ -59,34 +58,33 @@ export function LineChartCursor({
     return scaleLinear().domain(domainArray).range([0, width]);
   }, [width, xDomain, xValues.length]);
 
-  const linearScalePositionAndIndex = ({
-    xPosition,
-  }: {
-    xPosition: number;
-  }) => {
-    if (!parsedPath) {
-      return;
-    }
+  const linearScalePositionAndIndex = React.useCallback(
+    ({ xPosition }: { xPosition: number }) => {
+      if (!parsedPath) {
+        return;
+      }
 
-    // Calculate a scaled timestamp for the current touch position
-    const xRelative = scaleX.invert(xPosition);
+      // Calculate a scaled timestamp for the current touch position
+      const xRelative = scaleX.invert(xPosition);
 
-    const closestIndex = bisectCenter(xValues, xRelative);
-    const pathDataDelta = Math.abs(parsedPath.curves.length - xValues.length); // sometimes there is a difference between data length and number of path curves.
-    const closestPathCurve = Math.max(
-      Math.min(closestIndex, parsedPath.curves.length + 1) - pathDataDelta,
-      0
-    );
+      const closestIndex = bisectCenter(xValues, xRelative);
+      const pathDataDelta = Math.abs(parsedPath.curves.length - xValues.length); // sometimes there is a difference between data length and number of path curves.
+      const closestPathCurve = Math.max(
+        Math.min(closestIndex, parsedPath.curves.length + 1) - pathDataDelta,
+        0
+      );
 
-    const curveSegment =
-      closestIndex > 0 && parsedPath.curves[closestPathCurve]
-        ? parsedPath.curves[closestPathCurve]
-        : null;
-    const newXPosition = (curveSegment ? curveSegment.to : parsedPath.move).x;
-    // Update values
-    currentIndex.value = closestIndex;
-    currentX.value = newXPosition;
-  };
+      const curveSegment =
+        closestIndex > 0 && parsedPath.curves[closestPathCurve]
+          ? parsedPath.curves[closestPathCurve]
+          : null;
+      const newXPosition = (curveSegment ? curveSegment.to : parsedPath.move).x;
+      // Update values
+      currentIndex.value = closestIndex;
+      currentX.value = newXPosition;
+    },
+    [currentIndex, currentX, parsedPath, scaleX, xValues]
+  );
 
   useEffect(() => {
     if (at !== undefined) {
@@ -94,7 +92,7 @@ export function LineChartCursor({
       runOnJS(linearScalePositionAndIndex)({ xPosition });
       isActive.value = true;
     }
-  }, [at, scaleX]);
+  }, [at, scaleX, isActive, linearScalePositionAndIndex]);
 
   const updatePosition = (xPosition: number) => {
     'worklet';

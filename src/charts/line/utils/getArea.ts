@@ -33,7 +33,7 @@ export function getArea({
   const area = shape
     .area<TLineChartPoint>()
     .x((_: TLineChartPoint, i: number) =>
-      scaleX(xDomain ? timestamps[i] ?? i : i)
+      scaleX(xDomain ? (timestamps[i] ?? i) : i)
     )
     .y0((d: TLineChartPoint) => scaleY(d.value))
     .y1(() => height)

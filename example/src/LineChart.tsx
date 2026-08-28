@@ -1,599 +1,384 @@
-import React, { useMemo } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  Platform,
-} from 'react-native';
-import {
-  LineChart,
+import React, { useMemo, useState } from 'react';
+import type {
   LineChartTooltipPosition,
   TLineChartDataProp,
   TLineChartPoint,
 } from 'react-native-wagmi-charts';
-import * as haptics from 'expo-haptics';
+import { LineChart } from 'react-native-wagmi-charts';
 
-import mockData from './data/line-data.json';
-import mockData2 from './data/line-data2.json';
-import mockDataNonLinear from './data/line-data-non-linear-domain.json';
+import { gapLine, lineData, lineData2 } from './data';
+import { useTheme } from './theme';
+import {
+  ChartScreen,
+  TextDemos,
+  invokeHaptic,
+  useChartSize,
+  useDemoStyles,
+} from './ChartScreen';
+import { ControlChip, ControlGroup, ControlSegmented } from './ChartControls';
 
-function invokeHaptic() {
-  if (['ios', 'android'].includes(Platform.OS)) {
-    haptics.impactAsync(haptics.ImpactFeedbackStyle.Light);
+const DATASETS = {
+  '1': lineData,
+  '2': lineData2,
+  '3': gapLine,
+  '1+2': [...lineData, ...lineData2],
+  '2+1': [...lineData2, ...lineData],
+  '2+1+2': [...lineData2, ...lineData, ...lineData2],
+  'V Large': Array.from({ length: 6 }, () => [
+    ...lineData2,
+    ...lineData,
+  ]).flat(),
+};
+type DatasetKey = keyof typeof DATASETS;
+const DATASET_KEYS = Object.keys(DATASETS) as DatasetKey[];
+
+const MULTI_DATA = { one: lineData, two: lineData2 };
+
+const LINE_COLORS = {
+  Blue: { light: '#1E6EF4', dark: '#0091FF' },
+  Red: { light: '#E9152D', dark: '#FF4245' },
+  Green: { light: '#008932', dark: '#30D158' },
+  Orange: { light: '#FF8D28', dark: '#FF9230' },
+};
+type ColorName = keyof typeof LINE_COLORS;
+const COLOR_NAMES = Object.keys(LINE_COLORS) as ColorName[];
+
+const BACKGROUNDS = ['none', 'gradient'] as const;
+const Y_DOMAINS = ['auto', 'low', 'high'] as const;
+const CURSOR_LINES = ['none', 'vertical', 'horizontal', 'both'] as const;
+const TOOLTIPS = [
+  'off',
+  'top',
+  'bottom',
+  'left',
+  'right',
+] as const satisfies readonly ('off' | LineChartTooltipPosition)[];
+
+/** Every boolean control, keyed by the label it shows. */
+type Flag =
+  | 'Multi Series'
+  | 'Partial Day'
+  | 'Scale to Time'
+  | 'Min/Max Labels'
+  | 'Highlight'
+  | 'Markers'
+  | 'Axis'
+  | 'Snap to Point'
+  | 'Persist on End'
+  | 'Floating';
+
+const MARKER_COUNT = 5;
+
+function pickMarkers(length: number, count = MARKER_COUNT) {
+  const picked = new Set<number>();
+  while (picked.size < Math.min(count, length)) {
+    picked.add(Math.floor(Math.random() * length));
   }
+  return [...picked].sort((a, b) => a - b);
 }
 
-export default function App() {
-  const [data, setData] = React.useState<TLineChartPoint[]>(mockData);
+function summarise(points: readonly TLineChartPoint[]) {
+  const values = points.map((point) => point.value);
+  const stamps = points.map((point) => point.timestamp);
+  const low = Math.min(...values);
+  const high = Math.max(...values);
 
-  const [multiData, toggleMultiData] = React.useReducer(
-    (state) => !state,
-    false
-  );
-  const [partialDay, togglePartialDay] = React.useReducer(
-    (state) => !state,
-    false
-  );
-  const [at, setAt] = React.useState<number>();
-
-  const [scaleRelativeToTime, setScaleRelativeToTime] = React.useState(false);
-
-  const [yRange, setYRange] = React.useState<undefined | 'low' | 'high'>(
-    undefined
-  );
-
-  const [controlsCollapsed, setControlsCollapsed] = React.useState(false);
-
-  const toggleYRange = () => {
-    setYRange((domain) => {
-      if (!domain) {
-        return 'low';
-      }
-      if (domain === 'low') {
-        return 'high';
-      }
-      return undefined;
-    });
+  return {
+    low,
+    high,
+    lowIndex: values.indexOf(low),
+    highIndex: values.indexOf(high),
+    start: Math.min(...stamps),
+    end: Math.max(...stamps),
+    length: points.length,
   };
+}
 
-  const [toggleMinMaxLabels, setToggleMinMaxLabels] = React.useState(false);
-  const [toggleSnapToPoint, setToggleSnapToPoint] = React.useState(false);
-  const [togglePersistOnEnd, setTogglePersistOnEnd] = React.useState(false);
-  const [toggleHighlight, setToggleHighlight] = React.useState(false);
-  const [toggleShowLabelOnCursorLine, setToggleShowLabelOnCursorLine] =
-    React.useState(true);
+export default function LineChartScreen() {
+  const { colors, theme } = useTheme();
+  const demo = useDemoStyles();
+  const size = useChartSize();
 
-  const [floatingTooltip, setFloatingTooltip] = React.useState(false);
+  const [dataset, setDataset] = useState<DatasetKey>('1');
+  const [colorName, setColorName] = useState<ColorName>('Blue');
+  const [background, setBackground] =
+    useState<(typeof BACKGROUNDS)[number]>('gradient');
+  const [yDomain, setYDomain] = useState<(typeof Y_DOMAINS)[number]>('auto');
+  const [cursorLine, setCursorLine] =
+    useState<(typeof CURSOR_LINES)[number]>('vertical');
   const [tooltipPosition, setTooltipPosition] =
-    React.useState<LineChartTooltipPosition>('top');
+    useState<(typeof TOOLTIPS)[number]>('top');
+  const [cursorAt, setCursorAt] = useState<number>();
+  const [flags, setFlags] = useState<Partial<Record<Flag, boolean>>>({});
 
-  const [showAxis, setShowAxis] = React.useState(false);
+  const [scrubbing, setScrubbing] = useState(false);
 
-  let dataProp: TLineChartDataProp = data;
-  const [min, max] = useMemo(() => {
-    if (Array.isArray(dataProp)) {
-      const values = dataProp.map((d) => d.value);
-      const _min = Math.min(...values);
-      const _max = Math.max(...values);
-      return [
-        values.findIndex((v) => v === _min),
-        values.findIndex((v) => v === _max),
-      ];
-    }
-    return [0, 0];
-  }, [dataProp]);
+  const on = (flag: Flag) => !!flags[flag];
+  const toggle = (flag: Flag) =>
+    setFlags((prev) => ({ ...prev, [flag]: !prev[flag] }));
+  const flagChips = (...names: Flag[]) =>
+    names.map((name) => (
+      <ControlChip
+        key={name}
+        label={name}
+        selected={on(name)}
+        onPress={() => toggle(name)}
+      />
+    ));
 
-  if (multiData) {
-    dataProp = {
-      one: mockData,
-      two: mockData2,
-    };
-  }
+  /**
+   * Each series — and each highlight, which sits one further along — steps one
+   * along the palette, so neighbouring strokes stay distinguishable.
+   */
+  const seriesColor = (index: number) =>
+    LINE_COLORS[
+      COLOR_NAMES[
+        (COLOR_NAMES.indexOf(colorName) + index) % COLOR_NAMES.length
+      ]!
+    ][theme];
 
-  return (
-    <>
-      <Text style={styles.title}>Line Chart 📈</Text>
-      <LineChart.Provider
-        xDomain={
-          scaleRelativeToTime
-            ? [data[0]!.timestamp, data[data.length - 1]!.timestamp]
-            : undefined
-        }
-        xLength={partialDay ? data.length * 2 : undefined}
-        yRange={{
-          min:
-            yRange === 'low'
-              ? Math.min(...data.map((d) => d.value)) / 1.1
-              : undefined,
-          max:
-            yRange === 'high'
-              ? Math.max(...data.map((d) => d.value)) * 1.1
-              : undefined,
-        }}
-        data={dataProp}
-      >
-        {multiData ? (
-          <View style={styles.chartContainer}>
-            <LineChart.Group>
-              <LineChart id="one">
-                <LineChart.Path color="blue" />
-                <LineChart.CursorCrosshair
-                  snapToPoint={toggleSnapToPoint}
-                  onActivated={invokeHaptic}
-                  onEnded={invokeHaptic}
-                >
+  const multi = on('Multi Series');
+  const data = DATASETS[dataset];
+
+  const series = useMemo(
+    () =>
+      (multi
+        ? [
+            { id: 'one', ...summarise(MULTI_DATA.one) },
+            { id: 'two', ...summarise(MULTI_DATA.two) },
+          ]
+        : [{ id: undefined, ...summarise(data) }]
+      ).map((s) => ({ ...s, markers: pickMarkers(s.length) })),
+    [data, multi]
+  );
+
+  const low = Math.min(...series.map((s) => s.low));
+  const high = Math.max(...series.map((s) => s.high));
+  const yMin = yDomain === 'low' ? low / 1.1 : undefined;
+  const yMax = yDomain === 'high' ? high * 1.1 : undefined;
+
+  const cursorLines = (['vertical', 'horizontal'] as const).filter(
+    (orientation) => cursorLine === orientation || cursorLine === 'both'
+  );
+
+  const tooltip = tooltipPosition !== 'off' && (
+    <LineChart.Tooltip
+      position={tooltipPosition}
+      withHorizontalFloating={on('Floating')}
+      textStyle={demo.tooltipText}
+    />
+  );
+
+  const chart = (
+    <LineChart.Group>
+      {series.map((s, index) => {
+        const isLast = index === series.length - 1;
+        const color = seriesColor(index);
+
+        return (
+          <LineChart
+            key={s.id ?? 'single'}
+            id={s.id}
+            width={size}
+            height={size}
+          >
+            <LineChart.Path color={color}>
+              {background === 'gradient' && <LineChart.Gradient />}
+              {on('Min/Max Labels') && (
+                <>
                   <LineChart.Tooltip
-                    position={tooltipPosition}
-                    withHorizontalFloating={floatingTooltip}
+                    position="top"
+                    at={s.highIndex}
+                    textStyle={demo.tooltipText}
                   />
-                </LineChart.CursorCrosshair>
-              </LineChart>
-              <LineChart id="two">
-                <LineChart.Path color="red">
-                  <LineChart.Gradient color="red" />
-                </LineChart.Path>
-                <LineChart.CursorCrosshair
-                  snapToPoint={toggleSnapToPoint}
-                  color="hotpink"
-                  onActivated={invokeHaptic}
-                  onEnded={invokeHaptic}
-                >
                   <LineChart.Tooltip
-                    position={tooltipPosition}
-                    withHorizontalFloating={floatingTooltip}
+                    position="bottom"
+                    at={s.lowIndex}
+                    yGutter={-10}
+                    textStyle={demo.tooltipText}
                   />
-                </LineChart.CursorCrosshair>
-              </LineChart>
-            </LineChart.Group>
-          </View>
-        ) : (
-          <View style={styles.chartContainer}>
-            <LineChart>
-              <LineChart.Path color="black" width={3}>
-                {toggleMinMaxLabels && (
-                  <>
-                    <LineChart.Gradient color="black" />
-                    <LineChart.Tooltip position="top" at={max} />
-                    <LineChart.Tooltip
-                      position="bottom"
-                      at={min}
-                      yGutter={-10}
+                </>
+              )}
+              {on('Highlight') && (
+                <LineChart.Highlight
+                  color={seriesColor(index + 1)}
+                  from={Math.floor(s.length / 3)}
+                  to={Math.floor((s.length * 2) / 3)}
+                />
+              )}
+              {on('Markers') &&
+                s.markers.map((at, markerIndex) => {
+                  const markerColor = seriesColor(index + markerIndex + 1);
+                  return (
+                    <LineChart.Dot
+                      key={at}
+                      at={at}
+                      color={markerColor}
+                      size={4}
+                      hasOuterDot
+                      outerSize={9}
+                      dotProps={{
+                        fill: colors.background,
+                        stroke: markerColor,
+                        strokeWidth: 2,
+                      }}
                     />
-                  </>
-                )}
-                {toggleHighlight && (
-                  <LineChart.Highlight
-                    color="red"
-                    from={Math.floor(data.length / 3)}
-                    to={Math.floor(data.length * (2 / 3))}
-                  />
-                )}
-              </LineChart.Path>
-              <LineChart.CursorLine showLabel={toggleShowLabelOnCursorLine} />
-              <LineChart.CursorCrosshair
-                snapToPoint={toggleSnapToPoint}
-                persistOnEnd={togglePersistOnEnd}
-                onActivated={invokeHaptic}
-                onEnded={invokeHaptic}
-                at={at}
-                color="black"
-              >
-                <LineChart.Tooltip
-                  position={tooltipPosition}
-                  withHorizontalFloating={floatingTooltip}
-                />
-                <LineChart.HoverTrap />
-              </LineChart.CursorCrosshair>
-              {showAxis && (
-                <LineChart.Axis
-                  domain={[
-                    yRange === 'low'
-                      ? Math.min(...data.map((d) => d.value)) / 1.1
-                      : Math.min(...data.map((d) => d.value)),
-                    yRange === 'high'
-                      ? Math.max(...data.map((d) => d.value)) * 1.1
-                      : Math.max(...data.map((d) => d.value)),
-                  ]}
-                  hideOnInteraction
-                  labelPadding={0}
-                  position="right"
-                  orientation="vertical"
-                />
-              )}
-            </LineChart>
-          </View>
-        )}
-        <View style={styles.controlsContainer}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Load Data</Text>
-            <TouchableOpacity
-              onPress={() => setControlsCollapsed((val) => !val)}
+                  );
+                })}
+            </LineChart.Path>
+            {cursorLines.map((orientation) => (
+              <LineChart.CursorLine
+                key={orientation}
+                orientation={orientation}
+                showLabel
+                textStyle={demo.tooltipText}
+              />
+            ))}
+            <LineChart.CursorCrosshair
+              snapToPoint={on('Snap to Point')}
+              persistOnEnd={on('Persist on End')}
+              at={cursorAt}
+              color={index === 0 ? colors.text : color}
+              onActivated={() => {
+                invokeHaptic();
+                setScrubbing(true);
+              }}
+              onEnded={() => {
+                invokeHaptic();
+                setScrubbing(false);
+              }}
             >
-              <Text style={styles.collapseButtonText}>
-                {controlsCollapsed ? 'Expand' : 'Collapse'}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          {!controlsCollapsed && (
-            <>
-              <View style={styles.buttonGrid}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setData([...mockData])}
-                >
-                  <Text style={styles.buttonText}>Data 1</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setData([...mockData2])}
-                >
-                  <Text style={styles.buttonText}>Data 2</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setData([...mockDataNonLinear])}
-                >
-                  <Text style={styles.buttonText}>Data 3</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setData([...mockData, ...mockData2])}
-                >
-                  <Text style={styles.buttonText}>Data 1 + Data 2</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setData([...mockData2, ...mockData])}
-                >
-                  <Text style={styles.buttonText}>Data 2 + Data 1</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() =>
-                    setData([...mockData2, ...mockData, ...mockData2])
-                  }
-                >
-                  <Text style={styles.buttonText}>
-                    Data 2 + Data 1 + Data 2
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() =>
-                    setData([
-                      ...mockData2,
-                      ...mockData,
-                      ...mockData2,
-                      ...mockData,
-                      ...mockData,
-                      ...mockData2,
-                      ...mockData2,
-                      ...mockData,
-                      ...mockData2,
-                      ...mockData,
-                      ...mockData,
-                      ...mockData2,
-                    ])
-                  }
-                >
-                  <Text style={styles.buttonText}>V large data</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={toggleYRange}>
-                  <Text style={styles.buttonText}>{`${
-                    yRange || 'Set'
-                  } Y Domain`}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={toggleMultiData}
-                >
-                  <Text style={styles.buttonText}>Multi Data</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={togglePartialDay}
-                >
-                  <Text style={styles.buttonText}>Partial Day</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setToggleHighlight((val) => !val)}
-                >
-                  <Text style={styles.buttonText}>Toggle highlight</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setToggleMinMaxLabels((p) => !p)}
-                >
-                  <Text style={styles.buttonText}>Toggle min/max labels</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => {
-                    // Use with data 3 for best demonstration
-                    setScaleRelativeToTime((val) => !val);
-                  }}
-                >
-                  <Text style={styles.buttonText}>
-                    Toggle {scaleRelativeToTime ? 'off' : 'on'} XDomain
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setToggleSnapToPoint((val) => !val)}
-                >
-                  <Text style={styles.buttonText}>
-                    Toggle Snap {toggleSnapToPoint ? 'Off' : 'On'}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setTogglePersistOnEnd((val) => !val)}
-                >
-                  <Text style={styles.buttonText}>
-                    Toggle Persist On End {togglePersistOnEnd ? 'Off' : 'On'}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setToggleShowLabelOnCursorLine((val) => !val)}
-                >
-                  <Text style={styles.buttonText}>
-                    Toggle Show Label On CusorLine{' '}
-                    {toggleShowLabelOnCursorLine ? 'On' : 'Off'}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setAt(Math.floor(Math.random() * data.length))}
-                >
-                  <Text style={styles.buttonText}>Set Cursor</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setShowAxis((val) => !val)}
-                >
-                  <Text style={styles.buttonText}>Toggle Axis</Text>
-                </TouchableOpacity>
-              </View>
+              {tooltip}
+              {isLast && <LineChart.HoverTrap />}
+            </LineChart.CursorCrosshair>
+            {on('Axis') && isLast && (
+              <LineChart.Axis
+                domain={[yMin ?? low, yMax ?? high]}
+                hideOnInteraction
+                labelPadding={0}
+                position="right"
+                orientation="vertical"
+                color={colors.axis}
+              />
+            )}
+          </LineChart>
+        );
+      })}
+    </LineChart.Group>
+  );
 
-              <Text style={styles.label}>Tooltip position:</Text>
-              <View style={styles.radioGroup}>
-                <TouchableOpacity
-                  style={[
-                    styles.radioButton,
-                    tooltipPosition === 'top' && styles.radioButtonSelected,
-                  ]}
-                  onPress={() => setTooltipPosition('top')}
-                >
-                  <Text
-                    style={[
-                      styles.radioText,
-                      tooltipPosition === 'top' && styles.radioTextSelected,
-                    ]}
-                  >
-                    Top
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[
-                    styles.radioButton,
-                    tooltipPosition === 'bottom' && styles.radioButtonSelected,
-                  ]}
-                  onPress={() => setTooltipPosition('bottom')}
-                >
-                  <Text
-                    style={[
-                      styles.radioText,
-                      tooltipPosition === 'bottom' && styles.radioTextSelected,
-                    ]}
-                  >
-                    Bottom
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[
-                    styles.radioButton,
-                    tooltipPosition === 'left' && styles.radioButtonSelected,
-                  ]}
-                  onPress={() => setTooltipPosition('left')}
-                >
-                  <Text
-                    style={[
-                      styles.radioText,
-                      tooltipPosition === 'left' && styles.radioTextSelected,
-                    ]}
-                  >
-                    Left
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[
-                    styles.radioButton,
-                    tooltipPosition === 'right' && styles.radioButtonSelected,
-                  ]}
-                  onPress={() => setTooltipPosition('right')}
-                >
-                  <Text
-                    style={[
-                      styles.radioText,
-                      tooltipPosition === 'right' && styles.radioTextSelected,
-                    ]}
-                  >
-                    Right
-                  </Text>
-                </TouchableOpacity>
-              </View>
+  // Omitted for multiple series: both text components read the active series,
+  // which is ambiguous once the provider holds a dictionary.
+  const readouts = multi ? null : (
+    <TextDemos
+      PriceText={LineChart.PriceText}
+      DatetimeText={LineChart.DatetimeText}
+    />
+  );
 
-              {['left', 'right'].includes(tooltipPosition) && (
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setFloatingTooltip((val) => !val)}
-                >
-                  <Text style={styles.buttonText}>
-                    Toggle floating tooltip {floatingTooltip ? 'Off' : 'On'}
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </>
-          )}
-        </View>
-        {!multiData && (
-          <View style={styles.priceTextContainer}>
-            <Text style={styles.priceSectionTitle}>PriceText</Text>
-            <View style={styles.row}>
-              <Text style={styles.label}>Formatted: </Text>
-              <LineChart.PriceText style={styles.chartValueText} />
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>Value: </Text>
-              <LineChart.PriceText
-                variant="value"
-                style={styles.chartValueText}
-              />
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>Custom format: </Text>
-              <LineChart.PriceText
-                style={styles.chartValueText}
-                format={(d) => {
-                  'worklet';
-                  return d.formatted ? `$${d.formatted} AUD` : '';
-                }}
-              />
-            </View>
-            <Text style={styles.datetimeSectionTitle}>DatetimeText</Text>
-            <View style={styles.row}>
-              <Text style={styles.label}>Formatted: </Text>
-              <LineChart.DatetimeText style={styles.chartValueText} />
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>Value: </Text>
-              <LineChart.DatetimeText
-                variant="value"
-                style={styles.chartValueText}
-              />
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>Custom format: </Text>
-              <LineChart.DatetimeText
-                style={styles.chartValueText}
-                locale="en-AU"
-                options={{
-                  year: 'numeric',
-                  month: 'numeric',
-                  day: 'numeric',
-                  hour: 'numeric',
-                  minute: 'numeric',
-                  second: 'numeric',
-                }}
-              />
-            </View>
-          </View>
-        )}
-      </LineChart.Provider>
+  const controls = (
+    <>
+      <ControlGroup title="Data">
+        <ControlSegmented
+          options={DATASET_KEYS}
+          value={dataset}
+          onChange={setDataset}
+        />
+        {flagChips('Multi Series')}
+      </ControlGroup>
+
+      <ControlGroup title="Color">
+        <ControlSegmented
+          options={COLOR_NAMES}
+          value={colorName}
+          onChange={setColorName}
+        />
+      </ControlGroup>
+
+      <ControlGroup title="Background">
+        <ControlSegmented
+          options={BACKGROUNDS}
+          value={background}
+          onChange={setBackground}
+        />
+      </ControlGroup>
+
+      <ControlGroup title="Y Domain">
+        <ControlSegmented
+          options={Y_DOMAINS}
+          value={yDomain}
+          onChange={setYDomain}
+        />
+      </ControlGroup>
+
+      <ControlGroup title="X Domain">
+        {flagChips('Partial Day', 'Scale to Time')}
+      </ControlGroup>
+
+      <ControlGroup title="Appearance">
+        {flagChips('Min/Max Labels', 'Highlight', 'Markers', 'Axis')}
+      </ControlGroup>
+
+      <ControlGroup title="Cursor">
+        {flagChips('Snap to Point', 'Persist on End')}
+        <ControlChip
+          label="Set Cursor"
+          onPress={() =>
+            setCursorAt(Math.floor(Math.random() * series[0]!.length))
+          }
+        />
+      </ControlGroup>
+
+      <ControlGroup title="Cursor Line">
+        <ControlSegmented
+          options={CURSOR_LINES}
+          value={cursorLine}
+          onChange={setCursorLine}
+        />
+      </ControlGroup>
+
+      <ControlGroup title="Tooltip">
+        <ControlSegmented
+          options={TOOLTIPS}
+          value={tooltipPosition}
+          onChange={setTooltipPosition}
+        />
+        {(tooltipPosition === 'left' || tooltipPosition === 'right') &&
+          flagChips('Floating')}
+      </ControlGroup>
     </>
   );
-}
 
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 18,
-    fontWeight: '600',
-    paddingHorizontal: 16,
-    marginBottom: 16,
-  },
-  chartContainer: {
-    paddingVertical: 16,
-  },
-  controlsContainer: {
-    marginHorizontal: 16,
-    marginTop: 16,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  collapseButtonText: {
-    fontSize: 14,
-    color: '#007AFF',
-    fontWeight: '500',
-  },
-  buttonGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 2,
-    marginBottom: 16,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 6,
-    marginRight: 8,
-    marginBottom: 8,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 8,
-  },
-  radioGroup: {
-    flexDirection: 'row',
-    gap: 12,
-    marginBottom: 16,
-  },
-  radioButton: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 4,
-    backgroundColor: 'white',
-  },
-  radioButtonSelected: {
-    backgroundColor: '#007AFF',
-    borderColor: '#007AFF',
-  },
-  radioText: {
-    fontSize: 14,
-    color: '#333',
-  },
-  radioTextSelected: {
-    color: 'white',
-  },
-  priceTextContainer: {
-    padding: 16,
-    gap: 2,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-  },
-  chartValueText: {
-    lineHeight: Platform.OS === 'android' ? 1 : undefined,
-  },
-  priceSectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 12,
-  },
-  datetimeSectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginTop: 24,
-    marginBottom: 12,
-  },
-});
+  const dataProp: TLineChartDataProp = multi ? MULTI_DATA : data;
+
+  return (
+    <LineChart.Provider
+      xDomain={
+        on('Scale to Time')
+          ? [
+              Math.min(...series.map((s) => s.start)),
+              Math.max(...series.map((s) => s.end)),
+            ]
+          : undefined
+      }
+      xLength={
+        on('Partial Day')
+          ? Math.max(...series.map((s) => s.length)) * 2
+          : undefined
+      }
+      yRange={
+        yMin === undefined && yMax === undefined
+          ? undefined
+          : { min: yMin, max: yMax }
+      }
+      data={dataProp}
+    >
+      <ChartScreen
+        chart={chart}
+        readouts={readouts}
+        controls={controls}
+        scrubbing={scrubbing}
+      />
+    </LineChart.Provider>
+  );
+}

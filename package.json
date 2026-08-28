@@ -8,29 +8,21 @@
   "react-native": "src/index.ts",
   "source": "src/index",
   "scripts": {
-    "test": "jest",
-    "typescript": "tsc --noEmit",
-    "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "format": "prettier --write \"**/*.{js,ts,tsx}\"",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "build": "bob build",
-    "publishOnly": "bob build",
-    "example": "pnpm --filter react-native-wagmi-charts-example run start",
-    "pods": "cd example && pod-install --quiet",
-    "bootstrap": "pnpm example && pnpm && pnpm pods"
+    "prepack": "bob build",
+    "example:native": "pnpm --filter react-native-wagmi-charts-example run native",
+    "example:web": "pnpm --filter react-native-wagmi-charts-example run web"
   },
   "files": [
     "src",
     "lib",
     "!**/__tests__",
     "!**/__fixtures__",
-    "!**/__mocks__",
-    "android",
-    "ios",
-    "cpp",
-    "react-native-wagmi-charts.podspec",
-    "!lib/typescript/example",
-    "!android/build",
-    "!ios/build"
+    "!**/__mocks__"
   ],
   "keywords": [
     "react-native",
@@ -41,60 +33,42 @@
     "example"
   ],
   "engines": {
-    "node": ">= 18.0.0"
+    "node": ">= 20.19.4"
   },
+  "packageManager": "pnpm@10.34.5",
   "dependencies": {
-    "d3-array": "^3.1.6",
+    "d3-array": "^3.2.4",
     "d3-scale": "^2",
-    "d3-shape": "^3.0.1",
-    "fbjs": "^3.0.5",
-    "react-keyed-flatten-children": "^1.3.0",
-    "react-native-redash": "^18.1.3"
+    "d3-shape": "^3.2.0",
+    "react-native-redash": "^18.1.5"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^12.0.4",
-    "@eslint/js": "^9.30.1",
-    "@types/d3-array": "^3.0.5",
-    "@types/d3-scale": "^4.0.3",
-    "@types/d3-shape": "^3.1.7",
-    "@types/fbjs": "^3.0.10",
-    "@types/jest": "^26.0.24",
-    "@types/react": "^18.2.45",
-    "@typescript-eslint/eslint-plugin": "^8.35.1",
-    "@typescript-eslint/parser": "^8.35.1",
-    "eslint": "^9.2.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.1.3",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-react-native": "^5.0.0",
-    "husky": "^7.0.1",
-    "jest": "^27.0.6",
-    "pod-install": "^0.1.24",
-    "prettier": "^2.3.2",
-    "react": "19.0.0",
-    "react-native": "0.79.5",
-    "react-native-builder-bob": "^0.23.2",
-    "react-native-gesture-handler": "~2.24.0",
-    "react-native-reanimated": "3.17.4",
-    "react-native-svg": "15.11.2",
+    "@eslint/js": "^10.0.1",
+    "@types/d3-array": "^3.2.2",
+    "@types/d3-scale": "^4.0.9",
+    "@types/d3-shape": "^3.1.8",
+    "@types/react": "~19.2.14",
+    "eslint": "^10.9.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "prettier": "^3.9.6",
+    "react": "19.2.3",
+    "react-native": "0.86.2",
+    "react-native-builder-bob": "^0.35.3",
+    "react-native-gesture-handler": "~2.32.0",
+    "react-native-reanimated": "4.5.1",
+    "react-native-svg": "15.15.4",
+    "react-native-worklets": "0.10.1",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.35.1"
+    "typescript-eslint": "^8.67.0"
   },
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
     "react-native-gesture-handler": "*",
     "react-native-reanimated": "*",
-    "react-native-redash": "*",
     "react-native-svg": "*"
-  },
-  "jest": {
-    "preset": "react-native",
-    "modulePathIgnorePatterns": [
-      "<rootDir>/example/node_modules",
-      "<rootDir>/lib/"
-    ]
   },
   "react-native-builder-bob": {
     "source": "src",
@@ -102,7 +76,12 @@
     "targets": [
       "commonjs",
       "module",
-      "typescript"
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json"
+        }
+      ]
     ]
   },
   "sideEffects": false

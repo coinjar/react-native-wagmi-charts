@@ -1,9 +1,11 @@
 import React from 'react';
 import * as d3Shape from 'd3-shape';
 
-import { Dimensions, StyleSheet, View, ViewProps } from 'react-native';
+import type { ViewProps } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { LineChartIdProvider, useLineChartData } from './Data';
-import { Path, parse } from 'react-native-redash';
+import type { Path } from 'react-native-redash';
+import { parse } from 'react-native-redash';
 import { getArea, getPath } from './utils';
 
 import { LineChartContext } from './Context';
@@ -110,7 +112,7 @@ export function LineChart({
       width,
       height,
       pathWidth,
-      shape
+      shape,
     }),
     [
       yGutter,

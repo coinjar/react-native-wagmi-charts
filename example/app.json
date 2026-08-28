@@ -4,9 +4,9 @@
   "description": "Example app for react-native-wagmi-charts",
   "version": "1.0.0",
   "platforms": ["ios", "android", "web"],
+  "userInterfaceStyle": "automatic",
   "ios": {
     "supportsTablet": true
   },
-  "assetBundlePatterns": ["**/*"],
-  "plugins": ["expo-asset"]
+  "assetBundlePatterns": ["**/*"]
 }

@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  ViewProps,
-  StyleSheet,
-  Text,
-  TextStyle,
-  ViewStyle,
-} from 'react-native';
+import type { ViewProps, TextStyle, ViewStyle } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { Line, Svg } from 'react-native-svg';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { LineChartDimensionsContext } from './Chart';
@@ -178,14 +173,14 @@ export const LineChartAxis = ({
           i === 0
             ? styles.alignStart
             : i === tickCount
-            ? styles.alignEnd
-            : styles.alignCenter;
+              ? styles.alignEnd
+              : styles.alignCenter;
         const textAlignStyle =
           i === 0
             ? styles.textLeft
             : i === tickCount
-            ? styles.textRight
-            : styles.textCenter;
+              ? styles.textRight
+              : styles.textCenter;
 
         labels.push(
           <Animated.View
@@ -201,8 +196,8 @@ export const LineChartAxis = ({
                     i === 0
                       ? x + labelOffset
                       : i === tickCount
-                      ? x - dynamicLabelWidth - labelOffset
-                      : x - dynamicLabelWidth / 2
+                        ? x - dynamicLabelWidth - labelOffset
+                        : x - dynamicLabelWidth / 2
                   )
                 ),
                 top:

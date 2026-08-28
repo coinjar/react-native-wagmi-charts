@@ -1,285 +1,159 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
+import { Text, View } from 'react-native';
+import { runOnJS, useAnimatedReaction } from 'react-native-reanimated';
 import {
-  Platform,
-  View,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-} from 'react-native';
-import { CandlestickChart, TCandle } from 'react-native-wagmi-charts';
-import * as haptics from 'expo-haptics';
+  CandlestickChart,
+  useCandlestickChart,
+} from 'react-native-wagmi-charts';
 
-import mockData from './data/candlestick-data.json';
-import mockData2 from './data/candlestick-data2.json';
+import { candles, reversedCandles } from './data';
+import { useTheme } from './theme';
+import type { ChartScreenProps } from './ChartScreen';
+import {
+  ChartScreen,
+  TextDemos,
+  invokeHaptic,
+  useChartSize,
+  useDemoStyles,
+} from './ChartScreen';
+import { ControlGroup, ControlSegmented } from './ChartControls';
 
-function invokeHaptic() {
-  if (['ios', 'android'].includes(Platform.OS)) {
-    haptics.impactAsync(haptics.ImpactFeedbackStyle.Light);
-  }
+const DATASETS = { '1': candles, '2': reversedCandles };
+type DatasetKey = keyof typeof DATASETS;
+const DATASET_KEYS = Object.keys(DATASETS) as DatasetKey[];
+
+const COLOR_SCHEMES = ['default', 'custom'] as const;
+const MARGINS = ['0', '2', '6'] as const;
+const Y_RANGES = ['auto', 'padded'] as const;
+
+const CUSTOM_COLORS = {
+  light: { positiveColor: '#1E6EF4', negativeColor: '#FF8D28' },
+  dark: { positiveColor: '#0091FF', negativeColor: '#FF9230' },
+};
+
+/** Each reads one price off the crosshair's current candle. */
+const PRICE_COLUMNS = [
+  { label: 'Open', type: 'open' },
+  { label: 'High', type: 'high' },
+  { label: 'Low', type: 'low' },
+  { label: 'Close', type: 'close' },
+] as const;
+
+/**
+ * Sits inside the provider so it can watch the crosshair, which parks
+ * `currentX` at -1 rather than exposing an active flag or an end callback.
+ */
+function Screen(props: Omit<ChartScreenProps, 'scrubbing'>) {
+  const { currentX } = useCandlestickChart();
+  const [scrubbing, setScrubbing] = useState(false);
+
+  useAnimatedReaction(
+    () => currentX.value !== -1,
+    (active, previous) => {
+      if (active !== previous) runOnJS(setScrubbing)(active);
+    },
+    [currentX]
+  );
+
+  return <ChartScreen {...props} scrubbing={scrubbing} />;
 }
 
-export default function App() {
-  const [data, setData] = React.useState<TCandle[]>(mockData);
+export default function CandlestickChartScreen() {
+  const { colors, theme } = useTheme();
+  const demo = useDemoStyles();
+  const size = useChartSize();
 
-  return (
+  const [dataset, setDataset] = useState<DatasetKey>('1');
+  const [colorScheme, setColorScheme] =
+    useState<(typeof COLOR_SCHEMES)[number]>('default');
+  const [margin, setMargin] = useState<(typeof MARGINS)[number]>('2');
+  const [yRange, setYRange] = useState<(typeof Y_RANGES)[number]>('auto');
+
+  const data = DATASETS[dataset];
+
+  const valueRangeY = useMemo<[number, number] | undefined>(() => {
+    if (yRange === 'auto') return undefined;
+
+    const low = Math.min(...data.map((candle) => candle.low));
+    const high = Math.max(...data.map((candle) => candle.high));
+    const pad = (high - low) * 0.25;
+
+    return [low - pad, high + pad];
+  }, [data, yRange]);
+
+  const chart = (
+    <CandlestickChart width={size} height={size}>
+      <CandlestickChart.Candles
+        margin={Number(margin)}
+        {...(colorScheme === 'custom' ? CUSTOM_COLORS[theme] : undefined)}
+      />
+      <CandlestickChart.Crosshair
+        onCurrentXChange={invokeHaptic}
+        color={colors.text}
+      >
+        <CandlestickChart.Tooltip
+          style={demo.tooltip}
+          textStyle={demo.tooltipText}
+        />
+      </CandlestickChart.Crosshair>
+    </CandlestickChart>
+  );
+
+  const readouts = (
+    <TextDemos
+      PriceText={CandlestickChart.PriceText}
+      DatetimeText={CandlestickChart.DatetimeText}
+    >
+      <View style={demo.priceRow}>
+        {PRICE_COLUMNS.map(({ label, type }) => (
+          <View key={label} style={demo.priceColumn}>
+            <Text style={demo.priceLabel}>{label}</Text>
+            <CandlestickChart.PriceText type={type} style={demo.value} />
+          </View>
+        ))}
+      </View>
+    </TextDemos>
+  );
+
+  const controls = (
     <>
-      <Text style={styles.title}>Candlestick Chart 🕯</Text>
-      <CandlestickChart.Provider data={data}>
-        <View style={styles.chartContainer}>
-          <CandlestickChart>
-            <CandlestickChart.Candles />
-            <CandlestickChart.Crosshair onCurrentXChange={invokeHaptic}>
-              <CandlestickChart.Tooltip />
-            </CandlestickChart.Crosshair>
-          </CandlestickChart>
-        </View>
-        <View style={styles.controlsContainer}>
-          <Text style={styles.sectionTitle}>Load Data</Text>
-          <View style={styles.buttonRow}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => setData(mockData)}
-            >
-              <Text style={styles.buttonText}>Data 1</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => setData(mockData2)}
-            >
-              <Text style={styles.buttonText}>Data 2</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.priceTextContainer}>
-          <Text style={styles.sectionTitle}>PriceText</Text>
-          <View>
-            <Text style={[styles.priceTextlabel, styles.noMarginTop]}>
-              Formatted:{' '}
-            </Text>
-            <View style={styles.priceRow}>
-              <View style={styles.priceColumn}>
-                <Text style={styles.priceLabel}>Current</Text>
-                <CandlestickChart.PriceText style={styles.chartValueText} />
-              </View>
-              <View style={styles.priceColumn}>
-                <Text style={styles.priceLabel}>Open</Text>
-                <CandlestickChart.PriceText
-                  type="open"
-                  style={styles.chartValueText}
-                />
-              </View>
-              <View style={styles.priceColumn}>
-                <Text style={styles.priceLabel}>High</Text>
-                <CandlestickChart.PriceText
-                  type="high"
-                  style={styles.chartValueText}
-                />
-              </View>
-              <View style={styles.priceColumn}>
-                <Text style={styles.priceLabel}>Low</Text>
-                <CandlestickChart.PriceText
-                  type="low"
-                  style={styles.chartValueText}
-                />
-              </View>
-              <View style={styles.priceColumn}>
-                <Text style={styles.priceLabel}>Close</Text>
-                <CandlestickChart.PriceText
-                  type="close"
-                  style={styles.chartValueText}
-                />
-              </View>
-            </View>
-          </View>
-          <View>
-            <Text style={styles.priceTextlabel}>Value: </Text>
-            <View style={styles.priceRow}>
-              <View style={styles.priceColumn}>
-                <Text style={styles.priceLabel}>Current</Text>
-                <CandlestickChart.PriceText
-                  variant="value"
-                  style={styles.chartValueText}
-                />
-              </View>
-              <View style={styles.priceColumn}>
-                <Text style={styles.priceLabel}>Open</Text>
-                <CandlestickChart.PriceText
-                  type="open"
-                  variant="value"
-                  style={styles.chartValueText}
-                />
-              </View>
-              <View style={styles.priceColumn}>
-                <Text style={styles.priceLabel}>High</Text>
-                <CandlestickChart.PriceText
-                  type="high"
-                  variant="value"
-                  style={styles.chartValueText}
-                />
-              </View>
-              <View style={styles.priceColumn}>
-                <Text style={styles.priceLabel}>Low</Text>
-                <CandlestickChart.PriceText
-                  type="low"
-                  variant="value"
-                  style={styles.chartValueText}
-                />
-              </View>
-              <View style={styles.priceColumn}>
-                <Text style={styles.priceLabel}>Close</Text>
-                <CandlestickChart.PriceText
-                  type="close"
-                  variant="value"
-                  style={styles.chartValueText}
-                />
-              </View>
-            </View>
-          </View>
-          <View>
-            <Text style={styles.priceTextlabel}>Custom format: </Text>
-            <View style={styles.priceRow}>
-              <View style={styles.priceColumn}>
-                <Text style={styles.priceLabel}>Current</Text>
-                <CandlestickChart.PriceText
-                  style={styles.chartValueText}
-                  format={(d) => {
-                    'worklet';
-                    return `$${d.formatted} AUD`;
-                  }}
-                />
-              </View>
-              <View style={styles.priceColumn}>
-                <Text style={styles.priceLabel}>Open</Text>
-                <CandlestickChart.PriceText
-                  type="open"
-                  style={styles.chartValueText}
-                  format={(d) => {
-                    'worklet';
-                    return `$${d.formatted} AUD`;
-                  }}
-                />
-              </View>
-              <View style={styles.priceColumn}>
-                <Text style={styles.priceLabel}>Close</Text>
-                <CandlestickChart.PriceText
-                  type="close"
-                  style={styles.chartValueText}
-                  format={(d) => {
-                    'worklet';
-                    return `$${d.formatted} AUD`;
-                  }}
-                />
-              </View>
-            </View>
-          </View>
-        </View>
-        <View style={styles.dateTimeContainer}>
-          <Text style={styles.sectionTitle}>DatetimeText</Text>
-          <View style={[styles.row, styles.noMarginTop]}>
-            <Text style={styles.dateTimelabel}>Formatted: </Text>
-            <CandlestickChart.DatetimeText style={styles.chartValueText} />
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.dateTimelabel}>Float: </Text>
-            <CandlestickChart.DatetimeText
-              variant="value"
-              style={styles.chartValueText}
-            />
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.dateTimelabel}>Custom format: </Text>
-            <CandlestickChart.DatetimeText
-              style={styles.chartValueText}
-              locale="en-AU"
-              options={{
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric',
-              }}
-            />
-          </View>
-        </View>
-      </CandlestickChart.Provider>
+      <ControlGroup title="Data">
+        <ControlSegmented
+          options={DATASET_KEYS}
+          value={dataset}
+          onChange={setDataset}
+        />
+      </ControlGroup>
+
+      <ControlGroup title="Colors">
+        <ControlSegmented
+          options={COLOR_SCHEMES}
+          value={colorScheme}
+          onChange={setColorScheme}
+        />
+      </ControlGroup>
+
+      <ControlGroup title="Margin">
+        <ControlSegmented
+          options={MARGINS}
+          value={margin}
+          onChange={setMargin}
+        />
+      </ControlGroup>
+
+      <ControlGroup title="Y Range">
+        <ControlSegmented
+          options={Y_RANGES}
+          value={yRange}
+          onChange={setYRange}
+        />
+      </ControlGroup>
     </>
   );
-}
 
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 18,
-    fontWeight: '600',
-    paddingHorizontal: 16,
-    marginBottom: 16,
-  },
-  chartContainer: {
-    paddingVertical: 16,
-  },
-  controlsContainer: {
-    marginHorizontal: 16,
-    marginTop: 16,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 6,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  priceTextContainer: {
-    paddingTop: 32,
-    paddingHorizontal: 16,
-  },
-  priceRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  priceTextlabel: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  priceColumn: {
-    flex: 1,
-  },
-  priceLabel: {
-    fontSize: 10,
-    marginBottom: 4,
-  },
-  dateTimeContainer: {
-    padding: 32,
-    paddingHorizontal: 16,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    marginTop: 2,
-  },
-  dateTimelabel: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 8,
-  },
-  chartValueText: {
-    lineHeight: Platform.OS === 'android' ? 1 : undefined,
-  },
-  noMarginTop: {
-    marginTop: 0,
-  },
-});
+  return (
+    <CandlestickChart.Provider data={data} valueRangeY={valueRangeY}>
+      <Screen chart={chart} readouts={readouts} controls={controls} />
+    </CandlestickChart.Provider>
+  );
+}

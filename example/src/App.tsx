@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  Platform,
   View,
   TouchableOpacity,
   Text,
@@ -8,106 +7,107 @@ import {
   StyleSheet,
   StatusBar,
 } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import CandlestickChart from './CandlestickChart';
-import LineChart from './LineChart';
+import type { ThemeColors } from './theme';
+import { ThemeProvider, useTheme, useThemedStyles } from './theme';
+import { ControlChip } from './ChartControls';
+import CandlestickChartScreen from './CandlestickChart';
+import LineChartScreen from './LineChart';
 
-export default function App() {
-  const [selected, setSelected] = React.useState('');
+const CHARTS = [
+  { key: 'line', label: 'Line 📈', Screen: LineChartScreen },
+  {
+    key: 'candlestick',
+    label: 'Candlestick 🕯',
+    Screen: CandlestickChartScreen,
+  },
+] as const;
+
+function AppContent() {
+  const { theme, colors, toggleTheme } = useTheme();
+  const insets = useSafeAreaInsets();
+  const styles = useThemedStyles(createStyles);
+
+  const [active, setActive] =
+    React.useState<(typeof CHARTS)[number]['key']>('line');
+  const { Screen } = CHARTS.find((chart) => chart.key === active)!;
+
   return (
-    <GestureHandlerRootView style={styles.flex}>
-      <SafeAreaProvider>
-        <StatusBar backgroundColor="white" barStyle="dark-content" />
-        <SafeAreaView style={styles.flex}>
-          <View style={styles.container}>
-            <View style={styles.header}>
-              <Text style={styles.title}>React Native WAGMI Charts 💸</Text>
-              <TouchableOpacity
-                style={[styles.button, !selected && styles.hiddenButton]}
-                onPress={() => setSelected('')}
-                disabled={!selected}
-              >
-                <Text style={styles.buttonText}>Back</Text>
-              </TouchableOpacity>
-            </View>
-            <ScrollView>
-              {!selected && (
-                <View style={styles.buttonContainer}>
-                  <Text style={styles.subtitle}>
-                    Click a chart below to get started
-                  </Text>
-                  <TouchableOpacity
-                    style={styles.chartButton}
-                    onPress={() => setSelected('candlestick')}
-                  >
-                    <Text style={styles.buttonText}>Candlestick</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.chartButton}
-                    onPress={() => setSelected('line')}
-                  >
-                    <Text style={styles.buttonText}>Line</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-              {selected === 'candlestick' && <CandlestickChart />}
-              {selected === 'line' && <LineChart />}
-            </ScrollView>
-          </View>
-        </SafeAreaView>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <View style={[styles.screen, { paddingTop: insets.top }]}>
+      <StatusBar
+        backgroundColor={colors.background}
+        barStyle={theme === 'dark' ? 'light-content' : 'dark-content'}
+      />
+      <View style={styles.header}>
+        {CHARTS.map(({ key, label }) => (
+          <ControlChip
+            key={key}
+            label={label}
+            selected={key === active}
+            onPress={() => setActive(key)}
+          />
+        ))}
+        <View style={styles.spacer} />
+        <TouchableOpacity style={styles.themeButton} onPress={toggleTheme}>
+          <Text style={styles.themeButtonText}>
+            {theme === 'light' ? 'Dark' : 'Light'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView>
+        <Screen />
+      </ScrollView>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  flex: {
+export default function App() {
+  return (
+    <ThemeProvider>
+      <GestureHandlerRootView style={appStyles.root}>
+        <SafeAreaProvider>
+          <AppContent />
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    </ThemeProvider>
+  );
+}
+
+const appStyles = StyleSheet.create({
+  root: {
     flex: 1,
-  },
-  container: {
-    flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  title: {
-    fontSize: Platform.OS === 'web' ? 24 : 20,
-    fontWeight: 'bold',
-  },
-  subtitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 8,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  chartButton: {
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginVertical: 4,
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: '500',
-  },
-  hiddenButton: {
-    opacity: 0,
-  },
-  buttonContainer: {
-    paddingHorizontal: 16,
-    marginTop: 24,
-    gap: 16,
   },
 });
+
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    screen: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+      paddingHorizontal: 16,
+      paddingVertical: 12,
+    },
+    spacer: {
+      flex: 1,
+    },
+    themeButton: {
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+    },
+    themeButtonText: {
+      fontSize: 14,
+      fontWeight: '500',
+      color: colors.primary,
+    },
+  });

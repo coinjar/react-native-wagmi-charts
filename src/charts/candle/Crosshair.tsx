@@ -1,22 +1,23 @@
 import React from 'react';
-import { StyleSheet, ViewProps } from 'react-native';
-import {
-  Gesture,
-  GestureDetector,
+import type { ViewProps } from 'react-native';
+import { StyleSheet } from 'react-native';
+import type {
   GestureStateChangeEvent,
   LongPressGestureHandlerEventPayload,
 } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import type { AnimatedProps } from 'react-native-reanimated';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   useAnimatedReaction,
   runOnJS,
-  AnimatedProps,
 } from 'react-native-reanimated';
 import { clamp } from 'react-native-redash';
 
 import { CandlestickChartDimensionsContext } from './Chart';
-import { CandlestickChartLine, CandlestickChartLineProps } from './Line';
+import type { CandlestickChartLineProps } from './Line';
+import { CandlestickChartLine } from './Line';
 import { useCandlestickChart } from './useCandlestickChart';
 import { CandlestickChartCrosshairTooltipContext } from './CrosshairTooltip';
 
