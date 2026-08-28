@@ -18,7 +18,7 @@ A sweet & simple chart library for React Native that will make us feel like
 
 🛠 Highly customizable APIs
 
-✨ Uses React Native Reanimated 2 under-the-hood
+✨ Uses React Native Reanimated under the hood
 
 🧈 Slick data transition animations
 
@@ -40,6 +40,7 @@ A sweet & simple chart library for React Native that will make us feel like
   - [Haptic feedback](#haptic-feedback)
   - [Colors](#colors)
   - [Gradients](#gradients)
+  - [Dot grid](#dot-grid)
   - [Dots](#dots)
   - [Horizontal lines](#horizontal-lines)
   - [Customizing size](#customizing-size)
@@ -63,6 +64,7 @@ A sweet & simple chart library for React Native that will make us feel like
   - [LineChart.Highlight](#linechartdot)
   - [LineChart.HorizontalLine](#linecharthorizontalline)
   - [LineChart.Gradient](#linechartgradient)
+  - [LineChart.DotGrid](#linechartdotgrid)
   - [LineChart.Tooltip](#linecharttooltip)
   - [LineChart.PriceText](#linechartpricetext)
   - [LineChart.DatetimeText](#linechartdatetimetext)
@@ -497,6 +499,57 @@ provide a color prop to `LineChart.Gradient`.
 ```
 
 <img width="345" alt="Screen Shot 2021-10-25 at 8 32 26 pm" src="https://user-images.githubusercontent.com/7336481/138672153-9ba11b02-b750-4ab0-a2e2-c18a9af4635f.png">
+
+You can also set your own gradient by providing the `Stop`s as children
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path color="red">
+      <LineChart.Gradient>
+        <Stop offset="0%" stopColor="red" stopOpacity={0.3} />
+        <Stop offset="70%" stopColor="blue" stopOpacity={0.2} />
+        <Stop offset="100%" stopColor="green" stopOpacity={0.05} />
+      </LineChart.Gradient>
+    </LineChart.Path>
+  </LineChart>
+</LineChart.Provider>
+```
+
+### Dot grid
+
+If you'd rather fill the area underneath your path with a halftone-style dot
+grid than a solid gradient, swap `LineChart.Gradient` for `LineChart.DotGrid`.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path color="green">
+      <LineChart.DotGrid />
+    </LineChart.Path>
+  </LineChart>
+</LineChart.Provider>
+```
+
+The dots sit on a fixed square grid, `spacing` apart both down a column and
+across to the next column. The grid is static and the chart path simply uncovers
+the part of it that falls underneath the line, like a stencil cut out of the
+background.
+
+Like the gradient, the dot grid inherits your path's color by default and
+supports a custom color prop or `<Stop>` children.
+
+```jsx
+<LineChart.Provider data={data}>
+  <LineChart>
+    <LineChart.Path color="green">
+      <LineChart.DotGrid color="black" spacing={8} radius={1.5} />
+    </LineChart.Path>
+  </LineChart>
+</LineChart.Provider>
+```
+
+<img width="345" alt="Screenshot 2026-08-26 at 15.36.30" src="https://github.com/user-attachments/assets/dc6a8f48-1f51-49a1-a65b-6809537a9425">
 
 ### Dots
 
@@ -1010,10 +1063,21 @@ function in the form of a
 
 ### LineChart.Gradient
 
-| Prop       | Type        | Default | Description           |
-| ---------- | ----------- | ------- | --------------------- |
-| `color`    | `string`    |         | Color of the gradient |
-| `...props` | `PathProps` |         |                       |
+| Prop       | Type        | Default | Description                                                           |
+| ---------- | ----------- | ------- | --------------------------------------------------------------------- |
+| `color`    | `string`    |         | Color of the gradient. Defaults to the path's color.                  |
+| `children` | `Stop[]`    |         | `<Stop>` elements, top (`offset="0%"`) to baseline (`offset="100%"`). |
+| `...props` | `PathProps` |         |                                                                       |
+
+### LineChart.DotGrid
+
+| Prop       | Type        | Default | Description                                                                                               |
+| ---------- | ----------- | ------- | --------------------------------------------------------------------------------------------------------- |
+| `color`    | `string`    |         | Color of the dots. Defaults to the path's color.                                                          |
+| `spacing`  | `number`    | `6`     | Distance in pixels between dot centers, both down a column and across columns. Must be greater than zero. |
+| `radius`   | `number`    | `1.5`   | Radius in pixels of each dot.                                                                             |
+| `children` | `Stop[]`    |         | `<Stop>` elements, top (`offset="0%"`) to baseline (`offset="100%"`). See [Dot grid](#dot-grid).          |
+| `...props` | `PathProps` |         |                                                                                                           |
 
 ### LineChart.Tooltip
 

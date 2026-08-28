@@ -13,6 +13,11 @@ import { LineChartContext } from './Context';
 export const LineChartDimensionsContext = React.createContext({
   width: 0,
   height: 0,
+  /**
+   * `height` minus the space reserved at the bottom for x-axis cursor labels,
+   * i.e. the vertical space the path and area are actually drawn in.
+   */
+  chartDrawingHeight: 0,
   pointWidth: 0,
   parsedPath: {} as Path,
   path: '',
@@ -111,6 +116,7 @@ export function LineChart({
       path,
       width,
       height,
+      chartDrawingHeight,
       pathWidth,
       shape,
     }),
@@ -122,6 +128,7 @@ export function LineChart({
       path,
       width,
       height,
+      chartDrawingHeight,
       pathWidth,
       shape,
     ]

@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   useAnimatedProps,
   useAnimatedReaction,
@@ -5,7 +6,7 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 
-import { interpolatePath } from './utils';
+import { interpolatePreparedPath, prepareInterpolatedPath } from './utils';
 import { usePrevious } from '../../utils';
 
 export function useAnimatedPath({
@@ -31,15 +32,22 @@ export function useAnimatedPath({
     [path]
   );
 
+  // Lining the two paths up costs far more than sampling between them, and only
+  // changes with the data — so it happens here once, not on the UI thread on
+  // every frame of every transition.
+  const interpolation = React.useMemo(
+    () =>
+      previousPath && enabled
+        ? prepareInterpolatedPath(previousPath, path, null)
+        : null,
+    [enabled, path, previousPath]
+  );
+
   const animatedProps = useAnimatedProps(() => {
-    let d = path || '';
-    if (previousPath && enabled) {
-      const pathInterpolator = interpolatePath(previousPath, path, null);
-      d = pathInterpolator(transition.value);
+    if (!interpolation) {
+      return { d: path || '' };
     }
-    return {
-      d,
-    };
+    return { d: interpolatePreparedPath(interpolation, transition.value) };
   });
 
   return { animatedProps };

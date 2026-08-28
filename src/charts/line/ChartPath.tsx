@@ -15,14 +15,35 @@ import type { LineChartPathProps } from './Path';
 import { LineChartPath } from './Path';
 import { useLineChart } from './useLineChart';
 
+/**
+ * Rendered underneath everything else so they stay behind the path and the
+ * other background layers
+ */
+const UNDERLAY_COMPONENTS = ['LineChartDotGrid'];
 const BACKGROUND_COMPONENTS = [
   'LineChartHighlight',
   'LineChartHorizontalLine',
   'LineChartGradient',
   'LineChartDot',
-  'LineChartTooltip',
 ];
 const FOREGROUND_COMPONENTS = ['LineChartHighlight', 'LineChartDot'];
+/**
+ * Plain views so they cannot go in the shared `<Svg>`: nesting a view in an
+ * SVG container drops it and siblings.
+ */
+const OVERLAY_COMPONENTS = ['LineChartTooltip'];
+
+const KNOWN_COMPONENTS = [
+  ...new Set([
+    ...UNDERLAY_COMPONENTS,
+    ...BACKGROUND_COMPONENTS,
+    ...FOREGROUND_COMPONENTS,
+    ...OVERLAY_COMPONENTS,
+  ]),
+];
+
+/** Display names already reported, so the warning stays out of render loops. */
+const warnedComponents = new Set<string>();
 
 const AnimatedSVG = Animated.createAnimatedComponent(Svg);
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
@@ -134,20 +155,48 @@ export function LineChartPathWrapper({
 
   ////////////////////////////////////////////////
 
+  let underlayChildren;
   let backgroundChildren;
   let foregroundChildren;
+  let overlayChildren;
   if (children) {
     const iterableChildren = flattenChildren(children);
+    const layerOf = (child: React.ReactNode) =>
+      (child as ReactElementWithDisplayName)?.type?.displayName || '';
+
+    underlayChildren = iterableChildren.filter((child) =>
+      UNDERLAY_COMPONENTS.includes(layerOf(child))
+    );
     backgroundChildren = iterableChildren.filter((child) =>
-      BACKGROUND_COMPONENTS.includes(
-        (child as ReactElementWithDisplayName)?.type?.displayName || ''
-      )
+      BACKGROUND_COMPONENTS.includes(layerOf(child))
     );
     foregroundChildren = iterableChildren.filter((child) =>
-      FOREGROUND_COMPONENTS.includes(
-        (child as ReactElementWithDisplayName)?.type?.displayName || ''
-      )
+      FOREGROUND_COMPONENTS.includes(layerOf(child))
     );
+    overlayChildren = iterableChildren.filter((child) =>
+      OVERLAY_COMPONENTS.includes(layerOf(child))
+    );
+
+    // Children are matched by display name so anything unrecognised is dropped
+    if (__DEV__) {
+      const unreported = iterableChildren
+        .map((child) => layerOf(child) || 'unknown')
+        .filter(
+          (name) =>
+            !KNOWN_COMPONENTS.includes(name) && !warnedComponents.has(name)
+        );
+
+      if (unreported.length > 0) {
+        unreported.forEach((name) => warnedComponents.add(name));
+        console.warn(
+          `[react-native-wagmi-charts] <LineChart.Path> is ignoring ${unreported.join(
+            ', '
+          )}. It only renders ${KNOWN_COMPONENTS.join(
+            ', '
+          )}; any other child is dropped. Render it as a sibling of <LineChart.Path> instead.`
+        );
+      }
+    }
   }
 
   ////////////////////////////////////////////////
@@ -162,6 +211,7 @@ export function LineChartPathWrapper({
         }}
       >
         <View style={viewSize}>
+          {underlayChildren}
           <Svg width={width} height={height}>
             <LineChartPath
               color={color}
@@ -234,6 +284,11 @@ export function LineChartPathWrapper({
           )}
         </View>
       </LineChartPathContext.Provider>
+      {overlayChildren && overlayChildren.length > 0 && (
+        <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+          {overlayChildren}
+        </View>
+      )}
     </>
   );
 }

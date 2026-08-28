@@ -10,6 +10,23 @@
  * Reanimated compatible fork of https://github.com/pbeshai/d3-interpolate-path
  */
 
+type PathCommand = {
+  type: string;
+  [key: string]: number | string;
+};
+
+type ExcludeSegment = (
+  commandStart: PathCommand,
+  commandEnd: PathCommand
+) => boolean;
+
+export type PreparedPathInterpolation = {
+  types: string[];
+  from: number[];
+  to: number[];
+  toPath: string;
+};
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -23,14 +40,10 @@
  *   right is the segment from t..1.
  */
 function decasteljau(points, t) {
-  'worklet';
-
   const left = [];
   const right = [];
 
   function decasteljauRecurse(points, t) {
-    'worklet';
-
     if (points.length === 1) {
       left.push(points[0]);
       right.push(points[0]);
@@ -70,8 +83,6 @@ function decasteljau(points, t) {
  * @return {Object} A command object representing the segment.
  */
 function pointsToCommand(points) {
-  'worklet';
-
   const command = {};
 
   if (points.length === 4) {
@@ -108,8 +119,6 @@ function pointsToCommand(points) {
  * @return {Number[][][]} Array of segments
  */
 function splitCurveAsPoints(points, segmentCount) {
-  'worklet';
-
   segmentCount = segmentCount || 2;
 
   const segments = [];
@@ -154,9 +163,7 @@ function splitCurveAsPoints(points, segmentCount) {
  * @param {Number} segmentCount The number of segments to create
  * @return {Object[]} An array of commands representing the segments in sequence
  */
-export function splitCurve(commandStart, commandEnd, segmentCount) {
-  'worklet';
-
+function splitCurve(commandStart, commandEnd, segmentCount) {
   const points = [[commandStart.x, commandStart.y]];
   if (commandEnd.x1 != null) {
     points.push([commandEnd.x1, commandEnd.y1]);
@@ -191,27 +198,12 @@ Object.keys(typeMap).forEach((key) => {
 });
 
 function arrayOfLength(length, value) {
-  'worklet';
-
   const array = Array(length);
   for (let i = 0; i < length; i++) {
     array[i] = value;
   }
 
   return array;
-}
-
-/**
- * Converts a command object to a string to be used in a `d` attribute
- * @param {Object} command A command object
- * @return {String} The string for the `d` attribute
- */
-function commandToString(command) {
-  'worklet';
-
-  return `${command.type}${typeMap[command.type]
-    .map((p) => command[p])
-    .join(',')}`;
 }
 
 /**
@@ -235,8 +227,6 @@ function commandToString(command) {
  * @return {Object} aCommand converted to type of bCommand
  */
 function convertToSameType(aCommand, bCommand) {
-  'worklet';
-
   const conversionMap = {
     x1: 'x',
     y1: 'y',
@@ -295,8 +285,6 @@ function convertToSameType(aCommand, bCommand) {
  *   commandEnd. (Can be segmentCount+1 objects if commandStart is type M).
  */
 function splitSegment(commandStart, commandEnd, segmentCount) {
-  'worklet';
-
   let segments = [];
 
   // line, quadratic bezier, or cubic bezier
@@ -338,8 +326,6 @@ function splitSegment(commandStart, commandEnd, segmentCount) {
  * @return {Object[]} The extended commandsToExtend array
  */
 function extend(commandsToExtend, referenceCommands, excludeSegment) {
-  'worklet';
-
   // compute insertion points:
   // number of segments in the path to extend
   const numSegmentsToExtend = commandsToExtend.length - 1;
@@ -443,9 +429,7 @@ function extend(commandsToExtend, referenceCommands, excludeSegment) {
  *
  * @param {String|null} d A path `d` string
  */
-export function pathCommandsFromString(d) {
-  'worklet';
-
+function pathCommandsFromString(d) {
   // split into valid tokens
   const tokens = (d || '').match(/[MLCSTQAHVZmlcstqahv]|-?[\d.e+-]+/g) || [];
   const commands = [];
@@ -479,39 +463,26 @@ export function pathCommandsFromString(d) {
 }
 
 /**
- * Interpolate from A to B by extending A and B during interpolation to have
- * the same number of points. This allows for a smooth transition when they
- * have a different number of points.
+ * Lines up two command arrays so that they can be interpolated element by
+ * element: extends the shorter one by splitting curves until the point counts
+ * match, then converts each command in A to the type of its counterpart in B.
  *
  * Ignores the `Z` command in paths unless both A and B end with it.
- *
- * This function works directly with arrays of command objects instead of with
- * path `d` strings (see interpolatePath for working with `d` strings).
  *
  * @param {Object[]} aCommandsInput Array of path commands
  * @param {Object[]} bCommandsInput Array of path commands
  * @param {Function} excludeSegment a function that takes a start command object and
  *   end command object and returns true if the segment should be excluded from splitting.
- * @returns {Function} Interpolation function that maps t ([0, 1]) to an array of path commands.
+ * @return {Object} `{ aCommands, bCommands }`, both the same length.
  */
-export function interpolatePathCommands(
-  aCommandsInput,
-  bCommandsInput,
-  excludeSegment
-) {
-  'worklet';
-
+function alignCommands(aCommandsInput, bCommandsInput, excludeSegment) {
   // make a copy so we don't mess with the input arrays
   let aCommands = aCommandsInput == null ? [] : aCommandsInput.slice();
   let bCommands = bCommandsInput == null ? [] : bCommandsInput.slice();
 
   // both input sets are empty, so we don't interpolate
   if (!aCommands.length && !bCommands.length) {
-    return function nullInterpolator() {
-      'worklet';
-
-      return [];
-    };
+    return { aCommands: [], bCommands: [] };
   }
 
   // do we add Z during interpolation? yes if both have it. (we'd expect both to have it or not)
@@ -558,99 +529,102 @@ export function interpolatePathCommands(
     convertToSameType(aCommand, bCommands[i])
   );
 
-  // create mutable interpolated command objects
-  const interpolatedCommands = aCommands.map((aCommand) => aCommand);
-
+  // `Z` takes no arguments, so it interpolates to itself
   if (addZ) {
-    interpolatedCommands.push({ type: 'Z' });
-    aCommands.push({ type: 'Z' }); // required for when returning at t == 0
+    aCommands.push({ type: 'Z' });
+    bCommands.push({ type: 'Z' });
   }
 
-  return function pathCommandInterpolator(t) {
-    'worklet';
-
-    // at 1 return the final value without the extensions used during interpolation
-    if (t === 1) {
-      return bCommandsInput == null ? [] : bCommandsInput;
-    }
-
-    // work with aCommands directly since interpolatedCommands are mutated
-    if (t === 0) {
-      return aCommands;
-    }
-
-    // interpolate the commands using the mutable interpolated command objs
-    for (let i = 0; i < interpolatedCommands.length; ++i) {
-      // if (interpolatedCommands[i].type === 'Z') continue;
-
-      const aCommand = aCommands[i];
-      const bCommand = bCommands[i];
-      const interpolatedCommand = interpolatedCommands[i];
-      for (let j = 0; j < typeMap[interpolatedCommand.type].length; j++) {
-        const arg = typeMap[interpolatedCommand.type][j];
-        interpolatedCommand[arg] = (1 - t) * aCommand[arg] + t * bCommand[arg];
-
-        // do not use floats for flags (#27), round to integer
-        if (arg === 'largeArcFlag' || arg === 'sweepFlag') {
-          interpolatedCommand[arg] = Math.round(interpolatedCommand[arg]);
-        }
-      }
-    }
-
-    return interpolatedCommands;
-  };
+  return { aCommands, bCommands };
 }
 
 /**
- * Interpolate from A to B by extending A and B during interpolation to have
- * the same number of points. This allows for a smooth transition when they
- * have a different number of points.
+ * Flattens an interpolation between two `d` strings down to plain arrays of
+ * numbers, one entry per command argument.
  *
- * Ignores the `Z` character in paths unless both A and B end with it.
+ * Aligning the two paths is the expensive half of a path interpolation. Doing
+ * it once, here, leaves the per-frame half with nothing to do but multiply, add
+ * and concatenate.
  *
- * @param {String} a The `d` attribute for a path
- * @param {String} b The `d` attribute for a path
+ * @param {String} a The `d` attribute to interpolate from
+ * @param {String} b The `d` attribute to interpolate to
  * @param {Function} excludeSegment a function that takes a start command object and
  *   end command object and returns true if the segment should be excluded from splitting.
- * @returns {Function} Interpolation function that maps t ([0, 1]) to a path `d` string.
+ * @return {Object} A plain, serializable descriptor of the interpolation.
  */
-export function interpolatePath(a, b, excludeSegment): (t: number) => string {
-  'worklet';
-
-  const aCommands = pathCommandsFromString(a);
-  const bCommands = pathCommandsFromString(b);
-
-  if (!aCommands.length && !bCommands.length) {
-    return function nullInterpolator() {
-      'worklet';
-
-      return '';
-    };
-  }
-
-  const commandInterpolator = interpolatePathCommands(
-    aCommands,
-    bCommands,
+export function prepareInterpolatedPath(
+  a: string,
+  b: string,
+  excludeSegment: ExcludeSegment | null
+): PreparedPathInterpolation {
+  const { aCommands, bCommands } = alignCommands(
+    pathCommandsFromString(a),
+    pathCommandsFromString(b),
     excludeSegment
   );
 
-  return function pathStringInterpolator(t) {
-    'worklet';
+  const types = [];
+  const from = [];
+  const to = [];
 
-    // at 1 return the final value without the extensions used during interpolation
-    if (t === 1) {
-      return b == null ? '' : b;
+  for (let i = 0; i < aCommands.length; i++) {
+    const aCommand = aCommands[i];
+    const bCommand = bCommands[i] || aCommand;
+    const args = typeMap[aCommand.type];
+
+    types.push(aCommand.type);
+
+    for (let j = 0; j < args.length; j++) {
+      from.push(aCommand[args[j]]);
+      to.push(bCommand[args[j]]);
     }
+  }
 
-    const interpolatedCommands = commandInterpolator(t);
+  return { types, from, to, toPath: b == null ? '' : b };
+}
 
-    // convert to a string (fastest concat: https://jsperf.com/join-concat/150)
-    let interpolatedString = '';
-    for (let i = 0; i < interpolatedCommands.length; i++) {
-      const interpolatedCommand = interpolatedCommands[i];
-      interpolatedString += commandToString(interpolatedCommand);
+/**
+ * Evaluates a descriptor from `prepareInterpolatedPath` at `t`, returning a
+ * path `d` string. This is the only part that runs per frame.
+ *
+ * @param {Object} prepared A descriptor from `prepareInterpolatedPath`
+ * @param {Number} t Where to sample the interpolation (value between [0, 1])
+ * @return {String} The string for the `d` attribute
+ */
+export function interpolatePreparedPath(
+  prepared: PreparedPathInterpolation,
+  t: number
+): string {
+  'worklet';
+
+  const { types, from, to } = prepared;
+
+  // at 1 return the final value without the extensions used during interpolation
+  if (t >= 1) {
+    return prepared.toPath;
+  }
+
+  let d = '';
+  let arg = 0;
+
+  for (let i = 0; i < types.length; i++) {
+    const type = types[i];
+    const args = typeMap[type];
+
+    d += type;
+
+    for (let j = 0; j < args.length; j++) {
+      let value = (1 - t) * from[arg] + t * to[arg];
+
+      // do not use floats for flags (#27), round to integer
+      if (args[j] === 'largeArcFlag' || args[j] === 'sweepFlag') {
+        value = Math.round(value);
+      }
+
+      d += j === 0 ? value : `,${value}`;
+      arg++;
     }
+  }
 
-    return interpolatedString;
-  };
+  return d;
 }
