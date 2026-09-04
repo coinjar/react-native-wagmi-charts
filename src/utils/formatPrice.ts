@@ -1,7 +1,7 @@
 /**
  * @worklet
  */
-export function formatPrice({
+export const formatPrice = ({
   value: _value,
   defaultPrice: _defaultPrice = '',
   precision,
@@ -9,7 +9,7 @@ export function formatPrice({
   value: string;
   defaultPrice?: string | number;
   precision?: number;
-}) {
+}) => {
   'worklet';
 
   let defaultPrice = _defaultPrice;
@@ -37,4 +37,4 @@ export function formatPrice({
     }
   }
   return res;
-}
+};

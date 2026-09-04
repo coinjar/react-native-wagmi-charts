@@ -1,8 +1,8 @@
 import type { TLineChartData, TLineChartDataProp } from '../types';
 
-export function lineChartDataPropToArray(
+export const lineChartDataPropToArray = (
   dataProp: TLineChartDataProp
-): TLineChartData {
+): TLineChartData => {
   'worklet';
 
   if (!dataProp) {
@@ -22,4 +22,4 @@ export function lineChartDataPropToArray(
   });
 
   return data;
-}
+};

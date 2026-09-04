@@ -2,7 +2,7 @@ import { interpolate, Extrapolation } from 'react-native-reanimated';
 
 import type { TDomain } from '../types';
 
-export function getHeight({
+export const getHeight = ({
   value,
   domain,
   maxHeight,
@@ -10,7 +10,7 @@ export function getHeight({
   value: number;
   domain: TDomain;
   maxHeight: number;
-}) {
+}) => {
   'worklet';
   return interpolate(
     value,
@@ -18,4 +18,4 @@ export function getHeight({
     [0, maxHeight],
     Extrapolation.CLAMP
   );
-}
+};
