@@ -591,10 +591,10 @@ export function prepareInterpolatedPath(
  * @param {Number} t Where to sample the interpolation (value between [0, 1])
  * @return {String} The string for the `d` attribute
  */
-export function interpolatePreparedPath(
+export const interpolatePreparedPath = (
   prepared: PreparedPathInterpolation,
   t: number
-): string {
+): string => {
   'worklet';
 
   const { types, from, to } = prepared;
@@ -627,4 +627,4 @@ export function interpolatePreparedPath(
   }
 
   return d;
-}
+};

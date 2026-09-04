@@ -1,6 +1,6 @@
 import type { Path } from 'react-native-redash';
 
-export function getXPositionForCurve(path: Path, index: number) {
+export const getXPositionForCurve = (path: Path, index: number) => {
   'worklet';
   if (index === 0) {
     return path.move.x;
@@ -16,4 +16,4 @@ export function getXPositionForCurve(path: Path, index: number) {
   }
 
   return point.to.x;
-}
+};
