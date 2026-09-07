@@ -87,7 +87,7 @@ export function LineChartTooltip({
     return atXPosition == null
       ? undefined
       : (getYForX(parsedPath, atXPosition) ?? 0);
-  }, [atXPosition]);
+  }, [atXPosition, parsedPath]);
 
   const getInitialTranslateXOffset = React.useCallback(
     (elementWidth: number) => {
