@@ -220,7 +220,9 @@ export function LineChartPathWrapper({
               {...pathProps}
             />
           </Svg>
-          <Svg style={StyleSheet.absoluteFill}>{backgroundChildren}</Svg>
+          <Svg width={width} height={height} style={StyleSheet.absoluteFill}>
+            {backgroundChildren}
+          </Svg>
         </View>
       </LineChartPathContext.Provider>
       <LineChartPathContext.Provider
