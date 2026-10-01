@@ -51,13 +51,10 @@ export function LineChartHorizontalLine({
   at = { index: 0 },
   offsetY = 0,
 }: HorizontalLineProps) {
-  const { width, parsedPath, height, gutter } = React.useContext(
+  const { width, parsedPath, chartDrawingHeight, gutter } = React.useContext(
     LineChartDimensionsContext
   );
   const { yDomain } = useLineChart();
-
-  // Reserve space at the bottom for x-axis cursor labels
-  const X_AXIS_LABEL_RESERVED_HEIGHT = 40;
 
   const y = useDerivedValue(() => {
     if (typeof at === 'number' || at.index != null) {
@@ -78,12 +75,19 @@ export function LineChartHorizontalLine({
 
     const offsetTop = yDomain.max - at.value;
     const percentageOffsetTop = offsetTop / (yDomain.max - yDomain.min);
-    const chartDrawingHeight = height - X_AXIS_LABEL_RESERVED_HEIGHT;
     const heightBetweenGutters = chartDrawingHeight - gutter * 2;
     const offsetTopPixels = gutter + percentageOffsetTop * heightBetweenGutters;
 
     return withTiming(offsetTopPixels + offsetY);
-  }, [at, gutter, height, offsetY, parsedPath, yDomain.max, yDomain.min]);
+  }, [
+    at,
+    chartDrawingHeight,
+    gutter,
+    offsetY,
+    parsedPath,
+    yDomain.max,
+    yDomain.min,
+  ]);
 
   const lineAnimatedProps = useAnimatedProps(
     () => ({

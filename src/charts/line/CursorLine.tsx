@@ -41,7 +41,6 @@ const SPACING = {
   HORIZONTAL_TEXT_MARGIN: 8,
   HORIZONTAL_RIGHT_MARGIN: 16,
   BASE_LINE_GAP: 8,
-  X_AXIS_LABEL_RESERVED_HEIGHT: 40, // Reserved space at bottom for x-axis labels
 } as const;
 
 const AnimatedLine = Animated.createAnimatedComponent(SVGLine);
@@ -56,7 +55,9 @@ export function LineChartCursorLine({
   ...cursorProps
 }: LineChartCursorLineProps) {
   const isHorizontal = cursorProps?.orientation === 'horizontal';
-  const { height, width } = React.useContext(LineChartDimensionsContext);
+  const { height, width, chartDrawingHeight } = React.useContext(
+    LineChartDimensionsContext
+  );
   const { currentX, currentY, isActive } = useLineChart();
 
   const price = useLineChartPrice({
@@ -107,7 +108,7 @@ export function LineChartCursorLine({
     if (isHorizontal) return 0;
 
     // For vertical cursor, extend line to the chart area (excluding reserved label space)
-    return showLabel ? height - SPACING.X_AXIS_LABEL_RESERVED_HEIGHT : height;
+    return showLabel ? chartDrawingHeight : height;
   });
 
   const containerStyle = useAnimatedStyle(() => ({
@@ -175,10 +176,7 @@ export function LineChartCursorLine({
     }
 
     // Position label in the reserved space at the bottom
-    const labelTop =
-      height -
-      SPACING.X_AXIS_LABEL_RESERVED_HEIGHT +
-      SPACING.HORIZONTAL_TEXT_MARGIN;
+    const labelTop = chartDrawingHeight + SPACING.HORIZONTAL_TEXT_MARGIN;
 
     return {
       ...baseStyle,

@@ -984,13 +984,14 @@ function in the form of a
 
 ### LineChart
 
-| Prop       | Type        | Default                 | Description                                                                                                                |
-| ---------- | ----------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `width`    | `number`    | Width of device screen  | The width of the chart                                                                                                     |
-| `height`   | `number`    | Height of device screen | The height of the chart                                                                                                    |
-| `yGutter`  | `number`    | `16`                    | The gutter of the chart on the Y axis (the chart data will not exceed it's gutter)                                         |
-| `shape`    | `function`  | `shape.curveBumpX`      | The shape type/curve of the graph. [Accepts a curve function from d3-shape](https://www.npmjs.com/package/d3-shape#curves) |
-| `...props` | `ViewProps` |                         | This component also inherits React Native's `View` props.                                                                  |
+| Prop               | Type        | Default                 | Description                                                                                                                |
+| ------------------ | ----------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `width`            | `number`    | Width of device screen  | The width of the chart                                                                                                     |
+| `height`           | `number`    | Height of device screen | The height of the chart                                                                                                    |
+| `yGutter`          | `number`    | `16`                    | The gutter of the chart on the Y axis (the chart data will not exceed it's gutter)                                         |
+| `shape`            | `function`  | `shape.curveBumpX`      | The shape type/curve of the graph. [Accepts a curve function from d3-shape](https://www.npmjs.com/package/d3-shape#curves) |
+| `xAxisLabelHeight` | `number`    | `40`                    | The space reserved at the bottom of the chart for x-axis cursor labels. Set it to `0` when the chart has no labels.        |
+| `...props`         | `ViewProps` |                         | This component also inherits React Native's `View` props.                                                                  |
 
 ### LineChart.Path
 

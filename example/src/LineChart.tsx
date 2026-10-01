@@ -65,6 +65,7 @@ type Flag =
   | 'Axis'
   | 'Snap to Point'
   | 'Persist on End'
+  | 'No Label Space'
   | 'Floating';
 
 const MARKER_COUNT = 5;
@@ -181,6 +182,7 @@ export default function LineChartScreen() {
             id={s.id}
             width={size}
             height={size}
+            xAxisLabelHeight={on('No Label Space') ? 0 : undefined}
           >
             <LineChart.Path color={color}>
               {background === 'gradient' && <LineChart.Gradient />}
@@ -231,7 +233,9 @@ export default function LineChartScreen() {
               <LineChart.CursorLine
                 key={orientation}
                 orientation={orientation}
-                showLabel
+                showLabel={
+                  orientation === 'horizontal' || !on('No Label Space')
+                }
                 textStyle={demo.tooltipText}
               />
             ))}
@@ -336,6 +340,7 @@ export default function LineChartScreen() {
           value={cursorLine}
           onChange={setCursorLine}
         />
+        {flagChips('No Label Space')}
       </ControlGroup>
 
       <ControlGroup title="Tooltip">

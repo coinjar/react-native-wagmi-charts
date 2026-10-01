@@ -38,6 +38,10 @@ export type LineChartProps = ViewProps & {
    */
   id?: string;
   absolute?: boolean;
+  /**
+   * Space reserved at the bottom for x-axis cursor labels. Defaults to 40.
+   */
+  xAxisLabelHeight?: number;
 };
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -52,6 +56,7 @@ export function LineChart({
   shape = d3Shape.curveBumpX,
   id,
   absolute,
+  xAxisLabelHeight = 40,
   ...props
 }: LineChartProps) {
   const { yDomain, xLength, xDomain } = React.useContext(LineChartContext);
@@ -60,8 +65,7 @@ export function LineChart({
   });
 
   // Reserve space at the bottom for x-axis cursor labels
-  const X_AXIS_LABEL_RESERVED_HEIGHT = 40;
-  const chartDrawingHeight = height - X_AXIS_LABEL_RESERVED_HEIGHT;
+  const chartDrawingHeight = height - xAxisLabelHeight;
 
   const pathWidth = React.useMemo(() => {
     let allowedWidth = width;

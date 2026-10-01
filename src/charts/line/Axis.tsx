@@ -38,14 +38,14 @@ export const LineChartAxis = ({
   containerStyle,
   ...props
 }: LineChartAxisProps) => {
-  const { width, height } = React.useContext(LineChartDimensionsContext);
+  const { width, height, chartDrawingHeight } = React.useContext(
+    LineChartDimensionsContext
+  );
   const { isActive } = useLineChart();
 
-  // Reserve space at the bottom for x-axis cursor labels
-  const X_AXIS_LABEL_RESERVED_HEIGHT = 40;
   // For vertical axes, don't extend into the reserved cursor label space
   const effectiveHeight =
-    orientation === 'vertical' ? height - X_AXIS_LABEL_RESERVED_HEIGHT : height;
+    orientation === 'vertical' ? chartDrawingHeight : height;
 
   const padding = {
     left: 5,
